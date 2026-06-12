@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Mulish:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="./datos.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: #F4E9D8; }
+  ::selection { background: #C9A24B; color: #2A1C12; }
+  [data-noscroll] { scrollbar-width: none; -ms-overflow-style: none; }
+  [data-noscroll]::-webkit-scrollbar { display: none; }
+  @keyframes lmfloat { 0%,100% { transform: translateY(0); opacity:.85; } 50% { transform: translateY(-14px); opacity:1; } }
+  @keyframes lmglow { 0%,100% { opacity:.55; } 50% { opacity:.9; } }
+  .lm-chip { display:inline-block; padding:8px 16px; border-radius:999px; font-size:13.5px; font-weight:700; cursor:pointer; white-space:nowrap; transition:all .15s ease; }
+</style>
+</helmet>
+
+<div style="min-height:100vh; background:#F4E9D8; font-family:'Mulish',sans-serif; color:#34251A; -webkit-font-smoothing:antialiased;">
+
+  <!-- ============ HEADER ============ -->
+  <header style="position:sticky; top:0; z-index:50; background:rgba(244,233,216,0.88); backdrop-filter:blur(10px); border-bottom:1px solid #E3D2B8;">
+    <div style="max-width:1180px; margin:0 auto; padding:12px clamp(16px,4vw,32px); display:flex; align-items:center; justify-content:space-between; gap:16px;">
+      <div onClick="{{ nav.inicio }}" style="display:flex; align-items:center; gap:11px; cursor:pointer;">
+        <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(150deg,#2E4734,#3C5A43); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(46,71,52,0.3); position:relative;">
+          <span style="font-family:'Spectral',serif; font-weight:700; font-size:22px; color:#F4E9D8;">M</span>
+          <span style="position:absolute; top:-3px; right:-3px; width:9px; height:9px; border-radius:50%; background:#C9A24B; box-shadow:0 0 8px #C9A24B;"></span>
+        </div>
+        <div style="display:flex; flex-direction:column; line-height:1;">
+          <span style="font-family:'Spectral',serif; font-weight:700; font-size:18px; letter-spacing:.01em; color:#2E4734;">La Madriguera</span>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:#A07F5E; margin-top:3px;">Coffee &amp; Books</span>
+        </div>
+      </div>
+      <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="flex-shrink:0; display:inline-flex; align-items:center; gap:8px; text-decoration:none; background:#2E4734; color:#F7EFE2; font-weight:700; font-size:13.5px; padding:10px 17px; border-radius:999px; box-shadow:0 4px 14px rgba(46,71,52,0.28); transition:background .15s ease;" style-hover="background:#244031;"><span style="width:7px; height:7px; border-radius:50%; background:#9CD9A6;"></span>WhatsApp</a>
+    </div>
+    <nav data-noscroll style="max-width:1180px; margin:0 auto; padding:0 clamp(16px,4vw,32px) 11px; display:flex; gap:7px; overflow-x:auto; white-space:nowrap;">
+      <sc-if value="{{ navA.inicio }}" hint-placeholder-val="{{ true }}"><span onClick="{{ nav.inicio }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:#2E4734; color:#F7EFE2;">Inicio</span></sc-if>
+      <sc-if value="{{ navN.inicio }}" hint-placeholder-val="{{ false }}"><span onClick="{{ nav.inicio }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:transparent; color:#5E4632; transition:all .15s ease;" style-hover="background:#EFE2CB;">Inicio</span></sc-if>
+      <sc-if value="{{ navA.catalogo }}" hint-placeholder-val="{{ false }}"><span onClick="{{ nav.catalogo }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:#2E4734; color:#F7EFE2;">Catálogo</span></sc-if>
+      <sc-if value="{{ navN.catalogo }}" hint-placeholder-val="{{ true }}"><span onClick="{{ nav.catalogo }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:transparent; color:#5E4632; transition:all .15s ease;" style-hover="background:#EFE2CB;">Catálogo</span></sc-if>
+      <sc-if value="{{ navA.segunda }}" hint-placeholder-val="{{ false }}"><span onClick="{{ nav.segunda }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:#2E4734; color:#F7EFE2;">Segunda historia</span></sc-if>
+      <sc-if value="{{ navN.segunda }}" hint-placeholder-val="{{ true }}"><span onClick="{{ nav.segunda }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:transparent; color:#5E4632; transition:all .15s ease;" style-hover="background:#EFE2CB;">Segunda historia</span></sc-if>
+      <sc-if value="{{ navA.merch }}" hint-placeholder-val="{{ false }}"><span onClick="{{ nav.merch }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:#2E4734; color:#F7EFE2;">Merch</span></sc-if>
+      <sc-if value="{{ navN.merch }}" hint-placeholder-val="{{ true }}"><span onClick="{{ nav.merch }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:transparent; color:#5E4632; transition:all .15s ease;" style-hover="background:#EFE2CB;">Merch</span></sc-if>
+      <sc-if value="{{ navA.eventos }}" hint-placeholder-val="{{ false }}"><span onClick="{{ nav.eventos }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:#2E4734; color:#F7EFE2;">Eventos</span></sc-if>
+      <sc-if value="{{ navN.eventos }}" hint-placeholder-val="{{ true }}"><span onClick="{{ nav.eventos }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:transparent; color:#5E4632; transition:all .15s ease;" style-hover="background:#EFE2CB;">Eventos</span></sc-if>
+      <sc-if value="{{ navA.vender }}" hint-placeholder-val="{{ false }}"><span onClick="{{ nav.vender }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:#2E4734; color:#F7EFE2;">Vender</span></sc-if>
+      <sc-if value="{{ navN.vender }}" hint-placeholder-val="{{ true }}"><span onClick="{{ nav.vender }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:transparent; color:#5E4632; transition:all .15s ease;" style-hover="background:#EFE2CB;">Vender</span></sc-if>
+      <sc-if value="{{ navA.comprar }}" hint-placeholder-val="{{ false }}"><span onClick="{{ nav.comprar }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:#2E4734; color:#F7EFE2;">Cómo comprar</span></sc-if>
+      <sc-if value="{{ navN.comprar }}" hint-placeholder-val="{{ true }}"><span onClick="{{ nav.comprar }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:transparent; color:#5E4632; transition:all .15s ease;" style-hover="background:#EFE2CB;">Cómo comprar</span></sc-if>
+      <sc-if value="{{ navA.visitanos }}" hint-placeholder-val="{{ false }}"><span onClick="{{ nav.visitanos }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:#2E4734; color:#F7EFE2;">Visítanos</span></sc-if>
+      <sc-if value="{{ navN.visitanos }}" hint-placeholder-val="{{ true }}"><span onClick="{{ nav.visitanos }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:transparent; color:#5E4632; transition:all .15s ease;" style-hover="background:#EFE2CB;">Visítanos</span></sc-if>
+    </nav>
+  </header>
+
+  <main>
+
+  <!-- ============ INICIO ============ -->
+  <sc-if value="{{ isInicio }}" hint-placeholder-val="{{ true }}">
+  <div data-screen-label="Inicio">
+
+    <!-- HERO -->
+    <section style="position:relative; overflow:hidden; background:#F4E9D8;">
+      <div style="position:absolute; top:-120px; left:-80px; width:420px; height:420px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.45), rgba(201,162,75,0) 70%); animation:lmglow 7s ease-in-out infinite;"></div>
+      <div style="position:absolute; bottom:-160px; right:-120px; width:460px; height:460px; border-radius:50%; background:radial-gradient(circle, rgba(46,71,52,0.22), rgba(46,71,52,0) 70%);"></div>
+      <div style="position:absolute; top:90px; right:18%; width:7px; height:7px; border-radius:50%; background:#C9A24B; box-shadow:0 0 12px 2px rgba(201,162,75,0.7); animation:lmfloat 6s ease-in-out infinite;"></div>
+      <div style="position:absolute; top:220px; left:14%; width:5px; height:5px; border-radius:50%; background:#C9A24B; box-shadow:0 0 10px 2px rgba(201,162,75,0.6); animation:lmfloat 8s ease-in-out infinite .8s;"></div>
+      <div style="position:absolute; bottom:140px; left:42%; width:6px; height:6px; border-radius:50%; background:#7C2F3E; box-shadow:0 0 10px 2px rgba(188,98,67,0.5); animation:lmfloat 7.5s ease-in-out infinite .4s;"></div>
+
+      <div style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(40px,6vw,76px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:clamp(28px,5vw,56px); align-items:center;">
+        <div>
+          <span style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7C2F3E;"><span style="width:24px; height:1px; background:#7C2F3E;"></span>Guayaquil · refugio lector</span>
+          <h1 style="margin:18px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(38px,6vw,62px); line-height:1.04; letter-spacing:-0.01em; color:#2E4734; text-wrap:balance;">Una casa para quienes viven entre <span style="font-style:italic; color:#7C2F3E;">páginas</span></h1>
+          <p style="margin:22px 0 0; font-size:clamp(16px,1.6vw,19px); line-height:1.6; color:#5E4632; max-width:30em;">Libros, café, experiencias literarias y pequeños mundos por descubrir en La Madriguera.</p>
+          <div style="margin-top:32px; display:flex; flex-wrap:wrap; gap:12px;">
+            <span onClick="{{ nav.catalogo }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:#2E4734; color:#F7EFE2; font-weight:700; font-size:15px; padding:14px 24px; border-radius:999px; box-shadow:0 8px 22px rgba(46,71,52,0.3); transition:transform .15s ease, background .15s ease;" style-hover="background:#244031; transform:translateY(-2px);">Explorar libros</span>
+            <span onClick="{{ nav.merch }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:transparent; color:#9A7A1E; font-weight:700; font-size:15px; padding:13px 22px; border-radius:999px; border:1.5px solid #D9BC77; transition:all .15s ease;" style-hover="background:#F1E6CF;">Ver merch lector</span>
+            <span onClick="{{ nav.eventos }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:transparent; color:#2E4734; font-weight:700; font-size:15px; padding:13px 22px; border-radius:999px; border:1.5px solid #B9C4B4; transition:all .15s ease;" style-hover="background:#E7EDE6;">Reservar evento</span>
+            <span onClick="{{ nav.vender }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:transparent; color:#7C2F3E; font-weight:700; font-size:15px; padding:13px 22px; border-radius:999px; border:1.5px solid #E0AE95; transition:all .15s ease;" style-hover="background:#F6E3D5;">Vender mis libros</span>
+          </div>
+        </div>
+
+        <div style="position:relative;">
+          <div style="position:relative; aspect-ratio:4/5; border-radius:24px; overflow:hidden; box-shadow:0 30px 60px rgba(52,37,26,0.22); border:1px solid #E3D2B8; background:repeating-linear-gradient(135deg,#EBDDC4,#EBDDC4 14px,#E2D0B2 14px,#E2D0B2 28px);">
+            <div style="position:absolute; inset:0; background:radial-gradient(110% 80% at 70% 15%, rgba(255,243,214,0.7), rgba(255,243,214,0) 55%), linear-gradient(180deg, rgba(46,71,52,0) 55%, rgba(46,71,52,0.28));"></div>
+            <div style="position:absolute; left:0; right:0; bottom:0; padding:18px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+              <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.04em; color:#F7EFE2; background:rgba(52,37,26,0.55); padding:6px 10px; border-radius:8px;">banner · libros · café · luces suaves</span>
+            </div>
+          </div>
+          <div style="position:absolute; -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); top:18px; left:-16px; background:rgba(255,253,248,0.95); border:1px solid #E3D2B8; border-radius:14px; padding:12px 15px; box-shadow:0 12px 28px rgba(52,37,26,0.16);">
+            <div style="font-family:'Spectral',serif; font-style:italic; font-size:14px; color:#2E4734;">"Aquí las historias no solo se leen…"</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BRAND STRIP -->
+    <section style="background:#2E4734; color:#F4E9D8;">
+      <div style="max-width:1180px; margin:0 auto; padding:clamp(28px,4vw,40px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:24px; text-align:center;">
+        <div style="font-family:'Spectral',serif; font-style:italic; font-size:clamp(17px,1.8vw,21px); line-height:1.4; color:#F4E9D8;">Libros, café y mundos por descubrir.</div>
+        <div style="font-family:'Spectral',serif; font-style:italic; font-size:clamp(17px,1.8vw,21px); line-height:1.4; color:#E9CF8B;">Aquí las historias no solo se leen: se viven.</div>
+        <div style="font-family:'Spectral',serif; font-style:italic; font-size:clamp(17px,1.8vw,21px); line-height:1.4; color:#F4E9D8;">Tu próxima historia empieza en La Madriguera.</div>
+      </div>
+    </section>
+
+    <!-- NOVEDADES -->
+    <section style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px);">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:26px;">
+        <div>
+          <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7C2F3E;">Recién llegados</span>
+          <h2 style="margin:8px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(28px,3.4vw,38px); color:#2E4734;">Novedades literarias</h2>
+        </div>
+        <span onClick="{{ nav.catalogo }}" style="cursor:pointer; font-weight:700; font-size:14px; color:#2E4734; border-bottom:2px solid #C9A24B; padding-bottom:2px;">Ver catálogo completo →</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(218px,1fr)); gap:clamp(14px,2vw,22px);">
+        <sc-for list="{{ homeNovedades }}" as="b" hint-placeholder-count="4">
+          <dc-import name="BookCard" book="{{ b }}" hint-size="100%,430px"></dc-import>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- SEGUNDA HISTORIA TEASER -->
+    <section style="background:linear-gradient(180deg,#EFE2CB,#F4E9D8);">
+      <div style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:clamp(28px,4vw,48px); align-items:center;">
+        <div>
+          <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#9A7A1E;">Usados &amp; consignación</span>
+          <h2 style="margin:8px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(28px,3.4vw,40px); color:#2E4734; text-wrap:balance;">Libros con segunda historia</h2>
+          <p style="margin:18px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:30em;">Algunos libros no terminan cuando alguien los cierra. En La Madriguera les damos la oportunidad de encontrar un nuevo lector.</p>
+          <div style="margin-top:26px; display:flex; flex-wrap:wrap; gap:12px;">
+            <span onClick="{{ nav.segunda }}" style="cursor:pointer; background:#9A7A1E; color:#FBF3E0; font-weight:700; font-size:14.5px; padding:13px 22px; border-radius:999px; transition:background .15s ease;" style-hover="background:#866916;">Comprar segunda historia</span>
+            <span onClick="{{ nav.vender }}" style="cursor:pointer; background:transparent; color:#2E4734; font-weight:700; font-size:14.5px; padding:12px 21px; border-radius:999px; border:1.5px solid #B9C4B4; transition:background .15s ease;" style-hover="background:#E7EDE6;">Quiero vender mis libros</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px;">
+          <sc-for list="{{ homeSegunda }}" as="b" hint-placeholder-count="3">
+            <dc-import name="BookCard" book="{{ b }}" hint-size="100%,430px"></dc-import>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- MERCH TEASER -->
+    <section style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px);">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:26px;">
+        <div>
+          <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7C2F3E;">Pequeñas magias</span>
+          <h2 style="margin:8px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(28px,3.4vw,38px); color:#2E4734;">Merch para lectores</h2>
+        </div>
+        <span onClick="{{ nav.merch }}" style="cursor:pointer; font-weight:700; font-size:14px; color:#2E4734; border-bottom:2px solid #C9A24B; padding-bottom:2px;">Ver toda la tienda →</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:clamp(14px,2vw,22px);">
+        <sc-for list="{{ homeMerch }}" as="m" hint-placeholder-count="4">
+          <dc-import name="MerchCard" merch="{{ m }}" hint-size="100%,360px"></dc-import>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- EVENTOS TEASER -->
+    <section style="background:#2A1C12; color:#F4E9D8; position:relative; overflow:hidden;">
+      <div style="position:absolute; top:-100px; right:10%; width:340px; height:340px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.28), rgba(201,162,75,0) 70%);"></div>
+      <div style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px);">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:26px;">
+          <div>
+            <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#E9CF8B;">Experiencias</span>
+            <h2 style="margin:8px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(28px,3.4vw,38px); color:#F4E9D8;">Próximos eventos</h2>
+          </div>
+          <span onClick="{{ nav.eventos }}" style="cursor:pointer; font-weight:700; font-size:14px; color:#F4E9D8; border-bottom:2px solid #C9A24B; padding-bottom:2px;">Ver todos →</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:clamp(14px,2vw,22px);">
+          <sc-for list="{{ homeEventos }}" as="e" hint-placeholder-count="3">
+            <dc-import name="EventCard" event="{{ e }}" hint-size="100%,420px"></dc-import>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- RECOMENDADOS -->
+    <section style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px);">
+      <div style="text-align:center; margin-bottom:30px;">
+        <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7C2F3E;">Curaduría de la casa</span>
+        <h2 style="margin:8px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(28px,3.4vw,38px); color:#2E4734;">Recomendados por La Madriguera</h2>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(218px,1fr)); gap:clamp(14px,2vw,22px);">
+        <sc-for list="{{ recomendados }}" as="b" hint-placeholder-count="3">
+          <dc-import name="BookCard" book="{{ b }}" hint-size="100%,430px"></dc-import>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- VISITANOS TEASER -->
+    <section style="background:linear-gradient(180deg,#F4E9D8,#EFE2CB);">
+      <div style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:clamp(28px,4vw,48px); align-items:center;">
+        <div style="position:relative; aspect-ratio:16/11; border-radius:20px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 20px 44px rgba(52,37,26,0.16); background:repeating-linear-gradient(135deg,#E7D8BD,#E7D8BD 13px,#DECCAC 13px,#DECCAC 26px);">
+          <div style="position:absolute; inset:0; background:radial-gradient(100% 80% at 30% 20%, rgba(255,243,214,0.6), rgba(255,243,214,0) 60%);"></div>
+          <span style="position:absolute; left:14px; bottom:14px; font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#7A6450; background:rgba(255,253,248,0.8); padding:6px 10px; border-radius:8px;">foto del local · refugio lector</span>
+        </div>
+        <div>
+          <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#9A7A1E;">Guayaquil</span>
+          <h2 style="margin:8px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(28px,3.4vw,40px); color:#2E4734;">Visítanos en La Madriguera</h2>
+          <p style="margin:18px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:30em;">Te esperamos en nuestro refugio lector para descubrir libros, café, postres y experiencias mágicas.</p>
+          <div style="margin-top:22px; display:flex; align-items:center; gap:10px; font-weight:700; color:#2E4734; font-size:15px;"><span style="width:8px; height:8px; border-radius:50%; background:#C9A24B;"></span>Miércoles a sábado 12:00–20:00 · Domingos 10:00–18:00</div>
+          <div style="margin-top:24px;">
+            <span onClick="{{ nav.visitanos }}" style="cursor:pointer; display:inline-flex; background:#2E4734; color:#F7EFE2; font-weight:700; font-size:14.5px; padding:13px 22px; border-radius:999px; transition:background .15s ease;" style-hover="background:#244031;">Cómo llegar y horarios</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+  </sc-if>
+
+  <!-- ============ CATÁLOGO ============ -->
+  <sc-if value="{{ isCatalogo }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Catálogo">
+    <section style="max-width:1180px; margin:0 auto; padding:clamp(36px,5vw,56px) clamp(16px,4vw,32px) 8px;">
+      <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7C2F3E;">Catálogo lector</span>
+      <h1 style="margin:10px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#2E4734; line-height:1.05; text-wrap:balance;">Tu próxima historia empieza aquí</h1>
+      <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:46em;">Explora libros nuevos, libros con segunda historia y recomendaciones especiales para lectores curiosos.</p>
+
+      <div style="margin-top:26px; position:relative; max-width:560px;">
+        <span style="position:absolute; left:18px; top:50%; transform:translateY(-50%); width:14px; height:14px; border:2px solid #A07F5E; border-radius:50%;"></span>
+        <input value="{{ search }}" onInput="{{ onSearch }}" placeholder="Busca por título, autor, saga o género…" style="width:100%; padding:15px 18px 15px 46px; font-family:'Mulish',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; border:1px solid #E3D2B8; border-radius:999px; outline:none; box-shadow:0 6px 18px rgba(52,37,26,0.06);" />
+      </div>
+
+      <div data-noscroll data-chipbar style="margin-top:18px; display:flex; gap:9px; overflow-x:auto; white-space:nowrap; padding-bottom:4px; min-height:38px;"></div>
+    </section>
+
+    <section style="max-width:1180px; margin:0 auto; padding:18px clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+        <span style="font-size:13px; font-weight:700; color:#8A715A;">{{ catalogCount }} libros</span>
+      </div>
+      <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(216px,1fr)); gap:clamp(14px,2vw,22px);">
+          <sc-for list="{{ catalogBooks }}" as="b" hint-placeholder-count="8">
+            <dc-import name="BookCard" book="{{ b }}" hint-size="100%,430px"></dc-import>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center; padding:60px 20px; color:#8A715A;">
+          <div style="font-family:'Spectral',serif; font-style:italic; font-size:22px; color:#5E4632;">No encontramos ese título… todavía.</div>
+          <p style="margin:10px 0 0; font-size:15px;">Escríbenos por WhatsApp y lo buscamos para ti.</p>
+          <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="display:inline-block; margin-top:18px; text-decoration:none; background:#2E4734; color:#F7EFE2; font-weight:700; font-size:14px; padding:12px 22px; border-radius:999px;">Pedir un libro por WhatsApp</a>
+        </div>
+      </sc-if>
+    </section>
+  </div>
+  </sc-if>
+
+  <!-- ============ SEGUNDA HISTORIA ============ -->
+  <sc-if value="{{ isSegunda }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Segunda historia">
+    <section style="background:linear-gradient(180deg,#EFE2CB,#F4E9D8);">
+      <div style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px);">
+        <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#9A7A1E;">Usados &amp; consignación</span>
+        <h1 style="margin:10px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#2E4734; line-height:1.05; text-wrap:balance;">Libros con segunda historia</h1>
+        <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:42em;">Algunos libros no terminan cuando alguien los cierra. En La Madriguera les damos la oportunidad de encontrar un nuevo lector.</p>
+        <div style="margin-top:24px; display:flex; flex-wrap:wrap; gap:12px;">
+          <span onClick="{{ nav.vender }}" style="cursor:pointer; background:#9A7A1E; color:#FBF3E0; font-weight:700; font-size:14.5px; padding:13px 22px; border-radius:999px; transition:background .15s ease;" style-hover="background:#866916;">Quiero vender mis libros</span>
+        </div>
+      </div>
+    </section>
+    <section style="max-width:1180px; margin:0 auto; padding:clamp(34px,4vw,52px) clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(216px,1fr)); gap:clamp(14px,2vw,22px);">
+        <sc-for list="{{ segundaBooks }}" as="b" hint-placeholder-count="6">
+          <dc-import name="BookCard" book="{{ b }}" hint-size="100%,430px"></dc-import>
+        </sc-for>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <!-- ============ VENDER ============ -->
+  <sc-if value="{{ isVender }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Vender">
+    <section style="position:relative; overflow:hidden; background:#2E4734; color:#F4E9D8;">
+      <div style="position:absolute; top:-90px; left:8%; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.3), rgba(201,162,75,0) 70%);"></div>
+      <div style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,76px) clamp(16px,4vw,32px);">
+        <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#E9CF8B;">Consignación</span>
+        <h1 style="margin:10px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(32px,4.5vw,50px); color:#F4E9D8; line-height:1.05; text-wrap:balance; max-width:14em;">Vende tus libros en La Madriguera</h1>
+        <p style="margin:18px 0 0; font-size:17px; line-height:1.65; color:#DCE0D4; max-width:44em;">Si tienes libros en buen estado, puedes dejarlos en consignación para que encuentren un nuevo lector. Nosotros los revisamos, los publicamos en nuestro catálogo y, cuando se vendan, compartimos el valor contigo.</p>
+      </div>
+    </section>
+    <section style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px);">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:clamp(16px,2vw,24px);">
+        <sc-for list="{{ ventaPasos }}" as="p" hint-placeholder-count="4">
+          <div style="background:#FFFDF8; border:1px solid #EADBC4; border-radius:18px; padding:24px; box-shadow:0 8px 22px rgba(52,37,26,0.06); position:relative;">
+            <div style="width:42px; height:42px; border-radius:12px; background:#EFE2CB; display:flex; align-items:center; justify-content:center; font-family:'Spectral',serif; font-weight:700; font-size:20px; color:#9A7A1E;">{{ p.n }}</div>
+            <h3 style="margin:16px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:19px; color:#2E4734;">{{ p.title }}</h3>
+            <p style="margin:8px 0 0; font-size:14px; line-height:1.5; color:#6E5946;">{{ p.text }}</p>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin-top:34px; display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center; background:linear-gradient(150deg,#EFE2CB,#F4E9D8); border:1px solid #E3D2B8; border-radius:22px; padding:clamp(30px,4vw,48px);">
+        <div style="font-family:'Spectral',serif; font-style:italic; font-size:clamp(19px,2.2vw,26px); color:#2E4734; max-width:22em;">Libros con segunda historia, esperando a su próximo lector.</div>
+        <a href="{{ waVender }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; text-decoration:none; background:#2E4734; color:#F7EFE2; font-weight:700; font-size:15.5px; padding:15px 28px; border-radius:999px; box-shadow:0 10px 24px rgba(46,71,52,0.3); transition:background .15s ease;" style-hover="background:#244031;"><span style="width:7px; height:7px; border-radius:50%; background:#9CD9A6;"></span>Registrar mis libros</a>
+        <span style="font-size:13px; color:#8A715A;">Te respondemos por WhatsApp y coordinamos la revisión.</span>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <!-- ============ MERCH ============ -->
+  <sc-if value="{{ isMerch }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Merch">
+    <section style="max-width:1180px; margin:0 auto; padding:clamp(36px,5vw,56px) clamp(16px,4vw,32px) 8px;">
+      <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7C2F3E;">Tienda lectora</span>
+      <h1 style="margin:10px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#2E4734; line-height:1.05;">Merch para lectores</h1>
+      <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:48em;">Objetos creados para quienes viven entre páginas: separadores, stickers, pines, tazas, camisetas, tote bags, productos personalizados y pequeñas magias lectoras.</p>
+    </section>
+    <section style="max-width:1180px; margin:0 auto; padding:24px clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:clamp(14px,2vw,22px);">
+        <sc-for list="{{ merchAll }}" as="m" hint-placeholder-count="9">
+          <dc-import name="MerchCard" merch="{{ m }}" hint-size="100%,360px"></dc-import>
+        </sc-for>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <!-- ============ EVENTOS ============ -->
+  <sc-if value="{{ isEventos }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Eventos">
+    <section style="background:#2A1C12; color:#F4E9D8; position:relative; overflow:hidden;">
+      <div style="position:absolute; bottom:-120px; left:12%; width:360px; height:360px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.26), rgba(201,162,75,0) 70%);"></div>
+      <div style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px);">
+        <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#E9CF8B;">Experiencias inmersivas</span>
+        <h1 style="margin:10px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#F4E9D8; line-height:1.05; text-wrap:balance; max-width:15em;">Historias que salen de las páginas</h1>
+        <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#DCD2BE; max-width:46em;">Cine inmersivo, clubes de lectura, cenas temáticas, tardes mágicas y experiencias creadas para vivir tus historias favoritas más allá del libro.</p>
+      </div>
+    </section>
+    <section style="max-width:1180px; margin:0 auto; padding:clamp(34px,4vw,52px) clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:clamp(16px,2vw,24px);">
+        <sc-for list="{{ eventsAll }}" as="e" hint-placeholder-count="6">
+          <dc-import name="EventCard" event="{{ e }}" hint-size="100%,420px"></dc-import>
+        </sc-for>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <!-- ============ CÓMO COMPRAR ============ -->
+  <sc-if value="{{ isComprar }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Cómo comprar">
+    <section style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px);">
+      <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7C2F3E;">Sencillo y cercano</span>
+      <h1 style="margin:10px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#2E4734; line-height:1.05;">Cómo comprar en La Madriguera Online</h1>
+      <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:42em;">Sin carrito complicado: eliges, consultas por WhatsApp y coordinamos. Así de simple.</p>
+
+      <div style="margin-top:34px; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:clamp(16px,2vw,22px);">
+        <sc-for list="{{ compraPasos }}" as="p" hint-placeholder-count="5">
+          <div style="background:#FFFDF8; border:1px solid #EADBC4; border-radius:18px; padding:22px; box-shadow:0 8px 22px rgba(52,37,26,0.06);">
+            <div style="width:38px; height:38px; border-radius:11px; background:#2E4734; display:flex; align-items:center; justify-content:center; font-family:'Spectral',serif; font-weight:700; font-size:18px; color:#F4E9D8;">{{ p.n }}</div>
+            <p style="margin:14px 0 0; font-size:15px; line-height:1.5; color:#3A2C1F; font-weight:600;">{{ p.text }}</p>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="margin-top:40px; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:24px;">
+        <div style="background:#EFE2CB; border-radius:20px; padding:26px;">
+          <h3 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:20px; color:#2E4734;">Entrega</h3>
+          <ul style="margin:14px 0 0; padding-left:18px; color:#5E4632; font-size:15px; line-height:1.9;">
+            <li>Retiro en local</li>
+            <li>Envío dentro de Guayaquil</li>
+            <li>Envío nacional según disponibilidad</li>
+          </ul>
+        </div>
+        <div style="background:#E7EDE6; border-radius:20px; padding:26px;">
+          <h3 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:20px; color:#2E4734;">Pago</h3>
+          <ul style="margin:14px 0 0; padding-left:18px; color:#5E4632; font-size:15px; line-height:1.9;">
+            <li>Transferencia bancaria</li>
+            <li>Efectivo en local</li>
+            <li>Link de pago, si aplica</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:32px;">
+        <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; text-decoration:none; background:#2E4734; color:#F7EFE2; font-weight:700; font-size:15px; padding:14px 26px; border-radius:999px; transition:background .15s ease;" style-hover="background:#244031;"><span style="width:7px; height:7px; border-radius:50%; background:#9CD9A6;"></span>Escríbenos por WhatsApp</a>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <!-- ============ VISÍTANOS ============ -->
+  <sc-if value="{{ isVisitanos }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Visítanos">
+    <section style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px) clamp(48px,6vw,80px); display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:clamp(28px,4vw,48px); align-items:start;">
+      <div>
+        <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#9A7A1E;">Refugio lector · Guayaquil</span>
+        <h1 style="margin:10px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#2E4734; line-height:1.05;">Visítanos en La Madriguera</h1>
+        <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:32em;">Te esperamos en nuestro refugio lector para descubrir libros, café, postres y experiencias mágicas.</p>
+
+        <div style="margin-top:26px; display:flex; flex-direction:column; gap:16px;">
+          <div style="display:flex; gap:13px; align-items:flex-start;">
+            <span style="width:10px; height:10px; border-radius:50%; background:#7C2F3E; margin-top:6px; flex-shrink:0;"></span>
+            <div><div style="font-weight:800; font-size:13px; letter-spacing:.04em; text-transform:uppercase; color:#A07F5E;">Dirección</div><div style="font-size:16px; color:#3A2C1F; margin-top:3px;">Guayaquil, Ecuador · <span style="font-family:ui-monospace,Menlo,monospace; font-size:13px; color:#8A715A;">[dirección por confirmar]</span></div></div>
+          </div>
+          <div style="display:flex; gap:13px; align-items:flex-start;">
+            <span style="width:10px; height:10px; border-radius:50%; background:#2E4734; margin-top:6px; flex-shrink:0;"></span>
+            <div><div style="font-weight:800; font-size:13px; letter-spacing:.04em; text-transform:uppercase; color:#A07F5E;">Horario</div><div style="font-size:16px; color:#3A2C1F; margin-top:3px;">Miércoles a sábado · 12:00–20:00<br>Domingos · 10:00–18:00</div></div>
+          </div>
+        </div>
+
+        <div style="margin-top:28px; display:flex; flex-wrap:wrap; gap:11px;">
+          <a href="{{ mapsHref }}" target="_blank" rel="noopener" style="text-decoration:none; background:#2E4734; color:#F7EFE2; font-weight:700; font-size:14px; padding:12px 20px; border-radius:999px; transition:background .15s ease;" style-hover="background:#244031;">Google Maps</a>
+          <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="text-decoration:none; background:transparent; color:#2E4734; font-weight:700; font-size:14px; padding:11px 19px; border-radius:999px; border:1.5px solid #B9C4B4; transition:background .15s ease;" style-hover="background:#E7EDE6;">WhatsApp</a>
+          <a href="{{ igHref }}" target="_blank" rel="noopener" style="text-decoration:none; background:transparent; color:#7C2F3E; font-weight:700; font-size:14px; padding:11px 19px; border-radius:999px; border:1.5px solid #E0AE95; transition:background .15s ease;" style-hover="background:#F6E3D5;">Instagram</a>
+          <a href="{{ ttHref }}" target="_blank" rel="noopener" style="text-decoration:none; background:transparent; color:#9A7A1E; font-weight:700; font-size:14px; padding:11px 19px; border-radius:999px; border:1.5px solid #D9BC77; transition:background .15s ease;" style-hover="background:#F1E6CF;">TikTok</a>
+        </div>
+      </div>
+      <div style="position:relative; aspect-ratio:3/4; border-radius:22px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 24px 50px rgba(52,37,26,0.18); background:repeating-linear-gradient(135deg,#E7D8BD,#E7D8BD 13px,#DECCAC 13px,#DECCAC 26px);">
+        <div style="position:absolute; inset:0; background:radial-gradient(100% 70% at 60% 18%, rgba(255,243,214,0.6), rgba(255,243,214,0) 60%), linear-gradient(180deg, rgba(46,71,52,0) 60%, rgba(46,71,52,0.25));"></div>
+        <span style="position:absolute; left:14px; bottom:14px; font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#F7EFE2; background:rgba(52,37,26,0.55); padding:6px 10px; border-radius:8px;">foto del local · café &amp; libros</span>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer style="background:#2A1C12; color:#E8D9C2;">
+    <div style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,60px) clamp(16px,4vw,32px) 28px;">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:32px; align-items:start;">
+        <div>
+          <div style="display:flex; align-items:center; gap:11px;">
+            <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(150deg,#3C5A43,#2E4734); display:flex; align-items:center; justify-content:center; position:relative;">
+              <span style="font-family:'Spectral',serif; font-weight:700; font-size:22px; color:#F4E9D8;">M</span>
+              <span style="position:absolute; top:-3px; right:-3px; width:8px; height:8px; border-radius:50%; background:#C9A24B; box-shadow:0 0 8px #C9A24B;"></span>
+            </div>
+            <div style="font-family:'Spectral',serif; font-weight:700; font-size:19px; color:#F4E9D8;">La Madriguera</div>
+          </div>
+          <p style="margin:16px 0 0; font-family:'Spectral',serif; font-style:italic; font-size:16px; line-height:1.5; color:#C9A24B; max-width:22em;">Una casa para quienes viven entre páginas.</p>
+          <p style="margin:10px 0 0; font-size:13px; color:#9C8E78;">Specialty Coffee &amp; Books · Guayaquil</p>
+        </div>
+        <div>
+          <div style="font-size:12px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:#9C8E78; margin-bottom:14px;">Explora</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="8">
+              <span onClick="{{ item.onClick }}" style="cursor:pointer; font-size:14.5px; color:#E8D9C2; transition:color .15s ease;" style-hover="color:#C9A24B;">{{ item.label }}</span>
+            </sc-for>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:#9C8E78; margin-bottom:14px;">Síguenos</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <a href="{{ igHref }}" target="_blank" rel="noopener" style="text-decoration:none; font-size:14.5px; color:#E8D9C2; transition:color .15s ease;" style-hover="color:#C9A24B;">Instagram</a>
+            <a href="{{ ttHref }}" target="_blank" rel="noopener" style="text-decoration:none; font-size:14.5px; color:#E8D9C2; transition:color .15s ease;" style-hover="color:#C9A24B;">TikTok</a>
+            <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="text-decoration:none; font-size:14.5px; color:#E8D9C2; transition:color .15s ease;" style-hover="color:#C9A24B;">WhatsApp</a>
+            <a href="{{ mapsHref }}" target="_blank" rel="noopener" style="text-decoration:none; font-size:14.5px; color:#E8D9C2; transition:color .15s ease;" style-hover="color:#C9A24B;">Ubicación</a>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:36px; padding-top:20px; border-top:1px solid rgba(232,217,194,0.16); display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;">
+        <span style="font-size:12.5px; color:#9C8E78;">© {{ year }} La Madriguera Specialty Coffee &amp; Books</span>
+        <span style="font-family:'Spectral',serif; font-style:italic; font-size:13.5px; color:#9C8E78;">Lleva contigo una pequeña magia de La Madriguera.</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { page: 'inicio', search: '', category: 'todos' };
+
+  CATS = [
+    ['todos', 'Todos'], ['novedades', 'Novedades'], ['romance', 'Romance'], ['fantasia', 'Fantasía'],
+    ['manga', 'Manga'], ['infantil', 'Infantil y juvenil'], ['clasicos', 'Clásicos'], ['thriller', 'Thriller'],
+    ['usados', 'Libros usados'], ['ofertas', 'Ofertas lectoras'], ['ultima', 'Última unidad']
+  ];
+
+  componentDidMount() {
+    this.syncChips();
+    this.loadCMS();
+    this._onStorage = () => this.loadCMS();
+    window.addEventListener('storage', this._onStorage);
+    window.addEventListener('focus', this._onStorage);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('storage', this._onStorage);
+    window.removeEventListener('focus', this._onStorage);
+  }
+
+  loadCMS() {
+    let cms = null;
+    try { cms = JSON.parse(localStorage.getItem('lm-content')); } catch (e) {}
+    if ((!cms || !cms.libros) && typeof window !== 'undefined' && window.LM_DATA && window.LM_DATA.libros) cms = window.LM_DATA;
+    if (cms && cms.libros) this.setState({ cms });
+  }
+
+  cfg() { return (this.state.cms && this.state.cms.config) || {}; }
+
+  toBook(l) {
+    const g = ((l.genre || '') + '').toLowerCase();
+    const cats = [];
+    if ((l.estado || '') === 'Nuevo') cats.push('novedades');
+    if (g.indexOf('roman') >= 0) cats.push('romance');
+    if (g.indexOf('fantas') >= 0) cats.push('fantasia');
+    if (g.indexOf('manga') >= 0) cats.push('manga');
+    if (g.indexOf('infantil') >= 0 || g.indexOf('juvenil') >= 0) cats.push('infantil');
+    if (g.indexOf('clásic') >= 0 || g.indexOf('clasic') >= 0) cats.push('clasicos');
+    if (g.indexOf('thriller') >= 0 || g.indexOf('misterio') >= 0 || g.indexOf('suspenso') >= 0) cats.push('thriller');
+    if (((l.estado || '') + '').toLowerCase().indexOf('usado') >= 0 || l.estado === 'Con detalles visibles' || l.consigna) cats.push('usados');
+    if (l.disp === 'Última unidad') cats.push('ultima');
+    if (l.disp === 'Oferta') cats.push('ofertas');
+    return Object.assign({}, l, { code: l.code || l.id, cats });
+  }
+
+  notifyEmail(subject, data) {
+    const email = (((this.cfg().email || '') + '').trim()) || 'lamadriguera.guayaquil@gmail.com';
+    try {
+      fetch('https://formsubmit.co/ajax/' + encodeURIComponent(email), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.assign({ _subject: subject, _template: 'table' }, data))
+      }).catch(function () {});
+    } catch (e) {}
+  }
+  componentDidUpdate() { this.syncChips(); }
+  syncChips() {
+    if (typeof document === 'undefined') return;
+    const bar = document.querySelector('[data-chipbar]');
+    if (!bar) return;
+    if (bar.childElementCount !== this.CATS.length) {
+      bar.innerHTML = '';
+      this.CATS.forEach(([k, label]) => {
+        const s = document.createElement('span');
+        s.textContent = label;
+        s.setAttribute('data-cat', k);
+        s.className = 'lm-chip';
+        s.onclick = () => this.setState({ category: k });
+        bar.appendChild(s);
+      });
+    }
+    const active = this.state.category;
+    Array.from(bar.children).forEach(s => {
+      const on = s.getAttribute('data-cat') === active;
+      s.style.background = on ? '#7C2F3E' : '#FBF6EC';
+      s.style.color = on ? '#FFF7EC' : '#5E4632';
+      s.style.border = on ? '1px solid #7C2F3E' : '1px solid #E3D2B8';
+    });
+  }
+
+  WA = '593960186336';
+  igHref = 'https://instagram.com/';
+  ttHref = 'https://tiktok.com/';
+  mapsHref = 'https://maps.google.com/?q=Guayaquil';
+
+  allBooks = [
+    { title: 'Alas de sangre', author: 'Rebecca Yarros', genre: 'Fantasía · romantasy', estado: 'Nuevo', disp: 'Última unidad', price: 28, code: 'LM-N-0001', cats: ['novedades','fantasia','romance','ultima'] },
+    { title: 'Trono de cristal', author: 'Sarah J. Maas', genre: 'Fantasía', estado: 'Nuevo', disp: 'Disponible', price: 24, code: 'LM-N-0005', cats: ['novedades','fantasia'] },
+    { title: 'La canción de Aquiles', author: 'Madeline Miller', genre: 'Romance · mito', estado: 'Nuevo', disp: 'Reservado', price: 22, code: 'LM-N-0011', cats: ['novedades','romance'] },
+    { title: 'It termina con nosotros', author: 'Colleen Hoover', genre: 'Romance', estado: 'Nuevo', disp: 'Disponible', price: 20, code: 'LM-N-0003', cats: ['novedades','romance'] },
+    { title: 'Orgullo y prejuicio', author: 'Jane Austen', genre: 'Clásicos · romance', estado: 'Nuevo', disp: 'Disponible', price: 16, code: 'LM-N-0007', cats: ['novedades','clasicos','romance'] },
+    { title: 'Tokyo Revengers, Vol. 1', author: 'Ken Wakui', genre: 'Manga', estado: 'Nuevo', disp: 'Disponible', price: 9, code: 'LM-N-0021', cats: ['novedades','manga'] },
+    { title: 'Chainsaw Man, Vol. 1', author: 'Tatsuki Fujimoto', genre: 'Manga', estado: 'Nuevo', disp: 'Disponible', price: 9, code: 'LM-N-0025', cats: ['novedades','manga'] },
+    { title: 'El nombre del viento', author: 'Patrick Rothfuss', genre: 'Fantasía', estado: 'Usado excelente', disp: 'Disponible', price: 14, code: 'LM-U-0014', cats: ['fantasia','usados'] },
+    { title: 'La sombra del viento', author: 'Carlos Ruiz Zafón', genre: 'Thriller · misterio', estado: 'Usado excelente', disp: 'Última unidad', price: 12, code: 'LM-U-0009', cats: ['thriller','usados','ultima'] },
+    { title: 'Donde los árboles cantan', author: 'Laura Gallego', genre: 'Infantil y juvenil', estado: 'Usado bueno', disp: 'Disponible', price: 8, code: 'LM-U-0030', cats: ['infantil','fantasia','usados'] },
+    { title: 'Un cuento de Navidad', author: 'Charles Dickens', genre: 'Clásicos', estado: 'Usado bueno', disp: 'Oferta', price: 7, code: 'LM-U-0018', cats: ['clasicos','usados','ofertas'] },
+    { title: 'Cometas en el cielo', author: 'Khaled Hosseini', genre: 'Clásico contemporáneo', estado: 'En consignación', disp: 'Disponible', price: 10, code: 'LM-C-0042', cats: ['clasicos','usados'] }
+  ];
+
+  allMerch = [
+    { name: 'Separador "Mapa de saga"', cat: 'Separadores', desc: 'Separador metálico grabado, edición La Madriguera.', price: 3, disp: 'Disponible' },
+    { name: 'Sticker pack "Frases lectoras"', cat: 'Stickers', desc: 'Set de 6 stickers resistentes al agua.', price: 4, disp: 'Disponible' },
+    { name: 'Pin esmaltado "Team libro"', cat: 'Pines', desc: 'Pin de esmalte suave con cierre de mariposa.', price: 5, disp: 'Última unidad' },
+    { name: 'Taza "Una casa entre páginas"', cat: 'Tazas', desc: 'Cerámica de 350 ml con frase de la casa.', price: 9, disp: 'Disponible' },
+    { name: 'Tote bag lectora', cat: 'Tote bags', desc: 'Bolsa de tela con diseño literario exclusivo de La Madriguera.', price: 8, disp: 'Disponible' },
+    { name: 'Camiseta "Vivo entre páginas"', cat: 'Camisetas', desc: 'Algodón suave, estampado a una tinta.', price: 15, disp: 'Disponible' },
+    { name: 'Caja regalo personalizada', cat: 'Regalos personalizados', desc: 'Libro + café + detalle, armado a tu gusto.', price: 25, disp: 'Por encargo' },
+    { name: 'Vela aromática "Biblioteca"', cat: 'Productos temáticos', desc: 'Notas de papel viejo, madera y vainilla.', price: 12, disp: 'Disponible' },
+    { name: 'Edición especial firmada', cat: 'Ediciones especiales', desc: 'Ejemplar numerado con cantos pintados.', price: 35, disp: 'Última unidad' }
+  ];
+
+  allEvents = [
+    { name: 'Cine inmersivo', date: 'Vie 27 jun', time: '19:30', includes: 'Proyección temática + café de autor + una pequeña sorpresa lectora.', price: '$12', cupos: '8 cupos' },
+    { name: 'Club de lectura', date: 'Mié 2 jul', time: '18:00', includes: 'Lectura del mes + café + conversación entre lectores.', price: 'Gratis con consumo', cupos: '12 cupos' },
+    { name: 'Tardes Ghibli', date: 'Sáb 5 jul', time: '16:00', includes: 'Proyección + merienda temática + manualidad mágica.', price: '$10', cupos: '10 cupos' },
+    { name: 'Experiencia anime', date: 'Sáb 12 jul', time: '17:00', includes: 'Cosplay opcional + trivia + premios sorpresa.', price: '$10', cupos: '15 cupos' },
+    { name: 'Cena literaria', date: 'Vie 18 jul', time: '20:00', includes: 'Cena temática de 3 tiempos + ambientación de tu saga favorita.', price: '$28', cupos: '6 cupos' },
+    { name: 'Taller creativo: lettering', date: 'Dom 20 jul', time: '11:00', includes: 'Materiales incluidos + café + tu primera lámina lista.', price: '$18', cupos: '8 cupos' }
+  ];
+
+  ventaPasos = [
+    { n: '1', title: 'Registra tu libro', text: 'Cuéntanos qué tienes: título, autor y estado. Te guiamos por WhatsApp.' },
+    { n: '2', title: 'Revisamos su estado', text: 'La Madriguera evalúa cada ejemplar con cariño y honestidad.' },
+    { n: '3', title: 'Lo publicamos', text: 'Tu libro entra al catálogo con foto, precio y su propia ficha.' },
+    { n: '4', title: 'Recibes tu pago', text: 'Cuando se vende, compartimos el valor contigo. Así de simple.' }
+  ];
+
+  compraPasos = [
+    { n: '1', text: 'Explora el catálogo de libros y merch.' },
+    { n: '2', text: 'Elige tu libro o producto favorito.' },
+    { n: '3', text: 'Consulta disponibilidad por WhatsApp.' },
+    { n: '4', text: 'Confirma el pago de forma segura.' },
+    { n: '5', text: 'Retira en La Madriguera o coordina tu envío.' }
+  ];
+
+  badge(bg, color) {
+    return { display: 'inline-block', padding: '3px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: 800, letterSpacing: '.02em', background: bg, color: color, whiteSpace: 'nowrap', fontFamily: "'Mulish',sans-serif" };
+  }
+
+  estadoStyle(e) {
+    const m = {
+      'Nuevo': ['#E3EDE3', '#2E6B41'],
+      'Usado excelente': ['#F1E6CF', '#8A6A2E'],
+      'Usado bueno': ['#F3E2D6', '#A85A38'],
+      'Con detalles visibles': ['#ECE5DA', '#7A6450'],
+      'En consignación': ['#E2EAE6', '#37614A']
+    };
+    const c = m[e] || ['#ECE5DA', '#7A6450'];
+    return this.badge(c[0], c[1]);
+  }
+
+  dispStyle(d) {
+    const m = {
+      'Disponible': ['#E3EDE3', '#2E6B41'],
+      'Reservado': ['#ECE6DC', '#8A715A'],
+      'Vendido': ['#EFE0DC', '#9A4A3C'],
+      'Última unidad': ['#F3DEE3', '#93304A'],
+      'Oferta': ['#F4E9CC', '#9A7A1E'],
+      'Por encargo': ['#E7E9EC', '#5A6472']
+    };
+    const c = m[d] || ['#E3EDE3', '#2E6B41'];
+    return this.badge(c[0], c[1]);
+  }
+
+  cuposStyle() {
+    return { display: 'inline-block', padding: '4px 11px', borderRadius: '999px', fontSize: '11px', fontWeight: 800, background: 'rgba(247,239,226,0.94)', color: '#2E6B41', whiteSpace: 'nowrap', fontFamily: "'Mulish',sans-serif" };
+  }
+
+  waNum() { return (((this.cfg().whatsapp || '') + '').replace(/[^0-9]/g, '')) || this.WA; }
+  waText(t) { return 'https://wa.me/' + this.waNum() + '?text=' + encodeURIComponent(t); }
+  waBook(b) { return this.waText('Hola, vi en el catálogo de La Madriguera el libro ' + b.title + ', código ' + b.code + '. ¿Sigue disponible?'); }
+  waMerch(m) { return this.waText('Hola, vi en la web de La Madriguera el producto ' + m.name + '. ¿Sigue disponible?'); }
+  waEvent(e) { return this.waText('Hola, quiero reservar para el evento "' + e.name + '" del ' + e.date + '. ¿Hay cupos disponibles?'); }
+
+  decBook(b) { return Object.assign({}, b, { priceLabel: '$' + b.price, estadoStyle: this.estadoStyle(b.estado), dispStyle: this.dispStyle(b.disp), waHref: this.waBook(b), hasImg: !!b.imagen, onBuy: () => this.notifyEmail('Pedido web · Libro: ' + b.title, { tipo: 'Libro', titulo: b.title, autor: b.author || '', codigo: b.code || '', precio: '$' + b.price, mensaje: 'Un cliente pulsó "Consultar por WhatsApp" en la página.' }) }); }
+  decMerch(m) { return Object.assign({}, m, { priceLabel: '$' + m.price, dispStyle: this.dispStyle(m.disp), waHref: this.waMerch(m), hasImg: !!m.imagen, onBuy: () => this.notifyEmail('Pedido web · Merch: ' + m.name, { tipo: 'Merch', producto: m.name, categoria: m.cat || '', precio: '$' + m.price, mensaje: 'Un cliente pulsó "Pedir por WhatsApp" en la página.' }) }); }
+  decEvent(e) { return Object.assign({}, e, { dispStyle: this.cuposStyle(), waHref: this.waEvent(e), hasImg: !!e.imagen, onBuy: () => this.notifyEmail('Reserva web · Evento: ' + e.name, { tipo: 'Evento', evento: e.name, fecha: (e.date || '') + ' ' + (e.time || ''), precio: e.price || '', mensaje: 'Un cliente pulsó "Reservar por WhatsApp" en la página.' }) }); }
+
+  go(key) {
+    this.setState({ page: key });
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0, left: 0 });
+  }
+
+  navStyle(active) {
+    const base = { display: 'inline-block', padding: '8px 15px', borderRadius: '999px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap', border: '1px solid transparent', fontFamily: "'Mulish',sans-serif", transition: 'all .15s ease' };
+    return active ? Object.assign({}, base, { background: '#2E4734', color: '#F7EFE2' }) : Object.assign({}, base, { background: 'transparent', color: '#5E4632' });
+  }
+
+  chipStyle(active) {
+    const base = { display: 'inline-block', padding: '8px 16px', borderRadius: '999px', fontSize: '13.5px', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: "'Mulish',sans-serif", transition: 'all .15s ease' };
+    return active ? Object.assign({}, base, { background: '#7C2F3E', color: '#FFF7EC', border: '1px solid #7C2F3E' }) : Object.assign({}, base, { background: '#FBF6EC', color: '#5E4632', border: '1px solid #E3D2B8' });
+  }
+
+  renderVals() {
+    const { page, search, category } = this.state;
+    const q = (search || '').trim().toLowerCase();
+
+    const cms = this.state.cms;
+    const adminLibros = cms ? (cms.libros || []).filter(b => b.disp !== 'Vendido').map(b => this.toBook(b)) : [];
+    const consigLibros = cms ? (cms.consig || []).filter(c => c.estado === 'En venta').map(c => this.toBook(Object.assign({}, c, { estado: 'En consignación', disp: 'Disponible', consigna: true }))) : [];
+    const baseBooks = cms ? adminLibros.concat(consigLibros) : this.allBooks;
+    const baseMerch = cms ? (cms.merch || []).filter(m => m.disp !== 'Vendido') : this.allMerch;
+    const baseEvents = cms ? (cms.eventos || []) : this.allEvents;
+
+    let books = baseBooks;
+    if (category !== 'todos') books = books.filter(b => b.cats.includes(category));
+    if (q) books = books.filter(b => (b.title + ' ' + b.author + ' ' + b.genre).toLowerCase().includes(q));
+    const catalogBooks = books.map(b => this.decBook(b));
+
+    const usados = baseBooks.filter(b => b.cats.includes('usados')).map(b => this.decBook(b));
+
+    const navList = [
+      { k: 'inicio', label: 'Inicio' },
+      { k: 'catalogo', label: 'Catálogo' },
+      { k: 'segunda', label: 'Segunda historia' },
+      { k: 'merch', label: 'Merch' },
+      { k: 'eventos', label: 'Eventos' },
+      { k: 'vender', label: 'Vender' },
+      { k: 'comprar', label: 'Cómo comprar' },
+      { k: 'visitanos', label: 'Visítanos' }
+    ];
+    const navItems = navList.map(n => ({ label: n.label, onClick: () => this.go(n.k), active: n.k === page, inactive: n.k !== page }));
+
+    const catList = [
+      { k: 'todos', l: 'Todos' }, { k: 'novedades', l: 'Novedades' }, { k: 'romance', l: 'Romance' },
+      { k: 'fantasia', l: 'Fantasía' }, { k: 'manga', l: 'Manga' }, { k: 'infantil', l: 'Infantil y juvenil' },
+      { k: 'clasicos', l: 'Clásicos' }, { k: 'thriller', l: 'Thriller' }, { k: 'usados', l: 'Libros usados' },
+      { k: 'ofertas', l: 'Ofertas lectoras' }, { k: 'ultima', l: 'Última unidad' }
+    ];
+    const pageKeys = ['inicio', 'catalogo', 'segunda', 'merch', 'eventos', 'vender', 'comprar', 'visitanos'];
+    const navA = {}, navN = {};
+    pageKeys.forEach(k => { navA[k] = page === k; navN[k] = page !== k; });
+
+    const catChips = catList.map(c => ({ k: c.k, label: c.l, onClick: () => this.setState({ category: c.k }) }));
+
+    const recs = [7, 3, 1].map(i => baseBooks[i]).filter(Boolean);
+    const novedades = baseBooks.filter(b => b.cats.includes('novedades'));
+
+    return {
+      page,
+      isInicio: page === 'inicio', isCatalogo: page === 'catalogo', isSegunda: page === 'segunda',
+      isVender: page === 'vender', isMerch: page === 'merch', isEventos: page === 'eventos',
+      isComprar: page === 'comprar', isVisitanos: page === 'visitanos',
+      nav: {
+        inicio: () => this.go('inicio'), catalogo: () => this.go('catalogo'), segunda: () => this.go('segunda'),
+        vender: () => this.go('vender'), merch: () => this.go('merch'), eventos: () => this.go('eventos'),
+        comprar: () => this.go('comprar'), visitanos: () => this.go('visitanos')
+      },
+      navItems,
+      catChips,
+      category,
+      navA, navN,
+      search,
+      onSearch: (e) => this.setState({ search: e.target.value }),
+      catalogBooks,
+      catalogCount: catalogBooks.length,
+      hasResults: catalogBooks.length > 0,
+      noResults: catalogBooks.length === 0,
+      homeNovedades: (novedades.length ? novedades : baseBooks).slice(0, 4).map(b => this.decBook(b)),
+      homeSegunda: usados.slice(0, 3),
+      homeMerch: baseMerch.slice(0, 4).map(m => this.decMerch(m)),
+      homeEventos: baseEvents.slice(0, 3).map(e => this.decEvent(e)),
+      recomendados: (recs.length ? recs : baseBooks.slice(0, 3)).map(b => this.decBook(b)),
+      segundaBooks: usados,
+      merchAll: baseMerch.map(m => this.decMerch(m)),
+      eventsAll: baseEvents.map(e => this.decEvent(e)),
+      ventaPasos: this.ventaPasos,
+      compraPasos: this.compraPasos,
+      waVender: this.waText('Hola, quiero registrar mis libros para venderlos en consignación en La Madriguera. ¿Cómo empiezo?'),
+      waGeneral: 'https://wa.me/' + this.WA,
+      igHref: this.cfg().instagram || this.igHref,
+      ttHref: this.cfg().tiktok || this.ttHref,
+      mapsHref: this.cfg().maps || this.mapsHref,
+      year: 2026
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:flex; flex-direction:column; background:#FFFDF8; border:1px solid #EADBC4; border-radius:18px; overflow:hidden; box-shadow:0 10px 26px rgba(52,37,26,0.08); font-family:'Mulish',sans-serif; height:100%;">
+  <div style="position:relative; aspect-ratio:16/9; background:repeating-linear-gradient(135deg,#2E4734,#2E4734 12px,#365239 12px,#365239 24px); display:flex; align-items:flex-end; justify-content:flex-start;">
+    <div style="position:absolute; inset:0; background:radial-gradient(120% 120% at 80% 0%, rgba(201,162,75,0.4), rgba(46,71,52,0) 60%);"></div>
+    <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.08em; color:rgba(247,239,226,0.72); margin:12px; text-transform:lowercase;">imagen del evento</span>
+    <sc-if value="{{ event.hasImg }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ event.imagen }}'); background-size:cover; background-position:center;"></div></sc-if>
+    <span style="{{ event.dispStyle }}; position:absolute; right:12px; top:12px;">{{ event.cupos }}</span>
+  </div>
+  <div style="padding:16px 16px 18px; display:flex; flex-direction:column; gap:10px; flex:1;">
+    <h3 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:22px; line-height:1.12; color:#34251A; text-wrap:pretty;">{{ event.name }}</h3>
+    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-size:13px; font-weight:700; color:#2E4734;">
+      <span style="display:inline-flex; align-items:center; gap:6px;"><span style="width:6px; height:6px; border-radius:50%; background:#C9A24B;"></span>{{ event.date }}</span>
+      <span style="color:#C9A24B;">·</span>
+      <span>{{ event.time }}</span>
+    </div>
+    <p style="margin:0; font-size:13.5px; line-height:1.45; color:#6E5946;">{{ event.includes }}</p>
+    <div style="margin-top:auto; padding-top:6px; display:flex; align-items:center; justify-content:space-between; gap:10px;">
+      <span style="font-family:'Spectral',serif; font-weight:700; font-size:19px; color:#7C2F3E;">{{ event.price }}</span>
+    </div>
+    <a href="{{ event.waHref }}" onClick="{{ event.onBuy }}" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; background:#7C2F3E; color:#FFF7EC; font-weight:700; font-size:13.5px; padding:11px 12px; border-radius:11px; transition:background .15s ease;" style-hover="background:#672836;">Reservar por WhatsApp</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:340,&quot;height&quot;:420},&quot;event&quot;:{&quot;editor&quot;:null,&quot;default&quot;:{&quot;name&quot;:&quot;Cine inmersivo&quot;,&quot;date&quot;:&quot;Vie 27 jun&quot;,&quot;time&quot;:&quot;19:30&quot;,&quot;includes&quot;:&quot;Proyección temática + café de autor + una pequeña sorpresa lectora.&quot;,&quot;price&quot;:&quot;$12&quot;,&quot;cupos&quot;:&quot;8 cupos&quot;,&quot;dispStyle&quot;:{&quot;display&quot;:&quot;inline-block&quot;,&quot;padding&quot;:&quot;4px 11px&quot;,&quot;borderRadius&quot;:&quot;999px&quot;,&quot;fontSize&quot;:&quot;11px&quot;,&quot;fontWeight&quot;:800,&quot;background&quot;:&quot;rgba(247,239,226,0.92)&quot;,&quot;color&quot;:&quot;#2E6B41&quot;},&quot;waHref&quot;:&quot;#&quot;}}}"></script>
+</body>
+</html>

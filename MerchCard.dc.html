@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:flex; flex-direction:column; background:#FFFDF8; border:1px solid #EADBC4; border-radius:16px; overflow:hidden; box-shadow:0 8px 22px rgba(52,37,26,0.07); font-family:'Mulish',sans-serif; height:100%;">
+  <div style="position:relative; aspect-ratio:4/3; background:repeating-linear-gradient(135deg,#F1E5D0,#F1E5D0 11px,#E9D9BE 11px,#E9D9BE 22px); display:flex; align-items:center; justify-content:center;">
+    <div style="position:absolute; inset:0; background:radial-gradient(120% 100% at 50% 0%, rgba(255,247,228,0.5), rgba(255,247,228,0) 65%);"></div>
+    <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.06em; color:#A8916F; text-transform:lowercase; text-align:center; padding:0 10px;">{{ merch.cat }}</span>
+    <sc-if value="{{ merch.hasImg }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ merch.imagen }}'); background-size:cover; background-position:center;"></div></sc-if>
+    <span style="{{ merch.dispStyle }}; position:absolute; left:10px; top:10px;">{{ merch.disp }}</span>
+  </div>
+  <div style="padding:14px 14px 16px; display:flex; flex-direction:column; gap:7px; flex:1;">
+    <span style="font-size:10.5px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#A07F5E;">{{ merch.cat }}</span>
+    <h3 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:18px; line-height:1.15; color:#34251A; text-wrap:pretty;">{{ merch.name }}</h3>
+    <p style="margin:0; font-size:13px; line-height:1.4; color:#8A715A;">{{ merch.desc }}</p>
+    <div style="margin-top:4px; display:flex; align-items:center; justify-content:space-between; gap:8px;">
+      <span style="font-family:'Spectral',serif; font-weight:700; font-size:21px; color:#7C2F3E;">{{ merch.priceLabel }}</span>
+    </div>
+    <a href="{{ merch.waHref }}" onClick="{{ merch.onBuy }}" target="_blank" rel="noopener" style="margin-top:auto; display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; background:#2E4734; color:#F7EFE2; font-weight:700; font-size:13.5px; padding:11px 12px; border-radius:11px; transition:background .15s ease;" style-hover="background:#244031;">Pedir por WhatsApp</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:250,&quot;height&quot;:360},&quot;merch&quot;:{&quot;editor&quot;:null,&quot;default&quot;:{&quot;name&quot;:&quot;Tote bag lectora&quot;,&quot;cat&quot;:&quot;Tote bags&quot;,&quot;desc&quot;:&quot;Bolsa de tela con diseño literario exclusivo de La Madriguera.&quot;,&quot;priceLabel&quot;:&quot;$8&quot;,&quot;disp&quot;:&quot;Disponible&quot;,&quot;dispStyle&quot;:{&quot;display&quot;:&quot;inline-block&quot;,&quot;padding&quot;:&quot;3px 10px&quot;,&quot;borderRadius&quot;:&quot;999px&quot;,&quot;fontSize&quot;:&quot;11px&quot;,&quot;fontWeight&quot;:800,&quot;background&quot;:&quot;#E3EDE3&quot;,&quot;color&quot;:&quot;#2E6B41&quot;},&quot;waHref&quot;:&quot;#&quot;}}}"></script>
+</body>
+</html>

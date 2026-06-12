@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:flex; flex-direction:column; background:#FFFDF8; border:1px solid #EADBC4; border-radius:16px; overflow:hidden; box-shadow:0 8px 22px rgba(52,37,26,0.07); font-family:'Mulish',sans-serif; height:100%;">
+  <div style="position:relative; aspect-ratio:3/4; background:repeating-linear-gradient(135deg,#F1E5D0,#F1E5D0 11px,#E9D9BE 11px,#E9D9BE 22px); display:flex; align-items:center; justify-content:center;">
+    <div style="position:absolute; inset:0; background:radial-gradient(120% 90% at 50% 0%, rgba(255,247,228,0.55), rgba(255,247,228,0) 60%);"></div>
+    <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.08em; color:#A8916F; text-transform:lowercase;">portada</span>
+    <sc-if value="{{ book.hasImg }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ book.imagen }}'); background-size:cover; background-position:center;"></div></sc-if>
+    <span style="position:absolute; left:10px; bottom:10px; font-family:ui-monospace,Menlo,monospace; font-size:10px; background:rgba(52,37,26,0.74); color:#F7EFE2; padding:3px 7px; border-radius:6px; letter-spacing:.04em;">{{ book.code }}</span>
+  </div>
+  <div style="padding:14px 14px 16px; display:flex; flex-direction:column; gap:8px; flex:1;">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+      <span style="font-size:10.5px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#A07F5E;">{{ book.genre }}</span>
+      <span style="{{ book.dispStyle }}">{{ book.disp }}</span>
+    </div>
+    <h3 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:19px; line-height:1.15; color:#34251A; text-wrap:pretty;">{{ book.title }}</h3>
+    <span style="font-family:'Spectral',serif; font-style:italic; font-size:13.5px; color:#8A715A;">{{ book.author }}</span>
+    <div style="margin-top:2px; display:flex; align-items:center; justify-content:space-between; gap:8px;">
+      <span style="{{ book.estadoStyle }}">{{ book.estado }}</span>
+      <span style="font-family:'Spectral',serif; font-weight:700; font-size:21px; color:#7C2F3E;">{{ book.priceLabel }}</span>
+    </div>
+    <a href="{{ book.waHref }}" onClick="{{ book.onBuy }}" target="_blank" rel="noopener" style="margin-top:auto; display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; background:#2E4734; color:#F7EFE2; font-weight:700; font-size:13.5px; padding:11px 12px; border-radius:11px; transition:background .15s ease;" style-hover="background:#244031;">Consultar por WhatsApp</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:240,&quot;height&quot;:430},&quot;book&quot;:{&quot;editor&quot;:null,&quot;default&quot;:{&quot;title&quot;:&quot;Alas de sangre&quot;,&quot;author&quot;:&quot;Rebecca Yarros&quot;,&quot;genre&quot;:&quot;Fantasía&quot;,&quot;estado&quot;:&quot;Nuevo&quot;,&quot;disp&quot;:&quot;Última unidad&quot;,&quot;code&quot;:&quot;LM-N-0001&quot;,&quot;priceLabel&quot;:&quot;$28&quot;,&quot;estadoStyle&quot;:{&quot;display&quot;:&quot;inline-block&quot;,&quot;padding&quot;:&quot;3px 10px&quot;,&quot;borderRadius&quot;:&quot;999px&quot;,&quot;fontSize&quot;:&quot;11px&quot;,&quot;fontWeight&quot;:800,&quot;background&quot;:&quot;#E3EDE3&quot;,&quot;color&quot;:&quot;#2E4734&quot;},&quot;dispStyle&quot;:{&quot;display&quot;:&quot;inline-block&quot;,&quot;padding&quot;:&quot;3px 10px&quot;,&quot;borderRadius&quot;:&quot;999px&quot;,&quot;fontSize&quot;:&quot;11px&quot;,&quot;fontWeight&quot;:800,&quot;background&quot;:&quot;#F6E3D5&quot;,&quot;color&quot;:&quot;#BC5230&quot;},&quot;waHref&quot;:&quot;#&quot;}}}"></script>
+</body>
+</html>
