@@ -32,7 +32,7 @@
     <div style="max-width:1180px; margin:0 auto; padding:12px clamp(16px,4vw,32px); display:flex; align-items:center; justify-content:space-between; gap:16px;">
       <div onClick="{{ nav.inicio }}" style="display:flex; align-items:center; gap:11px; cursor:pointer;">
         <sc-if value="{{ hasLogo }}" hint-placeholder-val="{{ false }}">
-          <div style="width:44px; height:44px; border-radius:12px; overflow:hidden; background:#FFFDF8; border:1px solid #E3D2B8; background-image:url('{{ brandLogo }}'); background-size:contain; background-repeat:no-repeat; background-position:center; box-shadow:0 4px 12px rgba(46,71,52,0.18);"></div>
+          <div style="width:44px; height:44px; border-radius:12px; overflow:hidden; background:#FFFDF8; border:1px solid #E3D2B8; box-shadow:0 4px 12px rgba(46,71,52,0.18); display:flex; align-items:center; justify-content:center;">{{ brandLogoEl }}</div>
         </sc-if>
         <sc-if value="{{ noLogo }}" hint-placeholder-val="{{ true }}">
           <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(150deg,#2E4734,#3C5A43); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(46,71,52,0.3); position:relative;">
@@ -97,7 +97,7 @@
         <div style="position:relative;">
           <div style="position:relative; aspect-ratio:4/5; border-radius:24px; overflow:hidden; box-shadow:0 30px 60px rgba(52,37,26,0.22); border:1px solid #E3D2B8; background:repeating-linear-gradient(135deg,#EBDDC4,#EBDDC4 14px,#E2D0B2 14px,#E2D0B2 28px);">
             <sc-if value="{{ hasHero }}" hint-placeholder-val="{{ false }}">
-              <div style="position:absolute; inset:0; background-image:url('{{ brandHero }}'); background-size:cover; background-position:center;"></div>
+              {{ brandHeroEl }}
             </sc-if>
             <div style="position:absolute; inset:0; background:radial-gradient(110% 80% at 70% 15%, rgba(255,243,214,0.7), rgba(255,243,214,0) 55%), linear-gradient(180deg, rgba(46,71,52,0) 55%, rgba(46,71,52,0.28));"></div>
             <sc-if value="{{ noHero }}" hint-placeholder-val="{{ true }}">
@@ -177,7 +177,7 @@
     <!-- EVENTOS TEASER -->
     <section style="background:#2A1C12; color:#F4E9D8; position:relative; overflow:hidden;">
       <sc-if value="{{ hasEventosImg }}" hint-placeholder-val="{{ false }}">
-        <div style="position:absolute; inset:0; background-image:url('{{ brandEventosImg }}'); background-size:cover; background-position:center;"></div>
+        {{ brandEventosEl }}
         <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(42,28,18,0.62), rgba(42,28,18,0.84));"></div>
       </sc-if>
       <div style="position:absolute; top:-100px; right:10%; width:340px; height:340px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.28), rgba(201,162,75,0) 70%);"></div>
@@ -215,7 +215,7 @@
       <div style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:clamp(28px,4vw,48px); align-items:center;">
         <div style="position:relative; aspect-ratio:16/11; border-radius:20px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 20px 44px rgba(52,37,26,0.16); background:repeating-linear-gradient(135deg,#E7D8BD,#E7D8BD 13px,#DECCAC 13px,#DECCAC 26px);">
           <sc-if value="{{ hasLocal }}" hint-placeholder-val="{{ false }}">
-            <div style="position:absolute; inset:0; background-image:url('{{ brandLocal }}'); background-size:cover; background-position:center;"></div>
+            {{ brandLocalEl }}
           </sc-if>
           <sc-if value="{{ noLocal }}" hint-placeholder-val="{{ true }}">
             <div style="position:absolute; inset:0; background:radial-gradient(100% 80% at 30% 20%, rgba(255,243,214,0.6), rgba(255,243,214,0) 60%);"></div>
@@ -303,7 +303,7 @@
   <div data-screen-label="Vender">
     <section style="position:relative; overflow:hidden; background:#2E4734; color:#F4E9D8;">
       <sc-if value="{{ hasVenderImg }}" hint-placeholder-val="{{ false }}">
-        <div style="position:absolute; inset:0; background-image:url('{{ brandVenderImg }}'); background-size:cover; background-position:center;"></div>
+        {{ brandVenderEl }}
         <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(46,71,52,0.72), rgba(46,71,52,0.88));"></div>
       </sc-if>
       <div style="position:absolute; top:-90px; left:8%; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.3), rgba(201,162,75,0) 70%);"></div>
@@ -355,7 +355,7 @@
   <div data-screen-label="Eventos">
     <section style="background:#2A1C12; color:#F4E9D8; position:relative; overflow:hidden;">
       <sc-if value="{{ hasEventosImg }}" hint-placeholder-val="{{ false }}">
-        <div style="position:absolute; inset:0; background-image:url('{{ brandEventosImg }}'); background-size:cover; background-position:center;"></div>
+        {{ brandEventosEl }}
         <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(42,28,18,0.62), rgba(42,28,18,0.84));"></div>
       </sc-if>
       <div style="position:absolute; bottom:-120px; left:12%; width:360px; height:360px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.26), rgba(201,162,75,0) 70%);"></div>
@@ -446,7 +446,7 @@
       </div>
       <div style="position:relative; aspect-ratio:3/4; border-radius:22px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 24px 50px rgba(52,37,26,0.18); background:repeating-linear-gradient(135deg,#E7D8BD,#E7D8BD 13px,#DECCAC 13px,#DECCAC 26px);">
         <sc-if value="{{ hasLocal }}" hint-placeholder-val="{{ false }}">
-          <div style="position:absolute; inset:0; background-image:url('{{ brandLocal }}'); background-size:cover; background-position:center;"></div>
+          {{ brandLocalEl }}
         </sc-if>
         <sc-if value="{{ noLocal }}" hint-placeholder-val="{{ true }}">
           <div style="position:absolute; inset:0; background:radial-gradient(100% 70% at 60% 18%, rgba(255,243,214,0.6), rgba(255,243,214,0) 60%), linear-gradient(180deg, rgba(46,71,52,0) 60%, rgba(46,71,52,0.25));"></div>
@@ -466,7 +466,7 @@
         <div>
           <div style="display:flex; align-items:center; gap:11px;">
             <sc-if value="{{ hasLogo }}" hint-placeholder-val="{{ false }}">
-              <div style="width:42px; height:42px; border-radius:12px; overflow:hidden; background:#FFFDF8; background-image:url('{{ brandLogo }}'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
+              <div style="width:42px; height:42px; border-radius:12px; overflow:hidden; background:#FFFDF8; display:flex; align-items:center; justify-content:center;">{{ brandLogoEl }}</div>
             </sc-if>
             <sc-if value="{{ noLogo }}" hint-placeholder-val="{{ true }}">
               <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(150deg,#3C5A43,#2E4734); display:flex; align-items:center; justify-content:center; position:relative;">
@@ -746,17 +746,19 @@ class Component extends DCLogic {
     const catChips = catList.map(c => ({ k: c.k, label: c.l, onClick: () => this.setState({ category: c.k }) }));
 
     const brand = (cms && cms.brand) || {};
+    const mkImg = (src, fit) => src ? React.createElement('img', { src: src, alt: '', style: { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: fit } }) : null;
+    const mkLogo = (src) => src ? React.createElement('img', { src: src, alt: 'La Madriguera', style: { width: '100%', height: '100%', objectFit: 'contain' } }) : null;
 
     const recs = [7, 3, 1].map(i => baseBooks[i]).filter(Boolean);
     const novedades = baseBooks.filter(b => b.cats.includes('novedades'));
 
     return {
       page,
-      hasLogo: !!brand.logo, noLogo: !brand.logo, brandLogo: brand.logo || '',
-      hasHero: !!brand.hero, noHero: !brand.hero, brandHero: brand.hero || '',
-      hasLocal: !!brand.local, noLocal: !brand.local, brandLocal: brand.local || '',
-      hasEventosImg: !!brand.eventos, brandEventosImg: brand.eventos || '',
-      hasVenderImg: !!brand.vender, brandVenderImg: brand.vender || '',
+      hasLogo: !!brand.logo, noLogo: !brand.logo, brandLogo: brand.logo || '', brandLogoEl: mkLogo(brand.logo),
+      hasHero: !!brand.hero, noHero: !brand.hero, brandHero: brand.hero || '', brandHeroEl: mkImg(brand.hero, 'cover'),
+      hasLocal: !!brand.local, noLocal: !brand.local, brandLocal: brand.local || '', brandLocalEl: mkImg(brand.local, 'cover'),
+      hasEventosImg: !!brand.eventos, brandEventosImg: brand.eventos || '', brandEventosEl: mkImg(brand.eventos, 'cover'),
+      hasVenderImg: !!brand.vender, brandVenderImg: brand.vender || '', brandVenderEl: mkImg(brand.vender, 'cover'),
       isInicio: page === 'inicio', isCatalogo: page === 'catalogo', isSegunda: page === 'segunda',
       isVender: page === 'vender', isMerch: page === 'merch', isEventos: page === 'eventos',
       isComprar: page === 'comprar', isVisitanos: page === 'visitanos',

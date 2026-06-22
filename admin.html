@@ -103,7 +103,7 @@
             </div>
             <div style="display:flex; gap:16px; align-items:flex-start;">
               <div onClick="{{ l.onPick }}" style="position:relative; flex:0 0 100px; cursor:pointer; aspect-ratio:3/4; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F4ECDC; display:flex; align-items:center; justify-content:center; font-size:12px; color:#A07F5E; font-weight:800;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
-                <sc-if value="{{ l.hasImg }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ l.imagen }}'); background-size:cover; background-position:center;"></div></sc-if>
+                <sc-if value="{{ l.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ l.imagen }}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" /></sc-if>
                 <span style="position:relative; text-align:center; padding:0 8px;">Subir portada</span>
               </div>
               <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
@@ -177,7 +177,7 @@
             </div>
             <div style="display:flex; gap:16px; align-items:flex-start;">
               <div onClick="{{ m.onPick }}" style="position:relative; flex:0 0 100px; cursor:pointer; aspect-ratio:1/1; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F4ECDC; display:flex; align-items:center; justify-content:center; font-size:11px; color:#A07F5E; font-weight:800;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
-                <sc-if value="{{ m.hasImg }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ m.imagen }}'); background-size:cover; background-position:center;"></div></sc-if>
+                <sc-if value="{{ m.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ m.imagen }}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" /></sc-if>
                 <span style="position:relative; text-align:center; padding:0 8px;">Subir foto</span>
               </div>
               <div style="flex:1; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
@@ -214,7 +214,7 @@
             </div>
             <div style="display:flex; gap:16px; align-items:flex-start;">
               <div onClick="{{ e.onPick }}" style="position:relative; flex:0 0 100px; cursor:pointer; aspect-ratio:3/4; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F4ECDC; display:flex; align-items:center; justify-content:center; font-size:11px; color:#A07F5E; font-weight:800;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
-                <sc-if value="{{ e.hasImg }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ e.imagen }}'); background-size:cover; background-position:center;"></div></sc-if>
+                <sc-if value="{{ e.hasImg }}" hint-placeholder-val="{{ false }}"><img src="{{ e.imagen }}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" /></sc-if>
                 <span style="position:relative; text-align:center; padding:0 8px;">Subir cartel</span>
               </div>
               <div style="flex:1; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
@@ -245,7 +245,7 @@
           <div><div style="font-family:'Spectral',serif; font-weight:700; font-size:18px; color:#2E4734;">Logo</div><div style="font-size:12.5px; color:#8A715A; margin-top:2px;">Aparece arriba a la izquierda y en el pie.</div></div>
           <div onClick="{{ pickLogo }}" title="Click para subir el logo" style="position:relative; width:100%; aspect-ratio:1/1; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F4ECDC; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
             <span style="font-size:12px; color:#A07F5E; font-weight:800; text-align:center; padding:0 10px; line-height:1.4;">Subir<br>logo</span>
-            <sc-if value="{{ brandLogoHas }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ brandLogo }}'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div></sc-if>
+            <sc-if value="{{ brandLogoHas }}" hint-placeholder-val="{{ false }}"><img src="{{ brandLogo }}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:contain;" /></sc-if>
           </div>
           <sc-if value="{{ brandLogoHas }}" hint-placeholder-val="{{ false }}"><span onClick="{{ clearLogo }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar logo</span></sc-if>
         </div>
@@ -254,7 +254,7 @@
           <div><div style="font-family:'Spectral',serif; font-weight:700; font-size:18px; color:#2E4734;">Banner principal</div><div style="font-size:12.5px; color:#8A715A; margin-top:2px;">Foto grande del inicio (libros, café…).</div></div>
           <div onClick="{{ pickHero }}" title="Click para subir la foto" style="position:relative; width:100%; aspect-ratio:4/5; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F4ECDC; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
             <span style="font-size:12px; color:#A07F5E; font-weight:800; text-align:center; padding:0 10px; line-height:1.4;">Subir<br>banner</span>
-            <sc-if value="{{ brandHeroHas }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ brandHero }}'); background-size:cover; background-position:center;"></div></sc-if>
+            <sc-if value="{{ brandHeroHas }}" hint-placeholder-val="{{ false }}"><img src="{{ brandHero }}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" /></sc-if>
           </div>
           <sc-if value="{{ brandHeroHas }}" hint-placeholder-val="{{ false }}"><span onClick="{{ clearHero }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar banner</span></sc-if>
         </div>
@@ -263,7 +263,7 @@
           <div><div style="font-family:'Spectral',serif; font-weight:700; font-size:18px; color:#2E4734;">Foto del local</div><div style="font-size:12.5px; color:#8A715A; margin-top:2px;">Se usa en "Visítanos" y en el inicio.</div></div>
           <div onClick="{{ pickLocal }}" title="Click para subir la foto" style="position:relative; width:100%; aspect-ratio:4/5; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F4ECDC; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
             <span style="font-size:12px; color:#A07F5E; font-weight:800; text-align:center; padding:0 10px; line-height:1.4;">Subir<br>foto</span>
-            <sc-if value="{{ brandLocalHas }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ brandLocal }}'); background-size:cover; background-position:center;"></div></sc-if>
+            <sc-if value="{{ brandLocalHas }}" hint-placeholder-val="{{ false }}"><img src="{{ brandLocal }}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" /></sc-if>
           </div>
           <sc-if value="{{ brandLocalHas }}" hint-placeholder-val="{{ false }}"><span onClick="{{ clearLocal }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span></sc-if>
         </div>
@@ -272,7 +272,7 @@
           <div><div style="font-family:'Spectral',serif; font-weight:700; font-size:18px; color:#2E4734;">Banner de Eventos</div><div style="font-size:12.5px; color:#8A715A; margin-top:2px;">Fondo de la sección y página de eventos.</div></div>
           <div onClick="{{ pickEventos }}" title="Click para subir la foto" style="position:relative; width:100%; aspect-ratio:16/7; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F4ECDC; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
             <span style="font-size:12px; color:#A07F5E; font-weight:800; text-align:center; padding:0 10px; line-height:1.4;">Subir banner ancho</span>
-            <sc-if value="{{ brandEventosHas }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ brandEventos }}'); background-size:cover; background-position:center;"></div></sc-if>
+            <sc-if value="{{ brandEventosHas }}" hint-placeholder-val="{{ false }}"><img src="{{ brandEventos }}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" /></sc-if>
           </div>
           <div style="font-size:11.5px; color:#A08A6E;">La foto se oscurece sola para que el texto se lea bien encima.</div>
           <sc-if value="{{ brandEventosHas }}" hint-placeholder-val="{{ false }}"><span onClick="{{ clearEventos }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar banner</span></sc-if>
@@ -282,7 +282,7 @@
           <div><div style="font-family:'Spectral',serif; font-weight:700; font-size:18px; color:#2E4734;">Banner de Vender tus libros</div><div style="font-size:12.5px; color:#8A715A; margin-top:2px;">Fondo del encabezado de "Vende tus libros".</div></div>
           <div onClick="{{ pickVender }}" title="Click para subir la foto" style="position:relative; width:100%; aspect-ratio:16/7; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F4ECDC; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
             <span style="font-size:12px; color:#A07F5E; font-weight:800; text-align:center; padding:0 10px; line-height:1.4;">Subir banner ancho</span>
-            <sc-if value="{{ brandVenderHas }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ brandVender }}'); background-size:cover; background-position:center;"></div></sc-if>
+            <sc-if value="{{ brandVenderHas }}" hint-placeholder-val="{{ false }}"><img src="{{ brandVender }}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;" /></sc-if>
           </div>
           <div style="font-size:11.5px; color:#A08A6E;">La foto se oscurece sola para que el texto se lea bien encima.</div>
           <sc-if value="{{ brandVenderHas }}" hint-placeholder-val="{{ false }}"><span onClick="{{ clearVender }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar banner</span></sc-if>
