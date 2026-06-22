@@ -32,12 +32,10 @@
       </div>
       <h1 style="margin:0 0 10px; font-family:'Spectral',serif; font-weight:700; font-size:28px; color:#2E4734;">La Madriguera</h1>
       <p style="margin:0 0 28px; font-size:14px; color:#6E5946;">Panel de administración</p>
-      
       <div style="display:flex; flex-direction:column; gap:12px;">
         <input type="password" placeholder="Ingresa tu contraseña" value="{{ loginPassword }}" onChange="{{ onLoginPass }}" onKeyPress="{{ onLoginKeypress }}" style="width:100%; padding:12px 14px; border:1px solid #D9BC77; border-radius:10px; font-size:14px; font-family:inherit; background:#FBF3E0; color:#2A1C12;" />
         <button onClick="{{ doLogin }}" style="width:100%; padding:12px 14px; border:none; border-radius:10px; font-size:14px; font-weight:800; background:#2E4734; color:#F7EFE2; cursor:pointer; box-shadow:0 6px 16px rgba(46,71,52,0.2);" style-hover="background:#244031;">Entrar</button>
       </div>
-      
       <sc-if value="{{ loginError }}" hint-placeholder-val="{{ false }}">
         <div style="margin-top:14px; padding:10px 12px; background:#FDE8E0; border:1px solid #E0AE95; border-radius:8px; font-size:12.5px; color:#9A4A3C; font-weight:600;">{{ loginError }}</div>
       </sc-if>
@@ -45,7 +43,7 @@
   </div>
   </sc-if>
 
-  <!-- PANEL (oculto si no está autenticado) -->
+  <!-- PANEL -->
   <sc-if value="{{ isAuthenticated }}" hint-placeholder-val="{{ false }}">
 
   <!-- HEADER -->
@@ -85,82 +83,246 @@
 
   <main style="max-width:1100px; margin:0 auto; padding:clamp(24px,4vw,40px) clamp(16px,4vw,32px) 80px;">
 
+    <!-- ============ LIBROS ============ -->
+    <sc-if value="{{ isLibros }}" hint-placeholder-val="{{ true }}">
+    <div data-screen-label="Admin Libros">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:10px;">
+        <div>
+          <h2 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:30px; color:#2E4734;">Libros del catálogo</h2>
+          <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ librosCount }} libros · haz click en la portada para subir la foto. Todo se guarda solo.</p>
+        </div>
+        <span onClick="{{ addLibro }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#2E4734; color:#F7EFE2; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(46,71,52,0.25);" style-hover="background:#244031;">+ Añadir libro</span>
+      </div>
+      <div style="margin-bottom:22px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">En <strong>Género</strong> usa palabras como Fantasía, Romance, Manga, Infantil, Clásicos o Thriller para que el libro aparezca en los filtros del catálogo. Los libros marcados <strong>Vendido</strong> dejan de mostrarse en la página.</div>
+      <div style="display:flex; flex-direction:column; gap:18px;">
+        <sc-for list="{{ libros }}" as="l" hint-placeholder-count="3">
+          <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;">
+              <span style="font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:#8A715A; background:#F0E6D2; padding:4px 9px; border-radius:6px;">{{ l.code }}</span>
+              <span onClick="{{ l.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
+            </div>
+            <div style="display:flex; gap:16px; align-items:flex-start;">
+              <div onClick="{{ l.onPick }}" style="position:relative; flex:0 0 100px; cursor:pointer; aspect-ratio:3/4; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F4ECDC; display:flex; align-items:center; justify-content:center; font-size:12px; color:#A07F5E; font-weight:800;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
+                <sc-if value="{{ l.hasImg }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ l.imagen }}'); background-size:cover; background-position:center;"></div></sc-if>
+                <span style="position:relative; text-align:center; padding:0 8px;">Subir portada</span>
+              </div>
+              <div style="flex:1; display:flex; flex-direction:column; gap:12px;">
+                <div><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Título</label><input type="text" value="{{ l.title }}" onChange="{{ l.onTitle }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" /></div>
+                <div><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Autor</label><input type="text" value="{{ l.author }}" onChange="{{ l.onAuthor }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" /></div>
+                <div style="display:flex; gap:12px;">
+                  <div style="flex:1;"><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Género</label><input type="text" value="{{ l.genre }}" onChange="{{ l.onGenre }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" /></div>
+                  <div style="flex:0 0 90px;"><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Precio ($)</label><input type="number" value="{{ l.price }}" onChange="{{ l.onPrice }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" /></div>
+                </div>
+                <div style="display:flex; gap:12px;">
+                  <div style="flex:1;"><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Estado</label><input type="text" value="{{ l.estado }}" onChange="{{ l.onEstado }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" placeholder="Nuevo / Usado excelente…" /></div>
+                  <div style="flex:1;"><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Disponibilidad</label><input type="text" value="{{ l.disp }}" onChange="{{ l.onDisp }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" placeholder="Disponible / Vendido…" /></div>
+                </div>
+              </div>
+            </div>
+            <sc-if value="{{ l.hasImg }}" hint-placeholder-val="{{ false }}"><div style="margin-top:12px;"><span onClick="{{ l.onClearImg }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; padding:6px 12px; border-radius:8px; border:1px solid #E0AE95; background:#FDE8E0;" style-hover="background:#F6D9D1;">Quitar foto</span></div></sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ CONSIGNACIÓN ============ -->
+    <sc-if value="{{ isConsig }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Admin Consignación">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:10px;">
+        <div>
+          <h2 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:30px; color:#2E4734;">Libros en consignación</h2>
+          <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ consigCount }} libros · registro de lo que recibiste y vendiste. Esto no se muestra en la web pública.</p>
+        </div>
+        <span onClick="{{ addConsig }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#9A7A1E; color:#FBF3E0; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(154,122,30,0.25);" style-hover="background:#86691A;">+ Añadir libro</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:18px;">
+        <sc-for list="{{ consig }}" as="c" hint-placeholder-count="2">
+          <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;">
+              <span style="font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:#8A715A; background:#F0E6D2; padding:4px 9px; border-radius:6px;">{{ c.code }}</span>
+              <span onClick="{{ c.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Título</label><input type="text" value="{{ c.title }}" onChange="{{ c.onTitle }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" /></div>
+              <div><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Autor</label><input type="text" value="{{ c.author }}" onChange="{{ c.onAuthor }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" /></div>
+              <div><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Dueño</label><input type="text" value="{{ c.owner }}" onChange="{{ c.onOwner }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" /></div>
+              <div><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Contacto</label><input type="text" value="{{ c.contact }}" onChange="{{ c.onContact }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" /></div>
+              <div><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Precio venta ($)</label><input type="number" value="{{ c.price }}" onChange="{{ c.onPrice }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" /></div>
+              <div><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Pago al dueño ($)</label><input type="number" value="{{ c.payout }}" onChange="{{ c.onPayout }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" /></div>
+              <div style="grid-column:1/3;"><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Estado</label><input type="text" value="{{ c.estado }}" onChange="{{ c.onEstado }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" placeholder="Recibido / En venta / Vendido / Pagado al dueño" /></div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ MERCH ============ -->
+    <sc-if value="{{ isMerch }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Admin Merch">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:10px;">
+        <div>
+          <h2 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:30px; color:#2E4734;">Merchandising</h2>
+          <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ merchCount }} productos · tazas, stickers, tote bags, etc.</p>
+        </div>
+        <span onClick="{{ addMerch }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#7C2F3E; color:#FFF7EC; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(124,47,62,0.25);" style-hover="background:#6A2735;">+ Añadir producto</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:18px;">
+        <sc-for list="{{ merch }}" as="m" hint-placeholder-count="2">
+          <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;">
+              <span style="font-size:13px; font-weight:700; color:#5E4632;">{{ m.name }}</span>
+              <span onClick="{{ m.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
+            </div>
+            <div style="display:flex; gap:16px; align-items:flex-start;">
+              <div onClick="{{ m.onPick }}" style="position:relative; flex:0 0 100px; cursor:pointer; aspect-ratio:1/1; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F4ECDC; display:flex; align-items:center; justify-content:center; font-size:11px; color:#A07F5E; font-weight:800;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
+                <sc-if value="{{ m.hasImg }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ m.imagen }}'); background-size:cover; background-position:center;"></div></sc-if>
+                <span style="position:relative; text-align:center; padding:0 8px;">Subir foto</span>
+              </div>
+              <div style="flex:1; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Nombre</label><input type="text" value="{{ m.name }}" onChange="{{ m.onName }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" /></div>
+                <div><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Categoría</label><input type="text" value="{{ m.cat }}" onChange="{{ m.onCat }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" placeholder="Tazas, stickers…" /></div>
+                <div style="grid-column:1/3;"><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Descripción</label><textarea value="{{ m.desc }}" onChange="{{ m.onDesc }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0; font-family:inherit; resize:vertical; min-height:60px;"></textarea></div>
+                <div><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Precio ($)</label><input type="number" value="{{ m.price }}" onChange="{{ m.onPrice }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" /></div>
+                <div><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Disponibilidad</label><input type="text" value="{{ m.disp }}" onChange="{{ m.onDisp }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" placeholder="Disponible / Agotado…" /></div>
+              </div>
+            </div>
+            <sc-if value="{{ m.hasImg }}" hint-placeholder-val="{{ false }}"><div style="margin-top:12px;"><span onClick="{{ m.onClearImg }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; padding:6px 12px; border-radius:8px; border:1px solid #E0AE95; background:#FDE8E0;" style-hover="background:#F6D9D1;">Quitar foto</span></div></sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ EVENTOS ============ -->
+    <sc-if value="{{ isEventos }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Admin Eventos">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:10px;">
+        <div>
+          <h2 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:30px; color:#2E4734;">Eventos y actividades</h2>
+          <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ eventosCount }} eventos · presentaciones, talleres, catas, etc.</p>
+        </div>
+        <span onClick="{{ addEvento }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#2A1C12; color:#F4E9D8; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(42,28,18,0.25);" style-hover="background:#1C130D;">+ Añadir evento</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:18px;">
+        <sc-for list="{{ eventos }}" as="e" hint-placeholder-count="2">
+          <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;">
+              <span style="font-size:13px; font-weight:700; color:#5E4632;">{{ e.name }}</span>
+              <span onClick="{{ e.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
+            </div>
+            <div style="display:flex; gap:16px; align-items:flex-start;">
+              <div onClick="{{ e.onPick }}" style="position:relative; flex:0 0 100px; cursor:pointer; aspect-ratio:3/4; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F4ECDC; display:flex; align-items:center; justify-content:center; font-size:11px; color:#A07F5E; font-weight:800;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
+                <sc-if value="{{ e.hasImg }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ e.imagen }}'); background-size:cover; background-position:center;"></div></sc-if>
+                <span style="position:relative; text-align:center; padding:0 8px;">Subir cartel</span>
+              </div>
+              <div style="flex:1; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div style="grid-column:1/3;"><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Nombre</label><input type="text" value="{{ e.name }}" onChange="{{ e.onName }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" /></div>
+                <div><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Fecha</label><input type="text" value="{{ e.date }}" onChange="{{ e.onDate }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" placeholder="Vie 27 jun" /></div>
+                <div><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Hora</label><input type="text" value="{{ e.time }}" onChange="{{ e.onTime }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" placeholder="19:30" /></div>
+                <div style="grid-column:1/3;"><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Incluye</label><input type="text" value="{{ e.includes }}" onChange="{{ e.onIncludes }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" /></div>
+                <div><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Precio</label><input type="text" value="{{ e.price }}" onChange="{{ e.onPrice }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" placeholder="$12 / Gratis" /></div>
+                <div><label style="display:block; font-size:11px; font-weight:800; color:#5E4632; text-transform:uppercase; letter-spacing:.03em; margin-bottom:4px;">Cupos</label><input type="text" value="{{ e.cupos }}" onChange="{{ e.onCupos }}" style="width:100%; padding:9px 11px; border:1px solid #D9BC77; border-radius:8px; font-size:13px; background:#FBF3E0;" placeholder="8 cupos" /></div>
+              </div>
+            </div>
+            <sc-if value="{{ e.hasImg }}" hint-placeholder-val="{{ false }}"><div style="margin-top:12px;"><span onClick="{{ e.onClearImg }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; padding:6px 12px; border-radius:8px; border:1px solid #E0AE95; background:#FDE8E0;" style-hover="background:#F6D9D1;">Quitar cartel</span></div></sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
     <!-- ============ MARCA ============ -->
     <sc-if value="{{ isMarca }}" hint-placeholder-val="{{ false }}">
     <div data-screen-label="Admin Marca">
       <h2 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:30px; color:#5E4632;">Marca e imágenes</h2>
-      <p style="margin:6px 0 0 0 14px; font-size:14px; color:#6E5946;">Sube tu logo y las fotos del local. Si no subes nada, la página muestra los marcadores por defecto. Click en cada recuadro para subir.</p>
+      <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">Sube tu logo y las fotos del local. Si no subes nada, la página muestra los marcadores por defecto. Click en cada recuadro para subir.</p>
       <div style="margin:18px 0 24px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">Para el <strong>logo</strong> usa una imagen con fondo transparente (PNG) si puedes; se ve mejor. Las fotos se reducen solas para que la página cargue rápido.</div>
-
       <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:18px;">
 
         <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05); display:flex; flex-direction:column; gap:12px;">
           <div><div style="font-family:'Spectral',serif; font-weight:700; font-size:18px; color:#2E4734;">Logo</div><div style="font-size:12.5px; color:#8A715A; margin-top:2px;">Aparece arriba a la izquierda y en el pie.</div></div>
           <div onClick="{{ pickLogo }}" title="Click para subir el logo" style="position:relative; width:100%; aspect-ratio:1/1; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F4ECDC; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
             <span style="font-size:12px; color:#A07F5E; font-weight:800; text-align:center; padding:0 10px; line-height:1.4;">Subir<br>logo</span>
-            <sc-if value="{{ brandLogoHas }}" hint-placeholder-val="{{ false }}">
-              <div style="position:absolute; inset:0; background-image:url('{{ brandLogo }}'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
-            </sc-if>
+            <sc-if value="{{ brandLogoHas }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ brandLogo }}'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div></sc-if>
           </div>
-          <sc-if value="{{ brandLogoHas }}" hint-placeholder-val="{{ false }}">
-            <span onClick="{{ clearLogo }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar logo</span>
-          </sc-if>
+          <sc-if value="{{ brandLogoHas }}" hint-placeholder-val="{{ false }}"><span onClick="{{ clearLogo }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar logo</span></sc-if>
         </div>
 
         <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05); display:flex; flex-direction:column; gap:12px;">
           <div><div style="font-family:'Spectral',serif; font-weight:700; font-size:18px; color:#2E4734;">Banner principal</div><div style="font-size:12.5px; color:#8A715A; margin-top:2px;">Foto grande del inicio (libros, café…).</div></div>
           <div onClick="{{ pickHero }}" title="Click para subir la foto" style="position:relative; width:100%; aspect-ratio:4/5; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F4ECDC; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
             <span style="font-size:12px; color:#A07F5E; font-weight:800; text-align:center; padding:0 10px; line-height:1.4;">Subir<br>banner</span>
-            <sc-if value="{{ brandHeroHas }}" hint-placeholder-val="{{ false }}">
-              <div style="position:absolute; inset:0; background-image:url('{{ brandHero }}'); background-size:cover; background-position:center;"></div>
-            </sc-if>
+            <sc-if value="{{ brandHeroHas }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ brandHero }}'); background-size:cover; background-position:center;"></div></sc-if>
           </div>
-          <sc-if value="{{ brandHeroHas }}" hint-placeholder-val="{{ false }}">
-            <span onClick="{{ clearHero }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar banner</span>
-          </sc-if>
+          <sc-if value="{{ brandHeroHas }}" hint-placeholder-val="{{ false }}"><span onClick="{{ clearHero }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar banner</span></sc-if>
         </div>
 
         <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05); display:flex; flex-direction:column; gap:12px;">
           <div><div style="font-family:'Spectral',serif; font-weight:700; font-size:18px; color:#2E4734;">Foto del local</div><div style="font-size:12.5px; color:#8A715A; margin-top:2px;">Se usa en "Visítanos" y en el inicio.</div></div>
           <div onClick="{{ pickLocal }}" title="Click para subir la foto" style="position:relative; width:100%; aspect-ratio:4/5; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F4ECDC; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
             <span style="font-size:12px; color:#A07F5E; font-weight:800; text-align:center; padding:0 10px; line-height:1.4;">Subir<br>foto</span>
-            <sc-if value="{{ brandLocalHas }}" hint-placeholder-val="{{ false }}">
-              <div style="position:absolute; inset:0; background-image:url('{{ brandLocal }}'); background-size:cover; background-position:center;"></div>
-            </sc-if>
+            <sc-if value="{{ brandLocalHas }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ brandLocal }}'); background-size:cover; background-position:center;"></div></sc-if>
           </div>
-          <sc-if value="{{ brandLocalHas }}" hint-placeholder-val="{{ false }}">
-            <span onClick="{{ clearLocal }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span>
-          </sc-if>
+          <sc-if value="{{ brandLocalHas }}" hint-placeholder-val="{{ false }}"><span onClick="{{ clearLocal }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span></sc-if>
         </div>
 
         <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05); display:flex; flex-direction:column; gap:12px;">
           <div><div style="font-family:'Spectral',serif; font-weight:700; font-size:18px; color:#2E4734;">Banner de Eventos</div><div style="font-size:12.5px; color:#8A715A; margin-top:2px;">Fondo de la sección y página de eventos.</div></div>
           <div onClick="{{ pickEventos }}" title="Click para subir la foto" style="position:relative; width:100%; aspect-ratio:16/7; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F4ECDC; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
             <span style="font-size:12px; color:#A07F5E; font-weight:800; text-align:center; padding:0 10px; line-height:1.4;">Subir banner ancho</span>
-            <sc-if value="{{ brandEventosHas }}" hint-placeholder-val="{{ false }}">
-              <div style="position:absolute; inset:0; background-image:url('{{ brandEventos }}'); background-size:cover; background-position:center;"></div>
-            </sc-if>
+            <sc-if value="{{ brandEventosHas }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ brandEventos }}'); background-size:cover; background-position:center;"></div></sc-if>
           </div>
           <div style="font-size:11.5px; color:#A08A6E;">La foto se oscurece sola para que el texto se lea bien encima.</div>
-          <sc-if value="{{ brandEventosHas }}" hint-placeholder-val="{{ false }}">
-            <span onClick="{{ clearEventos }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar banner</span>
-          </sc-if>
+          <sc-if value="{{ brandEventosHas }}" hint-placeholder-val="{{ false }}"><span onClick="{{ clearEventos }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar banner</span></sc-if>
         </div>
 
         <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05); display:flex; flex-direction:column; gap:12px;">
           <div><div style="font-family:'Spectral',serif; font-weight:700; font-size:18px; color:#2E4734;">Banner de Vender tus libros</div><div style="font-size:12.5px; color:#8A715A; margin-top:2px;">Fondo del encabezado de "Vende tus libros".</div></div>
           <div onClick="{{ pickVender }}" title="Click para subir la foto" style="position:relative; width:100%; aspect-ratio:16/7; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F4ECDC; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
             <span style="font-size:12px; color:#A07F5E; font-weight:800; text-align:center; padding:0 10px; line-height:1.4;">Subir banner ancho</span>
-            <sc-if value="{{ brandVenderHas }}" hint-placeholder-val="{{ false }}">
-              <div style="position:absolute; inset:0; background-image:url('{{ brandVender }}'); background-size:cover; background-position:center;"></div>
-            </sc-if>
+            <sc-if value="{{ brandVenderHas }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ brandVender }}'); background-size:cover; background-position:center;"></div></sc-if>
           </div>
           <div style="font-size:11.5px; color:#A08A6E;">La foto se oscurece sola para que el texto se lea bien encima.</div>
-          <sc-if value="{{ brandVenderHas }}" hint-placeholder-val="{{ false }}">
-            <span onClick="{{ clearVender }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar banner</span>
-          </sc-if>
+          <sc-if value="{{ brandVenderHas }}" hint-placeholder-val="{{ false }}"><span onClick="{{ clearVender }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar banner</span></sc-if>
         </div>
 
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ============ CONFIGURACIÓN ============ -->
+    <sc-if value="{{ isConfig }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Admin Configuración">
+      <h2 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:30px; color:#5E4632;">Configuración</h2>
+      <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">Datos de contacto y redes que aparecen en tu página.</p>
+      <div style="margin:24px 0; display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px;">
+        <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
+          <label style="display:block; font-family:'Spectral',serif; font-weight:700; font-size:18px; color:#2E4734; margin-bottom:8px;">Email para pedidos</label>
+          <input type="email" value="{{ cfgEmail }}" onChange="{{ onCfgEmail }}" placeholder="tu@email.com" style="width:100%; padding:10px 12px; border:1px solid #D9BC77; border-radius:10px; font-size:13px; background:#FBF3E0;" />
+        </div>
+        <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
+          <label style="display:block; font-family:'Spectral',serif; font-weight:700; font-size:18px; color:#2E4734; margin-bottom:8px;">WhatsApp</label>
+          <input type="text" value="{{ cfgWhatsapp }}" onChange="{{ onCfgWhatsapp }}" placeholder="593xxxxxxxxx" style="width:100%; padding:10px 12px; border:1px solid #D9BC77; border-radius:10px; font-size:13px; background:#FBF3E0;" />
+        </div>
+        <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
+          <label style="display:block; font-family:'Spectral',serif; font-weight:700; font-size:18px; color:#2E4734; margin-bottom:8px;">Instagram</label>
+          <input type="text" value="{{ cfgInstagram }}" onChange="{{ onCfgInstagram }}" placeholder="https://instagram.com/tuusuario" style="width:100%; padding:10px 12px; border:1px solid #D9BC77; border-radius:10px; font-size:13px; background:#FBF3E0;" />
+        </div>
+        <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
+          <label style="display:block; font-family:'Spectral',serif; font-weight:700; font-size:18px; color:#2E4734; margin-bottom:8px;">TikTok</label>
+          <input type="text" value="{{ cfgTiktok }}" onChange="{{ onCfgTiktok }}" placeholder="https://tiktok.com/@tuusuario" style="width:100%; padding:10px 12px; border:1px solid #D9BC77; border-radius:10px; font-size:13px; background:#FBF3E0;" />
+        </div>
+        <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
+          <label style="display:block; font-family:'Spectral',serif; font-weight:700; font-size:18px; color:#2E4734; margin-bottom:8px;">Google Maps</label>
+          <input type="text" value="{{ cfgMaps }}" onChange="{{ onCfgMaps }}" placeholder="https://maps.google.com/?q=..." style="width:100%; padding:10px 12px; border:1px solid #D9BC77; border-radius:10px; font-size:13px; background:#FBF3E0;" />
+        </div>
+      </div>
+      <div style="margin-top:24px; background:#2E4734; color:#F7EFE2; border-radius:16px; padding:24px;">
+        <h3 style="margin:0 0 8px; font-family:'Spectral',serif; font-weight:700; font-size:22px;">Publicar tus cambios</h3>
+        <p style="margin:0 0 18px; font-size:14px; color:#CDD8C8; line-height:1.55;">Todo lo que editas aquí se guarda en tu navegador. Para que tus clientes lo vean, descarga este archivo y súbelo a GitHub reemplazando el <strong>datos.js</strong> de la carpeta <strong>publicar</strong>.</p>
+        <span onClick="{{ onExport }}" style="display:inline-block; cursor:pointer; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:15px; padding:13px 26px; border-radius:999px; box-shadow:0 6px 16px rgba(201,162,75,0.3);" style-hover="background:#B8923F;">⬇ Descargar datos.js</span>
       </div>
     </div>
     </sc-if>
@@ -175,54 +337,79 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { tab: 'marca', data: {}, savedAt: null, mailStatus: '', authenticated: false, loginPassword: '', loginError: '' };
-  
+  state = { tab: 'libros', data: null, savedAt: null, authenticated: false, loginPassword: '', loginError: '' };
+
   componentDidMount() {
-    const pwd = localStorage.getItem('lm-admin-pwd');
-    if (pwd === 'lamadriguera') {
-      this.setState({ authenticated: true });
-    }
+    if (localStorage.getItem('lm-admin-pwd') === 'lamadriguera') this.setState({ authenticated: true });
     this.loadData();
   }
-  
-  onLoginPass = (e) => {
-    this.setState({ loginPassword: e.target.value, loginError: '' });
+
+  loadData() {
+    let data;
+    const saved = localStorage.getItem('lm-content');
+    if (saved) { try { data = JSON.parse(saved); } catch (e) { data = null; } }
+    if (!data) data = window.LM_DATA ? JSON.parse(JSON.stringify(window.LM_DATA)) : { libros: [], consig: [], merch: [], eventos: [], config: {} };
+    if (!data.libros) data.libros = [];
+    if (!data.consig) data.consig = [];
+    if (!data.merch) data.merch = [];
+    if (!data.eventos) data.eventos = [];
+    if (!data.config) data.config = { email: '', whatsapp: '', instagram: '', tiktok: '', maps: '' };
+    if (!data.brand) data.brand = { logo: '', hero: '', local: '', eventos: '', vender: '' };
+    this.setState({ data });
   }
-  
-  onLoginKeypress = (e) => {
-    if (e.key === 'Enter') this.doLogin();
-  }
-  
+
+  onLoginPass = (e) => { this.setState({ loginPassword: e.target.value, loginError: '' }); };
+  onLoginKeypress = (e) => { if (e.key === 'Enter') this.doLogin(); };
   doLogin = () => {
-    const pwd = this.state.loginPassword.trim();
+    const pwd = (this.state.loginPassword || '').trim();
     if (pwd === 'lamadriguera') {
       localStorage.setItem('lm-admin-pwd', pwd);
       this.setState({ authenticated: true, loginPassword: '', loginError: '' });
     } else {
       this.setState({ loginPassword: '', loginError: 'Contraseña incorrecta' });
     }
-  }
-
-  loadData() {
-    const saved = localStorage.getItem('lm-content');
-    const data = saved ? JSON.parse(saved) : (window.LM_DATA ? JSON.parse(JSON.stringify(window.LM_DATA)) : this.seedData());
-    if (!data.brand) data.brand = { logo: '', hero: '', local: '', eventos: '', vender: '' };
-    this.setState({ data });
-  }
-
-  seedData() {
-    return { libros: [], consig: [], merch: [], eventos: [], config: { email: '', whatsapp: '', instagram: '', tiktok: '', maps: '' }, brand: { logo: '', hero: '', local: '', eventos: '', vender: '' } };
-  }
+  };
 
   save(data) {
-    this.setState({ data, savedAt: new Date().toLocaleTimeString() });
+    this.setState({ data, savedAt: 'Guardado ' + new Date().toLocaleTimeString() });
     localStorage.setItem('lm-content', JSON.stringify(data));
+  }
+
+  upd(col, id, field, value) {
+    const data = Object.assign({}, this.state.data);
+    const item = data[col].find(it => it.id === id);
+    if (item) { item[field] = value; this.save(data); }
   }
 
   updBrand(field, value) {
     const data = Object.assign({}, this.state.data);
     data.brand = Object.assign({ logo: '', hero: '', local: '', eventos: '', vender: '' }, data.brand, { [field]: value });
     this.save(data);
+  }
+
+  updCfg(field, value) {
+    const data = Object.assign({}, this.state.data);
+    data.config = Object.assign({}, data.config, { [field]: value });
+    this.save(data);
+  }
+
+  del(col, id, label) {
+    if (!confirm('¿Eliminar ' + label + '?')) return;
+    const data = Object.assign({}, this.state.data);
+    data[col] = data[col].filter(it => it.id !== id);
+    this.save(data);
+  }
+
+  add(col, item) {
+    const data = Object.assign({}, this.state.data);
+    data[col] = data[col].concat([item]);
+    this.save(data);
+  }
+
+  pick(col, id) {
+    this.pending = { col, id };
+    const inp = document.getElementById('lm-admin-file');
+    if (inp) { inp.value = ''; inp.click(); }
   }
 
   pickBrand(field) {
@@ -240,56 +427,107 @@ class Component extends DCLogic {
     reader.onload = (e) => {
       const img = new Image();
       img.onload = () => {
-        const MAX = isLogo ? 460 : 1200;
+        const MAX = isLogo ? 460 : (pend.brand ? 1200 : 700);
         const scale = Math.min(1, MAX / Math.max(img.width, img.height));
         const canvas = document.createElement('canvas');
         canvas.width = Math.round(img.width * scale);
         canvas.height = Math.round(img.height * scale);
         canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
         const url = isLogo ? canvas.toDataURL('image/png') : canvas.toDataURL('image/jpeg', 0.82);
-        this.updBrand(pend.brand, url);
+        if (pend.brand) this.updBrand(pend.brand, url);
+        else this.upd(pend.col, pend.id, 'imagen', url);
       };
       img.src = e.target.result;
     };
     reader.readAsDataURL(file);
   };
 
+  onExport = () => {
+    const data = this.state.data;
+    if (!data) return;
+    const blob = new Blob(['window.LM_DATA = ' + JSON.stringify(data, null, 2) + ';\n'], { type: 'text/javascript' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'datos.js';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  };
+
+  fieldHandlers(col, it, fields) {
+    const out = {};
+    fields.forEach(f => {
+      const key = 'on' + f.charAt(0).toUpperCase() + f.slice(1);
+      out[key] = (e) => this.upd(col, it.id, f, e.target.value);
+    });
+    out.onPick = () => this.pick(col, it.id);
+    out.onClearImg = () => this.upd(col, it.id, 'imagen', '');
+    out.hasImg = !!it.imagen;
+    return out;
+  }
+
+  nextCode(prefix, col) {
+    const items = (this.state.data && this.state.data[col]) || [];
+    const codes = items.map(i => parseInt(String(i.code || '').split('-').pop()) || 0);
+    const next = Math.max(0, ...codes) + 1;
+    return prefix + String(next).padStart(4, '0');
+  }
+
   renderVals() {
     if (!this.state.authenticated) {
       return {
-        needsLogin: true,
-        isAuthenticated: false,
-        loginPassword: this.state.loginPassword,
-        loginError: this.state.loginError,
-        onLoginPass: this.onLoginPass,
-        onLoginKeypress: this.onLoginKeypress,
-        doLogin: this.doLogin
+        needsLogin: true, isAuthenticated: false,
+        loginPassword: this.state.loginPassword, loginError: this.state.loginError,
+        onLoginPass: this.onLoginPass, onLoginKeypress: this.onLoginKeypress, doLogin: this.doLogin
       };
     }
 
-    const data = this.state.data || {};
-    const brandLogo = (data.brand && data.brand.logo) || '';
-    const brandHero = (data.brand && data.brand.hero) || '';
-    const brandLocal = (data.brand && data.brand.local) || '';
-    const brandEventos = (data.brand && data.brand.eventos) || '';
-    const brandVender = (data.brand && data.brand.vender) || '';
+    const data = this.state.data || { libros: [], consig: [], merch: [], eventos: [], config: {} };
+    const tab = this.state.tab;
+    const tabs = ['libros', 'consig', 'merch', 'eventos', 'marca', 'config'];
+    const tabA = {}, tabN = {}, tabGo = {};
+    tabs.forEach(k => { tabA[k] = tab === k; tabN[k] = tab !== k; tabGo[k] = () => this.setState({ tab: k }); });
+
+    const cfg = data.config || {};
+    const brand = data.brand || {};
 
     return {
-      needsLogin: false,
-      isAuthenticated: true,
-      isMarca: true,
+      needsLogin: false, isAuthenticated: true,
+      tabA, tabN, tabGo,
+      isLibros: tab === 'libros', isConsig: tab === 'consig', isMerch: tab === 'merch',
+      isEventos: tab === 'eventos', isMarca: tab === 'marca', isConfig: tab === 'config',
       savedLabel: this.state.savedAt || 'Los cambios se guardan solos',
-      brandLogo, brandLogoHas: !!brandLogo,
-      brandHero, brandHeroHas: !!brandHero,
-      brandLocal, brandLocalHas: !!brandLocal,
-      brandEventos, brandEventosHas: !!brandEventos,
-      brandVender, brandVenderHas: !!brandVender,
+      librosCount: data.libros.length,
+      consigCount: data.consig.length,
+      merchCount: data.merch.length,
+      eventosCount: data.eventos.length,
+      libros: data.libros.map(l => Object.assign({}, l, this.fieldHandlers('libros', l, ['title', 'author', 'genre', 'price', 'estado', 'disp']), { onDel: () => this.del('libros', l.id, '"' + l.title + '"') })),
+      consig: data.consig.map(c => Object.assign({}, c, this.fieldHandlers('consig', c, ['title', 'author', 'genre', 'owner', 'contact', 'price', 'payout', 'estado']), { onDel: () => this.del('consig', c.id, '"' + c.title + '"') })),
+      merch: data.merch.map(m => Object.assign({}, m, this.fieldHandlers('merch', m, ['name', 'cat', 'desc', 'price', 'disp']), { onDel: () => this.del('merch', m.id, '"' + m.name + '"') })),
+      eventos: data.eventos.map(e => Object.assign({}, e, this.fieldHandlers('eventos', e, ['name', 'date', 'time', 'includes', 'price', 'cupos']), { onDel: () => this.del('eventos', e.id, '"' + e.name + '"') })),
+      cfgEmail: cfg.email || '', cfgWhatsapp: cfg.whatsapp || '', cfgInstagram: cfg.instagram || '', cfgTiktok: cfg.tiktok || '', cfgMaps: cfg.maps || '',
+      onCfgEmail: (e) => this.updCfg('email', e.target.value),
+      onCfgWhatsapp: (e) => this.updCfg('whatsapp', e.target.value),
+      onCfgInstagram: (e) => this.updCfg('instagram', e.target.value),
+      onCfgTiktok: (e) => this.updCfg('tiktok', e.target.value),
+      onCfgMaps: (e) => this.updCfg('maps', e.target.value),
+      brandLogo: brand.logo || '', brandLogoHas: !!brand.logo,
+      brandHero: brand.hero || '', brandHeroHas: !!brand.hero,
+      brandLocal: brand.local || '', brandLocalHas: !!brand.local,
+      brandEventos: brand.eventos || '', brandEventosHas: !!brand.eventos,
+      brandVender: brand.vender || '', brandVenderHas: !!brand.vender,
       pickLogo: () => this.pickBrand('logo'), clearLogo: () => this.updBrand('logo', ''),
       pickHero: () => this.pickBrand('hero'), clearHero: () => this.updBrand('hero', ''),
       pickLocal: () => this.pickBrand('local'), clearLocal: () => this.updBrand('local', ''),
       pickEventos: () => this.pickBrand('eventos'), clearEventos: () => this.updBrand('eventos', ''),
       pickVender: () => this.pickBrand('vender'), clearVender: () => this.updBrand('vender', ''),
-      onFile: this.onFile
+      onFile: this.onFile,
+      onExport: this.onExport,
+      addLibro: () => this.add('libros', { id: 'b' + Date.now(), code: this.nextCode('LM-N-', 'libros'), title: 'Nuevo libro', author: '', genre: '', estado: 'Nuevo', disp: 'Disponible', price: 0, imagen: '' }),
+      addConsig: () => this.add('consig', { id: 'c' + Date.now(), code: this.nextCode('LM-C-', 'consig'), title: 'Libro recibido', author: '', genre: '', owner: '', contact: '', price: 0, payout: 0, estado: 'Recibido', imagen: '' }),
+      addMerch: () => this.add('merch', { id: 'm' + Date.now(), name: 'Nuevo producto', cat: '', desc: '', price: 0, disp: 'Disponible', imagen: '' }),
+      addEvento: () => this.add('eventos', { id: 'e' + Date.now(), name: 'Nuevo evento', date: '', time: '', includes: '', price: '', cupos: '', imagen: '' })
     };
   }
 }
