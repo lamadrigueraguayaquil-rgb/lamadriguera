@@ -31,10 +31,15 @@
   <header style="position:sticky; top:0; z-index:50; background:rgba(244,233,216,0.88); backdrop-filter:blur(10px); border-bottom:1px solid #E3D2B8;">
     <div style="max-width:1180px; margin:0 auto; padding:12px clamp(16px,4vw,32px); display:flex; align-items:center; justify-content:space-between; gap:16px;">
       <div onClick="{{ nav.inicio }}" style="display:flex; align-items:center; gap:11px; cursor:pointer;">
-        <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(150deg,#2E4734,#3C5A43); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(46,71,52,0.3); position:relative;">
-          <span style="font-family:'Spectral',serif; font-weight:700; font-size:22px; color:#F4E9D8;">M</span>
-          <span style="position:absolute; top:-3px; right:-3px; width:9px; height:9px; border-radius:50%; background:#C9A24B; box-shadow:0 0 8px #C9A24B;"></span>
-        </div>
+        <sc-if value="{{ hasLogo }}" hint-placeholder-val="{{ false }}">
+          <div style="width:44px; height:44px; border-radius:12px; overflow:hidden; background:#FFFDF8; border:1px solid #E3D2B8; background-image:url('{{ brandLogo }}'); background-size:contain; background-repeat:no-repeat; background-position:center; box-shadow:0 4px 12px rgba(46,71,52,0.18);"></div>
+        </sc-if>
+        <sc-if value="{{ noLogo }}" hint-placeholder-val="{{ true }}">
+          <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(150deg,#2E4734,#3C5A43); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(46,71,52,0.3); position:relative;">
+            <span style="font-family:'Spectral',serif; font-weight:700; font-size:22px; color:#F4E9D8;">M</span>
+            <span style="position:absolute; top:-3px; right:-3px; width:9px; height:9px; border-radius:50%; background:#C9A24B; box-shadow:0 0 8px #C9A24B;"></span>
+          </div>
+        </sc-if>
         <div style="display:flex; flex-direction:column; line-height:1;">
           <span style="font-family:'Spectral',serif; font-weight:700; font-size:18px; letter-spacing:.01em; color:#2E4734;">La Madriguera</span>
           <span style="font-size:10px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:#A07F5E; margin-top:3px;">Coffee &amp; Books</span>
@@ -91,10 +96,15 @@
 
         <div style="position:relative;">
           <div style="position:relative; aspect-ratio:4/5; border-radius:24px; overflow:hidden; box-shadow:0 30px 60px rgba(52,37,26,0.22); border:1px solid #E3D2B8; background:repeating-linear-gradient(135deg,#EBDDC4,#EBDDC4 14px,#E2D0B2 14px,#E2D0B2 28px);">
+            <sc-if value="{{ hasHero }}" hint-placeholder-val="{{ false }}">
+              <div style="position:absolute; inset:0; background-image:url('{{ brandHero }}'); background-size:cover; background-position:center;"></div>
+            </sc-if>
             <div style="position:absolute; inset:0; background:radial-gradient(110% 80% at 70% 15%, rgba(255,243,214,0.7), rgba(255,243,214,0) 55%), linear-gradient(180deg, rgba(46,71,52,0) 55%, rgba(46,71,52,0.28));"></div>
-            <div style="position:absolute; left:0; right:0; bottom:0; padding:18px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
-              <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.04em; color:#F7EFE2; background:rgba(52,37,26,0.55); padding:6px 10px; border-radius:8px;">banner · libros · café · luces suaves</span>
-            </div>
+            <sc-if value="{{ noHero }}" hint-placeholder-val="{{ true }}">
+              <div style="position:absolute; left:0; right:0; bottom:0; padding:18px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+                <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.04em; color:#F7EFE2; background:rgba(52,37,26,0.55); padding:6px 10px; border-radius:8px;">banner · libros · café · luces suaves</span>
+              </div>
+            </sc-if>
           </div>
           <div style="position:absolute; -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); top:18px; left:-16px; background:rgba(255,253,248,0.95); border:1px solid #E3D2B8; border-radius:14px; padding:12px 15px; box-shadow:0 12px 28px rgba(52,37,26,0.16);">
             <div style="font-family:'Spectral',serif; font-style:italic; font-size:14px; color:#2E4734;">"Aquí las historias no solo se leen…"</div>
@@ -166,6 +176,10 @@
 
     <!-- EVENTOS TEASER -->
     <section style="background:#2A1C12; color:#F4E9D8; position:relative; overflow:hidden;">
+      <sc-if value="{{ hasEventosImg }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; inset:0; background-image:url('{{ brandEventosImg }}'); background-size:cover; background-position:center;"></div>
+        <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(42,28,18,0.62), rgba(42,28,18,0.84));"></div>
+      </sc-if>
       <div style="position:absolute; top:-100px; right:10%; width:340px; height:340px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.28), rgba(201,162,75,0) 70%);"></div>
       <div style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px);">
         <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:26px;">
@@ -200,8 +214,13 @@
     <section style="background:linear-gradient(180deg,#F4E9D8,#EFE2CB);">
       <div style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:clamp(28px,4vw,48px); align-items:center;">
         <div style="position:relative; aspect-ratio:16/11; border-radius:20px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 20px 44px rgba(52,37,26,0.16); background:repeating-linear-gradient(135deg,#E7D8BD,#E7D8BD 13px,#DECCAC 13px,#DECCAC 26px);">
-          <div style="position:absolute; inset:0; background:radial-gradient(100% 80% at 30% 20%, rgba(255,243,214,0.6), rgba(255,243,214,0) 60%);"></div>
-          <span style="position:absolute; left:14px; bottom:14px; font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#7A6450; background:rgba(255,253,248,0.8); padding:6px 10px; border-radius:8px;">foto del local · refugio lector</span>
+          <sc-if value="{{ hasLocal }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute; inset:0; background-image:url('{{ brandLocal }}'); background-size:cover; background-position:center;"></div>
+          </sc-if>
+          <sc-if value="{{ noLocal }}" hint-placeholder-val="{{ true }}">
+            <div style="position:absolute; inset:0; background:radial-gradient(100% 80% at 30% 20%, rgba(255,243,214,0.6), rgba(255,243,214,0) 60%);"></div>
+            <span style="position:absolute; left:14px; bottom:14px; font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#7A6450; background:rgba(255,253,248,0.8); padding:6px 10px; border-radius:8px;">foto del local · refugio lector</span>
+          </sc-if>
         </div>
         <div>
           <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#9A7A1E;">Guayaquil</span>
@@ -283,6 +302,10 @@
   <sc-if value="{{ isVender }}" hint-placeholder-val="{{ false }}">
   <div data-screen-label="Vender">
     <section style="position:relative; overflow:hidden; background:#2E4734; color:#F4E9D8;">
+      <sc-if value="{{ hasVenderImg }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; inset:0; background-image:url('{{ brandVenderImg }}'); background-size:cover; background-position:center;"></div>
+        <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(46,71,52,0.72), rgba(46,71,52,0.88));"></div>
+      </sc-if>
       <div style="position:absolute; top:-90px; left:8%; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.3), rgba(201,162,75,0) 70%);"></div>
       <div style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,76px) clamp(16px,4vw,32px);">
         <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#E9CF8B;">Consignación</span>
@@ -331,6 +354,10 @@
   <sc-if value="{{ isEventos }}" hint-placeholder-val="{{ false }}">
   <div data-screen-label="Eventos">
     <section style="background:#2A1C12; color:#F4E9D8; position:relative; overflow:hidden;">
+      <sc-if value="{{ hasEventosImg }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; inset:0; background-image:url('{{ brandEventosImg }}'); background-size:cover; background-position:center;"></div>
+        <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(42,28,18,0.62), rgba(42,28,18,0.84));"></div>
+      </sc-if>
       <div style="position:absolute; bottom:-120px; left:12%; width:360px; height:360px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.26), rgba(201,162,75,0) 70%);"></div>
       <div style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px);">
         <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#E9CF8B;">Experiencias inmersivas</span>
@@ -418,8 +445,13 @@
         </div>
       </div>
       <div style="position:relative; aspect-ratio:3/4; border-radius:22px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 24px 50px rgba(52,37,26,0.18); background:repeating-linear-gradient(135deg,#E7D8BD,#E7D8BD 13px,#DECCAC 13px,#DECCAC 26px);">
-        <div style="position:absolute; inset:0; background:radial-gradient(100% 70% at 60% 18%, rgba(255,243,214,0.6), rgba(255,243,214,0) 60%), linear-gradient(180deg, rgba(46,71,52,0) 60%, rgba(46,71,52,0.25));"></div>
-        <span style="position:absolute; left:14px; bottom:14px; font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#F7EFE2; background:rgba(52,37,26,0.55); padding:6px 10px; border-radius:8px;">foto del local · café &amp; libros</span>
+        <sc-if value="{{ hasLocal }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; inset:0; background-image:url('{{ brandLocal }}'); background-size:cover; background-position:center;"></div>
+        </sc-if>
+        <sc-if value="{{ noLocal }}" hint-placeholder-val="{{ true }}">
+          <div style="position:absolute; inset:0; background:radial-gradient(100% 70% at 60% 18%, rgba(255,243,214,0.6), rgba(255,243,214,0) 60%), linear-gradient(180deg, rgba(46,71,52,0) 60%, rgba(46,71,52,0.25));"></div>
+          <span style="position:absolute; left:14px; bottom:14px; font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#F7EFE2; background:rgba(52,37,26,0.55); padding:6px 10px; border-radius:8px;">foto del local · café &amp; libros</span>
+        </sc-if>
       </div>
     </section>
   </div>
@@ -433,10 +465,15 @@
       <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:32px; align-items:start;">
         <div>
           <div style="display:flex; align-items:center; gap:11px;">
-            <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(150deg,#3C5A43,#2E4734); display:flex; align-items:center; justify-content:center; position:relative;">
-              <span style="font-family:'Spectral',serif; font-weight:700; font-size:22px; color:#F4E9D8;">M</span>
-              <span style="position:absolute; top:-3px; right:-3px; width:8px; height:8px; border-radius:50%; background:#C9A24B; box-shadow:0 0 8px #C9A24B;"></span>
-            </div>
+            <sc-if value="{{ hasLogo }}" hint-placeholder-val="{{ false }}">
+              <div style="width:42px; height:42px; border-radius:12px; overflow:hidden; background:#FFFDF8; background-image:url('{{ brandLogo }}'); background-size:contain; background-repeat:no-repeat; background-position:center;"></div>
+            </sc-if>
+            <sc-if value="{{ noLogo }}" hint-placeholder-val="{{ true }}">
+              <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(150deg,#3C5A43,#2E4734); display:flex; align-items:center; justify-content:center; position:relative;">
+                <span style="font-family:'Spectral',serif; font-weight:700; font-size:22px; color:#F4E9D8;">M</span>
+                <span style="position:absolute; top:-3px; right:-3px; width:8px; height:8px; border-radius:50%; background:#C9A24B; box-shadow:0 0 8px #C9A24B;"></span>
+              </div>
+            </sc-if>
             <div style="font-family:'Spectral',serif; font-weight:700; font-size:19px; color:#F4E9D8;">La Madriguera</div>
           </div>
           <p style="margin:16px 0 0; font-family:'Spectral',serif; font-style:italic; font-size:16px; line-height:1.5; color:#C9A24B; max-width:22em;">Una casa para quienes viven entre páginas.</p>
@@ -708,11 +745,18 @@ class Component extends DCLogic {
 
     const catChips = catList.map(c => ({ k: c.k, label: c.l, onClick: () => this.setState({ category: c.k }) }));
 
+    const brand = (cms && cms.brand) || {};
+
     const recs = [7, 3, 1].map(i => baseBooks[i]).filter(Boolean);
     const novedades = baseBooks.filter(b => b.cats.includes('novedades'));
 
     return {
       page,
+      hasLogo: !!brand.logo, noLogo: !brand.logo, brandLogo: brand.logo || '',
+      hasHero: !!brand.hero, noHero: !brand.hero, brandHero: brand.hero || '',
+      hasLocal: !!brand.local, noLocal: !brand.local, brandLocal: brand.local || '',
+      hasEventosImg: !!brand.eventos, brandEventosImg: brand.eventos || '',
+      hasVenderImg: !!brand.vender, brandVenderImg: brand.vender || '',
       isInicio: page === 'inicio', isCatalogo: page === 'catalogo', isSegunda: page === 'segunda',
       isVender: page === 'vender', isMerch: page === 'merch', isEventos: page === 'eventos',
       isComprar: page === 'comprar', isVisitanos: page === 'visitanos',
