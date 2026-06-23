@@ -499,11 +499,44 @@
     </div>
   </footer>
 
+  <sc-if value="{{ leadOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeLead }}" style="position:fixed; inset:0; z-index:200; background:rgba(42,28,18,0.55); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); display:flex; align-items:center; justify-content:center; padding:18px;">
+    <div onClick="{{ stop }}" style="width:100%; max-width:420px; background:#FFFDF8; border-radius:20px; padding:clamp(22px,4vw,30px); box-shadow:0 30px 70px rgba(42,28,18,0.4); font-family:'Mulish',sans-serif;">
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+        <div>
+          <div style="font-size:11px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:#7C2F3E;">{{ leadKind }}</div>
+          <h3 style="margin:6px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:22px; color:#2E4734; line-height:1.18; text-wrap:balance;">{{ leadTitle }}</h3>
+          <p style="margin:4px 0 0; font-size:13px; color:#8A715A;">{{ leadSub }}</p>
+        </div>
+        <span onClick="{{ closeLead }}" style="cursor:pointer; flex-shrink:0; font-size:20px; line-height:1; color:#A07F5E; padding:2px 6px;">✕</span>
+      </div>
+      <p style="margin:16px 0 0; font-size:14.5px; line-height:1.5; color:#5E4632;">Déjanos tu celular y te contactamos para coordinar. Al enviar también se abrirá WhatsApp.</p>
+      <div style="margin-top:16px; display:flex; flex-direction:column; gap:12px;">
+        <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Tu nombre</label>
+          <input value="{{ leadName }}" onInput="{{ onLeadName }}" placeholder="Nombre y apellido" style="width:100%; padding:13px 15px; border:1px solid #E3D2B8; border-radius:11px; font-family:'Mulish',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;" />
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Tu celular *</label>
+          <input value="{{ leadPhone }}" onInput="{{ onLeadPhone }}" type="tel" inputmode="tel" placeholder="Ej. 0991234567" style="width:100%; padding:13px 15px; border:1px solid #E3D2B8; border-radius:11px; font-family:'Mulish',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;" />
+        </div>
+      </div>
+      <sc-if value="{{ leadHasErr }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:10px; font-size:13px; font-weight:700; color:#9A4A3C;">{{ leadErr }}</div>
+      </sc-if>
+      <div style="margin-top:18px; display:flex; flex-direction:column; gap:10px;">
+        <span onClick="{{ submitLead }}" style="cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; background:#2E4734; color:#F7EFE2; font-weight:800; font-size:15px; padding:14px; border-radius:12px; box-shadow:0 8px 20px rgba(46,71,52,0.28); transition:background .15s ease;" style-hover="background:#244031;"><span style="width:7px; height:7px; border-radius:50%; background:#9CD9A6;"></span>Enviar y abrir WhatsApp</span>
+        <span onClick="{{ closeLead }}" style="cursor:pointer; text-align:center; font-size:13.5px; font-weight:700; color:#8A715A; padding:6px;">Cancelar</span>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { page: 'inicio', search: '', category: 'todos' };
+  state = { page: 'inicio', search: '', category: 'todos', lead: null, leadName: '', leadPhone: '', leadErr: '' };
 
   CATS = [
     ['todos', 'Todos'], ['novedades', 'Novedades'], ['romance', 'Romance'], ['fantasia', 'Fantasía'],
@@ -695,9 +728,21 @@ class Component extends DCLogic {
   waMerch(m) { return this.waText('Hola, vi en la web de La Madriguera el producto ' + m.name + '. ¿Sigue disponible?'); }
   waEvent(e) { return this.waText('Hola, quiero reservar para el evento "' + e.name + '" del ' + e.date + '. ¿Hay cupos disponibles?'); }
 
-  decBook(b) { return Object.assign({}, b, { priceLabel: '$' + b.price, estadoStyle: this.estadoStyle(b.estado), dispStyle: this.dispStyle(b.disp), waHref: this.waBook(b), hasImg: !!b.imagen, onBuy: () => this.notifyEmail('Pedido web · Libro: ' + b.title, { tipo: 'Libro', titulo: b.title, autor: b.author || '', codigo: b.code || '', precio: '$' + b.price, mensaje: 'Un cliente pulsó "Consultar por WhatsApp" en la página.' }) }); }
-  decMerch(m) { return Object.assign({}, m, { priceLabel: '$' + m.price, dispStyle: this.dispStyle(m.disp), waHref: this.waMerch(m), hasImg: !!m.imagen, onBuy: () => this.notifyEmail('Pedido web · Merch: ' + m.name, { tipo: 'Merch', producto: m.name, categoria: m.cat || '', precio: '$' + m.price, mensaje: 'Un cliente pulsó "Pedir por WhatsApp" en la página.' }) }); }
-  decEvent(e) { return Object.assign({}, e, { dispStyle: this.cuposStyle(), waHref: this.waEvent(e), hasImg: !!e.imagen, onBuy: () => this.notifyEmail('Reserva web · Evento: ' + e.name, { tipo: 'Evento', evento: e.name, fecha: (e.date || '') + ' ' + (e.time || ''), precio: e.price || '', mensaje: 'Un cliente pulsó "Reservar por WhatsApp" en la página.' }) }); }
+  openLead(info) { this.setState({ lead: info, leadName: '', leadPhone: '', leadErr: '' }); }
+
+  submitLead = () => {
+    const phone = (this.state.leadPhone || '').trim();
+    if (phone.replace(/[^0-9]/g, '').length < 7) { this.setState({ leadErr: 'Escribe un número de celular válido (mínimo 7 dígitos).' }); return; }
+    const info = this.state.lead || {};
+    const name = (this.state.leadName || '').trim();
+    this.notifyEmail(info.subject || 'Pedido web · La Madriguera', Object.assign({}, info.fields || {}, { nombre_cliente: name || '(no indicado)', celular_cliente: phone, mensaje: 'El cliente dejó sus datos en la web para que lo contactes y hagas seguimiento.' }));
+    if (info.waHref && typeof window !== 'undefined') window.open(info.waHref, '_blank', 'noopener');
+    this.setState({ lead: null, leadName: '', leadPhone: '', leadErr: '' });
+  };
+
+  decBook(b) { return Object.assign({}, b, { priceLabel: '$' + b.price, estadoStyle: this.estadoStyle(b.estado), dispStyle: this.dispStyle(b.disp), waHref: this.waBook(b), hasImg: !!b.imagen, onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Libro', subject: 'Pedido web · Libro: ' + b.title, title: b.title, sub: [b.author, b.code].filter(Boolean).join(' · '), waHref: this.waBook(b), fields: { tipo: 'Libro', titulo: b.title, autor: b.author || '', codigo: b.code || '', precio: '$' + b.price } }); } }); }
+  decMerch(m) { return Object.assign({}, m, { priceLabel: '$' + m.price, dispStyle: this.dispStyle(m.disp), waHref: this.waMerch(m), hasImg: !!m.imagen, onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Merch', subject: 'Pedido web · Merch: ' + m.name, title: m.name, sub: m.cat || '', waHref: this.waMerch(m), fields: { tipo: 'Merch', producto: m.name, categoria: m.cat || '', precio: '$' + m.price } }); } }); }
+  decEvent(e) { return Object.assign({}, e, { dispStyle: this.cuposStyle(), waHref: this.waEvent(e), hasImg: !!e.imagen, onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Evento', subject: 'Reserva web · Evento: ' + e.name, title: e.name, sub: [e.date, e.time].filter(Boolean).join(' · '), waHref: this.waEvent(e), fields: { tipo: 'Evento', evento: e.name, fecha: (e.date || '') + ' ' + (e.time || ''), precio: e.price || '' } }); } }); }
 
   go(key) {
     this.setState({ page: key });
@@ -803,6 +848,17 @@ class Component extends DCLogic {
       igHref: this.cfg().instagram || this.igHref,
       ttHref: this.cfg().tiktok || this.ttHref,
       mapsHref: this.cfg().maps || this.mapsHref,
+      leadOpen: !!this.state.lead,
+      leadKind: this.state.lead ? this.state.lead.kind : '',
+      leadTitle: this.state.lead ? this.state.lead.title : '',
+      leadSub: this.state.lead ? this.state.lead.sub : '',
+      leadName: this.state.leadName, leadPhone: this.state.leadPhone,
+      onLeadName: (e) => this.setState({ leadName: e.target.value, leadErr: '' }),
+      onLeadPhone: (e) => this.setState({ leadPhone: e.target.value, leadErr: '' }),
+      submitLead: this.submitLead,
+      closeLead: () => this.setState({ lead: null, leadErr: '' }),
+      stop: (e) => { if (e && e.stopPropagation) e.stopPropagation(); },
+      leadErr: this.state.leadErr, leadHasErr: !!this.state.leadErr,
       year: 2026
     };
   }
