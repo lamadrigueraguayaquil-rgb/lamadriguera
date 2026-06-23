@@ -519,9 +519,25 @@ class Component extends DCLogic {
   componentDidMount() {
     this.syncChips();
     this.loadCMS();
+    this.fetchFreshData();
     this._onStorage = () => this.loadCMS();
     window.addEventListener('storage', this._onStorage);
     window.addEventListener('focus', this._onStorage);
+  }
+
+  fetchFreshData() {
+    if (typeof fetch === 'undefined') return;
+    fetch('./datos.js?ts=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.text() : null; })
+      .then((txt) => {
+        if (!txt) return;
+        try {
+          var s = txt.trim().replace(/^window\.LM_DATA\s*=\s*/, '').replace(/;\s*$/, '');
+          var obj = JSON.parse(s);
+          if (obj && obj.libros) { window.LM_DATA = obj; this.loadCMS(); }
+        } catch (e) {}
+      })
+      .catch(function () {});
   }
 
   componentWillUnmount() {

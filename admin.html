@@ -342,6 +342,25 @@ class Component extends DCLogic {
   componentDidMount() {
     if (localStorage.getItem('lm-admin-pwd') === 'lamadriguera') this.setState({ authenticated: true });
     this.loadData();
+    this.fetchFreshData();
+  }
+
+  fetchFreshData() {
+    if (typeof fetch === 'undefined') return;
+    // Only refresh the published baseline when there is no local draft, so we never
+    // clobber edits the owner has in progress on this browser.
+    if (localStorage.getItem('lm-content')) return;
+    fetch('./datos.js?ts=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.text() : null; })
+      .then((txt) => {
+        if (!txt) return;
+        try {
+          var s = txt.trim().replace(/^window\.LM_DATA\s*=\s*/, '').replace(/;\s*$/, '');
+          var obj = JSON.parse(s);
+          if (obj && obj.libros) { window.LM_DATA = obj; this.loadData(); }
+        } catch (e) {}
+      })
+      .catch(function () {});
   }
 
   loadData() {
@@ -372,7 +391,12 @@ class Component extends DCLogic {
 
   save(data) {
     this.setState({ data, savedAt: 'Guardado ' + new Date().toLocaleTimeString() });
-    localStorage.setItem('lm-content', JSON.stringify(data));
+    try {
+      localStorage.setItem('lm-content', JSON.stringify(data));
+    } catch (e) {
+      this.setState({ savedAt: '⚠ No se pudo guardar: las fotos pesan demasiado' });
+      alert('No se pudo guardar el cambio porque las imágenes ocupan demasiado espacio en el navegador.\n\nUsa fotos más livianas o quita alguna imagen, y vuelve a intentarlo. Igual puedes descargar tu archivo datos.js con el botón de la pestaña Configuración.');
+    }
   }
 
   upd(col, id, field, value) {
