@@ -574,9 +574,19 @@ class Component extends DCLogic {
   }
 
   loadCMS() {
+    let ls = null;
+    try { ls = JSON.parse(localStorage.getItem('lm-content')); } catch (e) {}
+    if (ls && !ls.libros) ls = null;
+    const win = (typeof window !== 'undefined' && window.LM_DATA && window.LM_DATA.libros) ? window.LM_DATA : null;
     let cms = null;
-    try { cms = JSON.parse(localStorage.getItem('lm-content')); } catch (e) {}
-    if ((!cms || !cms.libros) && typeof window !== 'undefined' && window.LM_DATA && window.LM_DATA.libros) cms = window.LM_DATA;
+    if (ls && win) {
+      const lsT = +ls.updatedAt || 0;
+      const winT = +win.updatedAt || 0;
+      if (winT > lsT) { cms = win; try { localStorage.setItem('lm-content', JSON.stringify(win)); } catch (e) {} }
+      else cms = ls;
+    } else {
+      cms = ls || win;
+    }
     if (cms && cms.libros) this.setState({ cms });
   }
 

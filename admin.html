@@ -523,6 +523,7 @@ class Component extends DCLogic {
   }
 
   save(data) {
+    data = Object.assign({}, data, { updatedAt: Date.now() });
     const t = new Date();
     const hh = String(t.getHours()).padStart(2, '0');
     const mm = String(t.getMinutes()).padStart(2, '0');
@@ -619,8 +620,8 @@ class Component extends DCLogic {
   };
 
   onExport = () => {
-    const data = this.state.data;
-    if (!data) return;
+    const data = Object.assign({}, this.state.data, { updatedAt: Date.now() });
+    if (!this.state.data) return;
     const blob = new Blob(['window.LM_DATA = ' + JSON.stringify(data, null, 2) + ';\n'], { type: 'text/javascript' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
