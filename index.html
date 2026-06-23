@@ -132,7 +132,7 @@
         <span onClick="{{ nav.catalogo }}" style="cursor:pointer; font-weight:700; font-size:14px; color:#2E4734; border-bottom:2px solid #C9A24B; padding-bottom:2px;">Ver catálogo completo →</span>
       </div>
       <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(218px,1fr)); gap:clamp(14px,2vw,22px);">
-        <sc-for list="{{ homeNovedades }}" as="b" hint-placeholder-count="4">
+        <sc-for list="{{ homeNovedades }}" as="b" hint-placeholder-count="6">
           <dc-import name="BookCard" book="{{ b }}" hint-size="100%,430px"></dc-import>
         </sc-for>
       </div>
@@ -151,7 +151,7 @@
           </div>
         </div>
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px;">
-          <sc-for list="{{ homeSegunda }}" as="b" hint-placeholder-count="3">
+          <sc-for list="{{ homeSegunda }}" as="b" hint-placeholder-count="4">
             <dc-import name="BookCard" book="{{ b }}" hint-size="100%,430px"></dc-import>
           </sc-for>
         </div>
@@ -168,7 +168,7 @@
         <span onClick="{{ nav.merch }}" style="cursor:pointer; font-weight:700; font-size:14px; color:#2E4734; border-bottom:2px solid #C9A24B; padding-bottom:2px;">Ver toda la tienda →</span>
       </div>
       <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:clamp(14px,2vw,22px);">
-        <sc-for list="{{ homeMerch }}" as="m" hint-placeholder-count="4">
+        <sc-for list="{{ homeMerch }}" as="m" hint-placeholder-count="6">
           <dc-import name="MerchCard" merch="{{ m }}" hint-size="100%,360px"></dc-import>
         </sc-for>
       </div>
@@ -788,9 +788,9 @@ class Component extends DCLogic {
       catalogCount: catalogBooks.length,
       hasResults: catalogBooks.length > 0,
       noResults: catalogBooks.length === 0,
-      homeNovedades: (novedades.length ? novedades : baseBooks).slice(0, 4).map(b => this.decBook(b)),
-      homeSegunda: usados.slice(0, 3),
-      homeMerch: baseMerch.slice(0, 4).map(m => this.decMerch(m)),
+      homeNovedades: (novedades.length ? novedades : baseBooks).slice(0, 6).map(b => this.decBook(b)),
+      homeSegunda: usados.slice(0, 4),
+      homeMerch: baseMerch.slice(0, 6).map(m => this.decMerch(m)),
       homeEventos: baseEvents.slice(0, 3).map(e => this.decEvent(e)),
       recomendados: (recs.length ? recs : baseBooks.slice(0, 3)).map(b => this.decBook(b)),
       segundaBooks: usados,
