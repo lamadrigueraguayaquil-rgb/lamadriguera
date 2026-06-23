@@ -405,7 +405,7 @@
           <h3 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:20px; color:#2E4734;">Pago</h3>
           <ul style="margin:14px 0 0; padding-left:18px; color:#5E4632; font-size:15px; line-height:1.9;">
             <li>Transferencia bancaria</li>
-            <li>Efectivo en local</li>
+            <li>Tarjeta de crédito en local</li>
             <li>Link de pago, si aplica</li>
           </ul>
         </div>
@@ -429,7 +429,7 @@
         <div style="margin-top:26px; display:flex; flex-direction:column; gap:16px;">
           <div style="display:flex; gap:13px; align-items:flex-start;">
             <span style="width:10px; height:10px; border-radius:50%; background:#7C2F3E; margin-top:6px; flex-shrink:0;"></span>
-            <div><div style="font-weight:800; font-size:13px; letter-spacing:.04em; text-transform:uppercase; color:#A07F5E;">Dirección</div><div style="font-size:16px; color:#3A2C1F; margin-top:3px;">Guayaquil, Ecuador · <span style="font-family:ui-monospace,Menlo,monospace; font-size:13px; color:#8A715A;">[dirección por confirmar]</span></div></div>
+            <div><div style="font-weight:800; font-size:13px; letter-spacing:.04em; text-transform:uppercase; color:#A07F5E;">Dirección</div><div style="font-size:16px; color:#3A2C1F; margin-top:3px;">Urdesa, Circunvalación Sur y Ficus<br>Guayaquil, Ecuador</div></div>
           </div>
           <div style="display:flex; gap:13px; align-items:flex-start;">
             <span style="width:10px; height:10px; border-radius:50%; background:#2E4734; margin-top:6px; flex-shrink:0;"></span>
@@ -444,14 +444,9 @@
           <a href="{{ ttHref }}" target="_blank" rel="noopener" style="text-decoration:none; background:transparent; color:#9A7A1E; font-weight:700; font-size:14px; padding:11px 19px; border-radius:999px; border:1.5px solid #D9BC77; transition:background .15s ease;" style-hover="background:#F1E6CF;">TikTok</a>
         </div>
       </div>
-      <div style="position:relative; aspect-ratio:3/4; border-radius:22px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 24px 50px rgba(52,37,26,0.18); background:repeating-linear-gradient(135deg,#E7D8BD,#E7D8BD 13px,#DECCAC 13px,#DECCAC 26px);">
-        <sc-if value="{{ hasLocal }}" hint-placeholder-val="{{ false }}">
-          {{ brandLocalEl }}
-        </sc-if>
-        <sc-if value="{{ noLocal }}" hint-placeholder-val="{{ true }}">
-          <div style="position:absolute; inset:0; background:radial-gradient(100% 70% at 60% 18%, rgba(255,243,214,0.6), rgba(255,243,214,0) 60%), linear-gradient(180deg, rgba(46,71,52,0) 60%, rgba(46,71,52,0.25));"></div>
-          <span style="position:absolute; left:14px; bottom:14px; font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#F7EFE2; background:rgba(52,37,26,0.55); padding:6px 10px; border-radius:8px;">foto del local · café &amp; libros</span>
-        </sc-if>
+      <div style="position:relative; aspect-ratio:3/4; border-radius:22px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 24px 50px rgba(52,37,26,0.18); background:#E7D8BD;">
+        <iframe title="Ubicación de La Madriguera en Google Maps" src="https://www.google.com/maps?q=Circunvalaci%C3%B3n+Sur+y+Ficus,+Urdesa,+Guayaquil,+Ecuador&z=16&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="position:absolute; inset:0; width:100%; height:100%; border:0;"></iframe>
+        <span style="position:absolute; left:14px; bottom:14px; pointer-events:none; font-family:'Mulish',sans-serif; font-size:12px; font-weight:700; color:#F7EFE2; background:rgba(46,71,52,0.92); padding:7px 12px; border-radius:999px; box-shadow:0 4px 14px rgba(42,28,18,0.35);">Urdesa · Circunvalación Sur y Ficus</span>
       </div>
     </section>
   </div>

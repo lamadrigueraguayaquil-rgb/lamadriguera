@@ -319,10 +319,28 @@
           <input type="text" value="{{ cfgMaps }}" onChange="{{ onCfgMaps }}" placeholder="https://maps.google.com/?q=..." style="width:100%; padding:10px 12px; border:1px solid #D9BC77; border-radius:10px; font-size:13px; background:#FBF3E0;" />
         </div>
       </div>
-      <div style="margin-top:24px; background:#2E4734; color:#F7EFE2; border-radius:16px; padding:24px;">
-        <h3 style="margin:0 0 8px; font-family:'Spectral',serif; font-weight:700; font-size:22px;">Publicar tus cambios</h3>
-        <p style="margin:0 0 18px; font-size:14px; color:#CDD8C8; line-height:1.55;">Todo lo que editas aquí se guarda en tu navegador. Para que tus clientes lo vean, descarga este archivo y súbelo a GitHub reemplazando el <strong>datos.js</strong> de la carpeta <strong>publicar</strong>.</p>
-        <span onClick="{{ onExport }}" style="display:inline-block; cursor:pointer; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:15px; padding:13px 26px; border-radius:999px; box-shadow:0 6px 16px rgba(201,162,75,0.3);" style-hover="background:#B8923F;">⬇ Descargar datos.js</span>
+      <div style="margin-top:24px; background:linear-gradient(160deg,#2E4734,#244031); color:#F7EFE2; border-radius:18px; padding:clamp(22px,3vw,30px); box-shadow:0 14px 34px rgba(46,71,52,0.3);">
+        <div style="display:flex; align-items:center; gap:11px;">
+          <span style="flex-shrink:0; width:34px; height:34px; border-radius:10px; background:#C9A24B; color:#2A1C12; display:flex; align-items:center; justify-content:center; font-size:19px; font-weight:800;">↑</span>
+          <h3 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:23px;">Publicar mis cambios en internet</h3>
+        </div>
+        <div style="margin-top:15px; background:rgba(201,162,75,0.16); border:1px solid rgba(201,162,75,0.42); border-radius:12px; padding:13px 16px; font-size:13.5px; line-height:1.55; color:#F1E5C8;">Todo lo que editas aquí se guarda solo en <strong>este navegador</strong> (tu vista previa). Para que tus clientes lo vean en la web, haz estos 3 pasos <strong>cada vez</strong> que termines de editar.</div>
+        <div style="margin-top:20px; display:flex; flex-direction:column; gap:16px;">
+          <div style="display:flex; gap:14px; align-items:flex-start;">
+            <span style="flex-shrink:0; width:30px; height:30px; border-radius:50%; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:15px; display:flex; align-items:center; justify-content:center;">1</span>
+            <div style="font-size:14.5px; line-height:1.55; color:#E8EFE4;">Pulsa el botón <strong>⬇ Descargar datos.js</strong> de aquí abajo. Se guardará un archivo <strong>datos.js</strong> en tu computadora (normalmente en «Descargas»).</div>
+          </div>
+          <div style="display:flex; gap:14px; align-items:flex-start;">
+            <span style="flex-shrink:0; width:30px; height:30px; border-radius:50%; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:15px; display:flex; align-items:center; justify-content:center;">2</span>
+            <div style="font-size:14.5px; line-height:1.55; color:#E8EFE4;">Entra a tu repositorio en <strong>GitHub</strong> y abre la carpeta <strong>publicar</strong>. Pulsa <strong>Add file → Upload files</strong> y arrastra el <strong>datos.js</strong> que descargaste (reemplaza al que ya estaba).</div>
+          </div>
+          <div style="display:flex; gap:14px; align-items:flex-start;">
+            <span style="flex-shrink:0; width:30px; height:30px; border-radius:50%; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:15px; display:flex; align-items:center; justify-content:center;">3</span>
+            <div style="font-size:14.5px; line-height:1.55; color:#E8EFE4;">Baja un poco y pulsa el botón verde <strong>Commit changes</strong>. En 1–2 minutos tu página se actualiza para todos. ¡Listo!</div>
+          </div>
+        </div>
+        <span onClick="{{ onExport }}" style="display:inline-flex; align-items:center; gap:8px; cursor:pointer; margin-top:22px; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:15.5px; padding:15px 30px; border-radius:999px; box-shadow:0 8px 20px rgba(201,162,75,0.35);" style-hover="background:#B8923F;">⬇ Descargar datos.js</span>
+        <p style="margin:12px 0 0; font-size:12.5px; color:#AFBDA8;">Mientras no subas el archivo a GitHub, los cambios solo los ves tú en esta computadora.</p>
       </div>
     </div>
     </sc-if>
