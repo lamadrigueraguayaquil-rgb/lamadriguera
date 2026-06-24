@@ -954,7 +954,15 @@
         <sc-if value="{{ fbOffline }}" hint-placeholder-val="{{ true }}">
           <div style="margin-top:15px; background:rgba(224,161,76,0.16); border:1px solid rgba(224,161,76,0.42); border-radius:12px; padding:13px 16px; font-size:13.5px; line-height:1.55; color:#F1E5C8;"><strong>Sin conexión a la nube.</strong> Es normal dentro de esta vista previa; en tu web publicada se conecta a Firebase automáticamente. Mientras tanto, los cambios se guardan en este navegador.</div>
         </sc-if>
-        <div style="margin-top:18px; background:rgba(255,253,248,0.07); border:1px solid rgba(247,239,226,0.16); border-radius:12px; padding:16px 18px;">
+        <sc-if value="{{ cloudNoAuth }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:12px; background:rgba(154,74,60,0.16); border:1px solid rgba(154,74,60,0.45); border-radius:12px; padding:13px 16px; font-size:13.5px; line-height:1.55; color:#F3D9D0;"><strong>Entraste con la clave local.</strong> Para guardar en la nube debes iniciar sesión con tu <strong>usuario de Firebase</strong> (Authentication → Users). Cierra sesión, vuelve a «Administrar» y entra con ese correo y contraseña.</div>
+        </sc-if>
+        <div style="margin-top:12px; background:rgba(255,253,248,0.06); border:1px solid rgba(247,239,226,0.16); border-radius:12px; padding:13px 16px; font-size:13px; line-height:1.7; color:#D7E3D2;">
+          <div style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#C9A24B; margin-bottom:6px;">Diagnóstico</div>
+          <div><strong>Sesión:</strong> {{ sessionLabel }}</div>
+          <div><strong>Datos en la nube:</strong> {{ cloudCounts }}</div>
+        </div>
+        <div style="margin-top:14px; background:rgba(255,253,248,0.07); border:1px solid rgba(247,239,226,0.16); border-radius:12px; padding:16px 18px;">
           <div style="font-size:12.5px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#C9A24B; margin-bottom:12px;">Activar la nube (una sola vez en Firebase)</div>
           <div style="display:flex; flex-direction:column; gap:12px;">
             <div style="display:flex; gap:13px; align-items:flex-start;"><span style="flex-shrink:0; width:26px; height:26px; border-radius:50%; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center;">1</span><div style="font-size:14px; line-height:1.55; color:#E8EFE4;">En tu proyecto <strong>adminpagweb</strong>: abre <strong>Firestore Database</strong> → <strong>Crear base de datos</strong> → modo producción.</div></div>
@@ -1265,7 +1273,7 @@ class Component extends DCLogic {
         });
       });
       batch.set(this.db.collection('config').doc('general'), Object.assign({ seeded: true }, this.clean(d.config || {})), { merge: true });
-      batch.commit().then(() => this.flash('Catálogo subido a la nube ✓')).catch(() => this.flash('No se pudo subir el catálogo.'));
+      batch.commit().then(() => this.flash('Catálogo subido a la nube ✓')).catch((e) => this.flash(this.fbErr(e)));
     } catch (e) {}
   }
   itemRef(coll, id) { return this.db.collection(coll).doc(id); }
@@ -1311,7 +1319,7 @@ class Component extends DCLogic {
     if (!it) return;
     it[key] = val;
     this.cacheCMS(cms);
-    if (this.online()) this.itemRef(coll, id).set(this.clean(it), { merge: true }).catch(() => this.flash('No se pudo guardar en la nube.'));
+    if (this.online()) this.itemRef(coll, id).set(this.clean(it), { merge: true }).catch((e) => this.flash(this.fbErr(e)));
   }
   setNum(coll, id, key, val) {
     const n = parseFloat(val); this.setField(coll, id, key, isNaN(n) ? 0 : n);
@@ -1327,7 +1335,7 @@ class Component extends DCLogic {
     cms[coll] = cms[coll] || [];
     cms[coll].unshift(item);
     this.cacheCMS(cms);
-    if (this.online()) this.itemRef(coll, item.id).set(this.clean(item)).catch(() => this.flash('No se pudo guardar en la nube.'));
+    if (this.online()) this.itemRef(coll, item.id).set(this.clean(item)).catch((e) => this.flash(this.fbErr(e)));
     this.flash(msg);
   }
   addLibro = () => {
@@ -1349,7 +1357,7 @@ class Component extends DCLogic {
     cms.config = cms.config || {};
     cms.config[key] = val;
     this.cacheCMS(cms);
-    if (this.online()) this.db.collection('config').doc('general').set({ [key]: val }, { merge: true }).catch(() => this.flash('No se pudo guardar en la nube.'));
+    if (this.online()) this.db.collection('config').doc('general').set({ [key]: val }, { merge: true }).catch((e) => this.flash(this.fbErr(e)));
   }
 
   // ---------- image upload ----------
@@ -1368,7 +1376,7 @@ class Component extends DCLogic {
     cms.brand = cms.brand || {};
     cms.brand[key] = val;
     this.cacheCMS(cms);
-    if (this.online()) this.itemRef('brand', key).set({ id: key, data: val }, { merge: true }).catch(() => this.flash('No se pudo guardar en la nube.'));
+    if (this.online()) this.itemRef('brand', key).set({ id: key, data: val }, { merge: true }).catch((e) => this.flash(this.fbErr(e)));
   }
   clearBrand(key) {
     const cms = this.currentCMS();
@@ -1437,7 +1445,7 @@ class Component extends DCLogic {
     const created = rows.map(r => { n++; return { id: 'b' + Date.now() + '_' + n, code: 'LM-N-' + this.pad(n), title: r.title, author: r.author, genre: r.genre, estado: r.estado, disp: r.disp, price: r.price, imagen: '', order: Date.now() + n }; });
     cms.libros = created.concat(cms.libros);
     this.cacheCMS(cms);
-    if (this.online()) { try { const batch = this.db.batch(); created.forEach(it => batch.set(this.itemRef('libros', it.id), this.clean(it))); batch.commit().catch(() => this.flash('No se pudo guardar en la nube.')); } catch (e) {} }
+    if (this.online()) { try { const batch = this.db.batch(); created.forEach(it => batch.set(this.itemRef('libros', it.id), this.clean(it))); batch.commit().catch((e) => this.flash(this.fbErr(e))); } catch (e) {} }
     this.setState({ bulkOpen: false, bulkText: '', bulkErr: '' });
     this.flash(created.length + ' libros agregados ✓');
   };
@@ -1781,6 +1789,9 @@ class Component extends DCLogic {
       exitAdmin: () => this.setState({ view: 'store' }),
       logout: this.logout, adminEmail: this.state.adminEmail,
       fbOnline: this.state.fb === 'online', fbOffline: this.state.fb !== 'online',
+      cloudNoAuth: this.state.fb === 'online' && !this.state.authed,
+      sessionLabel: this.state.authed ? ('Conectado a Firebase como ' + (this.state.adminEmail || 'usuario')) : 'Modo local — NO estás autenticado en Firebase (los cambios no se guardan en la nube)',
+      cloudCounts: 'Libros ' + libros.length + ' · Merch ' + merch.length + ' · Eventos ' + eventos.length + ' · Pedidos ' + pedidos.length,
       savedLabel: this.state.fb === 'online' ? 'Guardado en la nube ✓' : (this.state.fb === 'connecting' ? 'Conectando a la nube…' : 'Sin nube · guardado local'),
       importSeed: this.importSeed,
       onFile: this.onFile, onBulkFile: this.onBulkFile,
@@ -1874,6 +1885,13 @@ class Component extends DCLogic {
       'auth/network-request-failed': 'Sin conexión. Revisa tu internet.'
     };
     return (e && m[e.code]) || 'No se pudo iniciar sesión. Revisa tus datos.';
+  }
+  fbErr(e) {
+    const c = (e && e.code ? e.code : (e && e.message ? e.message : '')) + '';
+    if (c.indexOf('permission-denied') >= 0) return 'Permiso denegado por Firestore. Revisa 2 cosas: (1) que publicaste las Reglas, y (2) que entraste con tu usuario de Firebase (no la clave local).';
+    if (c.indexOf('unauthenticated') >= 0) return 'Inicia sesión con tu usuario de Firebase (Authentication) para poder guardar en la nube.';
+    if (c.indexOf('unavailable') >= 0 || c.indexOf('failed-precondition') >= 0) return 'No se pudo conectar a Firestore. ¿Ya creaste la base de datos Firestore en tu proyecto?';
+    return 'No se pudo guardar en la nube' + (c ? (' (' + c + ')') : '') + '.';
   }
   logout = () => {
     if (this.auth) { try { this.auth.signOut(); } catch (e) {} }
