@@ -12,6 +12,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&family=Mulish:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="./datos.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <style>
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
@@ -19,68 +22,57 @@
   ::selection { background: #C9A24B; color: #2A1C12; }
   [data-noscroll] { scrollbar-width: none; -ms-overflow-style: none; }
   [data-noscroll]::-webkit-scrollbar { display: none; }
+  input:focus, select:focus, textarea:focus { border-color: #C9A24B !important; box-shadow: 0 0 0 3px rgba(201,162,75,0.18); }
   @keyframes lmfloat { 0%,100% { transform: translateY(0); opacity:.85; } 50% { transform: translateY(-14px); opacity:1; } }
   @keyframes lmglow { 0%,100% { opacity:.55; } 50% { opacity:.9; } }
+  @keyframes lmslide { from { transform: translateX(100%); } to { transform: translateX(0); } }
+  @keyframes lmtoast { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: translateY(0); } }
   .lm-chip { display:inline-block; padding:8px 16px; border-radius:999px; font-size:13.5px; font-weight:700; cursor:pointer; white-space:nowrap; transition:all .15s ease; }
 </style>
 </helmet>
 
 <div style="min-height:100vh; background:#F4E9D8; font-family:'Mulish',sans-serif; color:#34251A; -webkit-font-smoothing:antialiased;">
 
-  <!-- ============ HEADER ============ -->
+<!-- ============ STORE ============ -->
+<sc-if value="{{ isStore }}" hint-placeholder-val="{{ true }}">
+<div>
+
   <header style="position:sticky; top:0; z-index:50; background:rgba(244,233,216,0.88); backdrop-filter:blur(10px); border-bottom:1px solid #E3D2B8;">
     <div style="max-width:1180px; margin:0 auto; padding:12px clamp(16px,4vw,32px); display:flex; align-items:center; justify-content:space-between; gap:16px;">
       <div onClick="{{ nav.inicio }}" style="display:flex; align-items:center; gap:11px; cursor:pointer;">
-        <sc-if value="{{ hasLogo }}" hint-placeholder-val="{{ false }}">
-          <div style="width:44px; height:44px; border-radius:12px; overflow:hidden; background:#FFFDF8; border:1px solid #E3D2B8; box-shadow:0 4px 12px rgba(46,71,52,0.18); display:flex; align-items:center; justify-content:center;">{{ brandLogoEl }}</div>
-        </sc-if>
-        <sc-if value="{{ noLogo }}" hint-placeholder-val="{{ true }}">
-          <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(150deg,#2E4734,#3C5A43); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(46,71,52,0.3); position:relative;">
-            <span style="font-family:'Spectral',serif; font-weight:700; font-size:22px; color:#F4E9D8;">M</span>
-            <span style="position:absolute; top:-3px; right:-3px; width:9px; height:9px; border-radius:50%; background:#C9A24B; box-shadow:0 0 8px #C9A24B;"></span>
-          </div>
-        </sc-if>
+        <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(150deg,#2E4734,#3C5A43); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(46,71,52,0.3); position:relative;">
+          <span style="font-family:'Spectral',serif; font-weight:700; font-size:22px; color:#F4E9D8;">M</span>
+          <span style="position:absolute; top:-3px; right:-3px; width:9px; height:9px; border-radius:50%; background:#C9A24B; box-shadow:0 0 8px #C9A24B;"></span>
+        </div>
         <div style="display:flex; flex-direction:column; line-height:1;">
           <span style="font-family:'Spectral',serif; font-weight:700; font-size:18px; letter-spacing:.01em; color:#2E4734;">La Madriguera</span>
           <span style="font-size:10px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:#A07F5E; margin-top:3px;">Coffee &amp; Books</span>
         </div>
       </div>
-      <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="flex-shrink:0; display:inline-flex; align-items:center; gap:8px; text-decoration:none; background:#2E4734; color:#F7EFE2; font-weight:700; font-size:13.5px; padding:10px 17px; border-radius:999px; box-shadow:0 4px 14px rgba(46,71,52,0.28); transition:background .15s ease;" style-hover="background:#244031;"><span style="width:7px; height:7px; border-radius:50%; background:#9CD9A6;"></span>WhatsApp</a>
+      <div style="display:flex; align-items:center; gap:10px; flex-shrink:0;">
+        <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; text-decoration:none; background:transparent; color:#2E4734; font-weight:700; font-size:13.5px; padding:9px 15px; border-radius:999px; border:1.5px solid #B9C4B4; transition:background .15s ease;" style-hover="background:#E7EDE6;"><span style="width:7px; height:7px; border-radius:50%; background:#2E6B41;"></span>WhatsApp</a>
+        <div onClick="{{ openCart }}" style="position:relative; cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:#2E4734; color:#F7EFE2; font-weight:800; font-size:13.5px; padding:10px 17px; border-radius:999px; box-shadow:0 4px 14px rgba(46,71,52,0.28); transition:background .15s ease;" style-hover="background:#244031;">
+          Carrito
+          <sc-if value="{{ cartCountShow }}" hint-placeholder-val="{{ false }}"><span style="min-width:21px; height:21px; padding:0 6px; border-radius:999px; background:#C9A24B; color:#2A1C12; font-size:12px; font-weight:800; display:inline-flex; align-items:center; justify-content:center;">{{ cartCount }}</span></sc-if>
+        </div>
+      </div>
     </div>
     <nav data-noscroll style="max-width:1180px; margin:0 auto; padding:0 clamp(16px,4vw,32px) 11px; display:flex; gap:7px; overflow-x:auto; white-space:nowrap;">
-      <sc-if value="{{ navA.inicio }}" hint-placeholder-val="{{ true }}"><span onClick="{{ nav.inicio }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:#2E4734; color:#F7EFE2;">Inicio</span></sc-if>
-      <sc-if value="{{ navN.inicio }}" hint-placeholder-val="{{ false }}"><span onClick="{{ nav.inicio }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:transparent; color:#5E4632; transition:all .15s ease;" style-hover="background:#EFE2CB;">Inicio</span></sc-if>
-      <sc-if value="{{ navA.catalogo }}" hint-placeholder-val="{{ false }}"><span onClick="{{ nav.catalogo }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:#2E4734; color:#F7EFE2;">Catálogo</span></sc-if>
-      <sc-if value="{{ navN.catalogo }}" hint-placeholder-val="{{ true }}"><span onClick="{{ nav.catalogo }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:transparent; color:#5E4632; transition:all .15s ease;" style-hover="background:#EFE2CB;">Catálogo</span></sc-if>
-      <sc-if value="{{ navA.segunda }}" hint-placeholder-val="{{ false }}"><span onClick="{{ nav.segunda }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:#2E4734; color:#F7EFE2;">Segunda historia</span></sc-if>
-      <sc-if value="{{ navN.segunda }}" hint-placeholder-val="{{ true }}"><span onClick="{{ nav.segunda }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:transparent; color:#5E4632; transition:all .15s ease;" style-hover="background:#EFE2CB;">Segunda historia</span></sc-if>
-      <sc-if value="{{ navA.merch }}" hint-placeholder-val="{{ false }}"><span onClick="{{ nav.merch }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:#2E4734; color:#F7EFE2;">Merch</span></sc-if>
-      <sc-if value="{{ navN.merch }}" hint-placeholder-val="{{ true }}"><span onClick="{{ nav.merch }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:transparent; color:#5E4632; transition:all .15s ease;" style-hover="background:#EFE2CB;">Merch</span></sc-if>
-      <sc-if value="{{ navA.eventos }}" hint-placeholder-val="{{ false }}"><span onClick="{{ nav.eventos }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:#2E4734; color:#F7EFE2;">Eventos</span></sc-if>
-      <sc-if value="{{ navN.eventos }}" hint-placeholder-val="{{ true }}"><span onClick="{{ nav.eventos }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:transparent; color:#5E4632; transition:all .15s ease;" style-hover="background:#EFE2CB;">Eventos</span></sc-if>
-      <sc-if value="{{ navA.vender }}" hint-placeholder-val="{{ false }}"><span onClick="{{ nav.vender }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:#2E4734; color:#F7EFE2;">Vender</span></sc-if>
-      <sc-if value="{{ navN.vender }}" hint-placeholder-val="{{ true }}"><span onClick="{{ nav.vender }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:transparent; color:#5E4632; transition:all .15s ease;" style-hover="background:#EFE2CB;">Vender</span></sc-if>
-      <sc-if value="{{ navA.comprar }}" hint-placeholder-val="{{ false }}"><span onClick="{{ nav.comprar }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:#2E4734; color:#F7EFE2;">Cómo comprar</span></sc-if>
-      <sc-if value="{{ navN.comprar }}" hint-placeholder-val="{{ true }}"><span onClick="{{ nav.comprar }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:transparent; color:#5E4632; transition:all .15s ease;" style-hover="background:#EFE2CB;">Cómo comprar</span></sc-if>
-      <sc-if value="{{ navA.visitanos }}" hint-placeholder-val="{{ false }}"><span onClick="{{ nav.visitanos }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:#2E4734; color:#F7EFE2;">Visítanos</span></sc-if>
-      <sc-if value="{{ navN.visitanos }}" hint-placeholder-val="{{ true }}"><span onClick="{{ nav.visitanos }}" style="display:inline-block; padding:8px 15px; border-radius:999px; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; border:1px solid transparent; background:transparent; color:#5E4632; transition:all .15s ease;" style-hover="background:#EFE2CB;">Visítanos</span></sc-if>
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="8">
+        <span onClick="{{ item.onClick }}" style="{{ item.style }}">{{ item.label }}</span>
+      </sc-for>
     </nav>
   </header>
 
   <main>
 
-  <!-- ============ INICIO ============ -->
+  <!-- INICIO -->
   <sc-if value="{{ isInicio }}" hint-placeholder-val="{{ true }}">
   <div data-screen-label="Inicio">
-
-    <!-- HERO -->
     <section style="position:relative; overflow:hidden; background:#F4E9D8;">
       <div style="position:absolute; top:-120px; left:-80px; width:420px; height:420px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.45), rgba(201,162,75,0) 70%); animation:lmglow 7s ease-in-out infinite;"></div>
       <div style="position:absolute; bottom:-160px; right:-120px; width:460px; height:460px; border-radius:50%; background:radial-gradient(circle, rgba(46,71,52,0.22), rgba(46,71,52,0) 70%);"></div>
       <div style="position:absolute; top:90px; right:18%; width:7px; height:7px; border-radius:50%; background:#C9A24B; box-shadow:0 0 12px 2px rgba(201,162,75,0.7); animation:lmfloat 6s ease-in-out infinite;"></div>
-      <div style="position:absolute; top:220px; left:14%; width:5px; height:5px; border-radius:50%; background:#C9A24B; box-shadow:0 0 10px 2px rgba(201,162,75,0.6); animation:lmfloat 8s ease-in-out infinite .8s;"></div>
-      <div style="position:absolute; bottom:140px; left:42%; width:6px; height:6px; border-radius:50%; background:#7C2F3E; box-shadow:0 0 10px 2px rgba(188,98,67,0.5); animation:lmfloat 7.5s ease-in-out infinite .4s;"></div>
-
       <div style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(40px,6vw,76px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:clamp(28px,5vw,56px); align-items:center;">
         <div>
           <span style="display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7C2F3E;"><span style="width:24px; height:1px; background:#7C2F3E;"></span>Guayaquil · refugio lector</span>
@@ -90,21 +82,14 @@
             <span onClick="{{ nav.catalogo }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:#2E4734; color:#F7EFE2; font-weight:700; font-size:15px; padding:14px 24px; border-radius:999px; box-shadow:0 8px 22px rgba(46,71,52,0.3); transition:transform .15s ease, background .15s ease;" style-hover="background:#244031; transform:translateY(-2px);">Explorar libros</span>
             <span onClick="{{ nav.merch }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:transparent; color:#9A7A1E; font-weight:700; font-size:15px; padding:13px 22px; border-radius:999px; border:1.5px solid #D9BC77; transition:all .15s ease;" style-hover="background:#F1E6CF;">Ver merch lector</span>
             <span onClick="{{ nav.eventos }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:transparent; color:#2E4734; font-weight:700; font-size:15px; padding:13px 22px; border-radius:999px; border:1.5px solid #B9C4B4; transition:all .15s ease;" style-hover="background:#E7EDE6;">Reservar evento</span>
-            <span onClick="{{ nav.vender }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:transparent; color:#7C2F3E; font-weight:700; font-size:15px; padding:13px 22px; border-radius:999px; border:1.5px solid #E0AE95; transition:all .15s ease;" style-hover="background:#F6E3D5;">Vender mis libros</span>
           </div>
         </div>
-
         <div style="position:relative;">
           <div style="position:relative; aspect-ratio:4/5; border-radius:24px; overflow:hidden; box-shadow:0 30px 60px rgba(52,37,26,0.22); border:1px solid #E3D2B8; background:repeating-linear-gradient(135deg,#EBDDC4,#EBDDC4 14px,#E2D0B2 14px,#E2D0B2 28px);">
-            <sc-if value="{{ hasHero }}" hint-placeholder-val="{{ false }}">
-              {{ brandHeroEl }}
-            </sc-if>
             <div style="position:absolute; inset:0; background:radial-gradient(110% 80% at 70% 15%, rgba(255,243,214,0.7), rgba(255,243,214,0) 55%), linear-gradient(180deg, rgba(46,71,52,0) 55%, rgba(46,71,52,0.28));"></div>
-            <sc-if value="{{ noHero }}" hint-placeholder-val="{{ true }}">
-              <div style="position:absolute; left:0; right:0; bottom:0; padding:18px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
-                <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.04em; color:#F7EFE2; background:rgba(52,37,26,0.55); padding:6px 10px; border-radius:8px;">banner · libros · café · luces suaves</span>
-              </div>
-            </sc-if>
+            <div style="position:absolute; left:0; right:0; bottom:0; padding:18px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+              <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.04em; color:#F7EFE2; background:rgba(52,37,26,0.55); padding:6px 10px; border-radius:8px;">banner · libros · café · luces suaves</span>
+            </div>
           </div>
           <div style="position:absolute; -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); top:18px; left:-16px; background:rgba(255,253,248,0.95); border:1px solid #E3D2B8; border-radius:14px; padding:12px 15px; box-shadow:0 12px 28px rgba(52,37,26,0.16);">
             <div style="font-family:'Spectral',serif; font-style:italic; font-size:14px; color:#2E4734;">"Aquí las historias no solo se leen…"</div>
@@ -113,7 +98,6 @@
       </div>
     </section>
 
-    <!-- BRAND STRIP -->
     <section style="background:#2E4734; color:#F4E9D8;">
       <div style="max-width:1180px; margin:0 auto; padding:clamp(28px,4vw,40px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:24px; text-align:center;">
         <div style="font-family:'Spectral',serif; font-style:italic; font-size:clamp(17px,1.8vw,21px); line-height:1.4; color:#F4E9D8;">Libros, café y mundos por descubrir.</div>
@@ -122,7 +106,6 @@
       </div>
     </section>
 
-    <!-- NOVEDADES -->
     <section style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px);">
       <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:26px;">
         <div>
@@ -133,12 +116,11 @@
       </div>
       <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(218px,1fr)); gap:clamp(14px,2vw,22px);">
         <sc-for list="{{ homeNovedades }}" as="b" hint-placeholder-count="6">
-          <dc-import name="BookCard" book="{{ b }}" hint-size="100%,430px"></dc-import>
+          <dc-import name="BookCard" book="{{ b }}" hint-size="100%,470px"></dc-import>
         </sc-for>
       </div>
     </section>
 
-    <!-- SEGUNDA HISTORIA TEASER -->
     <section style="background:linear-gradient(180deg,#EFE2CB,#F4E9D8);">
       <div style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:clamp(28px,4vw,48px); align-items:center;">
         <div>
@@ -152,13 +134,12 @@
         </div>
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px;">
           <sc-for list="{{ homeSegunda }}" as="b" hint-placeholder-count="4">
-            <dc-import name="BookCard" book="{{ b }}" hint-size="100%,430px"></dc-import>
+            <dc-import name="BookCard" book="{{ b }}" hint-size="100%,470px"></dc-import>
           </sc-for>
         </div>
       </div>
     </section>
 
-    <!-- MERCH TEASER -->
     <section style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px);">
       <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:26px;">
         <div>
@@ -169,17 +150,12 @@
       </div>
       <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:clamp(14px,2vw,22px);">
         <sc-for list="{{ homeMerch }}" as="m" hint-placeholder-count="6">
-          <dc-import name="MerchCard" merch="{{ m }}" hint-size="100%,360px"></dc-import>
+          <dc-import name="MerchCard" merch="{{ m }}" hint-size="100%,400px"></dc-import>
         </sc-for>
       </div>
     </section>
 
-    <!-- EVENTOS TEASER -->
     <section style="background:#2A1C12; color:#F4E9D8; position:relative; overflow:hidden;">
-      <sc-if value="{{ hasEventosImg }}" hint-placeholder-val="{{ false }}">
-        {{ brandEventosEl }}
-        <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(42,28,18,0.62), rgba(42,28,18,0.84));"></div>
-      </sc-if>
       <div style="position:absolute; top:-100px; right:10%; width:340px; height:340px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.28), rgba(201,162,75,0) 70%);"></div>
       <div style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px);">
         <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:26px;">
@@ -197,7 +173,6 @@
       </div>
     </section>
 
-    <!-- RECOMENDADOS -->
     <section style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px);">
       <div style="text-align:center; margin-bottom:30px;">
         <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7C2F3E;">Curaduría de la casa</span>
@@ -205,22 +180,16 @@
       </div>
       <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(218px,1fr)); gap:clamp(14px,2vw,22px);">
         <sc-for list="{{ recomendados }}" as="b" hint-placeholder-count="3">
-          <dc-import name="BookCard" book="{{ b }}" hint-size="100%,430px"></dc-import>
+          <dc-import name="BookCard" book="{{ b }}" hint-size="100%,470px"></dc-import>
         </sc-for>
       </div>
     </section>
 
-    <!-- VISITANOS TEASER -->
     <section style="background:linear-gradient(180deg,#F4E9D8,#EFE2CB);">
       <div style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:clamp(28px,4vw,48px); align-items:center;">
         <div style="position:relative; aspect-ratio:16/11; border-radius:20px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 20px 44px rgba(52,37,26,0.16); background:repeating-linear-gradient(135deg,#E7D8BD,#E7D8BD 13px,#DECCAC 13px,#DECCAC 26px);">
-          <sc-if value="{{ hasLocal }}" hint-placeholder-val="{{ false }}">
-            {{ brandLocalEl }}
-          </sc-if>
-          <sc-if value="{{ noLocal }}" hint-placeholder-val="{{ true }}">
-            <div style="position:absolute; inset:0; background:radial-gradient(100% 80% at 30% 20%, rgba(255,243,214,0.6), rgba(255,243,214,0) 60%);"></div>
-            <span style="position:absolute; left:14px; bottom:14px; font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#7A6450; background:rgba(255,253,248,0.8); padding:6px 10px; border-radius:8px;">foto del local · refugio lector</span>
-          </sc-if>
+          <div style="position:absolute; inset:0; background:radial-gradient(100% 80% at 30% 20%, rgba(255,243,214,0.6), rgba(255,243,214,0) 60%);"></div>
+          <span style="position:absolute; left:14px; bottom:14px; font-family:ui-monospace,Menlo,monospace; font-size:11px; color:#7A6450; background:rgba(255,253,248,0.8); padding:6px 10px; border-radius:8px;">foto del local · refugio lector</span>
         </div>
         <div>
           <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#9A7A1E;">Guayaquil</span>
@@ -233,26 +202,22 @@
         </div>
       </div>
     </section>
-
   </div>
   </sc-if>
 
-  <!-- ============ CATÁLOGO ============ -->
+  <!-- CATÁLOGO -->
   <sc-if value="{{ isCatalogo }}" hint-placeholder-val="{{ false }}">
   <div data-screen-label="Catálogo">
     <section style="max-width:1180px; margin:0 auto; padding:clamp(36px,5vw,56px) clamp(16px,4vw,32px) 8px;">
       <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7C2F3E;">Catálogo lector</span>
       <h1 style="margin:10px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#2E4734; line-height:1.05; text-wrap:balance;">Tu próxima historia empieza aquí</h1>
       <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:46em;">Explora libros nuevos, libros con segunda historia y recomendaciones especiales para lectores curiosos.</p>
-
       <div style="margin-top:26px; position:relative; max-width:560px;">
         <span style="position:absolute; left:18px; top:50%; transform:translateY(-50%); width:14px; height:14px; border:2px solid #A07F5E; border-radius:50%;"></span>
         <input value="{{ search }}" onInput="{{ onSearch }}" placeholder="Busca por título, autor, saga o género…" style="width:100%; padding:15px 18px 15px 46px; font-family:'Mulish',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; border:1px solid #E3D2B8; border-radius:999px; outline:none; box-shadow:0 6px 18px rgba(52,37,26,0.06);" />
       </div>
-
       <div data-noscroll data-chipbar style="margin-top:18px; display:flex; gap:9px; overflow-x:auto; white-space:nowrap; padding-bottom:4px; min-height:38px;"></div>
     </section>
-
     <section style="max-width:1180px; margin:0 auto; padding:18px clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
         <span style="font-size:13px; font-weight:700; color:#8A715A;">{{ catalogCount }} libros</span>
@@ -260,7 +225,7 @@
       <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(216px,1fr)); gap:clamp(14px,2vw,22px);">
           <sc-for list="{{ catalogBooks }}" as="b" hint-placeholder-count="8">
-            <dc-import name="BookCard" book="{{ b }}" hint-size="100%,430px"></dc-import>
+            <dc-import name="BookCard" book="{{ b }}" hint-size="100%,470px"></dc-import>
           </sc-for>
         </div>
       </sc-if>
@@ -275,7 +240,7 @@
   </div>
   </sc-if>
 
-  <!-- ============ SEGUNDA HISTORIA ============ -->
+  <!-- SEGUNDA HISTORIA -->
   <sc-if value="{{ isSegunda }}" hint-placeholder-val="{{ false }}">
   <div data-screen-label="Segunda historia">
     <section style="background:linear-gradient(180deg,#EFE2CB,#F4E9D8);">
@@ -291,21 +256,17 @@
     <section style="max-width:1180px; margin:0 auto; padding:clamp(34px,4vw,52px) clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
       <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(216px,1fr)); gap:clamp(14px,2vw,22px);">
         <sc-for list="{{ segundaBooks }}" as="b" hint-placeholder-count="6">
-          <dc-import name="BookCard" book="{{ b }}" hint-size="100%,430px"></dc-import>
+          <dc-import name="BookCard" book="{{ b }}" hint-size="100%,470px"></dc-import>
         </sc-for>
       </div>
     </section>
   </div>
   </sc-if>
 
-  <!-- ============ VENDER ============ -->
+  <!-- VENDER -->
   <sc-if value="{{ isVender }}" hint-placeholder-val="{{ false }}">
   <div data-screen-label="Vender">
     <section style="position:relative; overflow:hidden; background:#2E4734; color:#F4E9D8;">
-      <sc-if value="{{ hasVenderImg }}" hint-placeholder-val="{{ false }}">
-        {{ brandVenderEl }}
-        <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(46,71,52,0.72), rgba(46,71,52,0.88));"></div>
-      </sc-if>
       <div style="position:absolute; top:-90px; left:8%; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.3), rgba(201,162,75,0) 70%);"></div>
       <div style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,76px) clamp(16px,4vw,32px);">
         <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#E9CF8B;">Consignación</span>
@@ -332,7 +293,7 @@
   </div>
   </sc-if>
 
-  <!-- ============ MERCH ============ -->
+  <!-- MERCH -->
   <sc-if value="{{ isMerch }}" hint-placeholder-val="{{ false }}">
   <div data-screen-label="Merch">
     <section style="max-width:1180px; margin:0 auto; padding:clamp(36px,5vw,56px) clamp(16px,4vw,32px) 8px;">
@@ -343,21 +304,17 @@
     <section style="max-width:1180px; margin:0 auto; padding:24px clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
       <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:clamp(14px,2vw,22px);">
         <sc-for list="{{ merchAll }}" as="m" hint-placeholder-count="9">
-          <dc-import name="MerchCard" merch="{{ m }}" hint-size="100%,360px"></dc-import>
+          <dc-import name="MerchCard" merch="{{ m }}" hint-size="100%,400px"></dc-import>
         </sc-for>
       </div>
     </section>
   </div>
   </sc-if>
 
-  <!-- ============ EVENTOS ============ -->
+  <!-- EVENTOS -->
   <sc-if value="{{ isEventos }}" hint-placeholder-val="{{ false }}">
   <div data-screen-label="Eventos">
     <section style="background:#2A1C12; color:#F4E9D8; position:relative; overflow:hidden;">
-      <sc-if value="{{ hasEventosImg }}" hint-placeholder-val="{{ false }}">
-        {{ brandEventosEl }}
-        <div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(42,28,18,0.62), rgba(42,28,18,0.84));"></div>
-      </sc-if>
       <div style="position:absolute; bottom:-120px; left:12%; width:360px; height:360px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.26), rgba(201,162,75,0) 70%);"></div>
       <div style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px);">
         <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#E9CF8B;">Experiencias inmersivas</span>
@@ -375,14 +332,13 @@
   </div>
   </sc-if>
 
-  <!-- ============ CÓMO COMPRAR ============ -->
+  <!-- CÓMO COMPRAR -->
   <sc-if value="{{ isComprar }}" hint-placeholder-val="{{ false }}">
   <div data-screen-label="Cómo comprar">
     <section style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px);">
       <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7C2F3E;">Sencillo y cercano</span>
       <h1 style="margin:10px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#2E4734; line-height:1.05;">Cómo comprar en La Madriguera Online</h1>
-      <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:42em;">Sin carrito complicado: eliges, consultas por WhatsApp y coordinamos. Así de simple.</p>
-
+      <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:42em;">Agrega al carrito lo que quieras, revisa tu pedido y envíalo por WhatsApp con un toque. Nosotros confirmamos disponibilidad, pago y entrega.</p>
       <div style="margin-top:34px; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:clamp(16px,2vw,22px);">
         <sc-for list="{{ compraPasos }}" as="p" hint-placeholder-count="5">
           <div style="background:#FFFDF8; border:1px solid #EADBC4; border-radius:18px; padding:22px; box-shadow:0 8px 22px rgba(52,37,26,0.06);">
@@ -391,7 +347,6 @@
           </div>
         </sc-for>
       </div>
-
       <div style="margin-top:40px; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:24px;">
         <div style="background:#EFE2CB; border-radius:20px; padding:26px;">
           <h3 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:20px; color:#2E4734;">Entrega</h3>
@@ -410,14 +365,15 @@
           </ul>
         </div>
       </div>
-      <div style="margin-top:32px;">
-        <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; text-decoration:none; background:#2E4734; color:#F7EFE2; font-weight:700; font-size:15px; padding:14px 26px; border-radius:999px; transition:background .15s ease;" style-hover="background:#244031;"><span style="width:7px; height:7px; border-radius:50%; background:#9CD9A6;"></span>Escríbenos por WhatsApp</a>
+      <div style="margin-top:32px; display:flex; flex-wrap:wrap; gap:12px;">
+        <span onClick="{{ nav.catalogo }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:9px; background:#2E4734; color:#F7EFE2; font-weight:700; font-size:15px; padding:14px 26px; border-radius:999px; transition:background .15s ease;" style-hover="background:#244031;">Explorar el catálogo</span>
+        <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; text-decoration:none; background:transparent; color:#2E4734; border:1.5px solid #B9C4B4; font-weight:700; font-size:15px; padding:13px 24px; border-radius:999px; transition:background .15s ease;" style-hover="background:#E7EDE6;">Escríbenos por WhatsApp</a>
       </div>
     </section>
   </div>
   </sc-if>
 
-  <!-- ============ VISÍTANOS ============ -->
+  <!-- VISÍTANOS -->
   <sc-if value="{{ isVisitanos }}" hint-placeholder-val="{{ false }}">
   <div data-screen-label="Visítanos">
     <section style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px) clamp(48px,6vw,80px); display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:clamp(28px,4vw,48px); align-items:start;">
@@ -425,7 +381,6 @@
         <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#9A7A1E;">Refugio lector · Guayaquil</span>
         <h1 style="margin:10px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#2E4734; line-height:1.05;">Visítanos en La Madriguera</h1>
         <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:32em;">Te esperamos en nuestro refugio lector para descubrir libros, café, postres y experiencias mágicas.</p>
-
         <div style="margin-top:26px; display:flex; flex-direction:column; gap:16px;">
           <div style="display:flex; gap:13px; align-items:flex-start;">
             <span style="width:10px; height:10px; border-radius:50%; background:#7C2F3E; margin-top:6px; flex-shrink:0;"></span>
@@ -436,7 +391,6 @@
             <div><div style="font-weight:800; font-size:13px; letter-spacing:.04em; text-transform:uppercase; color:#A07F5E;">Horario</div><div style="font-size:16px; color:#3A2C1F; margin-top:3px;">Miércoles a sábado · 12:00–20:00<br>Domingos · 10:00–18:00</div></div>
           </div>
         </div>
-
         <div style="margin-top:28px; display:flex; flex-wrap:wrap; gap:11px;">
           <a href="{{ mapsHref }}" target="_blank" rel="noopener" style="text-decoration:none; background:#2E4734; color:#F7EFE2; font-weight:700; font-size:14px; padding:12px 20px; border-radius:999px; transition:background .15s ease;" style-hover="background:#244031;">Google Maps</a>
           <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="text-decoration:none; background:transparent; color:#2E4734; font-weight:700; font-size:14px; padding:11px 19px; border-radius:999px; border:1.5px solid #B9C4B4; transition:background .15s ease;" style-hover="background:#E7EDE6;">WhatsApp</a>
@@ -454,21 +408,15 @@
 
   </main>
 
-  <!-- ============ FOOTER ============ -->
   <footer style="background:#2A1C12; color:#E8D9C2;">
     <div style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,60px) clamp(16px,4vw,32px) 28px;">
       <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:32px; align-items:start;">
         <div>
           <div style="display:flex; align-items:center; gap:11px;">
-            <sc-if value="{{ hasLogo }}" hint-placeholder-val="{{ false }}">
-              <div style="width:42px; height:42px; border-radius:12px; overflow:hidden; background:#FFFDF8; display:flex; align-items:center; justify-content:center;">{{ brandLogoEl }}</div>
-            </sc-if>
-            <sc-if value="{{ noLogo }}" hint-placeholder-val="{{ true }}">
-              <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(150deg,#3C5A43,#2E4734); display:flex; align-items:center; justify-content:center; position:relative;">
-                <span style="font-family:'Spectral',serif; font-weight:700; font-size:22px; color:#F4E9D8;">M</span>
-                <span style="position:absolute; top:-3px; right:-3px; width:8px; height:8px; border-radius:50%; background:#C9A24B; box-shadow:0 0 8px #C9A24B;"></span>
-              </div>
-            </sc-if>
+            <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(150deg,#3C5A43,#2E4734); display:flex; align-items:center; justify-content:center; position:relative;">
+              <span style="font-family:'Spectral',serif; font-weight:700; font-size:22px; color:#F4E9D8;">M</span>
+              <span style="position:absolute; top:-3px; right:-3px; width:8px; height:8px; border-radius:50%; background:#C9A24B; box-shadow:0 0 8px #C9A24B;"></span>
+            </div>
             <div style="font-family:'Spectral',serif; font-weight:700; font-size:19px; color:#F4E9D8;">La Madriguera</div>
           </div>
           <p style="margin:16px 0 0; font-family:'Spectral',serif; font-style:italic; font-size:16px; line-height:1.5; color:#C9A24B; max-width:22em;">Una casa para quienes viven entre páginas.</p>
@@ -494,49 +442,681 @@
       </div>
       <div style="margin-top:36px; padding-top:20px; border-top:1px solid rgba(232,217,194,0.16); display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;">
         <span style="font-size:12.5px; color:#9C8E78;">© {{ year }} La Madriguera Specialty Coffee &amp; Books</span>
-        <span style="font-family:'Spectral',serif; font-style:italic; font-size:13.5px; color:#9C8E78;">Lleva contigo una pequeña magia de La Madriguera.</span>
+        <div style="display:flex; align-items:center; gap:16px;">
+          <span style="font-family:'Spectral',serif; font-style:italic; font-size:13.5px; color:#9C8E78;">Lleva contigo una pequeña magia de La Madriguera.</span>
+          <span onClick="{{ openPw }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#6E6353; border:1px solid rgba(232,217,194,0.18); padding:5px 11px; border-radius:999px; transition:color .15s ease;" style-hover="color:#C9A24B;">Administrar</span>
+        </div>
       </div>
     </div>
   </footer>
 
-  <sc-if value="{{ leadOpen }}" hint-placeholder-val="{{ false }}">
-  <div onClick="{{ closeLead }}" style="position:fixed; inset:0; z-index:200; background:rgba(42,28,18,0.55); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); display:flex; align-items:center; justify-content:center; padding:18px;">
-    <div onClick="{{ stop }}" style="width:100%; max-width:420px; background:#FFFDF8; border-radius:20px; padding:clamp(22px,4vw,30px); box-shadow:0 30px 70px rgba(42,28,18,0.4); font-family:'Mulish',sans-serif;">
-      <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
-        <div>
-          <div style="font-size:11px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:#7C2F3E;">{{ leadKind }}</div>
-          <h3 style="margin:6px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:22px; color:#2E4734; line-height:1.18; text-wrap:balance;">{{ leadTitle }}</h3>
-          <p style="margin:4px 0 0; font-size:13px; color:#8A715A;">{{ leadSub }}</p>
-        </div>
-        <span onClick="{{ closeLead }}" style="cursor:pointer; flex-shrink:0; font-size:20px; line-height:1; color:#A07F5E; padding:2px 6px;">✕</span>
-      </div>
-      <p style="margin:16px 0 0; font-size:14.5px; line-height:1.5; color:#5E4632;">Déjanos tu celular y te contactamos para coordinar. Al enviar también se abrirá WhatsApp.</p>
-      <div style="margin-top:16px; display:flex; flex-direction:column; gap:12px;">
-        <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Tu nombre</label>
-          <input value="{{ leadName }}" onInput="{{ onLeadName }}" placeholder="Nombre y apellido" style="width:100%; padding:13px 15px; border:1px solid #E3D2B8; border-radius:11px; font-family:'Mulish',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;" />
-        </div>
-        <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Tu celular *</label>
-          <input value="{{ leadPhone }}" onInput="{{ onLeadPhone }}" type="tel" inputmode="tel" placeholder="Ej. 0991234567" style="width:100%; padding:13px 15px; border:1px solid #E3D2B8; border-radius:11px; font-family:'Mulish',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;" />
+</div>
+</sc-if>
+
+<!-- ============ ADMIN ============ -->
+<sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+<div style="background:#F0E6D2; min-height:100vh;">
+
+  <header style="background:#2E4734; color:#F7EFE2;">
+    <div style="max-width:1100px; margin:0 auto; padding:18px clamp(16px,4vw,32px); display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="width:38px; height:38px; border-radius:11px; background:rgba(247,239,226,0.12); display:flex; align-items:center; justify-content:center; font-family:'Spectral',serif; font-weight:700; font-size:20px; color:#F4E9D8;">M</div>
+        <div style="display:flex; flex-direction:column; line-height:1.2;">
+          <span style="font-family:'Spectral',serif; font-weight:700; font-size:19px;">Panel de La Madriguera</span>
+          <span style="font-size:11.5px; color:#B9C4B4;">Aquí editas lo que se ve en tu página</span>
         </div>
       </div>
-      <sc-if value="{{ leadHasErr }}" hint-placeholder-val="{{ false }}">
-        <div style="margin-top:10px; font-size:13px; font-weight:700; color:#9A4A3C;">{{ leadErr }}</div>
-      </sc-if>
-      <div style="margin-top:18px; display:flex; flex-direction:column; gap:10px;">
-        <span onClick="{{ submitLead }}" style="cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; background:#2E4734; color:#F7EFE2; font-weight:800; font-size:15px; padding:14px; border-radius:12px; box-shadow:0 8px 20px rgba(46,71,52,0.28); transition:background .15s ease;" style-hover="background:#244031;"><span style="width:7px; height:7px; border-radius:50%; background:#9CD9A6;"></span>Enviar y abrir WhatsApp</span>
-        <span onClick="{{ closeLead }}" style="cursor:pointer; text-align:center; font-size:13.5px; font-weight:700; color:#8A715A; padding:6px;">Cancelar</span>
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <span style="display:inline-flex; align-items:center; gap:7px; font-size:12.5px; color:#B9C4B4;"><sc-if value="{{ fbOnline }}" hint-placeholder-val="{{ false }}"><span style="width:8px; height:8px; border-radius:50%; background:#9CD9A6; box-shadow:0 0 8px #9CD9A6;"></span></sc-if><sc-if value="{{ fbOffline }}" hint-placeholder-val="{{ true }}"><span style="width:8px; height:8px; border-radius:50%; background:#E0A14C;"></span></sc-if>{{ savedLabel }}</span>
+        <sc-if value="{{ fbOnline }}" hint-placeholder-val="{{ false }}"><span onClick="{{ logout }}" style="cursor:pointer; display:inline-block; white-space:nowrap; font-size:12.5px; font-weight:700; color:#B9C4B4; border:1px solid rgba(247,239,226,0.22); padding:9px 14px; border-radius:999px;" style-hover="color:#F7EFE2;">Cerrar sesión</span></sc-if>
+        <span onClick="{{ exitAdmin }}" style="cursor:pointer; display:inline-block; white-space:nowrap; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:13.5px; padding:10px 18px; border-radius:999px;" style-hover="background:#d9b25b;">← Ver mi tienda</span>
       </div>
     </div>
+  </header>
+
+  <div style="background:#FFFDF8; border-bottom:1px solid #E3D2B8; position:sticky; top:0; z-index:40;">
+    <nav data-noscroll style="max-width:1100px; margin:0 auto; padding:10px clamp(16px,4vw,32px); display:flex; gap:8px; overflow-x:auto;">
+      <sc-for list="{{ adminTabs }}" as="t" hint-placeholder-count="5">
+        <span onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}</span>
+      </sc-for>
+    </nav>
   </div>
-  </sc-if>
+
+  <main style="max-width:1100px; margin:0 auto; padding:clamp(24px,4vw,40px) clamp(16px,4vw,32px) 80px;">
+
+    <!-- ADMIN LIBROS -->
+    <sc-if value="{{ aLibros }}" hint-placeholder-val="{{ true }}">
+    <div data-screen-label="Admin Libros">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:10px;">
+        <div>
+          <h2 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:30px; color:#2E4734;">Libros del catálogo</h2>
+          <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ librosCount }} libros · haz click en la portada para subir la foto. Todo se guarda solo.</p>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <span onClick="{{ openBulk }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(201,162,75,0.3);" style-hover="background:#d9b25b;">⬆ Carga masiva</span>
+          <span onClick="{{ addLibro }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#2E4734; color:#F7EFE2; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(46,71,52,0.25);" style-hover="background:#244031;">+ Añadir libro</span>
+        </div>
+      </div>
+      <div style="margin-bottom:22px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">En <strong>Género</strong> usa palabras como Fantasía, Romance, Manga, Infantil, Clásicos o Thriller para que el libro aparezca en los filtros del catálogo. Los libros marcados <strong>Vendido</strong> dejan de mostrarse en la página.</div>
+
+      <sc-if value="{{ bulkOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-bottom:22px; background:#FFFDF8; border:1px solid #C9A24B; border-radius:16px; padding:clamp(18px,3vw,26px); box-shadow:0 10px 28px rgba(52,37,26,0.08);">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap;">
+          <div>
+            <h3 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:21px; color:#2E4734;">Carga masiva de libros</h3>
+            <p style="margin:6px 0 0; font-size:13.5px; color:#6E5946; line-height:1.5; max-width:46em;">Copia las filas desde tu Excel o Google Sheets y <strong>pégalas</strong> abajo, o sube un archivo CSV. Las fotos se cargan después, haciendo click en la portada de cada libro.</p>
+          </div>
+          <span onClick="{{ closeBulk }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#8A715A; padding:6px 12px; border-radius:999px; border:1px solid #E3D2B8;" style-hover="background:#F0E6D2;">Cerrar ✕</span>
+        </div>
+        <div style="margin-top:14px; background:#F0E6D2; border-radius:10px; padding:12px 15px; font-size:12.5px; color:#5E4632; line-height:1.6;">
+          <strong>Orden de columnas:</strong> Título · Autor · Género · Precio · Estado · Disponibilidad<br>
+          <span style="color:#8A715A;">Estado: Nuevo / Usado excelente / Usado bueno / Con detalles visibles · Disponibilidad: Disponible / Última unidad / Reservado / Oferta. Si dejas un campo vacío usamos «Nuevo» y «Disponible».</span>
+        </div>
+        <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+          <span onClick="{{ downloadTemplate }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#2E4734; padding:9px 16px; border-radius:999px; border:1.5px solid #B9C4B4;" style-hover="background:#E7EDE6;">⬇ Descargar plantilla CSV</span>
+          <span onClick="{{ pickBulkFile }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#9A7A1E; padding:9px 16px; border-radius:999px; border:1.5px solid #D9BC77;" style-hover="background:#F1E6CF;">📄 Subir archivo CSV</span>
+        </div>
+        <textarea value="{{ bulkText }}" onInput="{{ onBulkText }}" placeholder="Pega aquí las filas copiadas de tu hoja de cálculo (una por línea)…" style="margin-top:14px; width:100%; min-height:150px; resize:vertical; padding:13px 15px; border:1px solid #E3D2B8; border-radius:10px; font-family:ui-monospace,Menlo,monospace; font-size:13px; line-height:1.6; color:#34251A; background:#FFFDF8; outline:none;"></textarea>
+        <sc-if value="{{ bulkHasErr }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:10px; font-size:13px; font-weight:700; color:#9A4A3C;">{{ bulkErr }}</div>
+        </sc-if>
+        <sc-if value="{{ bulkHasRows }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:16px;">
+            <div style="font-size:13px; font-weight:800; color:#2E4734; margin-bottom:8px;">Vista previa · {{ bulkCount }} libros detectados</div>
+            <div style="border:1px solid #E3D2B8; border-radius:10px; overflow:hidden;">
+              <sc-for list="{{ bulkPreview }}" as="r" hint-placeholder-count="3">
+                <div style="display:grid; grid-template-columns:28px 1fr auto; gap:12px; align-items:center; padding:10px 14px; border-top:1px solid #F0E6D2;">
+                  <span style="font-family:ui-monospace,Menlo,monospace; font-size:12px; color:#A07F5E;">{{ r.n }}</span>
+                  <div style="min-width:0;">
+                    <div style="font-weight:700; font-size:14px; color:#34251A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.title }}</div>
+                    <div style="font-size:12.5px; color:#8A715A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.sub }}</div>
+                  </div>
+                  <span style="font-weight:800; font-size:13.5px; color:#2E6B41;">{{ r.priceLabel }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ bulkMoreShow }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:8px; font-size:12.5px; color:#8A715A;">…y {{ bulkMore }} más.</div>
+            </sc-if>
+          </div>
+        </sc-if>
+        <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+          <span onClick="{{ commitBulk }}" style="cursor:pointer; background:#2E4734; color:#F7EFE2; font-weight:800; font-size:14.5px; padding:13px 26px; border-radius:999px; box-shadow:0 6px 16px rgba(46,71,52,0.25);" style-hover="background:#244031;">Agregar {{ bulkCount }} libros</span>
+          <span onClick="{{ closeBulk }}" style="cursor:pointer; font-size:13.5px; font-weight:700; color:#8A715A; padding:11px 18px;">Cancelar</span>
+        </div>
+      </div>
+      </sc-if>
+
+      <div style="display:flex; flex-direction:column; gap:18px;">
+        <sc-for list="{{ libros }}" as="l" hint-placeholder-count="3">
+          <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;">
+              <span style="font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:#8A715A; background:#F0E6D2; padding:4px 9px; border-radius:6px;">{{ l.code }}</span>
+              <span onClick="{{ l.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
+            </div>
+            <div style="display:grid; grid-template-columns:110px 1fr; gap:20px; align-items:start;">
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <div onClick="{{ l.onPick }}" title="Click para subir la portada" style="position:relative; width:110px; aspect-ratio:3/4; border-radius:10px; overflow:hidden; border:2px dashed #D9BC77; background:#F7EFE2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
+                  <span style="font-size:11px; color:#A07F5E; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>portada</span>
+                  <sc-if value="{{ l.hasImg }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:absolute; inset:0; background-image:url('{{ l.imagen }}'); background-size:cover; background-position:center;"></div>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ l.hasImg }}" hint-placeholder-val="{{ false }}">
+                  <span onClick="{{ l.onClearImg }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span>
+                </sc-if>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px;">
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Título</label>
+                  <input value="{{ l.title }}" onChange="{{ l.onTitle }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Autor</label>
+                  <input value="{{ l.author }}" onChange="{{ l.onAuthor }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Género</label>
+                  <input value="{{ l.genre }}" onChange="{{ l.onGenre }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio ($)</label>
+                  <input value="{{ l.price }}" onChange="{{ l.onPrice }}" type="number" min="0" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Estado</label>
+                  <select value="{{ l.estado }}" onChange="{{ l.onEstado }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                    <option value="Nuevo">Nuevo</option>
+                    <option value="Usado excelente">Usado excelente</option>
+                    <option value="Usado bueno">Usado bueno</option>
+                    <option value="Con detalles visibles">Con detalles visibles</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Disponibilidad</label>
+                  <select value="{{ l.disp }}" onChange="{{ l.onDisp }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                    <option value="Disponible">Disponible</option>
+                    <option value="Última unidad">Última unidad</option>
+                    <option value="Reservado">Reservado</option>
+                    <option value="Oferta">Oferta</option>
+                    <option value="Por encargo">Por encargo</option>
+                    <option value="Vendido">Vendido</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ADMIN CONSIGNACIÓN -->
+    <sc-if value="{{ aConsig }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Admin Consignación">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:10px;">
+        <div>
+          <h2 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:30px; color:#9A7A1E;">Libros en consignación</h2>
+          <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ consigCount }} registros · libros de segunda mano que te dejan para vender.</p>
+        </div>
+        <span onClick="{{ addConsig }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#9A7A1E; color:#FBF3E0; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(154,122,30,0.3);" style-hover="background:#866916;">+ Registrar libro recibido</span>
+      </div>
+      <div style="margin-bottom:22px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">Cuando alguien te deja libros en el local, regístralos aquí con los datos del dueño. Solo los que marques <strong>En venta</strong> aparecen en la página, en la sección <strong>Segunda historia</strong>. Cuando se venda, cámbialo a <strong>Vendido</strong> y luego a <strong>Pagado al dueño</strong> cuando le entregues su parte.</div>
+
+      <div style="display:flex; flex-direction:column; gap:18px;">
+        <sc-for list="{{ consig }}" as="c" hint-placeholder-count="2">
+          <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:#8A715A; background:#F0E6D2; padding:4px 9px; border-radius:6px;">{{ c.code }}</span>
+                <span style="{{ c.estadoBadge }}">{{ c.estado }}</span>
+              </div>
+              <span onClick="{{ c.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
+            </div>
+            <div style="display:grid; grid-template-columns:110px 1fr; gap:20px; align-items:start;">
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <div onClick="{{ c.onPick }}" title="Click para subir la portada" style="position:relative; width:110px; aspect-ratio:3/4; border-radius:10px; overflow:hidden; border:2px dashed #D9BC77; background:#F7EFE2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
+                  <span style="font-size:11px; color:#A07F5E; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>portada</span>
+                  <sc-if value="{{ c.hasImg }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:absolute; inset:0; background-image:url('{{ c.imagen }}'); background-size:cover; background-position:center;"></div>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ c.hasImg }}" hint-placeholder-val="{{ false }}">
+                  <span onClick="{{ c.onClearImg }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span>
+                </sc-if>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px;">
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Título</label>
+                  <input value="{{ c.title }}" onChange="{{ c.onTitle }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Autor</label>
+                  <input value="{{ c.author }}" onChange="{{ c.onAuthor }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Género</label>
+                  <input value="{{ c.genre }}" onChange="{{ c.onGenre }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Dueño del libro</label>
+                  <input value="{{ c.owner }}" onChange="{{ c.onOwner }}" placeholder="Nombre de quien lo dejó" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Contacto del dueño</label>
+                  <input value="{{ c.contact }}" onChange="{{ c.onContact }}" placeholder="Teléfono o WhatsApp" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio de venta ($)</label>
+                  <input value="{{ c.price }}" onChange="{{ c.onPrice }}" type="number" min="0" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Pago al dueño ($)</label>
+                  <input value="{{ c.payout }}" onChange="{{ c.onPayout }}" type="number" min="0" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Estado</label>
+                  <select value="{{ c.estado }}" onChange="{{ c.onEstado }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                    <option value="Recibido">Recibido (aún no publicado)</option>
+                    <option value="En venta">En venta (visible en la página)</option>
+                    <option value="Vendido">Vendido</option>
+                    <option value="Pagado al dueño">Pagado al dueño</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ADMIN MERCH -->
+    <sc-if value="{{ aMerch }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Admin Merch">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:22px;">
+        <div>
+          <h2 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:30px; color:#7C2F3E;">Merch de la tienda</h2>
+          <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ merchCount }} productos · click en la foto para cambiarla.</p>
+        </div>
+        <span onClick="{{ addMerch }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#7C2F3E; color:#FFF7EC; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(124,47,62,0.3);" style-hover="background:#672836;">+ Añadir producto</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:18px;">
+        <sc-for list="{{ merch }}" as="m" hint-placeholder-count="2">
+          <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
+            <div style="display:flex; align-items:center; justify-content:flex-end; margin-bottom:14px;">
+              <span onClick="{{ m.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
+            </div>
+            <div style="display:grid; grid-template-columns:130px 1fr; gap:20px; align-items:start;">
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <div onClick="{{ m.onPick }}" title="Click para subir la foto" style="position:relative; width:130px; aspect-ratio:4/3; border-radius:10px; overflow:hidden; border:2px dashed #D9BC77; background:#F7EFE2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
+                  <span style="font-size:11px; color:#A07F5E; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>foto</span>
+                  <sc-if value="{{ m.hasImg }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:absolute; inset:0; background-image:url('{{ m.imagen }}'); background-size:cover; background-position:center;"></div>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ m.hasImg }}" hint-placeholder-val="{{ false }}">
+                  <span onClick="{{ m.onClearImg }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span>
+                </sc-if>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px;">
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Nombre</label>
+                  <input value="{{ m.name }}" onChange="{{ m.onName }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Categoría</label>
+                  <input value="{{ m.cat }}" onChange="{{ m.onCat }}" placeholder="Tazas, Stickers, Pines…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio ($)</label>
+                  <input value="{{ m.price }}" onChange="{{ m.onPrice }}" type="number" min="0" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Disponibilidad</label>
+                  <select value="{{ m.disp }}" onChange="{{ m.onDisp }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                    <option value="Disponible">Disponible</option>
+                    <option value="Última unidad">Última unidad</option>
+                    <option value="Por encargo">Por encargo</option>
+                    <option value="Vendido">Agotado</option>
+                  </select>
+                </div>
+                <div style="grid-column:1/-1;">
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Descripción</label>
+                  <input value="{{ m.desc }}" onChange="{{ m.onDesc }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ADMIN EVENTOS -->
+    <sc-if value="{{ aEventos }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Admin Eventos">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:22px;">
+        <div>
+          <h2 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:30px; color:#2A1C12;">Eventos y experiencias</h2>
+          <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ eventosCount }} eventos · los más próximos aparecen primero en la página.</p>
+        </div>
+        <span onClick="{{ addEvento }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#2A1C12; color:#F4E9D8; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(42,28,18,0.3);" style-hover="background:#3d2a1c;">+ Añadir evento</span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:18px;">
+        <sc-for list="{{ eventos }}" as="e" hint-placeholder-count="2">
+          <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
+            <div style="display:flex; align-items:center; justify-content:flex-end; margin-bottom:14px;">
+              <span onClick="{{ e.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
+            </div>
+            <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; align-items:start;">
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <div onClick="{{ e.onPick }}" title="Click para subir la imagen" style="position:relative; width:150px; aspect-ratio:16/10; border-radius:10px; overflow:hidden; border:2px dashed #D9BC77; background:#F7EFE2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
+                  <span style="font-size:11px; color:#A07F5E; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>imagen</span>
+                  <sc-if value="{{ e.hasImg }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:absolute; inset:0; background-image:url('{{ e.imagen }}'); background-size:cover; background-position:center;"></div>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ e.hasImg }}" hint-placeholder-val="{{ false }}">
+                  <span onClick="{{ e.onClearImg }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span>
+                </sc-if>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px;">
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Nombre del evento</label>
+                  <input value="{{ e.name }}" onChange="{{ e.onName }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Fecha (texto)</label>
+                  <input value="{{ e.date }}" onChange="{{ e.onDate }}" placeholder="Vie 27 jun" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Hora</label>
+                  <input value="{{ e.time }}" onChange="{{ e.onTime }}" placeholder="19:30" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio (texto)</label>
+                  <input value="{{ e.price }}" onChange="{{ e.onPrice }}" placeholder="$12 o Gratis con consumo" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Cupos (texto)</label>
+                  <input value="{{ e.cupos }}" onChange="{{ e.onCupos }}" placeholder="8 cupos" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+                <div style="grid-column:1/-1;">
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Qué incluye</label>
+                  <input value="{{ e.includes }}" onChange="{{ e.onIncludes }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ADMIN PEDIDOS -->
+    <sc-if value="{{ aPedidos }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Admin Pedidos">
+      <div style="margin-bottom:18px;">
+        <h2 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:30px; color:#3A5A6B;">Pedidos y consultas</h2>
+        <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ pedidosCount }} registros · {{ pedidosNuevos }} sin atender. Cada pedido del carrito y cada consulta de la web queda guardado aquí.</p>
+      </div>
+      <sc-if value="{{ pedidosEmpty }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#FFFDF8; border:1px dashed #D9C7AC; border-radius:16px; padding:44px 20px; text-align:center; color:#8A715A;">
+          <div style="width:50px; height:50px; margin:0 auto; border-radius:14px; background:#EAF2F6; display:flex; align-items:center; justify-content:center; font-size:24px;">🧾</div>
+          <div style="margin-top:14px; font-family:'Spectral',serif; font-style:italic; font-size:20px; color:#5E4632;">Aún no hay pedidos.</div>
+          <p style="margin:8px 0 0; font-size:14px;">Cuando un cliente envíe su carrito o deje sus datos, aparecerá aquí al instante.</p>
+        </div>
+      </sc-if>
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <sc-for list="{{ pedidos }}" as="p" hint-placeholder-count="3">
+          <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:18px 20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <span style="{{ p.canalBadge }}">{{ p.canal }}</span>
+                <span style="font-weight:800; font-size:15px; color:#34251A;">{{ p.tipo }}</span>
+                <span style="font-size:12.5px; color:#8A715A;">{{ p.fecha }}</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <select value="{{ p.estado }}" onChange="{{ p.onEstado }}" style="padding:8px 12px; border:1px solid #E3D2B8; border-radius:999px; font-size:13px; font-weight:700; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                  <option value="Nuevo">🔴 Nuevo</option>
+                  <option value="Atendido">🟡 Atendido</option>
+                  <option value="Entregado">🟢 Entregado</option>
+                  <option value="Cancelado">⚪ Cancelado</option>
+                </select>
+                <span onClick="{{ p.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
+              </div>
+            </div>
+            <div style="margin-top:14px; display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; align-items:start;">
+              <div>
+                <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:4px;">Cliente</div>
+                <div style="font-size:14.5px; color:#34251A; font-weight:600;">{{ p.clienteLabel }}</div>
+                <sc-if value="{{ p.hasCel }}" hint-placeholder-val="{{ false }}"><a href="{{ p.waCliente }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:6px; margin-top:6px; text-decoration:none; font-size:13px; font-weight:700; color:#2E6B41;"><span style="width:6px; height:6px; border-radius:50%; background:#2E6B41;"></span>{{ p.celular }}</a></sc-if>
+              </div>
+              <div style="grid-column:span 2;">
+                <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:4px;">Detalle</div>
+                <div style="font-size:14px; color:#3A2C1F; line-height:1.5;">{{ p.itemsLabel }}</div>
+                <sc-if value="{{ p.hasNota }}" hint-placeholder-val="{{ false }}"><div style="margin-top:5px; font-size:13px; color:#8A715A;">Nota: {{ p.nota }}</div></sc-if>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:4px;">Total</div>
+                <div style="font-family:'Spectral',serif; font-weight:700; font-size:22px; color:#2E4734;">{{ p.totalLabel }}</div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ADMIN CONFIG -->
+    <sc-if value="{{ aConfig }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Admin Configuración" style="max-width:640px;">
+      <h2 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:30px; color:#34251A;">Configuración</h2>
+      <p style="margin:6px 0 24px; font-size:14px; color:#6E5946;">Datos de contacto de la tienda, clave de administrador y notificaciones de pedidos.</p>
+      <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:24px; box-shadow:0 6px 18px rgba(52,37,26,0.05); display:flex; flex-direction:column; gap:18px;">
+        <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Correo para recibir pedidos</label>
+          <input value="{{ cfgEmail }}" onChange="{{ onCfgEmail }}" placeholder="tucorreo@ejemplo.com" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Cuando un cliente envía un pedido del carrito (o consulta un libro), además de abrirse tu WhatsApp, te llega un correo con el detalle. <strong>La primera vez</strong> pulsa "Enviar correo de prueba" y confirma la activación en tu bandeja (revisa spam).</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+          <span onClick="{{ onTestEmail }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#5A6472; color:#F4F6F8; font-weight:800; font-size:13.5px; padding:11px 20px; border-radius:999px;" style-hover="background:#49525e;">Enviar correo de prueba</span>
+          <span style="font-size:13px; font-weight:700; color:#2E6B41;">{{ mailStatus }}</span>
+        </div>
+        <div style="height:1px; background:#EADBC4;"></div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Número de WhatsApp de la tienda</label>
+          <input value="{{ cfgWhatsapp }}" onChange="{{ onCfgWhatsapp }}" placeholder="593960186336 (con código de país, sin +)" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Clave de administrador</label>
+          <input value="{{ cfgPass }}" onChange="{{ onCfgPass }}" placeholder="madriguera" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Es la clave que te pide la app al pulsar «Administrar» en el pie de tu página. Cámbiala por una que solo tú sepas. (Por defecto: madriguera)</p>
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Instagram (link completo)</label>
+          <input value="{{ cfgInstagram }}" onChange="{{ onCfgInstagram }}" placeholder="https://instagram.com/lamadriguera" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">TikTok (link completo)</label>
+          <input value="{{ cfgTiktok }}" onChange="{{ onCfgTiktok }}" placeholder="https://tiktok.com/@lamadriguera" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Link de Google Maps</label>
+          <input value="{{ cfgMaps }}" onChange="{{ onCfgMaps }}" placeholder="https://maps.google.com/?q=…" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;" />
+        </div>
+      </div>
+
+      <div style="margin-top:22px; background:linear-gradient(160deg,#2E4734,#244031); border-radius:18px; padding:clamp(22px,3vw,30px); color:#F4E9D8; box-shadow:0 14px 34px rgba(46,71,52,0.3);">
+        <div style="display:flex; align-items:center; gap:11px;">
+          <span style="flex-shrink:0; width:34px; height:34px; border-radius:10px; background:#C9A24B; color:#2A1C12; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800;">☁</span>
+          <h3 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:23px; color:#F4E9D8;">Tus cambios se publican solos</h3>
+        </div>
+        <sc-if value="{{ fbOnline }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:15px; background:rgba(156,217,166,0.14); border:1px solid rgba(156,217,166,0.4); border-radius:12px; padding:13px 16px; font-size:13.5px; line-height:1.55; color:#DCEFD9;"><strong>Conectado a la nube ✓</strong> Todo lo que editas se guarda al instante en Firebase y tus clientes lo ven en vivo. No necesitas descargar ni subir nada.</div>
+        </sc-if>
+        <sc-if value="{{ fbOffline }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:15px; background:rgba(224,161,76,0.16); border:1px solid rgba(224,161,76,0.42); border-radius:12px; padding:13px 16px; font-size:13.5px; line-height:1.55; color:#F1E5C8;"><strong>Sin conexión a la nube.</strong> Es normal dentro de esta vista previa; en tu web publicada se conecta a Firebase automáticamente. Mientras tanto, los cambios se guardan en este navegador.</div>
+        </sc-if>
+        <div style="margin-top:18px; background:rgba(255,253,248,0.07); border:1px solid rgba(247,239,226,0.16); border-radius:12px; padding:16px 18px;">
+          <div style="font-size:12.5px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#C9A24B; margin-bottom:12px;">Activar la nube (una sola vez en Firebase)</div>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; gap:13px; align-items:flex-start;"><span style="flex-shrink:0; width:26px; height:26px; border-radius:50%; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center;">1</span><div style="font-size:14px; line-height:1.55; color:#E8EFE4;">En tu proyecto <strong>adminpagweb</strong>: abre <strong>Firestore Database</strong> → <strong>Crear base de datos</strong> → modo producción.</div></div>
+            <div style="display:flex; gap:13px; align-items:flex-start;"><span style="flex-shrink:0; width:26px; height:26px; border-radius:50%; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center;">2</span><div style="font-size:14px; line-height:1.55; color:#E8EFE4;">Abre <strong>Authentication → Sign-in method</strong> y activa <strong>Correo/Contraseña</strong>. Luego en <strong>Users → Add user</strong> crea tu correo y contraseña de administrador (con esos entras aquí).</div></div>
+            <div style="display:flex; gap:13px; align-items:flex-start;"><span style="flex-shrink:0; width:26px; height:26px; border-radius:50%; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center;">3</span><div style="font-size:14px; line-height:1.55; color:#E8EFE4;">En <strong>Firestore → Reglas</strong> pega esto y pulsa <strong>Publicar</strong>:</div></div>
+          </div>
+          <pre style="margin:12px 0 0; background:#1C2A20; border:1px solid rgba(247,239,226,0.14); border-radius:10px; padding:13px 15px; overflow-x:auto; font-family:ui-monospace,Menlo,monospace; font-size:11.5px; line-height:1.6; color:#CFE6CC; white-space:pre;">rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+    match /{doc=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}</pre>
+        </div>
+        <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+          <span onClick="{{ importSeed }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 8px 20px rgba(201,162,75,0.3);" style-hover="background:#d9b25b;">☁ Subir mi catálogo actual a la nube</span>
+          <span onClick="{{ onExport }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:transparent; color:#E8EFE4; border:1.5px solid rgba(247,239,226,0.3); font-weight:700; font-size:13.5px; padding:11px 20px; border-radius:999px;" style-hover="background:rgba(255,253,248,0.08);">⬇ Descargar respaldo</span>
+        </div>
+        <p style="margin:12px 0 0; font-size:12.5px; color:#AFBDA8;">«Subir mi catálogo» copia tus libros, merch y eventos actuales a Firebase. Se hace solo la primera vez que inicias sesión; el botón es por si quieres forzarlo. El respaldo descarga una copia opcional.</p>
+      </div>
+    </div>
+    </sc-if>
+
+  </main>
+
+  <input id="lm-admin-file" type="file" accept="image/*" style="display:none;" onChange="{{ onFile }}" />
+  <input id="lm-bulk-file" type="file" accept=".csv,text/csv,text/plain" style="display:none;" onChange="{{ onBulkFile }}" />
+</div>
+</sc-if>
+
+<!-- ============ CARRITO ============ -->
+<sc-if value="{{ cartOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeCart }}" style="position:fixed; inset:0; z-index:300; background:rgba(42,28,18,0.5); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); display:flex; justify-content:flex-end;">
+  <div onClick="{{ stop }}" style="width:min(430px,100%); height:100%; background:#F4E9D8; display:flex; flex-direction:column; box-shadow:-20px 0 60px rgba(42,28,18,0.35); animation:lmslide .22s ease;">
+    <div style="flex-shrink:0; padding:20px clamp(16px,4vw,24px); border-bottom:1px solid #E3D2B8; display:flex; align-items:center; justify-content:space-between; gap:12px; background:#FFFDF8;">
+      <div>
+        <div style="font-family:'Spectral',serif; font-weight:700; font-size:21px; color:#2E4734;">Tu carrito</div>
+        <div style="font-size:12.5px; color:#8A715A; margin-top:2px;">{{ cartCountLabel }}</div>
+      </div>
+      <span onClick="{{ closeCart }}" style="cursor:pointer; font-size:20px; line-height:1; color:#A07F5E; padding:4px 8px;">✕</span>
+    </div>
+
+    <div data-noscroll style="flex:1; overflow-y:auto; padding:clamp(14px,3vw,20px);">
+      <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ true }}">
+        <div style="text-align:center; padding:60px 20px; color:#8A715A;">
+          <div style="width:54px; height:54px; margin:0 auto; border-radius:16px; background:#EFE2CB; display:flex; align-items:center; justify-content:center; font-size:26px; color:#9A7A1E;">☕</div>
+          <div style="margin-top:16px; font-family:'Spectral',serif; font-style:italic; font-size:19px; color:#5E4632;">Tu carrito está vacío</div>
+          <p style="margin:8px 0 0; font-size:14px;">Agrega libros o merch y aparecerán aquí.</p>
+          <span onClick="{{ goCatalogFromCart }}" style="cursor:pointer; display:inline-block; margin-top:18px; background:#2E4734; color:#F7EFE2; font-weight:700; font-size:14px; padding:12px 22px; border-radius:999px;">Explorar catálogo</span>
+        </div>
+      </sc-if>
+      <sc-if value="{{ cartHasItems }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <sc-for list="{{ cartItems }}" as="it" hint-placeholder-count="2">
+            <div style="display:grid; grid-template-columns:62px 1fr auto; gap:12px; align-items:center; background:#FFFDF8; border:1px solid #EADBC4; border-radius:14px; padding:10px;">
+              <div style="position:relative; width:62px; height:78px; border-radius:9px; overflow:hidden; background:repeating-linear-gradient(135deg,#F1E5D0,#F1E5D0 8px,#E9D9BE 8px,#E9D9BE 16px); flex-shrink:0;">
+                <sc-if value="{{ it.hasImg }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ it.imagen }}'); background-size:cover; background-position:center;"></div></sc-if>
+              </div>
+              <div style="min-width:0;">
+                <div style="font-size:10px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#A07F5E;">{{ it.kind }}</div>
+                <div style="font-family:'Spectral',serif; font-weight:700; font-size:15px; color:#34251A; line-height:1.2; margin-top:2px; text-wrap:pretty;">{{ it.title }}</div>
+                <div style="font-size:12px; color:#8A715A; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ it.sub }}</div>
+                <div style="margin-top:7px; display:flex; align-items:center; gap:10px;">
+                  <div style="display:inline-flex; align-items:center; gap:0; border:1px solid #D9BC77; border-radius:999px; overflow:hidden;">
+                    <span onClick="{{ it.onDec }}" style="cursor:pointer; width:26px; height:26px; display:flex; align-items:center; justify-content:center; font-size:16px; color:#2E4734; user-select:none;">−</span>
+                    <span style="min-width:22px; text-align:center; font-weight:800; font-size:13.5px; color:#34251A;">{{ it.qty }}</span>
+                    <span onClick="{{ it.onInc }}" style="cursor:pointer; width:26px; height:26px; display:flex; align-items:center; justify-content:center; font-size:16px; color:#2E4734; user-select:none;">+</span>
+                  </div>
+                  <span onClick="{{ it.onRemove }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C;">Quitar</span>
+                </div>
+              </div>
+              <div style="text-align:right; align-self:flex-start;">
+                <div style="font-family:'Spectral',serif; font-weight:700; font-size:17px; color:#7C2F3E;">{{ it.lineLabel }}</div>
+                <div style="font-size:11px; color:#A07F5E; margin-top:2px;">{{ it.priceLabel }} c/u</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ cartHasItems }}" hint-placeholder-val="{{ false }}">
+    <div style="flex-shrink:0; border-top:1px solid #E3D2B8; background:#FFFDF8; padding:clamp(14px,3vw,20px); display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <span style="font-size:14px; font-weight:700; color:#5E4632;">Total</span>
+        <span style="font-family:'Spectral',serif; font-weight:700; font-size:26px; color:#2E4734;">{{ cartSubtotal }}</span>
+      </div>
+      <input value="{{ coName }}" onInput="{{ onCoName }}" placeholder="Tu nombre (opcional)" style="width:100%; padding:12px 14px; border:1px solid #E3D2B8; border-radius:10px; font-family:'Mulish',sans-serif; font-size:14.5px; color:#34251A; background:#FFFDF8; outline:none;" />
+      <input value="{{ coNote }}" onInput="{{ onCoNote }}" placeholder="Nota: entrega, color, etc. (opcional)" style="width:100%; padding:12px 14px; border:1px solid #E3D2B8; border-radius:10px; font-family:'Mulish',sans-serif; font-size:14.5px; color:#34251A; background:#FFFDF8; outline:none;" />
+      <span onClick="{{ checkout }}" style="cursor:pointer; display:flex; align-items:center; justify-content:center; gap:9px; background:#2E4734; color:#F7EFE2; font-weight:800; font-size:15.5px; padding:15px; border-radius:13px; box-shadow:0 8px 20px rgba(46,71,52,0.28); transition:background .15s ease;" style-hover="background:#244031;"><span style="width:8px; height:8px; border-radius:50%; background:#9CD9A6;"></span>Enviar pedido por WhatsApp</span>
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <span onClick="{{ clearCart }}" style="cursor:pointer; font-size:12.5px; font-weight:700; color:#9A4A3C;">Vaciar carrito</span>
+        <span style="font-size:12px; color:#A07F5E;">Confirmamos stock y pago por WhatsApp</span>
+      </div>
+    </div>
+    </sc-if>
+  </div>
+</div>
+</sc-if>
+
+<!-- ============ LEAD MODAL ============ -->
+<sc-if value="{{ leadOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeLead }}" style="position:fixed; inset:0; z-index:310; background:rgba(42,28,18,0.55); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); display:flex; align-items:center; justify-content:center; padding:18px;">
+  <div onClick="{{ stop }}" style="width:100%; max-width:420px; background:#FFFDF8; border-radius:20px; padding:clamp(22px,4vw,30px); box-shadow:0 30px 70px rgba(42,28,18,0.4); font-family:'Mulish',sans-serif;">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+      <div>
+        <div style="font-size:11px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:#7C2F3E;">{{ leadKind }}</div>
+        <h3 style="margin:6px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:22px; color:#2E4734; line-height:1.18; text-wrap:balance;">{{ leadTitle }}</h3>
+        <p style="margin:4px 0 0; font-size:13px; color:#8A715A;">{{ leadSub }}</p>
+      </div>
+      <span onClick="{{ closeLead }}" style="cursor:pointer; flex-shrink:0; font-size:20px; line-height:1; color:#A07F5E; padding:2px 6px;">✕</span>
+    </div>
+    <p style="margin:16px 0 0; font-size:14.5px; line-height:1.5; color:#5E4632;">Déjanos tu celular y te contactamos para coordinar. Al enviar también se abrirá WhatsApp.</p>
+    <div style="margin-top:16px; display:flex; flex-direction:column; gap:12px;">
+      <div>
+        <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Tu nombre</label>
+        <input value="{{ leadName }}" onInput="{{ onLeadName }}" placeholder="Nombre y apellido" style="width:100%; padding:13px 15px; border:1px solid #E3D2B8; border-radius:11px; font-family:'Mulish',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;" />
+      </div>
+      <div>
+        <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Tu celular *</label>
+        <input value="{{ leadPhone }}" onInput="{{ onLeadPhone }}" type="tel" inputmode="tel" placeholder="Ej. 0991234567" style="width:100%; padding:13px 15px; border:1px solid #E3D2B8; border-radius:11px; font-family:'Mulish',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;" />
+      </div>
+    </div>
+    <sc-if value="{{ leadHasErr }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:10px; font-size:13px; font-weight:700; color:#9A4A3C;">{{ leadErr }}</div>
+    </sc-if>
+    <div style="margin-top:18px; display:flex; flex-direction:column; gap:10px;">
+      <span onClick="{{ submitLead }}" style="cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; background:#2E4734; color:#F7EFE2; font-weight:800; font-size:15px; padding:14px; border-radius:12px; box-shadow:0 8px 20px rgba(46,71,52,0.28); transition:background .15s ease;" style-hover="background:#244031;"><span style="width:7px; height:7px; border-radius:50%; background:#9CD9A6;"></span>Enviar y abrir WhatsApp</span>
+      <span onClick="{{ closeLead }}" style="cursor:pointer; text-align:center; font-size:13.5px; font-weight:700; color:#8A715A; padding:6px;">Cancelar</span>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ============ PASSWORD MODAL ============ -->
+<sc-if value="{{ pwOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closePw }}" style="position:fixed; inset:0; z-index:320; background:rgba(42,28,18,0.55); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); display:flex; align-items:center; justify-content:center; padding:18px;">
+  <div onClick="{{ stop }}" style="width:100%; max-width:380px; background:#FFFDF8; border-radius:20px; padding:clamp(22px,4vw,30px); box-shadow:0 30px 70px rgba(42,28,18,0.4); font-family:'Mulish',sans-serif;">
+    <div style="display:flex; align-items:center; gap:11px;">
+      <div style="width:38px; height:38px; border-radius:11px; background:#2E4734; display:flex; align-items:center; justify-content:center; font-family:'Spectral',serif; font-weight:700; font-size:20px; color:#F4E9D8;">M</div>
+      <div>
+        <h3 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:20px; color:#2E4734;">Acceso administrador</h3>
+        <p style="margin:2px 0 0; font-size:12.5px; color:#8A715A;">Solo para el equipo de La Madriguera</p>
+      </div>
+    </div>
+    <p style="margin:16px 0 0; font-size:14px; line-height:1.5; color:#5E4632;">Inicia sesión con tu correo y contraseña para editar el catálogo, subir fotos y configurar la tienda.</p>
+    <input value="{{ pwEmail }}" onInput="{{ onPwEmail }}" type="email" inputmode="email" autocomplete="username" placeholder="Correo de administrador" style="margin-top:14px; width:100%; padding:13px 15px; border:1px solid #E3D2B8; border-radius:11px; font-family:'Mulish',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;" />
+    <input value="{{ pwInput }}" onInput="{{ onPwInput }}" onKeyDown="{{ onPwKey }}" type="password" autocomplete="current-password" placeholder="Contraseña" style="margin-top:10px; width:100%; padding:13px 15px; border:1px solid #E3D2B8; border-radius:11px; font-family:'Mulish',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;" />
+    <sc-if value="{{ pwLocal }}" hint-placeholder-val="{{ false }}"><div style="margin-top:10px; font-size:12px; color:#8A715A; line-height:1.5;">Vista previa sin nube: el correo se ignora, usa tu clave local (por defecto «madriguera»).</div></sc-if>
+    <sc-if value="{{ pwHasErr }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:10px; font-size:13px; font-weight:700; color:#9A4A3C;">{{ pwErr }}</div>
+    </sc-if>
+    <div style="margin-top:18px; display:flex; flex-direction:column; gap:10px;">
+      <span onClick="{{ submitPw }}" style="cursor:pointer; display:flex; align-items:center; justify-content:center; background:#2E4734; color:#F7EFE2; font-weight:800; font-size:15px; padding:14px; border-radius:12px; transition:background .15s ease;" style-hover="background:#244031;">Entrar al panel</span>
+      <span onClick="{{ closePw }}" style="cursor:pointer; text-align:center; font-size:13.5px; font-weight:700; color:#8A715A; padding:6px;">Cancelar</span>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ============ TOAST ============ -->
+<sc-if value="{{ toastShow }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed; left:50%; bottom:26px; transform:translateX(-50%); z-index:340; background:#2E4734; color:#F7EFE2; font-weight:700; font-size:14px; padding:13px 22px; border-radius:999px; box-shadow:0 12px 30px rgba(42,28,18,0.4); animation:lmtoast .2s ease; display:flex; align-items:center; gap:9px;"><span style="width:8px; height:8px; border-radius:50%; background:#9CD9A6;"></span>{{ toast }}</div>
+</sc-if>
 
 </div>
+
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { page: 'inicio', search: '', category: 'todos', lead: null, leadName: '', leadPhone: '', leadErr: '' };
+  state = {
+    view: 'store', page: 'inicio', search: '', category: 'todos',
+    adminTab: 'libros',
+    cms: null, savedAt: 0,
+    cart: [], cartOpen: false, coName: '', coNote: '',
+    lead: null, leadName: '', leadPhone: '', leadErr: '',
+    pwOpen: false, pwInput: '', pwEmail: '', pwErr: '',
+    bulkOpen: false, bulkText: '', bulkErr: '',
+    fb: 'connecting', authed: false, adminEmail: '',
+    mailStatus: '', toast: ''
+  };
+
+  WA = '593960186336';
+
+  FB_CFG = {
+    apiKey: "AIzaSyCoPVaS_2Oej-zVLduWRDSY_-GMQ--Joy0",
+    authDomain: "adminpagweb.firebaseapp.com",
+    projectId: "adminpagweb",
+    storageBucket: "adminpagweb.firebasestorage.app",
+    messagingSenderId: "950571588786",
+    appId: "1:950571588786:web:a1cb1e33921d4c99163dab"
+  };
+  igHref = 'https://instagram.com/';
+  ttHref = 'https://tiktok.com/';
+  mapsHref = 'https://maps.google.com/?q=Guayaquil';
 
   CATS = [
     ['todos', 'Todos'], ['novedades', 'Novedades'], ['romance', 'Romance'], ['fantasia', 'Fantasía'],
@@ -544,54 +1124,341 @@ class Component extends DCLogic {
     ['usados', 'Libros usados'], ['ofertas', 'Ofertas lectoras'], ['ultima', 'Última unidad']
   ];
 
+  ventaPasos = [
+    { n: '1', title: 'Registra tu libro', text: 'Cuéntanos qué tienes: título, autor y estado. Te guiamos por WhatsApp.' },
+    { n: '2', title: 'Revisamos su estado', text: 'La Madriguera evalúa cada ejemplar con cariño y honestidad.' },
+    { n: '3', title: 'Lo publicamos', text: 'Tu libro entra al catálogo con foto, precio y su propia ficha.' },
+    { n: '4', title: 'Recibes tu pago', text: 'Cuando se vende, compartimos el valor contigo. Así de simple.' }
+  ];
+  compraPasos = [
+    { n: '1', text: 'Explora el catálogo de libros y merch.' },
+    { n: '2', text: 'Agrega al carrito tus libros o productos favoritos.' },
+    { n: '3', text: 'Envía tu pedido por WhatsApp con un toque.' },
+    { n: '4', text: 'Confirmamos disponibilidad y el pago de forma segura.' },
+    { n: '5', text: 'Retira en La Madriguera o coordina tu envío.' }
+  ];
+
   componentDidMount() {
-    this.syncChips();
     this.loadCMS();
-    this.fetchFreshData();
+    this.loadCart();
     this._onStorage = () => this.loadCMS();
     window.addEventListener('storage', this._onStorage);
     window.addEventListener('focus', this._onStorage);
+    this.syncChips();
+    this.bootFirebase(0);
   }
-
-  fetchFreshData() {
-    if (typeof fetch === 'undefined') return;
-    fetch('./datos.js?ts=' + Date.now(), { cache: 'no-store' })
-      .then(function (r) { return r.ok ? r.text() : null; })
-      .then((txt) => {
-        if (!txt) return;
-        try {
-          var s = txt.trim().replace(/^window\.LM_DATA\s*=\s*/, '').replace(/;\s*$/, '');
-          var obj = JSON.parse(s);
-          if (obj && obj.libros) { window.LM_DATA = obj; this.loadCMS(); }
-        } catch (e) {}
-      })
-      .catch(function () {});
-  }
-
   componentWillUnmount() {
     window.removeEventListener('storage', this._onStorage);
     window.removeEventListener('focus', this._onStorage);
+    (this._unsubs || []).forEach(fn => { try { fn(); } catch (e) {} });
+    if (this._fbTimer) clearTimeout(this._fbTimer);
+    if (this._toastT) clearTimeout(this._toastT);
   }
+  componentDidUpdate() { this.syncChips(); }
+
+  // ---------- Firebase ----------
+  bootFirebase(n) {
+    if (typeof window !== 'undefined' && window.firebase && window.firebase.initializeApp) {
+      try {
+        if (!window.firebase.apps.length) window.firebase.initializeApp(this.FB_CFG);
+        if (!window.firebase.apps.length) { this.db = null; this.auth = null; this.setState({ fb: 'offline' }); return; }
+        this.db = window.firebase.firestore();
+        this.auth = window.firebase.auth();
+        this.auth.onAuthStateChanged((u) => { this._authed = !!u; this.setState({ authed: !!u, adminEmail: u ? (u.email || '') : '' }); this.maybeSeed(); });
+        this.subscribe();
+        this._fbTimer = setTimeout(() => { if (this.state.fb !== 'online') this.setState({ fb: 'offline' }); }, 7000);
+        return;
+      } catch (e) { this.setState({ fb: 'offline' }); return; }
+    }
+    if (n > 40) { this.setState({ fb: 'offline' }); return; }
+    setTimeout(() => this.bootFirebase(n + 1), 150);
+  }
+  subscribe() {
+    if (!this.db) return;
+    this._live = this._live || this.defaultCMS();
+    this._unsubs = this._unsubs || [];
+    const ok = () => { if (this.state.fb !== 'online') this.setState({ fb: 'online' }); if (this._fbTimer) clearTimeout(this._fbTimer); };
+    ['libros', 'consig', 'merch', 'eventos', 'pedidos'].forEach((coll) => {
+      const u = this.db.collection(coll).onSnapshot((snap) => {
+        const arr = [];
+        snap.forEach((d) => arr.push(Object.assign({ id: d.id }, d.data())));
+        arr.sort((a, b) => (b.order || 0) - (a.order || 0));
+        this._live[coll] = arr; ok(); this.commitLive(); this.maybeSeed();
+      }, () => this.setState({ fb: 'offline' }));
+      this._unsubs.push(u);
+    });
+    const uc = this.db.collection('config').doc('general').onSnapshot((d) => {
+      this._live.config = d.exists ? d.data() : {}; ok(); this.commitLive(); this.maybeSeed();
+    }, () => {});
+    this._unsubs.push(uc);
+  }
+  commitLive() {
+    let cms = Object.assign(this.defaultCMS(), JSON.parse(JSON.stringify(this._live || {})));
+    const total = cms.libros.length + cms.merch.length + cms.eventos.length + cms.consig.length;
+    if (total === 0 && !(cms.config && cms.config.seeded)) {
+      const src = (typeof window !== 'undefined' && window.LM_DATA) || null;
+      if (src && src.libros) cms = Object.assign(this.defaultCMS(), JSON.parse(JSON.stringify(src)), { config: cms.config || {}, pedidos: cms.pedidos || [] });
+    }
+    this.setState({ cms });
+    try { localStorage.setItem('lm-content', JSON.stringify(cms)); } catch (e) {}
+  }
+  maybeSeed() {
+    if (this._seeded || !this.db || this.state.fb !== 'online' || !this._authed) return;
+    const L = this._live || {};
+    if (!L.libros || !L.config) return;
+    if (L.config.seeded) { this._seeded = true; return; }
+    const empty = (L.libros.length + (L.merch || []).length + (L.eventos || []).length + (L.consig || []).length) === 0;
+    const src = (typeof window !== 'undefined' && window.LM_DATA) || null;
+    if (!empty || !src || !src.libros) return;
+    this._seeded = true;
+    this.seedFromData(src);
+  }
+  seedFromData(d) {
+    if (!this.db || !d) return;
+    try {
+      const batch = this.db.batch();
+      ['libros', 'consig', 'merch', 'eventos'].forEach((coll) => {
+        const arr = d[coll] || [];
+        arr.forEach((it, idx) => {
+          const id = it.id || (coll.charAt(0) + Date.now() + '_' + idx);
+          batch.set(this.itemRef(coll, id), this.clean(Object.assign({}, it, { id: id, order: arr.length - idx })));
+        });
+      });
+      batch.set(this.db.collection('config').doc('general'), Object.assign({ seeded: true }, this.clean(d.config || {})), { merge: true });
+      batch.commit().then(() => this.flash('Catálogo subido a la nube ✓')).catch(() => this.flash('No se pudo subir el catálogo.'));
+    } catch (e) {}
+  }
+  itemRef(coll, id) { return this.db.collection(coll).doc(id); }
+  online() { return !!(this.db && this.state.fb === 'online'); }
+  clean(o) { return JSON.parse(JSON.stringify(o)); }
+
+  // ---------- CMS (caché local) ----------
+  defaultCMS() { return { libros: [], consig: [], merch: [], eventos: [], config: {} }; }
 
   loadCMS() {
+    if (this.online()) return;
     let ls = null;
     try { ls = JSON.parse(localStorage.getItem('lm-content')); } catch (e) {}
     if (ls && !ls.libros) ls = null;
     const win = (typeof window !== 'undefined' && window.LM_DATA && window.LM_DATA.libros) ? window.LM_DATA : null;
-    let cms = null;
-    if (ls && win) {
-      const lsT = +ls.updatedAt || 0;
-      const winT = +win.updatedAt || 0;
-      if (winT > lsT) { cms = win; try { localStorage.setItem('lm-content', JSON.stringify(win)); } catch (e) {} }
-      else cms = ls;
-    } else {
-      cms = ls || win;
-    }
+    const cms = ls || win;
     if (cms && cms.libros) this.setState({ cms });
   }
 
+  currentCMS() {
+    const c = this.state.cms || (typeof window !== 'undefined' && window.LM_DATA) || this.defaultCMS();
+    return Object.assign(this.defaultCMS(), JSON.parse(JSON.stringify(c)));
+  }
+  cacheCMS(cms) {
+    this.setState({ cms, savedAt: Date.now() });
+    try { localStorage.setItem('lm-content', JSON.stringify(cms)); }
+    catch (e) { this.flash('Espacio local lleno. Usa fotos más livianas.'); }
+  }
+  saveCMS(cms) { this.cacheCMS(cms); }
   cfg() { return (this.state.cms && this.state.cms.config) || {}; }
 
+  flash(msg) {
+    this.setState({ toast: msg });
+    if (this._toastT) clearTimeout(this._toastT);
+    this._toastT = setTimeout(() => this.setState({ toast: '' }), 2000);
+  }
+
+  // ---------- editing ----------
+  pad(n) { return String(n).padStart(4, '0'); }
+  setField(coll, id, key, val) {
+    const cms = this.currentCMS();
+    const it = (cms[coll] || []).find(x => x.id === id);
+    if (!it) return;
+    it[key] = val;
+    this.cacheCMS(cms);
+    if (this.online()) this.itemRef(coll, id).set(this.clean(it), { merge: true }).catch(() => this.flash('No se pudo guardar en la nube.'));
+  }
+  setNum(coll, id, key, val) {
+    const n = parseFloat(val); this.setField(coll, id, key, isNaN(n) ? 0 : n);
+  }
+  delItem(coll, id) {
+    const cms = this.currentCMS();
+    cms[coll] = (cms[coll] || []).filter(x => x.id !== id);
+    this.cacheCMS(cms);
+    if (this.online()) this.itemRef(coll, id).delete().catch(() => this.flash('No se pudo eliminar en la nube.'));
+  }
+  addItem(coll, item, msg) {
+    const cms = this.currentCMS();
+    cms[coll] = cms[coll] || [];
+    cms[coll].unshift(item);
+    this.cacheCMS(cms);
+    if (this.online()) this.itemRef(coll, item.id).set(this.clean(item)).catch(() => this.flash('No se pudo guardar en la nube.'));
+    this.flash(msg);
+  }
+  addLibro = () => {
+    const n = (this.currentCMS().libros || []).length + 1;
+    this.addItem('libros', { id: 'b' + Date.now(), code: 'LM-N-' + this.pad(n), title: 'Nuevo libro', author: '', genre: '', estado: 'Nuevo', disp: 'Disponible', price: 0, imagen: '', order: Date.now() }, 'Libro añadido — edítalo abajo.');
+  };
+  addConsig = () => {
+    const n = (this.currentCMS().consig || []).length + 1;
+    this.addItem('consig', { id: 'c' + Date.now(), code: 'LM-C-' + this.pad(n), title: 'Libro recibido', author: '', genre: '', owner: '', contact: '', price: 0, payout: 0, estado: 'Recibido', imagen: '', order: Date.now() }, 'Registro creado.');
+  };
+  addMerch = () => {
+    this.addItem('merch', { id: 'm' + Date.now(), name: 'Nuevo producto', cat: '', desc: '', price: 0, disp: 'Disponible', imagen: '', order: Date.now() }, 'Producto añadido.');
+  };
+  addEvento = () => {
+    this.addItem('eventos', { id: 'e' + Date.now(), name: 'Nuevo evento', date: '', time: '', includes: '', price: '', cupos: '', imagen: '', order: Date.now() }, 'Evento añadido.');
+  };
+  setConfig(key, val) {
+    const cms = this.currentCMS();
+    cms.config = cms.config || {};
+    cms.config[key] = val;
+    this.cacheCMS(cms);
+    if (this.online()) this.db.collection('config').doc('general').set({ [key]: val }, { merge: true }).catch(() => this.flash('No se pudo guardar en la nube.'));
+  }
+
+  // ---------- image upload ----------
+  pickImage(coll, id) {
+    this._pick = { coll, id };
+    const el = document.getElementById('lm-admin-file');
+    if (el) { el.value = ''; el.click(); }
+  }
+  onFile = (e) => {
+    const file = e.target.files && e.target.files[0];
+    const tgt = this._pick;
+    if (!file || !tgt) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => {
+        const max = 900; let w = img.width, h = img.height;
+        if (w > max || h > max) { const r = Math.min(max / w, max / h); w = Math.round(w * r); h = Math.round(h * r); }
+        const c = document.createElement('canvas'); c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        let data; try { data = c.toDataURL('image/jpeg', 0.82); } catch (x) { data = ev.target.result; }
+        this.setField(tgt.coll, tgt.id, 'imagen', data);
+        this.flash('Foto cargada ✓');
+      };
+      img.onerror = () => { this.setField(tgt.coll, tgt.id, 'imagen', ev.target.result); };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // ---------- bulk ----------
+  parseBulk(text) {
+    const out = [];
+    (text || '').split(/\r?\n/).forEach(line => {
+      const raw = line.trim();
+      if (!raw) return;
+      const cells = raw.indexOf('\t') >= 0 ? raw.split('\t') : raw.split(',');
+      const c = cells.map(x => (x || '').trim());
+      if (!c[0]) return;
+      if (/^t[ií]tulo$/i.test(c[0])) return; // skip header
+      out.push({
+        title: c[0], author: c[1] || '', genre: c[2] || '',
+        price: parseFloat((c[3] || '').replace(/[^0-9.]/g, '')) || 0,
+        estado: c[4] || 'Nuevo', disp: c[5] || 'Disponible'
+      });
+    });
+    return out;
+  }
+  onBulkText = (e) => this.setState({ bulkText: e.target.value, bulkErr: '' });
+  openBulk = () => this.setState({ bulkOpen: true, bulkText: '', bulkErr: '' });
+  closeBulk = () => this.setState({ bulkOpen: false, bulkText: '', bulkErr: '' });
+  pickBulkFile = () => { const el = document.getElementById('lm-bulk-file'); if (el) { el.value = ''; el.click(); } };
+  onBulkFile = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => this.setState({ bulkText: ev.target.result || '', bulkErr: '' });
+    reader.readAsText(file);
+  };
+  commitBulk = () => {
+    const rows = this.parseBulk(this.state.bulkText);
+    if (!rows.length) { this.setState({ bulkErr: 'No detectamos filas válidas. Revisa que cada línea tenga al menos un título.' }); return; }
+    const cms = this.currentCMS();
+    cms.libros = cms.libros || [];
+    let n = cms.libros.length;
+    const created = rows.map(r => { n++; return { id: 'b' + Date.now() + '_' + n, code: 'LM-N-' + this.pad(n), title: r.title, author: r.author, genre: r.genre, estado: r.estado, disp: r.disp, price: r.price, imagen: '', order: Date.now() + n }; });
+    cms.libros = created.concat(cms.libros);
+    this.cacheCMS(cms);
+    if (this.online()) { try { const batch = this.db.batch(); created.forEach(it => batch.set(this.itemRef('libros', it.id), this.clean(it))); batch.commit().catch(() => this.flash('No se pudo guardar en la nube.')); } catch (e) {} }
+    this.setState({ bulkOpen: false, bulkText: '', bulkErr: '' });
+    this.flash(created.length + ' libros agregados ✓');
+  };
+  downloadTemplate = () => {
+    const csv = 'Título,Autor,Género,Precio,Estado,Disponibilidad\nAlas de sangre,Rebecca Yarros,Fantasía,28,Nuevo,Última unidad\nEl nombre del viento,Patrick Rothfuss,Fantasía,14,Usado excelente,Disponible\n';
+    this.download('plantilla-libros.csv', csv, 'text/csv');
+  };
+
+  download(name, content, type) {
+    try {
+      const blob = new Blob([content], { type: (type || 'text/plain') + ';charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = name;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    } catch (e) { this.flash('No se pudo descargar el archivo.'); }
+  }
+  onExport = () => {
+    const cms = this.currentCMS();
+    const body = 'window.LM_DATA = ' + JSON.stringify(cms, null, 2) + ';\n';
+    this.download('datos.js', body, 'application/javascript');
+    this.flash('datos.js descargado ✓');
+  };
+
+  // ---------- email ----------
+  notifyEmail(subject, data) {
+    const email = (((this.cfg().email || '') + '').trim()) || 'lamadriguera.guayaquil@gmail.com';
+    try {
+      fetch('https://formsubmit.co/ajax/' + encodeURIComponent(email), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(Object.assign({ _subject: subject, _template: 'table' }, data))
+      }).catch(function () {});
+    } catch (e) {}
+  }
+  onTestEmail = () => {
+    this.notifyEmail('Correo de prueba · La Madriguera', { mensaje: 'Este es un correo de prueba para activar las notificaciones de pedidos.' });
+    this.setState({ mailStatus: 'Enviado. Revisa tu bandeja y confirma (revisa spam).' });
+  };
+
+  // ---------- chips (catálogo) ----------
+  syncChips() {
+    if (typeof document === 'undefined') return;
+    const bar = document.querySelector('[data-chipbar]');
+    if (!bar) return;
+    if (bar.childElementCount !== this.CATS.length) {
+      bar.innerHTML = '';
+      this.CATS.forEach(([k, label]) => {
+        const s = document.createElement('span');
+        s.textContent = label; s.setAttribute('data-cat', k); s.className = 'lm-chip';
+        s.onclick = () => this.setState({ category: k });
+        bar.appendChild(s);
+      });
+    }
+    const active = this.state.category;
+    Array.from(bar.children).forEach(s => {
+      const on = s.getAttribute('data-cat') === active;
+      s.style.background = on ? '#7C2F3E' : '#FBF6EC';
+      s.style.color = on ? '#FFF7EC' : '#5E4632';
+      s.style.border = on ? '1px solid #7C2F3E' : '1px solid #E3D2B8';
+    });
+  }
+
+  // ---------- badges ----------
+  badge(bg, color) { return { display: 'inline-block', padding: '3px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: 800, letterSpacing: '.02em', background: bg, color: color, whiteSpace: 'nowrap', fontFamily: "'Mulish',sans-serif" }; }
+  estadoStyle(e) {
+    const m = { 'Nuevo': ['#E3EDE3', '#2E6B41'], 'Usado excelente': ['#F1E6CF', '#8A6A2E'], 'Usado bueno': ['#F3E2D6', '#A85A38'], 'Con detalles visibles': ['#ECE5DA', '#7A6450'], 'En consignación': ['#E2EAE6', '#37614A'] };
+    const c = m[e] || ['#ECE5DA', '#7A6450']; return this.badge(c[0], c[1]);
+  }
+  dispStyle(d) {
+    const m = { 'Disponible': ['#E3EDE3', '#2E6B41'], 'Reservado': ['#ECE6DC', '#8A715A'], 'Vendido': ['#EFE0DC', '#9A4A3C'], 'Última unidad': ['#F3DEE3', '#93304A'], 'Oferta': ['#F4E9CC', '#9A7A1E'], 'Por encargo': ['#E7E9EC', '#5A6472'] };
+    const c = m[d] || ['#E3EDE3', '#2E6B41']; return this.badge(c[0], c[1]);
+  }
+  consigBadge(e) {
+    const m = { 'Recibido': ['#ECE6DC', '#8A715A'], 'En venta': ['#E3EDE3', '#2E6B41'], 'Vendido': ['#EFE0DC', '#9A4A3C'], 'Pagado al dueño': ['#F4E9CC', '#9A7A1E'] };
+    const c = m[e] || ['#ECE6DC', '#8A715A']; return this.badge(c[0], c[1]);
+  }
+  cuposStyle() { return { display: 'inline-block', padding: '4px 11px', borderRadius: '999px', fontSize: '11px', fontWeight: 800, background: 'rgba(247,239,226,0.94)', color: '#2E6B41', whiteSpace: 'nowrap', fontFamily: "'Mulish',sans-serif" }; }
+
+  // ---------- catalog mapping ----------
   toBook(l) {
     const g = ((l.genre || '') + '').toLowerCase();
     const cats = [];
@@ -608,241 +1475,220 @@ class Component extends DCLogic {
     return Object.assign({}, l, { code: l.code || l.id, cats });
   }
 
-  notifyEmail(subject, data) {
-    const email = (((this.cfg().email || '') + '').trim()) || 'lamadriguera.guayaquil@gmail.com';
-    try {
-      fetch('https://formsubmit.co/ajax/' + encodeURIComponent(email), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(Object.assign({ _subject: subject, _template: 'table' }, data))
-      }).catch(function () {});
-    } catch (e) {}
-  }
-  componentDidUpdate() { this.syncChips(); }
-  syncChips() {
-    if (typeof document === 'undefined') return;
-    const bar = document.querySelector('[data-chipbar]');
-    if (!bar) return;
-    if (bar.childElementCount !== this.CATS.length) {
-      bar.innerHTML = '';
-      this.CATS.forEach(([k, label]) => {
-        const s = document.createElement('span');
-        s.textContent = label;
-        s.setAttribute('data-cat', k);
-        s.className = 'lm-chip';
-        s.onclick = () => this.setState({ category: k });
-        bar.appendChild(s);
-      });
-    }
-    const active = this.state.category;
-    Array.from(bar.children).forEach(s => {
-      const on = s.getAttribute('data-cat') === active;
-      s.style.background = on ? '#7C2F3E' : '#FBF6EC';
-      s.style.color = on ? '#FFF7EC' : '#5E4632';
-      s.style.border = on ? '1px solid #7C2F3E' : '1px solid #E3D2B8';
-    });
-  }
-
-  WA = '593960186336';
-  igHref = 'https://instagram.com/';
-  ttHref = 'https://tiktok.com/';
-  mapsHref = 'https://maps.google.com/?q=Guayaquil';
-
-  allBooks = [
-    { title: 'Alas de sangre', author: 'Rebecca Yarros', genre: 'Fantasía · romantasy', estado: 'Nuevo', disp: 'Última unidad', price: 28, code: 'LM-N-0001', cats: ['novedades','fantasia','romance','ultima'] },
-    { title: 'Trono de cristal', author: 'Sarah J. Maas', genre: 'Fantasía', estado: 'Nuevo', disp: 'Disponible', price: 24, code: 'LM-N-0005', cats: ['novedades','fantasia'] },
-    { title: 'La canción de Aquiles', author: 'Madeline Miller', genre: 'Romance · mito', estado: 'Nuevo', disp: 'Reservado', price: 22, code: 'LM-N-0011', cats: ['novedades','romance'] },
-    { title: 'It termina con nosotros', author: 'Colleen Hoover', genre: 'Romance', estado: 'Nuevo', disp: 'Disponible', price: 20, code: 'LM-N-0003', cats: ['novedades','romance'] },
-    { title: 'Orgullo y prejuicio', author: 'Jane Austen', genre: 'Clásicos · romance', estado: 'Nuevo', disp: 'Disponible', price: 16, code: 'LM-N-0007', cats: ['novedades','clasicos','romance'] },
-    { title: 'Tokyo Revengers, Vol. 1', author: 'Ken Wakui', genre: 'Manga', estado: 'Nuevo', disp: 'Disponible', price: 9, code: 'LM-N-0021', cats: ['novedades','manga'] },
-    { title: 'Chainsaw Man, Vol. 1', author: 'Tatsuki Fujimoto', genre: 'Manga', estado: 'Nuevo', disp: 'Disponible', price: 9, code: 'LM-N-0025', cats: ['novedades','manga'] },
-    { title: 'El nombre del viento', author: 'Patrick Rothfuss', genre: 'Fantasía', estado: 'Usado excelente', disp: 'Disponible', price: 14, code: 'LM-U-0014', cats: ['fantasia','usados'] },
-    { title: 'La sombra del viento', author: 'Carlos Ruiz Zafón', genre: 'Thriller · misterio', estado: 'Usado excelente', disp: 'Última unidad', price: 12, code: 'LM-U-0009', cats: ['thriller','usados','ultima'] },
-    { title: 'Donde los árboles cantan', author: 'Laura Gallego', genre: 'Infantil y juvenil', estado: 'Usado bueno', disp: 'Disponible', price: 8, code: 'LM-U-0030', cats: ['infantil','fantasia','usados'] },
-    { title: 'Un cuento de Navidad', author: 'Charles Dickens', genre: 'Clásicos', estado: 'Usado bueno', disp: 'Oferta', price: 7, code: 'LM-U-0018', cats: ['clasicos','usados','ofertas'] },
-    { title: 'Cometas en el cielo', author: 'Khaled Hosseini', genre: 'Clásico contemporáneo', estado: 'En consignación', disp: 'Disponible', price: 10, code: 'LM-C-0042', cats: ['clasicos','usados'] }
-  ];
-
-  allMerch = [
-    { name: 'Separador "Mapa de saga"', cat: 'Separadores', desc: 'Separador metálico grabado, edición La Madriguera.', price: 3, disp: 'Disponible' },
-    { name: 'Sticker pack "Frases lectoras"', cat: 'Stickers', desc: 'Set de 6 stickers resistentes al agua.', price: 4, disp: 'Disponible' },
-    { name: 'Pin esmaltado "Team libro"', cat: 'Pines', desc: 'Pin de esmalte suave con cierre de mariposa.', price: 5, disp: 'Última unidad' },
-    { name: 'Taza "Una casa entre páginas"', cat: 'Tazas', desc: 'Cerámica de 350 ml con frase de la casa.', price: 9, disp: 'Disponible' },
-    { name: 'Tote bag lectora', cat: 'Tote bags', desc: 'Bolsa de tela con diseño literario exclusivo de La Madriguera.', price: 8, disp: 'Disponible' },
-    { name: 'Camiseta "Vivo entre páginas"', cat: 'Camisetas', desc: 'Algodón suave, estampado a una tinta.', price: 15, disp: 'Disponible' },
-    { name: 'Caja regalo personalizada', cat: 'Regalos personalizados', desc: 'Libro + café + detalle, armado a tu gusto.', price: 25, disp: 'Por encargo' },
-    { name: 'Vela aromática "Biblioteca"', cat: 'Productos temáticos', desc: 'Notas de papel viejo, madera y vainilla.', price: 12, disp: 'Disponible' },
-    { name: 'Edición especial firmada', cat: 'Ediciones especiales', desc: 'Ejemplar numerado con cantos pintados.', price: 35, disp: 'Última unidad' }
-  ];
-
-  allEvents = [
-    { name: 'Cine inmersivo', date: 'Vie 27 jun', time: '19:30', includes: 'Proyección temática + café de autor + una pequeña sorpresa lectora.', price: '$12', cupos: '8 cupos' },
-    { name: 'Club de lectura', date: 'Mié 2 jul', time: '18:00', includes: 'Lectura del mes + café + conversación entre lectores.', price: 'Gratis con consumo', cupos: '12 cupos' },
-    { name: 'Tardes Ghibli', date: 'Sáb 5 jul', time: '16:00', includes: 'Proyección + merienda temática + manualidad mágica.', price: '$10', cupos: '10 cupos' },
-    { name: 'Experiencia anime', date: 'Sáb 12 jul', time: '17:00', includes: 'Cosplay opcional + trivia + premios sorpresa.', price: '$10', cupos: '15 cupos' },
-    { name: 'Cena literaria', date: 'Vie 18 jul', time: '20:00', includes: 'Cena temática de 3 tiempos + ambientación de tu saga favorita.', price: '$28', cupos: '6 cupos' },
-    { name: 'Taller creativo: lettering', date: 'Dom 20 jul', time: '11:00', includes: 'Materiales incluidos + café + tu primera lámina lista.', price: '$18', cupos: '8 cupos' }
-  ];
-
-  ventaPasos = [
-    { n: '1', title: 'Registra tu libro', text: 'Cuéntanos qué tienes: título, autor y estado. Te guiamos por WhatsApp.' },
-    { n: '2', title: 'Revisamos su estado', text: 'La Madriguera evalúa cada ejemplar con cariño y honestidad.' },
-    { n: '3', title: 'Lo publicamos', text: 'Tu libro entra al catálogo con foto, precio y su propia ficha.' },
-    { n: '4', title: 'Recibes tu pago', text: 'Cuando se vende, compartimos el valor contigo. Así de simple.' }
-  ];
-
-  compraPasos = [
-    { n: '1', text: 'Explora el catálogo de libros y merch.' },
-    { n: '2', text: 'Elige tu libro o producto favorito.' },
-    { n: '3', text: 'Consulta disponibilidad por WhatsApp.' },
-    { n: '4', text: 'Confirma el pago de forma segura.' },
-    { n: '5', text: 'Retira en La Madriguera o coordina tu envío.' }
-  ];
-
-  badge(bg, color) {
-    return { display: 'inline-block', padding: '3px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: 800, letterSpacing: '.02em', background: bg, color: color, whiteSpace: 'nowrap', fontFamily: "'Mulish',sans-serif" };
-  }
-
-  estadoStyle(e) {
-    const m = {
-      'Nuevo': ['#E3EDE3', '#2E6B41'],
-      'Usado excelente': ['#F1E6CF', '#8A6A2E'],
-      'Usado bueno': ['#F3E2D6', '#A85A38'],
-      'Con detalles visibles': ['#ECE5DA', '#7A6450'],
-      'En consignación': ['#E2EAE6', '#37614A']
-    };
-    const c = m[e] || ['#ECE5DA', '#7A6450'];
-    return this.badge(c[0], c[1]);
-  }
-
-  dispStyle(d) {
-    const m = {
-      'Disponible': ['#E3EDE3', '#2E6B41'],
-      'Reservado': ['#ECE6DC', '#8A715A'],
-      'Vendido': ['#EFE0DC', '#9A4A3C'],
-      'Última unidad': ['#F3DEE3', '#93304A'],
-      'Oferta': ['#F4E9CC', '#9A7A1E'],
-      'Por encargo': ['#E7E9EC', '#5A6472']
-    };
-    const c = m[d] || ['#E3EDE3', '#2E6B41'];
-    return this.badge(c[0], c[1]);
-  }
-
-  cuposStyle() {
-    return { display: 'inline-block', padding: '4px 11px', borderRadius: '999px', fontSize: '11px', fontWeight: 800, background: 'rgba(247,239,226,0.94)', color: '#2E6B41', whiteSpace: 'nowrap', fontFamily: "'Mulish',sans-serif" };
-  }
-
+  // ---------- WhatsApp ----------
   waNum() { return (((this.cfg().whatsapp || '') + '').replace(/[^0-9]/g, '')) || this.WA; }
   waText(t) { return 'https://wa.me/' + this.waNum() + '?text=' + encodeURIComponent(t); }
   waBook(b) { return this.waText('Hola, vi en el catálogo de La Madriguera el libro ' + b.title + ', código ' + b.code + '. ¿Sigue disponible?'); }
   waMerch(m) { return this.waText('Hola, vi en la web de La Madriguera el producto ' + m.name + '. ¿Sigue disponible?'); }
   waEvent(e) { return this.waText('Hola, quiero reservar para el evento "' + e.name + '" del ' + e.date + '. ¿Hay cupos disponibles?'); }
 
+  // ---------- lead ----------
   openLead(info) { this.setState({ lead: info, leadName: '', leadPhone: '', leadErr: '' }); }
-
   submitLead = () => {
     const phone = (this.state.leadPhone || '').trim();
     if (phone.replace(/[^0-9]/g, '').length < 7) { this.setState({ leadErr: 'Escribe un número de celular válido (mínimo 7 dígitos).' }); return; }
     const info = this.state.lead || {};
     const name = (this.state.leadName || '').trim();
-    this.notifyEmail(info.subject || 'Pedido web · La Madriguera', Object.assign({}, info.fields || {}, { nombre_cliente: name || '(no indicado)', celular_cliente: phone, mensaje: 'El cliente dejó sus datos en la web para que lo contactes y hagas seguimiento.' }));
+    this.notifyEmail(info.subject || 'Pedido web · La Madriguera', Object.assign({}, info.fields || {}, { nombre_cliente: name || '(no indicado)', celular_cliente: phone, mensaje: 'El cliente dejó sus datos en la web para que lo contactes.' }));
+    this.saveOrder({ id: 'p' + Date.now(), tipo: info.kind || 'Consulta', canal: 'Consulta', estado: 'Nuevo', cliente: name, celular: phone, nota: info.title || '', total: 0, items: [{ title: info.title || '', qty: 1, price: 0 }], ts: Date.now(), order: Date.now() });
     if (info.waHref && typeof window !== 'undefined') window.open(info.waHref, '_blank', 'noopener');
+    this.flash('¡Gracias! Te contactaremos pronto.');
     this.setState({ lead: null, leadName: '', leadPhone: '', leadErr: '' });
   };
 
-  decBook(b) { return Object.assign({}, b, { priceLabel: '$' + b.price, estadoStyle: this.estadoStyle(b.estado), dispStyle: this.dispStyle(b.disp), waHref: this.waBook(b), hasImg: !!b.imagen, onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Libro', subject: 'Pedido web · Libro: ' + b.title, title: b.title, sub: [b.author, b.code].filter(Boolean).join(' · '), waHref: this.waBook(b), fields: { tipo: 'Libro', titulo: b.title, autor: b.author || '', codigo: b.code || '', precio: '$' + b.price } }); } }); }
-  decMerch(m) { return Object.assign({}, m, { priceLabel: '$' + m.price, dispStyle: this.dispStyle(m.disp), waHref: this.waMerch(m), hasImg: !!m.imagen, onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Merch', subject: 'Pedido web · Merch: ' + m.name, title: m.name, sub: m.cat || '', waHref: this.waMerch(m), fields: { tipo: 'Merch', producto: m.name, categoria: m.cat || '', precio: '$' + m.price } }); } }); }
-  decEvent(e) { return Object.assign({}, e, { dispStyle: this.cuposStyle(), waHref: this.waEvent(e), hasImg: !!e.imagen, onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Evento', subject: 'Reserva web · Evento: ' + e.name, title: e.name, sub: [e.date, e.time].filter(Boolean).join(' · '), waHref: this.waEvent(e), fields: { tipo: 'Evento', evento: e.name, fecha: (e.date || '') + ' ' + (e.time || ''), precio: e.price || '' } }); } }); }
+  // ---------- cart ----------
+  loadCart() {
+    let c = null;
+    try { c = JSON.parse(localStorage.getItem('lm-cart')); } catch (e) {}
+    if (Array.isArray(c)) this.setState({ cart: c });
+  }
+  saveCart(cart) {
+    this.setState({ cart });
+    try { localStorage.setItem('lm-cart', JSON.stringify(cart)); } catch (e) {}
+  }
+  addToCart(kind, item) {
+    const cart = this.state.cart.slice();
+    const key = kind + ':' + (item.id || item.code || item.title);
+    const ex = cart.find(x => x.key === key);
+    if (ex) ex.qty += 1;
+    else cart.push({ key, kind, id: item.id, title: item.title, sub: item.sub || '', price: +item.price || 0, imagen: item.imagen || '', qty: 1 });
+    this.saveCart(cart);
+    this.flash('Agregado al carrito ✓');
+  }
+  cartInc(key) { const cart = this.state.cart.map(x => x.key === key ? Object.assign({}, x, { qty: x.qty + 1 }) : x); this.saveCart(cart); }
+  cartDec(key) { const cart = this.state.cart.map(x => x.key === key ? Object.assign({}, x, { qty: x.qty - 1 }) : x).filter(x => x.qty > 0); this.saveCart(cart); }
+  cartRemove(key) { this.saveCart(this.state.cart.filter(x => x.key !== key)); }
+  clearCart = () => this.saveCart([]);
+  saveOrder(order) {
+    const cms = this.currentCMS();
+    cms.pedidos = cms.pedidos || [];
+    cms.pedidos.unshift(order);
+    this.cacheCMS(cms);
+    if (this.online()) this.itemRef('pedidos', order.id).set(this.clean(order)).catch(() => {});
+  }
+  canalBadge(c) { const m = { 'Carrito': ['#E3EDE3', '#2E6B41'], 'Consulta': ['#F3DEE3', '#93304A'] }; const x = m[c] || ['#E7E9EC', '#5A6472']; return this.badge(x[0], x[1]); }
+  fmtDate(ts) { if (!ts) return ''; const d = new Date(ts); const p = n => String(n).padStart(2, '0'); return p(d.getDate()) + '/' + p(d.getMonth() + 1) + '/' + d.getFullYear() + ' · ' + p(d.getHours()) + ':' + p(d.getMinutes()); }
+  waPhone(num) { if (!num) return ''; let d = (num + '').replace(/[^0-9]/g, ''); if (!d) return ''; if (d.length === 10 && d.charAt(0) === '0') d = '593' + d.slice(1); else if (d.length === 9) d = '593' + d; return 'https://wa.me/' + d; }
+  cartTotal() { return this.state.cart.reduce((s, x) => s + (x.price * x.qty), 0); }
+  cartCount() { return this.state.cart.reduce((s, x) => s + x.qty, 0); }
+  checkout = () => {
+    if (!this.state.cart.length) return;
+    const name = (this.state.coName || '').trim();
+    const note = (this.state.coNote || '').trim();
+    let msg = 'Hola La Madriguera, quiero hacer este pedido:\n\n';
+    this.state.cart.forEach(x => { msg += '• ' + x.qty + '× ' + x.title + ' — $' + (x.price * x.qty) + '\n'; });
+    msg += '\nTotal: $' + this.cartTotal();
+    if (name) msg += '\nNombre: ' + name;
+    if (note) msg += '\nNota: ' + note;
+    const fields = { tipo: 'Pedido carrito', detalle: this.state.cart.map(x => x.qty + 'x ' + x.title + ' ($' + (x.price * x.qty) + ')').join(' | '), total: '$' + this.cartTotal(), nombre_cliente: name || '(no indicado)', nota: note || '' };
+    this.notifyEmail('Pedido web · Carrito La Madriguera', fields);
+    this.saveOrder({ id: 'p' + Date.now(), tipo: 'Pedido', canal: 'Carrito', estado: 'Nuevo', cliente: name, celular: '', nota: note, total: this.cartTotal(), items: this.state.cart.map(x => ({ title: x.title, qty: x.qty, price: x.price })), ts: Date.now(), order: Date.now() });
+    if (typeof window !== 'undefined') window.open(this.waText(msg), '_blank', 'noopener');
+    this.saveCart([]);
+    this.setState({ cartOpen: false, coName: '', coNote: '' });
+    this.flash('Pedido enviado ✓ Abriendo WhatsApp…');
+  };
 
-  go(key) {
-    this.setState({ page: key });
-    if (typeof window !== 'undefined') window.scrollTo({ top: 0, left: 0 });
+  // ---------- decorate for cards ----------
+  decBook(b) {
+    return Object.assign({}, b, {
+      priceLabel: '$' + b.price, estadoStyle: this.estadoStyle(b.estado), dispStyle: this.dispStyle(b.disp),
+      waHref: this.waBook(b), hasImg: !!b.imagen,
+      onAdd: () => this.addToCart('Libro', { id: b.id || b.code, title: b.title, sub: b.author || '', price: b.price, imagen: b.imagen }),
+      onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Libro', subject: 'Consulta web · Libro: ' + b.title, title: b.title, sub: [b.author, b.code].filter(Boolean).join(' · '), waHref: this.waBook(b), fields: { tipo: 'Libro', titulo: b.title, autor: b.author || '', codigo: b.code || '', precio: '$' + b.price } }); }
+    });
+  }
+  decMerch(m) {
+    return Object.assign({}, m, {
+      priceLabel: '$' + m.price, dispStyle: this.dispStyle(m.disp), waHref: this.waMerch(m), hasImg: !!m.imagen,
+      onAdd: () => this.addToCart('Merch', { id: m.id || m.name, title: m.name, sub: m.cat || '', price: m.price, imagen: m.imagen }),
+      onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Merch', subject: 'Consulta web · Merch: ' + m.name, title: m.name, sub: m.cat || '', waHref: this.waMerch(m), fields: { tipo: 'Merch', producto: m.name, categoria: m.cat || '', precio: '$' + m.price } }); }
+    });
+  }
+  decEvent(e) {
+    return Object.assign({}, e, {
+      dispStyle: this.cuposStyle(), waHref: this.waEvent(e), hasImg: !!e.imagen,
+      onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Evento', subject: 'Reserva web · Evento: ' + e.name, title: e.name, sub: [e.date, e.time].filter(Boolean).join(' · '), waHref: this.waEvent(e), fields: { tipo: 'Evento', evento: e.name, fecha: (e.date || '') + ' ' + (e.time || ''), precio: e.price || '' } }); }
+    });
   }
 
+  // ---------- nav ----------
+  go(key) { this.setState({ page: key }); if (typeof window !== 'undefined') window.scrollTo({ top: 0, left: 0 }); }
   navStyle(active) {
     const base = { display: 'inline-block', padding: '8px 15px', borderRadius: '999px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap', border: '1px solid transparent', fontFamily: "'Mulish',sans-serif", transition: 'all .15s ease' };
     return active ? Object.assign({}, base, { background: '#2E4734', color: '#F7EFE2' }) : Object.assign({}, base, { background: 'transparent', color: '#5E4632' });
   }
-
-  chipStyle(active) {
-    const base = { display: 'inline-block', padding: '8px 16px', borderRadius: '999px', fontSize: '13.5px', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: "'Mulish',sans-serif", transition: 'all .15s ease' };
-    return active ? Object.assign({}, base, { background: '#7C2F3E', color: '#FFF7EC', border: '1px solid #7C2F3E' }) : Object.assign({}, base, { background: '#FBF6EC', color: '#5E4632', border: '1px solid #E3D2B8' });
+  tabStyle(active, bg, fg) {
+    const base = { display: 'inline-block', padding: '9px 16px', borderRadius: '999px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: "'Mulish',sans-serif" };
+    return active ? Object.assign({}, base, { fontWeight: 800, background: bg, color: fg }) : Object.assign({}, base, { background: 'transparent', color: '#5E4632' });
   }
 
   renderVals() {
-    const { page, search, category } = this.state;
+    const { view, page, search, category, adminTab } = this.state;
     const q = (search || '').trim().toLowerCase();
-
     const cms = this.state.cms;
+
+    // ---- store data ----
     const adminLibros = cms ? (cms.libros || []).filter(b => b.disp !== 'Vendido').map(b => this.toBook(b)) : [];
-    const consigLibros = cms ? (cms.consig || []).filter(c => c.estado === 'En venta').map(c => this.toBook(Object.assign({}, c, { estado: 'En consignación', disp: 'Disponible', consigna: true }))) : [];
-    const baseBooks = cms ? adminLibros.concat(consigLibros) : this.allBooks;
-    const baseMerch = cms ? (cms.merch || []).filter(m => m.disp !== 'Vendido') : this.allMerch;
-    const baseEvents = cms ? (cms.eventos || []) : this.allEvents;
+    const consigPub = cms ? (cms.consig || []).filter(c => c.estado === 'En venta').map(c => this.toBook(Object.assign({}, c, { estado: 'En consignación', disp: 'Disponible', consigna: true }))) : [];
+    const baseBooks = adminLibros.concat(consigPub);
+    const baseMerch = cms ? (cms.merch || []).filter(m => m.disp !== 'Vendido') : [];
+    const baseEvents = cms ? (cms.eventos || []) : [];
 
     let books = baseBooks;
-    if (category !== 'todos') books = books.filter(b => b.cats.includes(category));
+    if (category !== 'todos') books = books.filter(b => (b.cats || []).includes(category));
     if (q) books = books.filter(b => (b.title + ' ' + b.author + ' ' + b.genre).toLowerCase().includes(q));
     const catalogBooks = books.map(b => this.decBook(b));
-
-    const usados = baseBooks.filter(b => b.cats.includes('usados')).map(b => this.decBook(b));
-
-    const navList = [
-      { k: 'inicio', label: 'Inicio' },
-      { k: 'catalogo', label: 'Catálogo' },
-      { k: 'segunda', label: 'Segunda historia' },
-      { k: 'merch', label: 'Merch' },
-      { k: 'eventos', label: 'Eventos' },
-      { k: 'vender', label: 'Vender' },
-      { k: 'comprar', label: 'Cómo comprar' },
-      { k: 'visitanos', label: 'Visítanos' }
-    ];
-    const navItems = navList.map(n => ({ label: n.label, onClick: () => this.go(n.k), active: n.k === page, inactive: n.k !== page }));
-
-    const catList = [
-      { k: 'todos', l: 'Todos' }, { k: 'novedades', l: 'Novedades' }, { k: 'romance', l: 'Romance' },
-      { k: 'fantasia', l: 'Fantasía' }, { k: 'manga', l: 'Manga' }, { k: 'infantil', l: 'Infantil y juvenil' },
-      { k: 'clasicos', l: 'Clásicos' }, { k: 'thriller', l: 'Thriller' }, { k: 'usados', l: 'Libros usados' },
-      { k: 'ofertas', l: 'Ofertas lectoras' }, { k: 'ultima', l: 'Última unidad' }
-    ];
-    const pageKeys = ['inicio', 'catalogo', 'segunda', 'merch', 'eventos', 'vender', 'comprar', 'visitanos'];
-    const navA = {}, navN = {};
-    pageKeys.forEach(k => { navA[k] = page === k; navN[k] = page !== k; });
-
-    const catChips = catList.map(c => ({ k: c.k, label: c.l, onClick: () => this.setState({ category: c.k }) }));
-
-    const brand = (cms && cms.brand) || {};
-    const mkImg = (src, fit) => src ? React.createElement('img', { src: src, alt: '', style: { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: fit } }) : null;
-    const mkLogo = (src) => src ? React.createElement('img', { src: src, alt: 'La Madriguera', style: { width: '100%', height: '100%', objectFit: 'contain' } }) : null;
-
+    const usados = baseBooks.filter(b => (b.cats || []).includes('usados')).map(b => this.decBook(b));
+    const novedades = baseBooks.filter(b => (b.cats || []).includes('novedades'));
     const recs = [7, 3, 1].map(i => baseBooks[i]).filter(Boolean);
-    const novedades = baseBooks.filter(b => b.cats.includes('novedades'));
+
+    const navList = [['inicio', 'Inicio'], ['catalogo', 'Catálogo'], ['segunda', 'Segunda historia'], ['merch', 'Merch'], ['eventos', 'Eventos'], ['vender', 'Vender'], ['comprar', 'Cómo comprar'], ['visitanos', 'Visítanos']];
+    const navItems = navList.map(([k, label]) => ({ label, onClick: () => this.go(k), style: this.navStyle(k === page) }));
+
+    // ---- admin lists ----
+    const C = this.currentCMS();
+    const mkBook = (l, coll) => Object.assign({}, l, {
+      hasImg: !!l.imagen,
+      onTitle: (e) => this.setField(coll, l.id, 'title', e.target.value),
+      onAuthor: (e) => this.setField(coll, l.id, 'author', e.target.value),
+      onGenre: (e) => this.setField(coll, l.id, 'genre', e.target.value),
+      onPrice: (e) => this.setNum(coll, l.id, 'price', e.target.value),
+      onEstado: (e) => this.setField(coll, l.id, 'estado', e.target.value),
+      onDisp: (e) => this.setField(coll, l.id, 'disp', e.target.value),
+      onPick: () => this.pickImage(coll, l.id),
+      onClearImg: () => this.setField(coll, l.id, 'imagen', ''),
+      onDel: () => this.delItem(coll, l.id)
+    });
+    const libros = (C.libros || []).map(l => mkBook(l, 'libros'));
+    const consig = (C.consig || []).map(c => Object.assign(mkBook(c, 'consig'), {
+      estadoBadge: this.consigBadge(c.estado),
+      onOwner: (e) => this.setField('consig', c.id, 'owner', e.target.value),
+      onContact: (e) => this.setField('consig', c.id, 'contact', e.target.value),
+      onPayout: (e) => this.setNum('consig', c.id, 'payout', e.target.value)
+    }));
+    const merch = (C.merch || []).map(m => Object.assign({}, m, {
+      hasImg: !!m.imagen,
+      onName: (e) => this.setField('merch', m.id, 'name', e.target.value),
+      onCat: (e) => this.setField('merch', m.id, 'cat', e.target.value),
+      onDesc: (e) => this.setField('merch', m.id, 'desc', e.target.value),
+      onPrice: (e) => this.setNum('merch', m.id, 'price', e.target.value),
+      onDisp: (e) => this.setField('merch', m.id, 'disp', e.target.value),
+      onPick: () => this.pickImage('merch', m.id),
+      onClearImg: () => this.setField('merch', m.id, 'imagen', ''),
+      onDel: () => this.delItem('merch', m.id)
+    }));
+    const eventos = (C.eventos || []).map(e => Object.assign({}, e, {
+      hasImg: !!e.imagen,
+      onName: (ev) => this.setField('eventos', e.id, 'name', ev.target.value),
+      onDate: (ev) => this.setField('eventos', e.id, 'date', ev.target.value),
+      onTime: (ev) => this.setField('eventos', e.id, 'time', ev.target.value),
+      onPrice: (ev) => this.setField('eventos', e.id, 'price', ev.target.value),
+      onCupos: (ev) => this.setField('eventos', e.id, 'cupos', ev.target.value),
+      onIncludes: (ev) => this.setField('eventos', e.id, 'includes', ev.target.value),
+      onPick: () => this.pickImage('eventos', e.id),
+      onClearImg: () => this.setField('eventos', e.id, 'imagen', ''),
+      onDel: () => this.delItem('eventos', e.id)
+    }));
+
+    const pedidos = (C.pedidos || []).map(p => ({
+      id: p.id, tipo: p.tipo || 'Pedido', canal: p.canal || 'Carrito', estado: p.estado || 'Nuevo',
+      fecha: this.fmtDate(p.ts), totalLabel: '$' + (p.total || 0),
+      clienteLabel: (p.cliente && p.cliente.trim()) ? p.cliente : 'Sin nombre',
+      celular: p.celular || '', hasCel: !!(p.celular && (p.celular + '').trim()), waCliente: this.waPhone(p.celular),
+      itemsLabel: (p.items || []).map(it => it.qty + '× ' + it.title).join(', ') || '—',
+      nota: p.nota || '', hasNota: !!(p.nota && (p.nota + '').trim()),
+      canalBadge: this.canalBadge(p.canal),
+      onEstado: (e) => this.setField('pedidos', p.id, 'estado', e.target.value),
+      onDel: () => this.delItem('pedidos', p.id)
+    }));
+
+    const tabList = [['libros', 'Libros', '#2E4734', '#F7EFE2'], ['consig', 'Consignación', '#9A7A1E', '#FBF3E0'], ['merch', 'Merch', '#7C2F3E', '#FFF7EC'], ['eventos', 'Eventos', '#2A1C12', '#F4E9D8'], ['pedidos', 'Pedidos', '#3A5A6B', '#EAF2F6'], ['config', 'Configuración', '#5A6472', '#F4F6F8']];
+    const adminTabs = tabList.map(([k, label, bg, fg]) => ({ label, onClick: () => this.setState({ adminTab: k }), style: this.tabStyle(adminTab === k, bg, fg) }));
+
+    // ---- bulk preview ----
+    const bulkRows = this.parseBulk(this.state.bulkText);
+    const bulkPreview = bulkRows.slice(0, 4).map((r, i) => ({ n: i + 1, title: r.title, sub: [r.author, r.genre].filter(Boolean).join(' · ') || '—', priceLabel: '$' + r.price }));
+
+    // ---- cart ----
+    const cartItems = this.state.cart.map(x => ({
+      key: x.key, kind: x.kind, title: x.title, sub: x.sub, qty: x.qty, imagen: x.imagen, hasImg: !!x.imagen,
+      priceLabel: '$' + x.price, lineLabel: '$' + (x.price * x.qty),
+      onInc: () => this.cartInc(x.key), onDec: () => this.cartDec(x.key), onRemove: () => this.cartRemove(x.key)
+    }));
+    const count = this.cartCount();
+    const cfg = this.cfg();
 
     return {
+      isStore: view === 'store', isAdmin: view === 'admin',
       page,
-      hasLogo: !!brand.logo, noLogo: !brand.logo, brandLogo: brand.logo || '', brandLogoEl: mkLogo(brand.logo),
-      hasHero: !!brand.hero, noHero: !brand.hero, brandHero: brand.hero || '', brandHeroEl: mkImg(brand.hero, 'cover'),
-      hasLocal: !!brand.local, noLocal: !brand.local, brandLocal: brand.local || '', brandLocalEl: mkImg(brand.local, 'cover'),
-      hasEventosImg: !!brand.eventos, brandEventosImg: brand.eventos || '', brandEventosEl: mkImg(brand.eventos, 'cover'),
-      hasVenderImg: !!brand.vender, brandVenderImg: brand.vender || '', brandVenderEl: mkImg(brand.vender, 'cover'),
       isInicio: page === 'inicio', isCatalogo: page === 'catalogo', isSegunda: page === 'segunda',
       isVender: page === 'vender', isMerch: page === 'merch', isEventos: page === 'eventos',
       isComprar: page === 'comprar', isVisitanos: page === 'visitanos',
-      nav: {
-        inicio: () => this.go('inicio'), catalogo: () => this.go('catalogo'), segunda: () => this.go('segunda'),
-        vender: () => this.go('vender'), merch: () => this.go('merch'), eventos: () => this.go('eventos'),
-        comprar: () => this.go('comprar'), visitanos: () => this.go('visitanos')
-      },
+      nav: { inicio: () => this.go('inicio'), catalogo: () => this.go('catalogo'), segunda: () => this.go('segunda'), vender: () => this.go('vender'), merch: () => this.go('merch'), eventos: () => this.go('eventos'), comprar: () => this.go('comprar'), visitanos: () => this.go('visitanos') },
       navItems,
-      catChips,
-      category,
-      navA, navN,
-      search,
-      onSearch: (e) => this.setState({ search: e.target.value }),
-      catalogBooks,
-      catalogCount: catalogBooks.length,
-      hasResults: catalogBooks.length > 0,
-      noResults: catalogBooks.length === 0,
+      search, onSearch: (e) => this.setState({ search: e.target.value }), category,
+      catalogBooks, catalogCount: catalogBooks.length, hasResults: catalogBooks.length > 0, noResults: catalogBooks.length === 0,
       homeNovedades: (novedades.length ? novedades : baseBooks).slice(0, 6).map(b => this.decBook(b)),
       homeSegunda: usados.slice(0, 4),
       homeMerch: baseMerch.slice(0, 6).map(m => this.decMerch(m)),
@@ -851,27 +1697,128 @@ class Component extends DCLogic {
       segundaBooks: usados,
       merchAll: baseMerch.map(m => this.decMerch(m)),
       eventsAll: baseEvents.map(e => this.decEvent(e)),
-      ventaPasos: this.ventaPasos,
-      compraPasos: this.compraPasos,
+      ventaPasos: this.ventaPasos, compraPasos: this.compraPasos,
       waVender: this.waText('Hola, quiero registrar mis libros para venderlos en consignación en La Madriguera. ¿Cómo empiezo?'),
-      waGeneral: 'https://wa.me/' + this.WA,
-      igHref: this.cfg().instagram || this.igHref,
-      ttHref: this.cfg().tiktok || this.ttHref,
-      mapsHref: this.cfg().maps || this.mapsHref,
-      leadOpen: !!this.state.lead,
-      leadKind: this.state.lead ? this.state.lead.kind : '',
-      leadTitle: this.state.lead ? this.state.lead.title : '',
-      leadSub: this.state.lead ? this.state.lead.sub : '',
+      waGeneral: 'https://wa.me/' + this.waNum(),
+      igHref: cfg.instagram || this.igHref, ttHref: cfg.tiktok || this.ttHref, mapsHref: cfg.maps || this.mapsHref,
+      year: 2026,
+
+      // admin
+      adminTabs,
+      aLibros: adminTab === 'libros', aConsig: adminTab === 'consig', aMerch: adminTab === 'merch', aEventos: adminTab === 'eventos', aPedidos: adminTab === 'pedidos', aConfig: adminTab === 'config',
+      libros, consig, merch, eventos, pedidos,
+      librosCount: libros.length, consigCount: consig.length, merchCount: merch.length, eventosCount: eventos.length,
+      pedidosCount: pedidos.length, pedidosNuevos: pedidos.filter(p => p.estado === 'Nuevo').length, pedidosEmpty: pedidos.length === 0,
+      addLibro: this.addLibro, addConsig: this.addConsig, addMerch: this.addMerch, addEvento: this.addEvento,
+      exitAdmin: () => this.setState({ view: 'store' }),
+      logout: this.logout, adminEmail: this.state.adminEmail,
+      fbOnline: this.state.fb === 'online', fbOffline: this.state.fb !== 'online',
+      savedLabel: this.state.fb === 'online' ? 'Guardado en la nube ✓' : (this.state.fb === 'connecting' ? 'Conectando a la nube…' : 'Sin nube · guardado local'),
+      importSeed: this.importSeed,
+      onFile: this.onFile, onBulkFile: this.onBulkFile,
+
+      // bulk
+      bulkOpen: this.state.bulkOpen, openBulk: this.openBulk, closeBulk: this.closeBulk,
+      bulkText: this.state.bulkText, onBulkText: this.onBulkText,
+      bulkErr: this.state.bulkErr, bulkHasErr: !!this.state.bulkErr,
+      bulkHasRows: bulkRows.length > 0, bulkCount: bulkRows.length, bulkPreview,
+      bulkMore: Math.max(0, bulkRows.length - 4), bulkMoreShow: bulkRows.length > 4,
+      commitBulk: this.commitBulk, downloadTemplate: this.downloadTemplate, pickBulkFile: this.pickBulkFile,
+
+      // config
+      cfgEmail: cfg.email || '', cfgWhatsapp: cfg.whatsapp || '', cfgPass: cfg.adminPass || '', cfgInstagram: cfg.instagram || '', cfgTiktok: cfg.tiktok || '', cfgMaps: cfg.maps || '',
+      onCfgEmail: (e) => this.setConfig('email', e.target.value),
+      onCfgWhatsapp: (e) => this.setConfig('whatsapp', e.target.value),
+      onCfgPass: (e) => this.setConfig('adminPass', e.target.value),
+      onCfgInstagram: (e) => this.setConfig('instagram', e.target.value),
+      onCfgTiktok: (e) => this.setConfig('tiktok', e.target.value),
+      onCfgMaps: (e) => this.setConfig('maps', e.target.value),
+      onExport: this.onExport, onTestEmail: this.onTestEmail, mailStatus: this.state.mailStatus,
+
+      // cart
+      cartOpen: this.state.cartOpen, openCart: () => this.setState({ cartOpen: true }), closeCart: () => this.setState({ cartOpen: false }),
+      cartCount: count, cartCountShow: count > 0,
+      cartCountLabel: count === 0 ? 'Aún no agregas nada' : (count + (count === 1 ? ' artículo' : ' artículos')),
+      cartItems, cartEmpty: count === 0, cartHasItems: count > 0,
+      cartSubtotal: '$' + this.cartTotal(),
+      coName: this.state.coName, coNote: this.state.coNote,
+      onCoName: (e) => this.setState({ coName: e.target.value }), onCoNote: (e) => this.setState({ coNote: e.target.value }),
+      checkout: this.checkout, clearCart: this.clearCart,
+      goCatalogFromCart: () => this.setState({ cartOpen: false, page: 'catalogo' }),
+
+      // lead
+      leadOpen: !!this.state.lead, leadKind: this.state.lead ? this.state.lead.kind : '', leadTitle: this.state.lead ? this.state.lead.title : '', leadSub: this.state.lead ? this.state.lead.sub : '',
       leadName: this.state.leadName, leadPhone: this.state.leadPhone,
-      onLeadName: (e) => this.setState({ leadName: e.target.value, leadErr: '' }),
-      onLeadPhone: (e) => this.setState({ leadPhone: e.target.value, leadErr: '' }),
-      submitLead: this.submitLead,
-      closeLead: () => this.setState({ lead: null, leadErr: '' }),
-      stop: (e) => { if (e && e.stopPropagation) e.stopPropagation(); },
+      onLeadName: (e) => this.setState({ leadName: e.target.value, leadErr: '' }), onLeadPhone: (e) => this.setState({ leadPhone: e.target.value, leadErr: '' }),
+      submitLead: this.submitLead, closeLead: () => this.setState({ lead: null, leadErr: '' }),
       leadErr: this.state.leadErr, leadHasErr: !!this.state.leadErr,
-      year: 2026
+
+      // password / acceso
+      pwOpen: this.state.pwOpen,
+      openPw: () => { if (this.state.authed) this.setState({ view: 'admin' }); else this.setState({ pwOpen: true, pwInput: '', pwErr: '' }); },
+      closePw: () => this.setState({ pwOpen: false, pwErr: '' }),
+      pwInput: this.state.pwInput, onPwInput: (e) => this.setState({ pwInput: e.target.value, pwErr: '' }),
+      pwEmail: this.state.pwEmail, onPwEmail: (e) => this.setState({ pwEmail: e.target.value, pwErr: '' }),
+      onPwKey: (e) => { if (e.key === 'Enter') this.submitPw(); },
+      submitPw: this.submitPw,
+      pwErr: this.state.pwErr, pwHasErr: !!this.state.pwErr,
+      pwLocal: this.state.fb !== 'online',
+
+      // toast
+      toast: this.state.toast, toastShow: !!this.state.toast,
+      stop: (e) => { if (e && e.stopPropagation) e.stopPropagation(); }
     };
   }
+
+  enterLocal(pass) {
+    const localPass = (this.cfg().adminPass || 'madriguera');
+    if (pass === localPass) this.setState({ view: 'admin', pwOpen: false, pwInput: '', pwErr: '' });
+    else this.setState({ pwErr: 'Sin conexión a la nube. Usa tu clave local (por defecto «madriguera»).' });
+  }
+  submitPw = () => {
+    const email = (this.state.pwEmail || '').trim();
+    const pass = (this.state.pwInput || '');
+    const hasApp = !!(typeof window !== 'undefined' && window.firebase && window.firebase.apps && window.firebase.apps.length);
+    if (this.auth && hasApp) {
+      if (!email || !pass) { this.setState({ pwErr: 'Escribe tu correo y tu contraseña.' }); return; }
+      try {
+        this.auth.signInWithEmailAndPassword(email, pass)
+          .then(() => this.setState({ view: 'admin', pwOpen: false, pwInput: '', pwErr: '' }))
+          .catch((err) => {
+            const setupCodes = ['auth/network-request-failed', 'auth/configuration-not-found', 'auth/operation-not-allowed', 'auth/internal-error', 'app-compat/no-app'];
+            if (err && setupCodes.indexOf(err.code) >= 0 && pass === (this.cfg().adminPass || 'madriguera')) {
+              this.setState({ view: 'admin', pwOpen: false, pwInput: '', pwErr: '' });
+            } else { this.setState({ pwErr: this.authErr(err) }); }
+          });
+      } catch (e) { this.enterLocal(pass); }
+    } else {
+      this.enterLocal(pass);
+    }
+  };
+  authErr(e) {
+    const m = {
+      'auth/invalid-email': 'El correo no es válido.',
+      'auth/user-not-found': 'No existe ese usuario. Créalo en Firebase → Authentication → Users.',
+      'auth/wrong-password': 'Contraseña incorrecta.',
+      'auth/invalid-credential': 'Correo o contraseña incorrectos.',
+      'auth/too-many-requests': 'Demasiados intentos. Espera un momento.',
+      'auth/operation-not-allowed': 'Activa Correo/Contraseña en Firebase → Authentication.',
+      'auth/network-request-failed': 'Sin conexión. Revisa tu internet.'
+    };
+    return (e && m[e.code]) || 'No se pudo iniciar sesión. Revisa tus datos.';
+  }
+  logout = () => {
+    if (this.auth) { try { this.auth.signOut(); } catch (e) {} }
+    this.setState({ view: 'store', authed: false, adminEmail: '' });
+    this.flash('Sesión cerrada.');
+  };
+  importSeed = () => {
+    if (!this.online()) { this.flash('Conéctate a la nube para importar.'); return; }
+    const src = (typeof window !== 'undefined' && window.LM_DATA) || null;
+    if (!src || !src.libros) { this.flash('No hay catálogo para importar.'); return; }
+    this._seeded = true;
+    this.seedFromData(src);
+  };
 }
 </script>
 </body>
