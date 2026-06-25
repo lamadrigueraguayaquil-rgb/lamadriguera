@@ -859,6 +859,7 @@
                 <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:4px;">Cliente</div>
                 <div style="font-size:14.5px; color:#34251A; font-weight:600;">{{ p.clienteLabel }}</div>
                 <sc-if value="{{ p.hasCel }}" hint-placeholder-val="{{ false }}"><a href="{{ p.waCliente }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:6px; margin-top:6px; text-decoration:none; font-size:13px; font-weight:700; color:#2E6B41;"><span style="width:6px; height:6px; border-radius:50%; background:#2E6B41;"></span>{{ p.celular }}</a></sc-if>
+                <sc-if value="{{ p.hasEmail }}" hint-placeholder-val="{{ false }}"><a href="{{ p.mailCliente }}" style="display:block; margin-top:4px; text-decoration:none; font-size:13px; font-weight:700; color:#3A5A6B;">{{ p.email }}</a></sc-if>
               </div>
               <div style="grid-column:span 2;">
                 <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:4px;">Detalle</div>
@@ -1046,7 +1047,8 @@ service cloud.firestore {
         <span style="font-family:'Spectral',serif; font-weight:700; font-size:26px; color:#2E4734;">{{ cartSubtotal }}</span>
       </div>
       <input value="{{ coName }}" onInput="{{ onCoName }}" placeholder="Tu nombre (opcional)" style="width:100%; padding:12px 14px; border:1px solid #E3D2B8; border-radius:10px; font-family:'Mulish',sans-serif; font-size:14.5px; color:#34251A; background:#FFFDF8; outline:none;" />
-      <input value="{{ coNote }}" onInput="{{ onCoNote }}" placeholder="Nota: entrega, color, etc. (opcional)" style="width:100%; padding:12px 14px; border:1px solid #E3D2B8; border-radius:10px; font-family:'Mulish',sans-serif; font-size:14.5px; color:#34251A; background:#FFFDF8; outline:none;" />
+      <input value="{{ coPhone }}" onInput="{{ onCoPhone }}" type="tel" inputmode="tel" autocomplete="tel" placeholder="Tu número de WhatsApp *" style="width:100%; padding:12px 14px; border:1px solid #E3D2B8; border-radius:10px; font-family:'Mulish',sans-serif; font-size:14.5px; color:#34251A; background:#FFFDF8; outline:none;" />
+      <input value="{{ coEmail }}" onInput="{{ onCoEmail }}" type="email" inputmode="email" autocomplete="email" placeholder="Tu correo electrónico (opcional)" style="width:100%; padding:12px 14px; border:1px solid #E3D2B8; border-radius:10px; font-family:'Mulish',sans-serif; font-size:14.5px; color:#34251A; background:#FFFDF8; outline:none;" />
       <span onClick="{{ checkout }}" style="cursor:pointer; display:flex; align-items:center; justify-content:center; gap:9px; background:#2E4734; color:#F7EFE2; font-weight:800; font-size:15.5px; padding:15px; border-radius:13px; box-shadow:0 8px 20px rgba(46,71,52,0.28); transition:background .15s ease;" style-hover="background:#244031;"><span style="width:8px; height:8px; border-radius:50%; background:#9CD9A6;"></span>Enviar pedido por WhatsApp</span>
       <div style="display:flex; align-items:center; justify-content:space-between;">
         <span onClick="{{ clearCart }}" style="cursor:pointer; font-size:12.5px; font-weight:700; color:#9A4A3C;">Vaciar carrito</span>
@@ -1132,7 +1134,7 @@ class Component extends DCLogic {
     view: 'store', page: 'inicio', search: '', category: 'todos',
     adminTab: 'libros',
     cms: null, savedAt: 0,
-    cart: [], cartOpen: false, coName: '', coNote: '',
+    cart: [], cartOpen: false, coName: '', coPhone: '', coEmail: '',
     lead: null, leadName: '', leadPhone: '', leadErr: '',
     pwOpen: false, pwInput: '', pwEmail: '', pwErr: '',
     bulkOpen: false, bulkText: '', bulkErr: '',
@@ -1690,18 +1692,22 @@ class Component extends DCLogic {
   checkout = () => {
     if (!this.state.cart.length) return;
     const name = (this.state.coName || '').trim();
-    const note = (this.state.coNote || '').trim();
+    const phone = (this.state.coPhone || '').trim();
+    const email = (this.state.coEmail || '').trim();
+    if (!phone) { this.flash('Escribe tu número de WhatsApp para enviar el pedido.'); return; }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { this.flash('Revisa el correo electrónico.'); return; }
     let msg = 'Hola La Madriguera, quiero hacer este pedido:\n\n';
     this.state.cart.forEach(x => { msg += '• ' + x.qty + '× ' + x.title + ' — $' + (x.price * x.qty) + '\n'; });
     msg += '\nTotal: $' + this.cartTotal();
     if (name) msg += '\nNombre: ' + name;
-    if (note) msg += '\nNota: ' + note;
-    const fields = { tipo: 'Pedido carrito', detalle: this.state.cart.map(x => x.qty + 'x ' + x.title + ' ($' + (x.price * x.qty) + ')').join(' | '), total: '$' + this.cartTotal(), nombre_cliente: name || '(no indicado)', nota: note || '' };
+    msg += '\nWhatsApp del cliente: ' + phone;
+    if (email) msg += '\nCorreo: ' + email;
+    const fields = { tipo: 'Pedido carrito', detalle: this.state.cart.map(x => x.qty + 'x ' + x.title + ' ($' + (x.price * x.qty) + ')').join(' | '), total: '$' + this.cartTotal(), nombre_cliente: name || '(no indicado)', celular_cliente: phone, correo_cliente: email || '(no indicado)' };
     this.notifyEmail('Pedido web · Carrito La Madriguera', fields);
-    this.saveOrder({ id: 'p' + Date.now(), tipo: 'Pedido', canal: 'Carrito', estado: 'Nuevo', cliente: name, celular: '', nota: note, total: this.cartTotal(), items: this.state.cart.map(x => ({ title: x.title, qty: x.qty, price: x.price })), ts: Date.now(), order: Date.now() });
+    this.saveOrder({ id: 'p' + Date.now(), tipo: 'Pedido', canal: 'Carrito', estado: 'Nuevo', cliente: name, celular: phone, email: email, nota: '', total: this.cartTotal(), items: this.state.cart.map(x => ({ title: x.title, qty: x.qty, price: x.price })), ts: Date.now(), order: Date.now() });
     if (typeof window !== 'undefined') window.open(this.waText(msg), '_blank', 'noopener');
     this.saveCart([]);
-    this.setState({ cartOpen: false, coName: '', coNote: '' });
+    this.setState({ cartOpen: false, coName: '', coPhone: '', coEmail: '' });
     this.flash('Pedido enviado ✓ Abriendo WhatsApp…');
   };
 
@@ -1815,6 +1821,7 @@ class Component extends DCLogic {
       fecha: this.fmtDate(p.ts), totalLabel: '$' + (p.total || 0),
       clienteLabel: (p.cliente && p.cliente.trim()) ? p.cliente : 'Sin nombre',
       celular: p.celular || '', hasCel: !!(p.celular && (p.celular + '').trim()), waCliente: this.waPhone(p.celular),
+      email: p.email || '', hasEmail: !!(p.email && (p.email + '').trim()), mailCliente: 'mailto:' + (p.email || ''),
       itemsLabel: (p.items || []).map(it => it.qty + '× ' + it.title).join(', ') || '—',
       nota: p.nota || '', hasNota: !!(p.nota && (p.nota + '').trim()),
       canalBadge: this.canalBadge(p.canal),
@@ -1911,8 +1918,8 @@ class Component extends DCLogic {
       cartCountLabel: count === 0 ? 'Aún no agregas nada' : (count + (count === 1 ? ' artículo' : ' artículos')),
       cartItems, cartEmpty: count === 0, cartHasItems: count > 0,
       cartSubtotal: '$' + this.cartTotal(),
-      coName: this.state.coName, coNote: this.state.coNote,
-      onCoName: (e) => this.setState({ coName: e.target.value }), onCoNote: (e) => this.setState({ coNote: e.target.value }),
+      coName: this.state.coName, coPhone: this.state.coPhone, coEmail: this.state.coEmail,
+      onCoName: (e) => this.setState({ coName: e.target.value }), onCoPhone: (e) => this.setState({ coPhone: e.target.value }), onCoEmail: (e) => this.setState({ coEmail: e.target.value }),
       checkout: this.checkout, clearCart: this.clearCart,
       goCatalogFromCart: () => this.setState({ cartOpen: false, page: 'catalogo' }),
 
