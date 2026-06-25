@@ -124,7 +124,7 @@
     <section style="background:linear-gradient(180deg,#EFE2CB,#F4E9D8);">
       <div style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:clamp(28px,4vw,48px); align-items:center;">
         <div>
-          <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#9A7A1E;">Usados &amp; consignación</span>
+          <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#9A7A1E;">Usado-buen estado</span>
           <h2 style="margin:8px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(28px,3.4vw,40px); color:#2E4734; text-wrap:balance;">Libros con segunda historia</h2>
           <p style="margin:18px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:30em;">Algunos libros no terminan cuando alguien los cierra. En La Madriguera les damos la oportunidad de encontrar un nuevo lector.</p>
           <div style="margin-top:26px; display:flex; flex-wrap:wrap; gap:12px;">
@@ -245,7 +245,7 @@
   <div data-screen-label="Segunda historia">
     <section style="background:linear-gradient(180deg,#EFE2CB,#F4E9D8);">
       <div style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px);">
-        <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#9A7A1E;">Usados &amp; consignación</span>
+        <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#9A7A1E;">Usado-buen estado</span>
         <h1 style="margin:10px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#2E4734; line-height:1.05; text-wrap:balance;">Libros con segunda historia</h1>
         <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:42em;">Algunos libros no terminan cuando alguien los cierra. En La Madriguera les damos la oportunidad de encontrar un nuevo lector.</p>
         <div style="margin-top:24px; display:flex; flex-wrap:wrap; gap:12px;">
@@ -973,10 +973,10 @@ service cloud.firestore {
 }</pre>
         </div>
         <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-          <span onClick="{{ importSeed }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 8px 20px rgba(201,162,75,0.3);" style-hover="background:#d9b25b;">☁ Subir mi catálogo actual a la nube</span>
+          <span onClick="{{ importSeed }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 8px 20px rgba(201,162,75,0.3);" style-hover="background:#d9b25b;">☁ Sincronizar catálogo visible con la nube</span>
           <span onClick="{{ onExport }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:transparent; color:#E8EFE4; border:1.5px solid rgba(247,239,226,0.3); font-weight:700; font-size:13.5px; padding:11px 20px; border-radius:999px;" style-hover="background:rgba(255,253,248,0.08);">⬇ Descargar respaldo</span>
         </div>
-        <p style="margin:12px 0 0; font-size:12.5px; color:#AFBDA8;">«Subir mi catálogo» copia tus libros, merch y eventos actuales a Firebase. Se hace solo la primera vez que inicias sesión; el botón es por si quieres forzarlo. El respaldo descarga una copia opcional.</p>
+        <p style="margin:12px 0 0; font-size:12.5px; color:#AFBDA8;">«Sincronizar catálogo visible» guarda en Firebase exactamente lo que ves ahora en el administrador: mantiene tus fotos existentes, elimina de la nube los libros/productos/eventos que ya borraste y no vuelve a cargar el catálogo de ejemplo.</p>
       </div>
     </div>
     </sc-if>
@@ -1234,6 +1234,7 @@ class Component extends DCLogic {
   subscribe() {
     if (!this.db) return;
     this._live = this._live || this.defaultCMS();
+    this._ready = this._ready || {};
     this._unsubs = this._unsubs || [];
     const ok = () => { if (this.state.fb !== 'online') this.setState({ fb: 'online' }); if (this._fbTimer) clearTimeout(this._fbTimer); };
     ['libros', 'consig', 'merch', 'eventos', 'pedidos'].forEach((coll) => {
@@ -1241,17 +1242,23 @@ class Component extends DCLogic {
         const arr = [];
         snap.forEach((d) => arr.push(Object.assign({ id: d.id }, d.data())));
         arr.sort((a, b) => (b.order || 0) - (a.order || 0));
-        this._live[coll] = arr; ok(); this.commitLive(); this.maybeSeed();
+        this._live[coll] = arr;
+        this._ready[coll] = true;
+        ok(); this.commitLive(); this.maybeSeed();
       }, () => this.setState({ fb: 'offline' }));
       this._unsubs.push(u);
     });
     const uc = this.db.collection('config').doc('general').onSnapshot((d) => {
-      this._live.config = d.exists ? d.data() : {}; ok(); this.commitLive(); this.maybeSeed();
+      this._live.config = d.exists ? d.data() : {};
+      this._ready.config = true;
+      ok(); this.commitLive(); this.maybeSeed();
     }, () => {});
     this._unsubs.push(uc);
     const ub = this.db.collection('brand').onSnapshot((snap) => {
       const o = {}; snap.forEach((d) => { o[d.id] = (d.data() || {}).data || ''; });
-      this._live.brand = o; ok(); this.commitLive();
+      this._live.brand = o;
+      this._ready.brand = true;
+      ok(); this.commitLive();
     }, () => {});
     this._unsubs.push(ub);
   }
@@ -1268,9 +1275,11 @@ class Component extends DCLogic {
   maybeSeed() {
     if (this._seeded || !this.db || this.state.fb !== 'online' || !this._authed) return;
     const L = this._live || {};
-    if (!L.libros || !L.config) return;
-    if (L.config.seeded) { this._seeded = true; return; }
-    const empty = (L.libros.length + (L.merch || []).length + (L.eventos || []).length + (L.consig || []).length) === 0;
+    const ready = this._ready || {};
+    const required = ['libros', 'consig', 'merch', 'eventos', 'config'];
+    if (required.some((k) => !ready[k])) return;
+    if (L.config && L.config.seeded) { this._seeded = true; return; }
+    const empty = ((L.libros || []).length + (L.merch || []).length + (L.eventos || []).length + (L.consig || []).length) === 0;
     const src = (typeof window !== 'undefined' && window.LM_DATA) || null;
     if (!empty || !src || !src.libros) return;
     this._seeded = true;
@@ -1284,12 +1293,63 @@ class Component extends DCLogic {
         const arr = d[coll] || [];
         arr.forEach((it, idx) => {
           const id = it.id || (coll.charAt(0) + Date.now() + '_' + idx);
-          batch.set(this.itemRef(coll, id), this.clean(Object.assign({}, it, { id: id, order: arr.length - idx })));
+          batch.set(this.itemRef(coll, id), this.clean(Object.assign({}, it, { id: id, order: it.order || (arr.length - idx) })));
         });
       });
       batch.set(this.db.collection('config').doc('general'), Object.assign({ seeded: true }, this.clean(d.config || {})), { merge: true });
-      batch.commit().then(() => this.flash('Catálogo subido a la nube ✓')).catch((e) => this.flash(this.fbErr(e)));
+      batch.commit().then(() => this.flash('Catálogo inicial subido a la nube ✓')).catch((e) => this.flash(this.fbErr(e)));
     } catch (e) {}
+  }
+
+  uploadCurrentToCloud = () => {
+    if (!this.online()) { this.flash('Conéctate a la nube para sincronizar.'); return; }
+    if (!this.state.authed) { this.flash('Entra con tu usuario de Firebase para guardar en la nube.'); return; }
+    const cms = this.currentCMS();
+    const colls = ['libros', 'consig', 'merch', 'eventos'];
+    Promise.all(colls.map((coll) => this.db.collection(coll).get()))
+      .then((snaps) => {
+        const ops = [];
+        colls.forEach((coll, ci) => {
+          const arr = cms[coll] || [];
+          const keep = {};
+          const prev = {};
+          snaps[ci].forEach((doc) => { prev[doc.id] = doc.data() || {}; });
+          arr.forEach((it, idx) => {
+            const id = it.id || (coll.charAt(0) + Date.now() + '_' + idx);
+            keep[id] = true;
+            const saved = this.clean(Object.assign({}, it, { id: id, order: it.order || (arr.length - idx) }));
+            // Protección: no borrar una imagen existente en Firestore si el catálogo visible trae el campo vacío.
+            if ((!saved.imagen || saved.imagen === '') && prev[id] && prev[id].imagen) saved.imagen = prev[id].imagen;
+            ops.push(['set', this.itemRef(coll, id), saved]);
+          });
+          snaps[ci].forEach((doc) => { if (!keep[doc.id]) ops.push(['delete', doc.ref]); });
+        });
+        ops.push(['set', this.db.collection('config').doc('general'), Object.assign({}, this.clean(cms.config || {}), { seeded: true }), { merge: true }]);
+        const brand = cms.brand || {};
+        Object.keys(brand).forEach((key) => {
+          if (brand[key]) ops.push(['set', this.itemRef('brand', key), { id: key, data: brand[key] }]);
+          else ops.push(['delete', this.itemRef('brand', key)]);
+        });
+        return this.commitOps(ops);
+      })
+      .then(() => this.flash('Catálogo visible sincronizado con la nube ✓'))
+      .catch((e) => this.flash(this.fbErr(e)));
+  };
+  commitOps(ops) {
+    const size = 200;
+    let chain = Promise.resolve();
+    for (let i = 0; i < ops.length; i += size) {
+      const chunk = ops.slice(i, i + size);
+      chain = chain.then(() => {
+        const batch = this.db.batch();
+        chunk.forEach((op) => {
+          if (op[0] === 'set') batch.set(op[1], op[2], op[3]);
+          else if (op[0] === 'delete') batch.delete(op[1]);
+        });
+        return batch.commit();
+      });
+    }
+    return chain;
   }
   itemRef(coll, id) { return this.db.collection(coll).doc(id); }
   online() { return !!(this.db && this.state.fb === 'online'); }
@@ -1541,7 +1601,7 @@ class Component extends DCLogic {
   // ---------- badges ----------
   badge(bg, color) { return { display: 'inline-block', padding: '3px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: 800, letterSpacing: '.02em', background: bg, color: color, whiteSpace: 'nowrap', fontFamily: "'Mulish',sans-serif" }; }
   estadoStyle(e) {
-    const m = { 'Nuevo': ['#E3EDE3', '#2E6B41'], 'Usado excelente': ['#F1E6CF', '#8A6A2E'], 'Usado bueno': ['#F3E2D6', '#A85A38'], 'Con detalles visibles': ['#ECE5DA', '#7A6450'], 'En consignación': ['#E2EAE6', '#37614A'] };
+    const m = { 'Nuevo': ['#E3EDE3', '#2E6B41'], 'Usado excelente': ['#F1E6CF', '#8A6A2E'], 'Usado bueno': ['#F3E2D6', '#A85A38'], 'Con detalles visibles': ['#ECE5DA', '#7A6450'], 'Usado-buen estado': ['#F3E2D6', '#A85A38'], 'En consignación': ['#E2EAE6', '#37614A'] };
     const c = m[e] || ['#ECE5DA', '#7A6450']; return this.badge(c[0], c[1]);
   }
   dispStyle(d) {
@@ -1689,7 +1749,7 @@ class Component extends DCLogic {
 
     // ---- store data ----
     const adminLibros = cms ? (cms.libros || []).filter(b => b.disp !== 'Vendido').map(b => this.toBook(b)) : [];
-    const consigPub = cms ? (cms.consig || []).filter(c => c.estado === 'En venta').map(c => this.toBook(Object.assign({}, c, { estado: 'En consignación', disp: 'Disponible', consigna: true }))) : [];
+    const consigPub = cms ? (cms.consig || []).filter(c => c.estado === 'En venta').map(c => this.toBook(Object.assign({}, c, { estado: 'Usado-buen estado', disp: 'Disponible', consigna: true }))) : [];
     const baseBooks = adminLibros.concat(consigPub);
     const baseMerch = cms ? (cms.merch || []).filter(m => m.disp !== 'Vendido') : [];
     const baseEvents = cms ? (cms.eventos || []) : [];
@@ -1930,11 +1990,7 @@ class Component extends DCLogic {
     this.flash('Sesión cerrada.');
   };
   importSeed = () => {
-    if (!this.online()) { this.flash('Conéctate a la nube para importar.'); return; }
-    const src = (typeof window !== 'undefined' && window.LM_DATA) || null;
-    if (!src || !src.libros) { this.flash('No hay catálogo para importar.'); return; }
-    this._seeded = true;
-    this.seedFromData(src);
+    this.uploadCurrentToCloud();
   };
 }
 </script>
