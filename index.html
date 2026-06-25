@@ -119,6 +119,11 @@
           <dc-import name="BookCard" book="{{ b }}" hint-size="100%,470px"></dc-import>
         </sc-for>
       </div>
+      <sc-if value="{{ noHomeNovedades }}" hint-placeholder-val="false">
+        <div style="margin-top:18px; padding:18px 20px; border:1px dashed #D9BC77; border-radius:16px; background:#FBF6EC; color:#5E4632; font-size:14px; line-height:1.45;">
+          No hay libros con estado <strong>Nuevo</strong> publicados por el momento. Agrega libros nuevos desde el administrador para que aparezcan en esta sección.
+        </div>
+      </sc-if>
     </section>
 
     <section style="background:linear-gradient(180deg,#EFE2CB,#F4E9D8);">
@@ -1979,7 +1984,8 @@ class Component extends DCLogic {
   toBook(l) {
     const g = ((l.genre || '') + '').toLowerCase();
     const cats = [];
-    if ((l.estado || '') === 'Nuevo') cats.push('novedades');
+    const estadoNorm = ((l.estado || '') + '').trim().toLowerCase();
+    if (estadoNorm === 'nuevo') cats.push('novedades');
     if (g.indexOf('roman') >= 0) cats.push('romance');
     if (g.indexOf('fantas') >= 0) cats.push('fantasia');
     if (g.indexOf('manga') >= 0) cats.push('manga');
@@ -2129,7 +2135,7 @@ class Component extends DCLogic {
     let segundaBase = usadosBase;
     if (sq) segundaBase = segundaBase.filter(b => (b.title + ' ' + b.author + ' ' + b.genre + ' ' + (b.code || '')).toLowerCase().includes(sq));
     const segundaBooks = segundaBase.map(b => this.decBook(b));
-    const novedades = baseBooks.filter(b => (b.cats || []).includes('novedades'));
+    const novedades = baseBooks.filter(b => ((b.estado || '') + '').trim().toLowerCase() === 'nuevo');
     const recs = [7, 3, 1].map(i => baseBooks[i]).filter(Boolean);
 
     const navList = [['inicio', 'Inicio'], ['catalogo', 'Catálogo'], ['segunda', 'Segunda historia'], ['merch', 'Merch'], ['eventos', 'Eventos'], ['vender', 'Vender'], ['comprar', 'Cómo comprar'], ['visitanos', 'Visítanos']];
@@ -2232,7 +2238,8 @@ class Component extends DCLogic {
       navItems,
       search, onSearch: (e) => this.setState({ search: e.target.value }), segundaSearch, onSegundaSearch: (e) => this.setState({ segundaSearch: e.target.value }), clearSegundaSearch: () => this.setState({ segundaSearch: '' }), hasSegundaSearch: !!sq, category,
       catalogBooks, catalogCount: catalogBooks.length, hasResults: catalogBooks.length > 0, noResults: catalogBooks.length === 0,
-      homeNovedades: (novedades.length ? novedades : baseBooks).slice(0, 6).map(b => this.decBook(b)),
+      homeNovedades: novedades.slice(0, 6).map(b => this.decBook(b)),
+      noHomeNovedades: novedades.length === 0,
       homeSegunda: usados.slice(0, 4),
       homeMerch: baseMerch.slice(0, 6).map(m => this.decMerch(m)),
       homeEventos: baseEvents.slice(0, 3).map(e => this.decEvent(e)),
