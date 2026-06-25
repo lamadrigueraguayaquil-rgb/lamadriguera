@@ -248,17 +248,38 @@
         <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#9A7A1E;">Usado-buen estado</span>
         <h1 style="margin:10px 0 0; font-family:'Spectral',serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#2E4734; line-height:1.05; text-wrap:balance;">Libros con segunda historia</h1>
         <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:42em;">Algunos libros no terminan cuando alguien los cierra. En La Madriguera les damos la oportunidad de encontrar un nuevo lector.</p>
-        <div style="margin-top:24px; display:flex; flex-wrap:wrap; gap:12px;">
+        <div style="margin-top:24px; display:flex; flex-wrap:wrap; gap:12px; align-items:center; max-width:780px;">
+          <div style="position:relative; flex:1 1 280px; min-width:0;">
+            <span style="position:absolute; left:18px; top:50%; transform:translateY(-50%); width:14px; height:14px; border:2px solid #9A7A1E; border-radius:50%;"></span>
+            <input value="{{ segundaSearch }}" onInput="{{ onSegundaSearch }}" placeholder="Busca por título, autor, género o código…" style="width:100%; padding:15px 18px 15px 46px; font-family:'Mulish',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; border:1px solid #D9BC77; border-radius:999px; outline:none; box-shadow:0 6px 18px rgba(52,37,26,0.06);" />
+          </div>
+          <sc-if value="{{ hasSegundaSearch }}" hint-placeholder-val="false">
+            <span onClick="{{ clearSegundaSearch }}" style="cursor:pointer; display:inline-flex; align-items:center; justify-content:center; background:#FBF3E0; color:#9A7A1E; border:1px solid #D9BC77; font-weight:800; font-size:13.5px; padding:13px 18px; border-radius:999px;">Limpiar</span>
+          </sc-if>
+        </div>
+        <div style="margin-top:18px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
           <span onClick="{{ nav.vender }}" style="cursor:pointer; background:#9A7A1E; color:#FBF3E0; font-weight:700; font-size:14.5px; padding:13px 22px; border-radius:999px; transition:background .15s ease;" style-hover="background:#866916;">Quiero vender mis libros</span>
         </div>
       </div>
     </section>
     <section style="max-width:1180px; margin:0 auto; padding:clamp(34px,4vw,52px) clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
-      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(216px,1fr)); gap:clamp(14px,2vw,22px);">
-        <sc-for list="{{ segundaBooks }}" as="b" hint-placeholder-count="6">
-          <dc-import name="BookCard" book="{{ b }}" hint-size="100%,470px"></dc-import>
-        </sc-for>
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px;">
+        <span style="font-size:13px; font-weight:700; color:#8A715A;">{{ segundaCount }} libros con segunda historia</span>
       </div>
+      <sc-if value="{{ hasSegundaResults }}" hint-placeholder-val="true">
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(216px,1fr)); gap:clamp(14px,2vw,22px);">
+          <sc-for list="{{ segundaBooks }}" as="b" hint-placeholder-count="6">
+            <dc-import name="BookCard" book="{{ b }}" hint-size="100%,470px"></dc-import>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noSegundaResults }}" hint-placeholder-val="false">
+        <div style="text-align:center; padding:58px 20px; background:#FFFDF8; border:1px solid #E3D2B8; border-radius:18px; color:#8A715A;">
+          <div style="font-family:'Spectral',serif; font-style:italic; font-size:22px; color:#5E4632;">No encontramos ese libro en Segunda Historia.</div>
+          <p style="margin:10px 0 0; font-size:15px;">Prueba con otro título, autor o género. También puedes escribirnos para revisar disponibilidad.</p>
+          <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="display:inline-block; margin-top:18px; text-decoration:none; background:#9A7A1E; color:#FBF3E0; font-weight:700; font-size:14px; padding:12px 22px; border-radius:999px;">Consultar por WhatsApp</a>
+        </div>
+      </sc-if>
     </section>
   </div>
   </sc-if>
@@ -1174,7 +1195,7 @@ service cloud.firestore {
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
   state = {
-    view: 'store', page: 'inicio', search: '', category: 'todos',
+    view: 'store', page: 'inicio', search: '', segundaSearch: '', category: 'todos',
     adminTab: 'libros',
     cms: null, savedAt: 0,
     cart: [], cartOpen: false, coName: '', coPhone: '', coEmail: '',
@@ -2084,8 +2105,9 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { view, page, search, category, adminTab } = this.state;
+    const { view, page, search, segundaSearch, category, adminTab } = this.state;
     const q = (search || '').trim().toLowerCase();
+    const sq = (segundaSearch || '').trim().toLowerCase();
     const cms = this.state.cms;
     const brand = (cms && cms.brand) || {};
     const brandDefs = [['logo', 'Logo', 'Cuadrado, fondo claro'], ['hero', 'Banner principal', 'Se ve en el inicio'], ['local', 'Foto del local', 'Sección Visítanos'], ['eventos', 'Imagen de Eventos', 'Encabezado de Eventos'], ['vender', 'Imagen de Vender', 'Encabezado de Vender']];
@@ -2100,9 +2122,13 @@ class Component extends DCLogic {
 
     let books = baseBooks;
     if (category !== 'todos') books = books.filter(b => (b.cats || []).includes(category));
-    if (q) books = books.filter(b => (b.title + ' ' + b.author + ' ' + b.genre).toLowerCase().includes(q));
+    if (q) books = books.filter(b => (b.title + ' ' + b.author + ' ' + b.genre + ' ' + (b.code || '')).toLowerCase().includes(q));
     const catalogBooks = books.map(b => this.decBook(b));
-    const usados = baseBooks.filter(b => (b.cats || []).includes('usados')).map(b => this.decBook(b));
+    const usadosBase = baseBooks.filter(b => (b.cats || []).includes('usados'));
+    const usados = usadosBase.map(b => this.decBook(b));
+    let segundaBase = usadosBase;
+    if (sq) segundaBase = segundaBase.filter(b => (b.title + ' ' + b.author + ' ' + b.genre + ' ' + (b.code || '')).toLowerCase().includes(sq));
+    const segundaBooks = segundaBase.map(b => this.decBook(b));
     const novedades = baseBooks.filter(b => (b.cats || []).includes('novedades'));
     const recs = [7, 3, 1].map(i => baseBooks[i]).filter(Boolean);
 
@@ -2204,14 +2230,14 @@ class Component extends DCLogic {
       isComprar: page === 'comprar', isVisitanos: page === 'visitanos',
       nav: { inicio: () => this.go('inicio'), catalogo: () => this.go('catalogo'), segunda: () => this.go('segunda'), vender: () => this.go('vender'), merch: () => this.go('merch'), eventos: () => this.go('eventos'), comprar: () => this.go('comprar'), visitanos: () => this.go('visitanos') },
       navItems,
-      search, onSearch: (e) => this.setState({ search: e.target.value }), category,
+      search, onSearch: (e) => this.setState({ search: e.target.value }), segundaSearch, onSegundaSearch: (e) => this.setState({ segundaSearch: e.target.value }), clearSegundaSearch: () => this.setState({ segundaSearch: '' }), hasSegundaSearch: !!sq, category,
       catalogBooks, catalogCount: catalogBooks.length, hasResults: catalogBooks.length > 0, noResults: catalogBooks.length === 0,
       homeNovedades: (novedades.length ? novedades : baseBooks).slice(0, 6).map(b => this.decBook(b)),
       homeSegunda: usados.slice(0, 4),
       homeMerch: baseMerch.slice(0, 6).map(m => this.decMerch(m)),
       homeEventos: baseEvents.slice(0, 3).map(e => this.decEvent(e)),
       recomendados: (recs.length ? recs : baseBooks.slice(0, 3)).map(b => this.decBook(b)),
-      segundaBooks: usados,
+      segundaBooks, segundaCount: segundaBooks.length, hasSegundaResults: segundaBooks.length > 0, noSegundaResults: segundaBooks.length === 0,
       merchAll: baseMerch.map(m => this.decMerch(m)),
       eventsAll: baseEvents.map(e => this.decEvent(e)),
       ventaPasos: this.ventaPasos, compraPasos: this.compraPasos,
