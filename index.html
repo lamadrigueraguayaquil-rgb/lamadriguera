@@ -1657,13 +1657,15 @@ class Component extends DCLogic {
     return { byCode, byName };
   }
   rowToLibro(r, old, code) {
+    const finalCode = code || r.code || (old && old.code) || '';
+    const estado = r.estado || (this.isUsedCode(finalCode) ? 'Usado-buen estado' : 'Nuevo');
     return {
       id: old ? old.id : ('b' + Date.now() + '_' + Math.floor(Math.random() * 1000000)),
-      code: code || r.code || (old && old.code) || '',
+      code: finalCode,
       title: r.title,
       author: r.author,
       genre: r.genre || '',
-      estado: r.estado || 'Nuevo',
+      estado: estado,
       disp: r.disp || 'Disponible',
       price: r.price || 0,
       editorial: r.editorial || (old && old.editorial) || '',
@@ -1981,21 +1983,33 @@ class Component extends DCLogic {
   cuposStyle() { return { display: 'inline-block', padding: '4px 11px', borderRadius: '999px', fontSize: '11px', fontWeight: 800, background: 'rgba(247,239,226,0.94)', color: '#2E6B41', whiteSpace: 'nowrap', fontFamily: "'Mulish',sans-serif" }; }
 
   // ---------- catalog mapping ----------
+  isUsedCode(code) {
+    const c = ((code || '') + '').trim().toUpperCase();
+    return c.startsWith('LM-U-') || c.startsWith('LM-C-') || c.startsWith('U-') || c.startsWith('C-');
+  }
+  isUsedBook(l) {
+    const estado = ((l.estado || '') + '').trim().toLowerCase();
+    return this.isUsedCode(l.code || l.id) || estado.indexOf('usado') >= 0 || estado === 'con detalles visibles' || !!l.consigna;
+  }
+  isNewBook(l) {
+    const estado = ((l.estado || '') + '').trim().toLowerCase();
+    return estado === 'nuevo' && !this.isUsedBook(l);
+  }
   toBook(l) {
     const g = ((l.genre || '') + '').toLowerCase();
+    const code = l.code || l.id;
     const cats = [];
-    const estadoNorm = ((l.estado || '') + '').trim().toLowerCase();
-    if (estadoNorm === 'nuevo') cats.push('novedades');
+    if (this.isNewBook(Object.assign({}, l, { code }))) cats.push('novedades');
     if (g.indexOf('roman') >= 0) cats.push('romance');
     if (g.indexOf('fantas') >= 0) cats.push('fantasia');
     if (g.indexOf('manga') >= 0) cats.push('manga');
     if (g.indexOf('infantil') >= 0 || g.indexOf('juvenil') >= 0) cats.push('infantil');
     if (g.indexOf('clásic') >= 0 || g.indexOf('clasic') >= 0) cats.push('clasicos');
     if (g.indexOf('thriller') >= 0 || g.indexOf('misterio') >= 0 || g.indexOf('suspenso') >= 0) cats.push('thriller');
-    if (((l.estado || '') + '').toLowerCase().indexOf('usado') >= 0 || l.estado === 'Con detalles visibles' || l.consigna) cats.push('usados');
+    if (this.isUsedBook(Object.assign({}, l, { code }))) cats.push('usados');
     if (l.disp === 'Última unidad') cats.push('ultima');
     if (l.disp === 'Oferta') cats.push('ofertas');
-    return Object.assign({}, l, { code: l.code || l.id, cats });
+    return Object.assign({}, l, { code, cats });
   }
 
   // ---------- WhatsApp ----------
@@ -2135,7 +2149,7 @@ class Component extends DCLogic {
     let segundaBase = usadosBase;
     if (sq) segundaBase = segundaBase.filter(b => (b.title + ' ' + b.author + ' ' + b.genre + ' ' + (b.code || '')).toLowerCase().includes(sq));
     const segundaBooks = segundaBase.map(b => this.decBook(b));
-    const novedades = baseBooks.filter(b => ((b.estado || '') + '').trim().toLowerCase() === 'nuevo');
+    const novedades = baseBooks.filter(b => this.isNewBook(b));
     const recs = [7, 3, 1].map(i => baseBooks[i]).filter(Boolean);
 
     const navList = [['inicio', 'Inicio'], ['catalogo', 'Catálogo'], ['segunda', 'Segunda historia'], ['merch', 'Merch'], ['eventos', 'Eventos'], ['vender', 'Vender'], ['comprar', 'Cómo comprar'], ['visitanos', 'Visítanos']];
