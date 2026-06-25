@@ -511,46 +511,88 @@
         <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap;">
           <div>
             <h3 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:21px; color:#2E4734;">Carga masiva de libros</h3>
-            <p style="margin:6px 0 0; font-size:13.5px; color:#6E5946; line-height:1.5; max-width:46em;">Copia las filas desde tu Excel o Google Sheets y <strong>pégalas</strong> abajo, o sube un archivo CSV. Las fotos se cargan después, haciendo click en la portada de cada libro.</p>
+            <p style="margin:6px 0 0; font-size:13.5px; color:#6E5946; line-height:1.5; max-width:54em;">Sube tu catálogo desde Excel o Google Sheets. Primero revisamos errores, duplicados y campos incompletos; luego tú decides si agregas, actualizas o reemplazas.</p>
           </div>
           <span onClick="{{ closeBulk }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#8A715A; padding:6px 12px; border-radius:999px; border:1px solid #E3D2B8;" style-hover="background:#F0E6D2;">Cerrar ✕</span>
         </div>
-        <div style="margin-top:14px; background:#F0E6D2; border-radius:10px; padding:12px 15px; font-size:12.5px; color:#5E4632; line-height:1.6;">
-          <strong>Orden de columnas:</strong> Título · Autor · Género · Precio · Estado · Disponibilidad<br>
-          <span style="color:#8A715A;">Estado: Nuevo / Usado excelente / Usado bueno / Con detalles visibles · Disponibilidad: Disponible / Última unidad / Reservado / Oferta. Si dejas un campo vacío usamos «Nuevo» y «Disponible».</span>
+
+        <div style="margin-top:14px; display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px;">
+          <div style="background:#F0E6D2; border-radius:10px; padding:12px 14px; font-size:12.5px; color:#5E4632; line-height:1.55;">
+            <strong>Columnas recomendadas:</strong><br>Código · Título · Autor · Género · Precio · Estado · Disponibilidad · Editorial · ISBN · Imagen
+          </div>
+          <div style="background:#E7EDE6; border-radius:10px; padding:12px 14px; font-size:12.5px; color:#2E4734; line-height:1.55;">
+            <strong>Datos obligatorios:</strong><br>Título · Autor · Precio. Si no escribes código, la app lo genera automáticamente.
+          </div>
+          <div style="background:#FBF3E0; border-radius:10px; padding:12px 14px; font-size:12.5px; color:#6E5946; line-height:1.55;">
+            <strong>Valores permitidos:</strong><br>Nuevo · Usado excelente · Usado-buen estado · Con detalles visibles · Disponible · Última unidad · Reservado · Oferta
+          </div>
         </div>
+
+        <div style="margin-top:14px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <label style="font-size:13px; font-weight:800; color:#2E4734;">Acción:</label>
+          <select value="{{ bulkMode }}" onChange="{{ onBulkMode }}" style="padding:10px 12px; border:1px solid #E3D2B8; border-radius:999px; font-size:13px; font-family:'Mulish',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+            <option value="add">Agregar solo libros nuevos</option>
+            <option value="update">Agregar nuevos y actualizar existentes</option>
+            <option value="replace">Reemplazar catálogo completo</option>
+          </select>
+          <span style="font-size:12.5px; color:#8A715A;">{{ bulkModeHelp }}</span>
+        </div>
+
         <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
           <span onClick="{{ downloadTemplate }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#2E4734; padding:9px 16px; border-radius:999px; border:1.5px solid #B9C4B4;" style-hover="background:#E7EDE6;">⬇ Descargar plantilla CSV</span>
           <span onClick="{{ pickBulkFile }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#9A7A1E; padding:9px 16px; border-radius:999px; border:1.5px solid #D9BC77;" style-hover="background:#F1E6CF;">📄 Subir archivo CSV</span>
+          <span onClick="{{ pickBulkImages }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#7C2F3E; padding:9px 16px; border-radius:999px; border:1.5px solid #E0AE95;" style-hover="background:#F6E3D5;">🖼 Subir fotos por código</span>
         </div>
+        <p style="margin:8px 0 0; font-size:12.5px; color:#8A715A; line-height:1.5;">Para cargar fotos por lote, nombra cada imagen igual al código del libro, por ejemplo <strong>LM-N-0001.jpg</strong>.</p>
+
         <textarea value="{{ bulkText }}" onInput="{{ onBulkText }}" placeholder="Pega aquí las filas copiadas de tu hoja de cálculo (una por línea)…" style="margin-top:14px; width:100%; min-height:150px; resize:vertical; padding:13px 15px; border:1px solid #E3D2B8; border-radius:10px; font-family:ui-monospace,Menlo,monospace; font-size:13px; line-height:1.6; color:#34251A; background:#FFFDF8; outline:none;"></textarea>
         <sc-if value="{{ bulkHasErr }}" hint-placeholder-val="{{ false }}">
           <div style="margin-top:10px; font-size:13px; font-weight:700; color:#9A4A3C;">{{ bulkErr }}</div>
         </sc-if>
+
         <sc-if value="{{ bulkHasRows }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:16px; display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px;">
+            <div style="background:#F7EFE2; border:1px solid #E3D2B8; border-radius:10px; padding:10px 12px;"><div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#A07F5E;">Detectados</div><div style="font-size:22px; font-weight:800; color:#34251A;">{{ bulkTotal }}</div></div>
+            <div style="background:#E7EDE6; border:1px solid #B9C4B4; border-radius:10px; padding:10px 12px;"><div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#2E4734;">Importables</div><div style="font-size:22px; font-weight:800; color:#2E6B41;">{{ bulkValid }}</div></div>
+            <div style="background:#FFF7EC; border:1px solid #D9BC77; border-radius:10px; padding:10px 12px;"><div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#9A7A1E;">Duplicados</div><div style="font-size:22px; font-weight:800; color:#9A7A1E;">{{ bulkDup }}</div></div>
+            <div style="background:#F6E3D5; border:1px solid #E0AE95; border-radius:10px; padding:10px 12px;"><div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#9A4A3C;">Errores</div><div style="font-size:22px; font-weight:800; color:#9A4A3C;">{{ bulkErrors }}</div></div>
+          </div>
+
           <div style="margin-top:16px;">
-            <div style="font-size:13px; font-weight:800; color:#2E4734; margin-bottom:8px;">Vista previa · {{ bulkCount }} libros detectados</div>
-            <div style="border:1px solid #E3D2B8; border-radius:10px; overflow:hidden;">
-              <sc-for list="{{ bulkPreview }}" as="r" hint-placeholder-count="3">
-                <div style="display:grid; grid-template-columns:28px 1fr auto; gap:12px; align-items:center; padding:10px 14px; border-top:1px solid #F0E6D2;">
-                  <span style="font-family:ui-monospace,Menlo,monospace; font-size:12px; color:#A07F5E;">{{ r.n }}</span>
-                  <div style="min-width:0;">
-                    <div style="font-weight:700; font-size:14px; color:#34251A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.title }}</div>
-                    <div style="font-size:12.5px; color:#8A715A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.sub }}</div>
-                  </div>
-                  <span style="font-weight:800; font-size:13.5px; color:#2E6B41;">{{ r.priceLabel }}</span>
+            <div style="font-size:13px; font-weight:800; color:#2E4734; margin-bottom:8px;">Vista previa validada · {{ bulkPreviewLabel }}</div>
+            <div style="border:1px solid #E3D2B8; border-radius:10px; overflow:auto; max-height:360px; background:#FFFDF8;">
+              <div style="min-width:760px; display:grid; grid-template-columns:54px 110px 1.2fr 1fr 90px 120px 150px; gap:0; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#8A715A; background:#F0E6D2;">
+                <div style="padding:9px 10px;">Fila</div><div style="padding:9px 10px;">Estado</div><div style="padding:9px 10px;">Título</div><div style="padding:9px 10px;">Autor</div><div style="padding:9px 10px;">Precio</div><div style="padding:9px 10px;">Disponibilidad</div><div style="padding:9px 10px;">Observación</div>
+              </div>
+              <sc-for list="{{ bulkPreview }}" as="r" hint-placeholder-count="6">
+                <div style="min-width:760px; display:grid; grid-template-columns:54px 110px 1.2fr 1fr 90px 120px 150px; gap:0; align-items:center; border-top:1px solid #F0E6D2; font-size:12.5px;">
+                  <div style="padding:9px 10px; font-family:ui-monospace,Menlo,monospace; color:#A07F5E;">{{ r.n }}</div>
+                  <div style="padding:9px 10px;"><span style="{{ r.statusStyle }}">{{ r.statusLabel }}</span></div>
+                  <div style="padding:9px 10px; font-weight:800; color:#34251A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.title }}</div>
+                  <div style="padding:9px 10px; color:#6E5946; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.author }}</div>
+                  <div style="padding:9px 10px; color:#2E6B41; font-weight:800;">{{ r.priceLabel }}</div>
+                  <div style="padding:9px 10px; color:#6E5946;">{{ r.disp }}</div>
+                  <div style="padding:9px 10px; color:#8A715A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.msg }}</div>
                 </div>
               </sc-for>
             </div>
             <sc-if value="{{ bulkMoreShow }}" hint-placeholder-val="{{ false }}">
-              <div style="margin-top:8px; font-size:12.5px; color:#8A715A;">…y {{ bulkMore }} más.</div>
+              <div style="margin-top:8px; font-size:12.5px; color:#8A715A;">…y {{ bulkMore }} filas más.</div>
             </sc-if>
           </div>
         </sc-if>
+
         <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-          <span onClick="{{ commitBulk }}" style="cursor:pointer; background:#2E4734; color:#F7EFE2; font-weight:800; font-size:14.5px; padding:13px 26px; border-radius:999px; box-shadow:0 6px 16px rgba(46,71,52,0.25);" style-hover="background:#244031;">Agregar {{ bulkCount }} libros</span>
+          <span onClick="{{ commitBulk }}" style="cursor:pointer; background:#2E4734; color:#F7EFE2; font-weight:800; font-size:14.5px; padding:13px 26px; border-radius:999px; box-shadow:0 6px 16px rgba(46,71,52,0.25);" style-hover="background:#244031;">{{ bulkButtonLabel }}</span>
           <span onClick="{{ closeBulk }}" style="cursor:pointer; font-size:13.5px; font-weight:700; color:#8A715A; padding:11px 18px;">Cancelar</span>
         </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ hasBulkUndo }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-bottom:18px; background:#E7EDE6; border:1px solid #B9C4B4; border-radius:12px; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+        <div style="font-size:13px; font-weight:700; color:#2E4734;">{{ bulkUndoLabel }}</div>
+        <span onClick="{{ undoBulk }}" style="cursor:pointer; background:#FFFDF8; color:#2E4734; border:1.5px solid #B9C4B4; font-weight:800; font-size:13px; padding:9px 16px; border-radius:999px;" style-hover="background:#F7EFE2;">Deshacer última carga</span>
       </div>
       </sc-if>
 
@@ -986,6 +1028,7 @@ service cloud.firestore {
 
   <input id="lm-admin-file" type="file" accept="image/*" style="display:none;" onChange="{{ onFile }}" />
   <input id="lm-bulk-file" type="file" accept=".csv,text/csv,text/plain" style="display:none;" onChange="{{ onBulkFile }}" />
+  <input id="lm-bulk-img-file" type="file" accept="image/*" multiple style="display:none;" onChange="{{ onBulkImages }}" />
 </div>
 </sc-if>
 
@@ -1137,7 +1180,7 @@ class Component extends DCLogic {
     cart: [], cartOpen: false, coName: '', coPhone: '', coEmail: '',
     lead: null, leadName: '', leadPhone: '', leadErr: '',
     pwOpen: false, pwInput: '', pwEmail: '', pwErr: '',
-    bulkOpen: false, bulkText: '', bulkErr: '',
+    bulkOpen: false, bulkText: '', bulkErr: '', bulkMode: 'add', bulkUndo: null,
     fb: 'connecting', authed: false, adminEmail: '',
     mailStatus: '', toast: ''
   };
@@ -1499,27 +1542,194 @@ class Component extends DCLogic {
   };
 
   // ---------- bulk ----------
-  parseBulk(text) {
-    const out = [];
-    (text || '').split(/\r?\n/).forEach(line => {
-      const raw = line.trim();
-      if (!raw) return;
-      const cells = raw.indexOf('\t') >= 0 ? raw.split('\t') : raw.split(',');
-      const c = cells.map(x => (x || '').trim());
-      if (!c[0]) return;
-      if (/^t[ií]tulo$/i.test(c[0])) return; // skip header
-      out.push({
-        title: c[0], author: c[1] || '', genre: c[2] || '',
-        price: parseFloat((c[3] || '').replace(/[^0-9.]/g, '')) || 0,
-        estado: c[4] || 'Nuevo', disp: c[5] || 'Disponible'
-      });
+  bulkKey(s) {
+    return (s || '').toString().trim().toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, ' ').trim();
+  }
+  bulkCodeKey(s) { return (s || '').toString().trim().toUpperCase().replace(/[^A-Z0-9]/g, ''); }
+  splitBulkLine(line) {
+    const sep = line.indexOf('\t') >= 0 ? '\t' : ',';
+    const out = []; let cur = '', q = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') {
+        if (q && line[i + 1] === '"') { cur += '"'; i++; }
+        else q = !q;
+      } else if (ch === sep && !q) { out.push(cur); cur = ''; }
+      else cur += ch;
+    }
+    out.push(cur);
+    return out.map(x => (x || '').trim());
+  }
+  csvCell(v) {
+    const s = (v == null ? '' : String(v));
+    return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }
+  normalizeEstado(v) {
+    const raw = (v || '').trim();
+    if (!raw) return { value: 'Nuevo' };
+    const k = this.bulkKey(raw);
+    const map = {
+      'nuevo': 'Nuevo',
+      'usado excelente': 'Usado excelente',
+      'usado muy bueno': 'Usado excelente',
+      'usado bueno': 'Usado-buen estado',
+      'usado buen estado': 'Usado-buen estado',
+      'usado-buen estado': 'Usado-buen estado',
+      'buen estado': 'Usado-buen estado',
+      'con detalles visibles': 'Con detalles visibles',
+      'detalles visibles': 'Con detalles visibles'
+    };
+    return map[k] ? { value: map[k] } : { value: raw, error: 'Estado no permitido' };
+  }
+  normalizeDisp(v) {
+    const raw = (v || '').trim();
+    if (!raw) return { value: 'Disponible' };
+    const k = this.bulkKey(raw);
+    const map = {
+      'disponible': 'Disponible',
+      'ultima unidad': 'Última unidad',
+      'ult unidad': 'Última unidad',
+      'reservado': 'Reservado',
+      'oferta': 'Oferta',
+      'vendido': 'Vendido'
+    };
+    return map[k] ? { value: map[k] } : { value: raw, error: 'Disponibilidad no permitida' };
+  }
+  parsePrice(v) {
+    let s = (v || '').toString().trim();
+    if (!s) return NaN;
+    s = s.replace(/\$/g, '').replace(/\s/g, '');
+    if (s.indexOf(',') >= 0 && s.indexOf('.') < 0) s = s.replace(',', '.');
+    s = s.replace(/[^0-9.]/g, '');
+    const n = parseFloat(s);
+    return isNaN(n) ? NaN : n;
+  }
+  nextLibroCode(cms) {
+    const nums = (cms.libros || []).map(x => {
+      const m = String(x.code || '').match(/(\d+)$/);
+      return m ? parseInt(m[1], 10) : 0;
     });
-    return out;
+    const n = Math.max(0, ...nums) + 1;
+    return 'LM-N-' + this.pad(n);
+  }
+  libroIndex(cms) {
+    const byCode = {}, byName = {};
+    (cms.libros || []).forEach(b => {
+      const ck = this.bulkCodeKey(b.code);
+      if (ck) byCode[ck] = b;
+      const nk = this.bulkKey((b.title || '') + ' ' + (b.author || ''));
+      if (nk.trim()) byName[nk] = b;
+    });
+    return { byCode, byName };
+  }
+  rowToLibro(r, old, code) {
+    return {
+      id: old ? old.id : ('b' + Date.now() + '_' + Math.floor(Math.random() * 1000000)),
+      code: code || r.code || (old && old.code) || '',
+      title: r.title,
+      author: r.author,
+      genre: r.genre || '',
+      estado: r.estado || 'Nuevo',
+      disp: r.disp || 'Disponible',
+      price: r.price || 0,
+      editorial: r.editorial || (old && old.editorial) || '',
+      isbn: r.isbn || (old && old.isbn) || '',
+      imagen: r.imagen || (old && old.imagen) || '',
+      order: old ? (old.order || Date.now()) : Date.now()
+    };
+  }
+  parseBulk(text) { return this.analyzeBulk(text).validRows; }
+  analyzeBulk(text, mode) {
+    mode = mode || this.state.bulkMode || 'add';
+    const cms = this.currentCMS();
+    const idx = this.libroIndex(cms);
+    const lines = (text || '').split(/\r?\n/).filter(x => x.trim());
+    const rows = [];
+    let header = null;
+    const normHead = (s) => this.bulkKey(s).replace(/\s/g, '');
+    const mapHeader = (cells) => {
+      const m = {};
+      cells.forEach((h, i) => {
+        const k = normHead(h);
+        if (['codigo','code','cod'].includes(k)) m.code = i;
+        if (['titulo','title','libro'].includes(k)) m.title = i;
+        if (['autor','author'].includes(k)) m.author = i;
+        if (['genero','genre','categoria'].includes(k)) m.genre = i;
+        if (['precio','price','valor'].includes(k)) m.price = i;
+        if (['estado','condicion'].includes(k)) m.estado = i;
+        if (['disponibilidad','disp','stock'].includes(k)) m.disp = i;
+        if (['editorial'].includes(k)) m.editorial = i;
+        if (['isbn'].includes(k)) m.isbn = i;
+        if (['imagen','foto','portada'].includes(k)) m.imagen = i;
+      });
+      return m.title != null ? m : null;
+    };
+    const seenCode = {}, seenName = {};
+    let autoCode = this.nextLibroCode(cms);
+    const nextAuto = () => { const out = autoCode; const m = out.match(/(\d+)$/); const n = m ? parseInt(m[1], 10) + 1 : 1; autoCode = 'LM-N-' + this.pad(n); return out; };
+    lines.forEach((line, i) => {
+      const c = this.splitBulkLine(line);
+      if (!c.length) return;
+      if (!header) {
+        const possible = mapHeader(c);
+        if (possible) { header = possible; return; }
+      }
+      let hasCodeFirst = false;
+      if (!header && c.length >= 7 && (this.bulkCodeKey(c[0]).startsWith('LM') || !c[0])) hasCodeFirst = true;
+      const get = (k, oldIndex) => header && header[k] != null ? c[header[k]] : c[hasCodeFirst ? oldIndex + 1 : oldIndex];
+      const row = {
+        line: i + 1,
+        code: (header && header.code != null) ? c[header.code] : (hasCodeFirst ? c[0] : ''),
+        title: get('title', 0) || '',
+        author: get('author', 1) || '',
+        genre: get('genre', 2) || '',
+        priceRaw: get('price', 3) || '',
+        estadoRaw: get('estado', 4) || '',
+        dispRaw: get('disp', 5) || '',
+        editorial: get('editorial', 6) || '',
+        isbn: get('isbn', 7) || '',
+        imagen: get('imagen', 8) || '',
+        errors: [], warnings: []
+      };
+      row.price = this.parsePrice(row.priceRaw);
+      const es = this.normalizeEstado(row.estadoRaw); row.estado = es.value; if (es.error) row.errors.push(es.error);
+      const ds = this.normalizeDisp(row.dispRaw); row.disp = ds.value; if (ds.error) row.errors.push(ds.error);
+      if (!row.title.trim()) row.errors.push('Falta título');
+      if (!row.author.trim()) row.errors.push('Falta autor');
+      if (isNaN(row.price) || row.price <= 0) row.errors.push('Falta precio válido');
+      const ck = this.bulkCodeKey(row.code);
+      const nk = this.bulkKey(row.title + ' ' + row.author);
+      if (ck && seenCode[ck]) row.errors.push('Código repetido en el archivo');
+      if (nk && seenName[nk]) row.errors.push('Título y autor repetidos en el archivo');
+      if (ck) seenCode[ck] = true;
+      if (nk) seenName[nk] = true;
+      row.existing = ck ? idx.byCode[ck] : null;
+      if (!row.existing && nk) row.existing = idx.byName[nk] || null;
+      row.duplicate = !!row.existing;
+      if (!row.code.trim()) row.code = nextAuto();
+      row.canImport = row.errors.length === 0 && !(mode === 'add' && row.duplicate);
+      if (row.errors.length) { row.status = 'error'; row.msg = row.errors.join(' · '); }
+      else if (row.duplicate && mode === 'add') { row.status = 'skip'; row.msg = 'Ya existe; se omitirá'; }
+      else if (row.duplicate && mode === 'update') { row.status = 'update'; row.msg = 'Actualiza registro existente'; }
+      else if (mode === 'replace') { row.status = 'replace'; row.msg = 'Quedará en el nuevo catálogo'; }
+      else { row.status = 'ok'; row.msg = 'Listo para importar'; }
+      rows.push(row);
+    });
+    const validRows = rows.filter(r => r.canImport);
+    const errors = rows.filter(r => r.errors.length).length;
+    const duplicates = rows.filter(r => r.duplicate).length;
+    const updates = validRows.filter(r => r.duplicate).length;
+    const news = validRows.length - updates;
+    return { rows, validRows, total: rows.length, errors, duplicates, updates, news, mode };
   }
   onBulkText = (e) => this.setState({ bulkText: e.target.value, bulkErr: '' });
-  openBulk = () => this.setState({ bulkOpen: true, bulkText: '', bulkErr: '' });
+  onBulkMode = (e) => this.setState({ bulkMode: e.target.value, bulkErr: '' });
+  openBulk = () => this.setState({ bulkOpen: true, bulkText: '', bulkErr: '', bulkMode: this.state.bulkMode || 'add' });
   closeBulk = () => this.setState({ bulkOpen: false, bulkText: '', bulkErr: '' });
   pickBulkFile = () => { const el = document.getElementById('lm-bulk-file'); if (el) { el.value = ''; el.click(); } };
+  pickBulkImages = () => { const el = document.getElementById('lm-bulk-img-file'); if (el) { el.value = ''; el.click(); } };
   onBulkFile = (e) => {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
@@ -1527,22 +1737,125 @@ class Component extends DCLogic {
     reader.onload = (ev) => this.setState({ bulkText: ev.target.result || '', bulkErr: '' });
     reader.readAsText(file);
   };
+  syncLibrosFirestore(before, after) {
+    if (!this.online()) return;
+    try {
+      const batch = this.db.batch();
+      const afterIds = new Set((after.libros || []).map(x => x.id));
+      (before.libros || []).forEach(it => { if (!afterIds.has(it.id)) batch.delete(this.itemRef('libros', it.id)); });
+      (after.libros || []).forEach(it => batch.set(this.itemRef('libros', it.id), this.clean(it), { merge: true }));
+      batch.commit().catch((e) => this.flash(this.fbErr(e)));
+    } catch (e) { this.flash('No se pudo sincronizar la carga en la nube.'); }
+  }
   commitBulk = () => {
-    const rows = this.parseBulk(this.state.bulkText);
-    if (!rows.length) { this.setState({ bulkErr: 'No detectamos filas válidas. Revisa que cada línea tenga al menos un título.' }); return; }
+    const report = this.analyzeBulk(this.state.bulkText, this.state.bulkMode);
+    if (!report.rows.length) { this.setState({ bulkErr: 'No detectamos filas. Pega datos o sube un CSV con al menos título, autor y precio.' }); return; }
+    if (report.errors) { this.setState({ bulkErr: 'Corrige las filas marcadas con error antes de importar.' }); return; }
+    if (!report.validRows.length) { this.setState({ bulkErr: 'No hay libros nuevos para importar con la acción seleccionada.' }); return; }
+    if (report.mode === 'replace' && !window.confirm('Esto reemplazará el catálogo actual de libros. Las portadas se conservan si el libro coincide por código o por título + autor. ¿Continuar?')) return;
+    const before = this.currentCMS();
     const cms = this.currentCMS();
     cms.libros = cms.libros || [];
-    let n = cms.libros.length;
-    const created = rows.map(r => { n++; return { id: 'b' + Date.now() + '_' + n, code: 'LM-N-' + this.pad(n), title: r.title, author: r.author, genre: r.genre, estado: r.estado, disp: r.disp, price: r.price, imagen: '', order: Date.now() + n }; });
-    cms.libros = created.concat(cms.libros);
+    const idx = this.libroIndex(cms);
+    let changed = 0;
+    if (report.mode === 'replace') {
+      const next = [];
+      report.validRows.forEach(r => {
+        const ck = this.bulkCodeKey(r.code);
+        const nk = this.bulkKey(r.title + ' ' + r.author);
+        const old = (ck && idx.byCode[ck]) || (nk && idx.byName[nk]) || null;
+        next.push(this.rowToLibro(r, old, r.code));
+      });
+      cms.libros = next;
+      changed = next.length;
+    } else {
+      report.validRows.forEach(r => {
+        let old = r.existing || null;
+        if (old && report.mode === 'update') {
+          const k = cms.libros.findIndex(x => x.id === old.id);
+          if (k >= 0) { cms.libros[k] = this.rowToLibro(r, cms.libros[k], r.code || cms.libros[k].code); changed++; }
+        } else if (!old) {
+          cms.libros.unshift(this.rowToLibro(r, null, r.code)); changed++;
+        }
+      });
+    }
     this.cacheCMS(cms);
-    if (this.online()) { try { const batch = this.db.batch(); created.forEach(it => batch.set(this.itemRef('libros', it.id), this.clean(it))); batch.commit().catch((e) => this.flash(this.fbErr(e))); } catch (e) {} }
-    this.setState({ bulkOpen: false, bulkText: '', bulkErr: '' });
-    this.flash(created.length + ' libros agregados ✓');
+    this.syncLibrosFirestore(before, cms);
+    this.setState({ bulkOpen: false, bulkText: '', bulkErr: '', bulkUndo: { before: before, after: this.clean(cms), label: this.bulkResultLabel(report, changed) } });
+    this.flash(this.bulkResultLabel(report, changed));
+  };
+  bulkResultLabel(report, changed) {
+    if (report.mode === 'replace') return 'Catálogo reemplazado: ' + changed + ' libros ✓';
+    if (report.mode === 'update') return report.news + ' nuevos · ' + report.updates + ' actualizados ✓';
+    return changed + ' libros nuevos agregados ✓';
+  }
+  undoBulk = () => {
+    const u = this.state.bulkUndo;
+    if (!u || !u.before) return;
+    const after = this.currentCMS();
+    this.cacheCMS(u.before);
+    this.syncLibrosFirestore(after, u.before);
+    this.setState({ bulkUndo: null });
+    this.flash('Última carga deshecha ✓');
   };
   downloadTemplate = () => {
-    const csv = 'Título,Autor,Género,Precio,Estado,Disponibilidad\nAlas de sangre,Rebecca Yarros,Fantasía,28,Nuevo,Última unidad\nEl nombre del viento,Patrick Rothfuss,Fantasía,14,Usado excelente,Disponible\n';
+    const rows = [
+      ['Código','Título','Autor','Género','Precio','Estado','Disponibilidad','Editorial','ISBN','Imagen'],
+      ['LM-N-0001','Alas de sangre','Rebecca Yarros','Fantasía',28,'Nuevo','Última unidad','','',''],
+      ['LM-U-0002','El nombre del viento','Patrick Rothfuss','Fantasía',14,'Usado-buen estado','Disponible','','','']
+    ];
+    const csv = rows.map(r => r.map(x => this.csvCell(x)).join(',')).join('\n') + '\n';
     this.download('plantilla-libros.csv', csv, 'text/csv');
+  };
+  imageFileToData(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('No se pudo leer la imagen'));
+      reader.onload = (ev) => {
+        const img = new Image();
+        img.onload = () => {
+          const max = 1100;
+          const scale = Math.min(1, max / Math.max(img.width, img.height));
+          const w = Math.max(1, Math.round(img.width * scale));
+          const h = Math.max(1, Math.round(img.height * scale));
+          const c = document.createElement('canvas'); c.width = w; c.height = h;
+          const ctx = c.getContext('2d'); ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, w, h); ctx.drawImage(img, 0, 0, w, h);
+          try { resolve(c.toDataURL('image/jpeg', 0.82)); } catch (e) { resolve(ev.target.result); }
+        };
+        img.onerror = () => resolve(ev.target.result);
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  onBulkImages = async (e) => {
+    const files = Array.from((e.target && e.target.files) || []);
+    if (!files.length) return;
+    const before = this.currentCMS();
+    const cms = this.currentCMS();
+    const libros = cms.libros || [];
+    const byCode = {};
+    libros.forEach(b => { const k = this.bulkCodeKey(b.code); if (k) byCode[k] = b; });
+    let ok = 0, miss = 0;
+    for (const file of files) {
+      const name = (file.name || '').replace(/\.[^.]+$/, '');
+      const nk = this.bulkCodeKey(name);
+      let book = byCode[nk] || null;
+      if (!book) {
+        const keys = Object.keys(byCode);
+        const found = keys.find(k => nk.indexOf(k) >= 0 || k.indexOf(nk) >= 0);
+        if (found) book = byCode[found];
+      }
+      if (!book) { miss++; continue; }
+      try { book.imagen = await this.imageFileToData(file); ok++; }
+      catch (err) { miss++; }
+    }
+    if (ok) {
+      this.cacheCMS(cms);
+      this.syncLibrosFirestore(before, cms);
+      this.setState({ bulkUndo: { before: before, after: this.clean(cms), label: ok + ' fotos cargadas por código' } });
+    }
+    this.flash(ok + ' fotos cargadas' + (miss ? ' · ' + miss + ' sin código' : '') + ' ✓');
   };
 
   download(name, content, type) {
@@ -1833,8 +2146,20 @@ class Component extends DCLogic {
     const adminTabs = tabList.map(([k, label, bg, fg]) => ({ label, onClick: () => this.setState({ adminTab: k }), style: this.tabStyle(adminTab === k, bg, fg) }));
 
     // ---- bulk preview ----
-    const bulkRows = this.parseBulk(this.state.bulkText);
-    const bulkPreview = bulkRows.slice(0, 4).map((r, i) => ({ n: i + 1, title: r.title, sub: [r.author, r.genre].filter(Boolean).join(' · ') || '—', priceLabel: '$' + r.price }));
+    const bulkReport = this.analyzeBulk(this.state.bulkText, this.state.bulkMode);
+    const bulkRows = bulkReport.rows;
+    const bulkStyle = (st) => {
+      const base = { display: 'inline-block', padding: '3px 8px', borderRadius: '999px', fontSize: '10.5px', fontWeight: 800 };
+      if (st === 'error') return Object.assign({}, base, { background: '#F6E3D5', color: '#9A4A3C' });
+      if (st === 'skip') return Object.assign({}, base, { background: '#FFF7EC', color: '#9A7A1E' });
+      if (st === 'update') return Object.assign({}, base, { background: '#EAF2F6', color: '#3A5A6B' });
+      if (st === 'replace') return Object.assign({}, base, { background: '#F0E6D2', color: '#5E4632' });
+      return Object.assign({}, base, { background: '#E7EDE6', color: '#2E6B41' });
+    };
+    const bulkStatusLabel = (st) => st === 'error' ? 'Error' : (st === 'skip' ? 'Duplicado' : (st === 'update' ? 'Actualizar' : (st === 'replace' ? 'Reemplazar' : 'Nuevo')));
+    const bulkPreview = bulkRows.slice(0, 20).map(r => ({ n: r.line, title: r.title || '—', author: r.author || '—', priceLabel: isNaN(r.price) ? '—' : ('$' + r.price), disp: r.disp || '—', msg: r.msg || '', statusLabel: bulkStatusLabel(r.status), statusStyle: bulkStyle(r.status) }));
+    const bulkModeHelp = this.state.bulkMode === 'replace' ? 'Usa esta opción solo cuando quieres cambiar todo el catálogo de libros.' : (this.state.bulkMode === 'update' ? 'Si el código o título + autor ya existen, se actualizan sin borrar portadas.' : 'Los duplicados se detectan y se saltan.');
+    const bulkButtonLabel = !bulkRows.length ? 'Importar libros' : (bulkReport.errors ? 'Corrige errores para importar' : (bulkReport.mode === 'replace' ? ('Reemplazar con ' + bulkReport.validRows.length + ' libros') : (bulkReport.mode === 'update' ? ('Importar ' + bulkReport.news + ' nuevos · actualizar ' + bulkReport.updates) : ('Importar ' + bulkReport.validRows.length + ' libros nuevos'))));
 
     // ---- cart ----
     const cartItems = this.state.cart.map(x => ({
@@ -1892,15 +2217,19 @@ class Component extends DCLogic {
       cloudCounts: 'Libros ' + libros.length + ' · Merch ' + merch.length + ' · Eventos ' + eventos.length + ' · Pedidos ' + pedidos.length,
       savedLabel: this.state.fb === 'online' ? 'Guardado en la nube ✓' : (this.state.fb === 'connecting' ? 'Conectando a la nube…' : 'Sin nube · guardado local'),
       importSeed: this.importSeed,
-      onFile: this.onFile, onBulkFile: this.onBulkFile,
+      onFile: this.onFile, onBulkFile: this.onBulkFile, onBulkImages: this.onBulkImages,
 
       // bulk
       bulkOpen: this.state.bulkOpen, openBulk: this.openBulk, closeBulk: this.closeBulk,
       bulkText: this.state.bulkText, onBulkText: this.onBulkText,
+      bulkMode: this.state.bulkMode, onBulkMode: this.onBulkMode, bulkModeHelp,
       bulkErr: this.state.bulkErr, bulkHasErr: !!this.state.bulkErr,
       bulkHasRows: bulkRows.length > 0, bulkCount: bulkRows.length, bulkPreview,
-      bulkMore: Math.max(0, bulkRows.length - 4), bulkMoreShow: bulkRows.length > 4,
-      commitBulk: this.commitBulk, downloadTemplate: this.downloadTemplate, pickBulkFile: this.pickBulkFile,
+      bulkTotal: bulkReport.total, bulkValid: bulkReport.validRows.length, bulkDup: bulkReport.duplicates, bulkErrors: bulkReport.errors,
+      bulkPreviewLabel: bulkRows.length + ' filas revisadas', bulkButtonLabel,
+      bulkMore: Math.max(0, bulkRows.length - 20), bulkMoreShow: bulkRows.length > 20,
+      commitBulk: this.commitBulk, undoBulk: this.undoBulk, hasBulkUndo: !!this.state.bulkUndo, bulkUndoLabel: this.state.bulkUndo ? this.state.bulkUndo.label : '',
+      downloadTemplate: this.downloadTemplate, pickBulkFile: this.pickBulkFile, pickBulkImages: this.pickBulkImages,
 
       // config
       cfgEmail: cfg.email || '', cfgWhatsapp: cfg.whatsapp || '', cfgPass: cfg.adminPass || '', cfgInstagram: cfg.instagram || '', cfgTiktok: cfg.tiktok || '', cfgMaps: cfg.maps || '',
