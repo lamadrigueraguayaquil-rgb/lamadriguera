@@ -11,7 +11,7 @@
   <div style="position:relative; aspect-ratio:4/3; background:repeating-linear-gradient(135deg,#F1E5D0,#F1E5D0 11px,#E9D9BE 11px,#E9D9BE 22px); display:flex; align-items:center; justify-content:center;">
     <div style="position:absolute; inset:0; background:radial-gradient(120% 100% at 50% 0%, rgba(255,247,228,0.5), rgba(255,247,228,0) 65%);"></div>
     <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.06em; color:#A8916F; text-transform:lowercase; text-align:center; padding:0 10px;">{{ merch.cat }}</span>
-    <sc-if value="{{ merch.hasImg }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ merch.imagen }}'); background-size:cover; background-position:center;"></div></sc-if>
+    <sc-if value="{{ merch.hasImg }}" hint-placeholder-val="{{ false }}"><div style="{{ merch.imgStyle }}"></div></sc-if>
     <span style="{{ merch.dispStyle }}; position:absolute; left:10px; top:10px;">{{ merch.disp }}</span>
   </div>
   <div style="padding:14px 14px 16px; display:flex; flex-direction:column; gap:7px; flex:1;">

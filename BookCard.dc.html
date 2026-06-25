@@ -11,7 +11,7 @@
   <div style="position:relative; aspect-ratio:3/4; background:repeating-linear-gradient(135deg,#F1E5D0,#F1E5D0 11px,#E9D9BE 11px,#E9D9BE 22px); display:flex; align-items:center; justify-content:center;">
     <div style="position:absolute; inset:0; background:radial-gradient(120% 90% at 50% 0%, rgba(255,247,228,0.55), rgba(255,247,228,0) 60%);"></div>
     <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.08em; color:#A8916F; text-transform:lowercase;">portada</span>
-    <sc-if value="{{ book.hasImg }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ book.imagen }}'); background-size:cover; background-position:center;"></div></sc-if>
+    <sc-if value="{{ book.hasImg }}" hint-placeholder-val="{{ false }}"><div style="{{ book.imgStyle }}"></div></sc-if>
     <span style="position:absolute; left:10px; bottom:10px; font-family:ui-monospace,Menlo,monospace; font-size:10px; background:rgba(52,37,26,0.74); color:#F7EFE2; padding:3px 7px; border-radius:6px; letter-spacing:.04em;">{{ book.code }}</span>
   </div>
   <div style="padding:14px 14px 16px; display:flex; flex-direction:column; gap:8px; flex:1;">

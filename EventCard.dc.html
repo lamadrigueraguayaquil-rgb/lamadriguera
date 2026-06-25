@@ -11,7 +11,7 @@
   <div style="position:relative; aspect-ratio:16/9; background:repeating-linear-gradient(135deg,#2E4734,#2E4734 12px,#365239 12px,#365239 24px); display:flex; align-items:flex-end; justify-content:flex-start;">
     <div style="position:absolute; inset:0; background:radial-gradient(120% 120% at 80% 0%, rgba(201,162,75,0.4), rgba(46,71,52,0) 60%);"></div>
     <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.08em; color:rgba(247,239,226,0.72); margin:12px; text-transform:lowercase;">imagen del evento</span>
-    <sc-if value="{{ event.hasImg }}" hint-placeholder-val="{{ false }}"><div style="position:absolute; inset:0; background-image:url('{{ event.imagen }}'); background-size:cover; background-position:center;"></div></sc-if>
+    <sc-if value="{{ event.hasImg }}" hint-placeholder-val="{{ false }}"><div style="{{ event.imgStyle }}"></div></sc-if>
     <span style="{{ event.dispStyle }}; position:absolute; right:12px; top:12px;">{{ event.cupos }}</span>
   </div>
   <div style="padding:16px 16px 18px; display:flex; flex-direction:column; gap:10px; flex:1;">
