@@ -1367,7 +1367,7 @@ class Component extends DCLogic {
   };
   addConsig = () => {
     const n = (this.currentCMS().consig || []).length + 1;
-    this.addItem('consig', { id: 'c' + Date.now(), code: 'LM-C-' + this.pad(n), title: 'Libro recibido', author: '', genre: '', owner: '', contact: '', price: 0, payout: 0, estado: 'Recibido', imagen: '', order: Date.now() }, 'Registro creado.');
+    this.addItem('consig', { id: 'c' + Date.now(), code: 'LM-C-' + this.pad(n), title: 'Libro recibido', author: '', genre: '', owner: '', contact: '', price: 0, payout: 0, estado: 'En venta', imagen: '', order: Date.now() }, 'Registro creado y publicado.');
   };
   addMerch = () => {
     this.addItem('merch', { id: 'm' + Date.now(), name: 'Nuevo producto', cat: '', desc: '', price: 0, disp: 'Disponible', imagen: '', order: Date.now() }, 'Producto añadido.');
