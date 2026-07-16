@@ -7,7 +7,7 @@
 </head>
 <body>
 <x-dc>
-<div style="display:flex; flex-direction:column; background:#FFFDF8; border:1px solid #EADBC4; border-radius:16px; overflow:hidden; box-shadow:0 8px 22px rgba(52,37,26,0.07); font-family:'Mulish',sans-serif; height:100%;">
+<div style="display:flex; flex-direction:column; background:#FFFDF8; border:1px solid #EADBC4; border-radius:16px; overflow:hidden; box-shadow:0 8px 22px rgba(52,37,26,0.07); font-family:'Outfit',sans-serif; height:100%;">
   <div style="position:relative; aspect-ratio:4/3; background:repeating-linear-gradient(135deg,#F1E5D0,#F1E5D0 11px,#E9D9BE 11px,#E9D9BE 22px); display:flex; align-items:center; justify-content:center;">
     <div style="position:absolute; inset:0; background:radial-gradient(120% 100% at 50% 0%, rgba(255,247,228,0.5), rgba(255,247,228,0) 65%);"></div>
     <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.06em; color:#A8916F; text-transform:lowercase; text-align:center; padding:0 10px;">{{ merch.cat }}</span>
@@ -16,14 +16,14 @@
   </div>
   <div style="padding:14px 14px 16px; display:flex; flex-direction:column; gap:7px; flex:1;">
     <span style="font-size:10.5px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#A07F5E;">{{ merch.cat }}</span>
-    <h3 style="margin:0; font-family:'Spectral',serif; font-weight:700; font-size:18px; line-height:1.15; color:#34251A; text-wrap:pretty;">{{ merch.name }}</h3>
+    <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:18px; line-height:1.15; color:#34251A; text-wrap:pretty;">{{ merch.name }}</h3>
     <p style="margin:0; font-size:13px; line-height:1.4; color:#8A715A;">{{ merch.desc }}</p>
     <div style="margin-top:4px; display:flex; align-items:center; justify-content:space-between; gap:8px;">
-      <span style="font-family:'Spectral',serif; font-weight:700; font-size:21px; color:#7C2F3E;">{{ merch.priceLabel }}</span>
+      <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:21px; color:#7C2F3E;">{{ merch.priceLabel }}</span>
     </div>
     <div style="margin-top:auto; display:flex; flex-direction:column; gap:7px;">
-      <span onClick="{{ merch.onAdd }}" style="display:flex; align-items:center; justify-content:center; gap:7px; cursor:pointer; background:#2E4734; color:#F7EFE2; font-weight:800; font-size:13.5px; padding:11px 12px; border-radius:11px; transition:background .15s ease;" style-hover="background:#244031;"><span style="font-size:16px; line-height:1;">＋</span>Agregar al carrito</span>
-      <a href="{{ merch.waHref }}" onClick="{{ merch.onBuy }}" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:center; gap:7px; text-decoration:none; background:transparent; color:#2E4734; border:1.5px solid #B9C4B4; font-weight:700; font-size:12.5px; padding:9px 12px; border-radius:11px; transition:background .15s ease;" style-hover="background:#E7EDE6;">Pedir por WhatsApp</a>
+      <span onClick="{{ merch.onAdd }}" style="display:flex; align-items:center; justify-content:center; gap:7px; cursor:pointer; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:13.5px; padding:11px 12px; border-radius:11px; transition:background .15s ease;" style-hover="background:#244031;"><span style="font-size:16px; line-height:1;">＋</span>Agregar al carrito</span>
+      <a href="{{ merch.waHref }}" onClick="{{ merch.onBuy }}" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:center; gap:7px; text-decoration:none; background:transparent; color:#5E1F33; border:1.5px solid #B9C4B4; font-weight:700; font-size:12.5px; padding:9px 12px; border-radius:11px; transition:background .15s ease;" style-hover="background:#F2E3E2;">Pedir por WhatsApp</a>
     </div>
   </div>
 </div>
