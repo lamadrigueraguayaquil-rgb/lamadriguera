@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>La Madriguera · Librería y café de especialidad en Guayaquil</title>
 <meta name="description" content="Librería y café de especialidad en Urdesa, Guayaquil. Libros nuevos y usados, consignación, merch para lectores y eventos literarios. Mié–Sáb 12:00–20:00, Dom 10:00–18:00.">
-<link rel="canonical" href="https://lamadrigueraguayaquil-rgb.github.io/lamadriguera/">
+<link rel="canonical" href="https://lamadriguera.ec/">
 <link rel="icon" type="image/png" href="./favicon.png">
 <link rel="apple-touch-icon" href="./favicon.png">
 <meta name="theme-color" content="#5E1F33">
@@ -16,26 +16,26 @@
 <meta property="og:locale" content="es_EC">
 <meta property="og:title" content="La Madriguera · Librería y café de especialidad en Guayaquil">
 <meta property="og:description" content="Librería y café de especialidad en Urdesa, Guayaquil. Libros nuevos y usados, consignación, merch para lectores y eventos literarios. Mié–Sáb 12:00–20:00, Dom 10:00–18:00.">
-<meta property="og:url" content="https://lamadrigueraguayaquil-rgb.github.io/lamadriguera/">
-<meta property="og:image" content="https://lamadrigueraguayaquil-rgb.github.io/lamadriguera/og-image.jpg">
+<meta property="og:url" content="https://lamadriguera.ec/">
+<meta property="og:image" content="https://lamadriguera.ec/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="La Madriguera · Librería y café de especialidad en Guayaquil">
 <meta name="twitter:description" content="Librería y café de especialidad en Urdesa, Guayaquil. Libros nuevos y usados, consignación, merch para lectores y eventos literarios. Mié–Sáb 12:00–20:00, Dom 10:00–18:00.">
-<meta name="twitter:image" content="https://lamadrigueraguayaquil-rgb.github.io/lamadriguera/og-image.jpg">
+<meta name="twitter:image" content="https://lamadriguera.ec/og-image.jpg">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "BookStore",
-  "@id": "https://lamadrigueraguayaquil-rgb.github.io/lamadriguera/#negocio",
+  "@id": "https://lamadriguera.ec/#negocio",
   "name": "La Madriguera Specialty Coffee & Books",
   "alternateName": "La Madriguera",
   "slogan": "Una casa para quienes viven entre páginas",
   "description": "Librería y café de especialidad en Urdesa, Guayaquil (Ecuador). Vendemos libros nuevos y usados, recibimos libros en consignación, y ofrecemos merch para lectores (separadores, tazas, tote bags, stickers) y eventos literarios: club de lectura, cine inmersivo, talleres creativos y cenas temáticas.",
-  "url": "https://lamadrigueraguayaquil-rgb.github.io/lamadriguera/",
-  "image": "https://lamadrigueraguayaquil-rgb.github.io/lamadriguera/og-image.jpg",
-  "logo": "https://lamadrigueraguayaquil-rgb.github.io/lamadriguera/favicon.png",
+  "url": "https://lamadriguera.ec/",
+  "image": "https://lamadriguera.ec/og-image.jpg",
+  "logo": "https://lamadriguera.ec/favicon.png",
   "telephone": "+593960186336",
   "email": "lamadriguera.guayaquil@gmail.com",
   "priceRange": "$",
@@ -405,13 +405,32 @@
       
       <h1 style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#5E1F33; line-height:1.05;">Merch para lectores</h1>
       <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:48em;">Objetos creados para quienes viven entre páginas: separadores, stickers, pines, tazas, camisetas, tote bags, productos personalizados y pequeñas magias lectoras.</p>
-    </section>
-    <section style="max-width:1180px; margin:0 auto; padding:24px clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
-      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:clamp(14px,2vw,22px);">
-        <sc-for list="{{ merchAll }}" as="m" hint-placeholder-count="9">
-          <dc-import name="MerchCard" merch="{{ m }}" hint-size="100%,400px"></dc-import>
+      <div style="margin-top:24px; position:relative; max-width:560px;">
+        <span style="position:absolute; left:18px; top:50%; transform:translateY(-50%); width:14px; height:14px; border:2px solid #A07F5E; border-radius:50%;"></span>
+        <input value="{{ merchSearch }}" onInput="{{ onMerchSearch }}" placeholder="Busca separadores, tazas, stickers…" style="width:100%; padding:14px 18px 14px 46px; font-family:'Outfit',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; border:1px solid #E3D2B8; border-radius:999px; outline:none; box-shadow:0 6px 18px rgba(52,37,26,0.06);">
+      </div>
+      <div data-noscroll="" style="margin-top:16px; display:flex; gap:9px; overflow-x:auto; white-space:nowrap; padding-bottom:4px;">
+        <sc-for list="{{ merchChips }}" as="chip" hint-placeholder-count="6">
+          <span onClick="{{ chip.onClick }}" style="{{ chip.style }}">{{ chip.label }}</span>
         </sc-for>
       </div>
+    </section>
+    <section style="max-width:1180px; margin:0 auto; padding:24px clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
+      <div style="margin-bottom:16px;"><span style="font-size:13px; font-weight:700; color:#8A715A;">{{ merchShownCount }} productos</span></div>
+      <sc-if value="{{ merchHasResults }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:clamp(14px,2vw,22px);">
+          <sc-for list="{{ merchAll }}" as="m" hint-placeholder-count="9">
+            <dc-import name="MerchCard" merch="{{ m }}" hint-size="100%,400px"></dc-import>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ merchNoResults }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center; padding:50px 20px; color:#8A715A;">
+          <div style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:21px; color:#5E4632;">No encontramos ese producto… todavía.</div>
+          <p style="margin:10px 0 0; font-size:15px;">Escríbenos por WhatsApp y te contamos qué tenemos o lo hacemos por encargo.</p>
+          <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="display:inline-block; margin-top:16px; text-decoration:none; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:14px; padding:12px 22px; border-radius:999px;">Preguntar por WhatsApp</a>
+        </div>
+      </sc-if>
     </section>
   </div>
   </sc-if>
@@ -595,6 +614,26 @@
 
   <main style="max-width:1100px; margin:0 auto; padding:clamp(24px,4vw,40px) clamp(16px,4vw,32px) 80px;">
 
+    <!-- RESUMEN -->
+    <div style="margin-bottom:26px; display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px;">
+      <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:14px; padding:15px 18px;">
+        <div style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#8A715A;">Pedidos nuevos</div>
+        <div style="margin-top:4px; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:27px; color:#93304A;">{{ pedidosNuevos }}</div>
+      </div>
+      <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:14px; padding:15px 18px;">
+        <div style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#8A715A;">Ventas entregadas</div>
+        <div style="margin-top:4px; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:27px; color:#2E6B41;">{{ ventasEntregadas }}</div>
+      </div>
+      <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:14px; padding:15px 18px;">
+        <div style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#8A715A;">Libros publicados</div>
+        <div style="margin-top:4px; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:27px; color:#5E1F33;">{{ librosCount }}</div>
+      </div>
+      <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:14px; padding:15px 18px;">
+        <div style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#8A715A;">Merch publicado</div>
+        <div style="margin-top:4px; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:27px; color:#7C2F3E;">{{ merchCount }}</div>
+      </div>
+    </div>
+
     <!-- ADMIN LIBROS -->
     <sc-if value="{{ aLibros }}" hint-placeholder-val="{{ true }}">
     <div data-screen-label="Admin Libros">
@@ -604,11 +643,16 @@
           <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ librosCount }} libros · haz click en la portada para subir la foto. Todo se guarda solo.</p>
         </div>
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <span onClick="{{ bulkCovers }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#7C2F3E; color:#FFF7EC; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(124,47,62,0.3);" style-hover="background:#672836;">{{ coversBtnLabel }}</span>
           <span onClick="{{ openBulk }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(201,162,75,0.3);" style-hover="background:#d9b25b;">⬆ Carga masiva</span>
           <span onClick="{{ addLibro }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(94,31,51,0.25);" style-hover="background:#244031;">+ Añadir libro</span>
         </div>
       </div>
-      <div style="margin-bottom:22px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">En <strong>Género</strong> usa palabras como Fantasía, Romance, Manga, Infantil, Clásicos o Thriller para que el libro aparezca en los filtros del catálogo. Los libros marcados <strong>Vendido</strong> dejan de mostrarse en la página.</div>
+      <div style="margin-bottom:16px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">En <strong>Género</strong> usa palabras como Fantasía, Romance, Manga, Infantil, Clásicos o Thriller para que el libro aparezca en los filtros del catálogo. Los libros marcados <strong>Vendido</strong> (o con stock 0) dejan de mostrarse en la página. Si llenas <strong>Precio antes</strong>, se muestra la oferta con el % de descuento.</div>
+      <div style="margin-bottom:22px; position:relative; max-width:460px;">
+        <span style="position:absolute; left:16px; top:50%; transform:translateY(-50%); width:13px; height:13px; border:2px solid #A07F5E; border-radius:50%;"></span>
+        <input value="{{ aSearch }}" onInput="{{ onASearch }}" placeholder="Buscar por título, autor o código…" style="width:100%; padding:12px 16px 12px 42px; font-family:'Outfit',sans-serif; font-size:14.5px; color:#34251A; background:#FFFDF8; border:1px solid #E3D2B8; border-radius:999px; outline:none;">
+      </div>
 
       <sc-if value="{{ bulkOpen }}" hint-placeholder-val="{{ false }}">
       <div style="margin-bottom:22px; background:#FFFDF8; border:1px solid #C9A24B; border-radius:16px; padding:clamp(18px,3vw,26px); box-shadow:0 10px 28px rgba(52,37,26,0.08);">
@@ -663,7 +707,10 @@
           <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
             <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;">
               <span style="font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:#8A715A; background:#F0E6D2; padding:4px 9px; border-radius:6px;">{{ l.code }}</span>
-              <span onClick="{{ l.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span onClick="{{ l.onSold }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#2E6B41; padding:6px 12px; border-radius:999px; border:1px solid #B9C4B4;" style-hover="background:#E3EDE3;">✓ Marcar vendido</span>
+                <span onClick="{{ l.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
+              </div>
             </div>
             <div style="display:grid; grid-template-columns:110px 1fr; gap:20px; align-items:start;">
               <div style="display:flex; flex-direction:column; gap:8px;">
@@ -673,6 +720,7 @@
                     <div style="{{ l.imgStyle }}"></div>
                   </sc-if>
                 </div>
+                <span onClick="{{ l.onFindCover }}" style="cursor:pointer; font-size:11.5px; font-weight:800; color:#9A7A1E; text-align:center; border:1px solid #D9BC77; border-radius:999px; padding:6px 8px;" style-hover="background:#F1E6CF;">🔍 Buscar portada</span>
                 <sc-if value="{{ l.hasImg }}" hint-placeholder-val="{{ false }}">
                   <span onClick="{{ l.onClearImg }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span>
                 </sc-if>
@@ -693,6 +741,14 @@
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio ($)</label>
                   <input value="{{ l.price }}" onChange="{{ l.onPrice }}" type="number" min="0" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio antes ($)</label>
+                  <input value="{{ l.priceOldVal }}" onChange="{{ l.onPriceOld }}" type="number" min="0" placeholder="Solo si hay oferta" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Stock (unidades)</label>
+                  <input value="{{ l.stockVal }}" onChange="{{ l.onStock }}" type="number" min="0" placeholder="Vacío = sin control" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Estado</label>
@@ -752,6 +808,7 @@
                     <div style="{{ c.imgStyle }}"></div>
                   </sc-if>
                 </div>
+                <span onClick="{{ c.onFindCover }}" style="cursor:pointer; font-size:11.5px; font-weight:800; color:#9A7A1E; text-align:center; border:1px solid #D9BC77; border-radius:999px; padding:6px 8px;" style-hover="background:#F1E6CF;">🔍 Buscar portada</span>
                 <sc-if value="{{ c.hasImg }}" hint-placeholder-val="{{ false }}">
                   <span onClick="{{ c.onClearImg }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span>
                 </sc-if>
@@ -815,7 +872,8 @@
       <div style="display:flex; flex-direction:column; gap:18px;">
         <sc-for list="{{ merch }}" as="m" hint-placeholder-count="2">
           <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
-            <div style="display:flex; align-items:center; justify-content:flex-end; margin-bottom:14px;">
+            <div style="display:flex; align-items:center; justify-content:flex-end; gap:8px; margin-bottom:14px;">
+              <span onClick="{{ m.onSold }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#2E6B41; padding:6px 12px; border-radius:999px; border:1px solid #B9C4B4;" style-hover="background:#E3EDE3;">✓ Marcar agotado</span>
               <span onClick="{{ m.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
             </div>
             <div style="display:grid; grid-template-columns:130px 1fr; gap:20px; align-items:start;">
@@ -844,6 +902,14 @@
                   <input value="{{ m.price }}" onChange="{{ m.onPrice }}" type="number" min="0" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio antes ($)</label>
+                  <input value="{{ m.priceOldVal }}" onChange="{{ m.onPriceOld }}" type="number" min="0" placeholder="Solo si hay oferta" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Stock (unidades)</label>
+                  <input value="{{ m.stockVal }}" onChange="{{ m.onStock }}" type="number" min="0" placeholder="Vacío = sin control" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Disponibilidad</label>
                   <select value="{{ m.disp }}" onChange="{{ m.onDisp }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                     <option value="Disponible">Disponible</option>
@@ -870,14 +936,17 @@
       <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:22px;">
         <div>
           <h2 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:30px; color:#2A1C12;">Eventos y experiencias</h2>
-          <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ eventosCount }} eventos · los más próximos aparecen primero en la página.</p>
+          <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ eventosCount }} eventos manuales · los más próximos aparecen primero y los pasados se ocultan solos. {{ resEventosNota }}</p>
         </div>
         <span onClick="{{ addEvento }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#2A1C12; color:#F4E9D8; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(42,28,18,0.3);" style-hover="background:#3d2a1c;">+ Añadir evento</span>
       </div>
       <div style="display:flex; flex-direction:column; gap:18px;">
         <sc-for list="{{ eventos }}" as="e" hint-placeholder-count="2">
           <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
-            <div style="display:flex; align-items:center; justify-content:flex-end; margin-bottom:14px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;">
+              <div>
+                <sc-if value="{{ e.isPast }}" hint-placeholder-val="{{ false }}"><span style="display:inline-block; padding:4px 11px; border-radius:999px; font-size:11.5px; font-weight:800; background:#ECE5DA; color:#7A6450;">Ya pasó · oculto en la página</span></sc-if>
+              </div>
               <span onClick="{{ e.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
             </div>
             <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; align-items:start;">
@@ -900,6 +969,10 @@
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Fecha (texto)</label>
                   <input value="{{ e.date }}" onChange="{{ e.onDate }}" placeholder="Vie 27 jun" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Fecha real (se oculta al pasar)</label>
+                  <input value="{{ e.fechaVal }}" onChange="{{ e.onFecha }}" type="date" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Hora</label>
@@ -930,7 +1003,12 @@
     <div data-screen-label="Admin Pedidos">
       <div style="margin-bottom:18px;">
         <h2 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:30px; color:#3A5A6B;">Pedidos y consultas</h2>
-        <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ pedidosCount }} registros · {{ pedidosNuevos }} sin atender. Cada pedido del carrito y cada consulta de la web queda guardado aquí.</p>
+        <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ pedidosCount }} registros · {{ pedidosNuevos }} sin atender. Cada pedido del carrito y cada consulta de la web queda guardado aquí. Al marcar un pedido como <strong>Entregado</strong>, el stock de sus productos se descuenta solo.</p>
+      </div>
+      <div data-noscroll="" style="margin-bottom:18px; display:flex; gap:9px; overflow-x:auto; white-space:nowrap; padding-bottom:4px;">
+        <sc-for list="{{ pedidoChips }}" as="chip" hint-placeholder-count="5">
+          <span onClick="{{ chip.onClick }}" style="{{ chip.style }}">{{ chip.label }}</span>
+        </sc-for>
       </div>
       <sc-if value="{{ pedidosEmpty }}" hint-placeholder-val="{{ true }}">
         <div style="background:#FFFDF8; border:1px dashed #D9C7AC; border-radius:16px; padding:44px 20px; text-align:center; color:#8A715A;">
@@ -963,6 +1041,8 @@
                 <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:4px;">Cliente</div>
                 <div style="font-size:14.5px; color:#34251A; font-weight:600;">{{ p.clienteLabel }}</div>
                 <sc-if value="{{ p.hasCel }}" hint-placeholder-val="{{ false }}"><a href="{{ p.waCliente }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:6px; margin-top:6px; text-decoration:none; font-size:13px; font-weight:700; color:#2E6B41;"><span style="width:6px; height:6px; border-radius:50%; background:#2E6B41;"></span>{{ p.celular }}</a></sc-if>
+                <sc-if value="{{ p.hasEntrega }}" hint-placeholder-val="{{ false }}"><div style="margin-top:5px; font-size:12.5px; font-weight:700; color:#5A6472;">{{ p.entrega }}</div></sc-if>
+                <sc-if value="{{ p.hasPago }}" hint-placeholder-val="{{ false }}"><div style="margin-top:3px; font-size:12.5px; font-weight:700; color:#2E6B41;">💳 {{ p.pago }}</div></sc-if>
               </div>
               <div style="grid-column:span 2;">
                 <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:4px;">Detalle</div>
@@ -1022,6 +1102,23 @@
           <input value="{{ cfgWhatsapp }}" onChange="{{ onCfgWhatsapp }}" placeholder="593960186336 (con código de país, sin +)" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
         </div>
         <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Link de pago con tarjeta</label>
+          <input value="{{ cfgPayLink }}" onChange="{{ onCfgPayLink }}" placeholder="https://ppls.me/… (Payphone, De Una, PlacetoPay…)" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Si tienes un link de cobro (Payphone, De Una, etc.), pégalo aquí: el carrito mostrará el botón <strong>«Pagar ahora»</strong> cuando el cliente elija pago con tarjeta. El cliente escribe el monto total que le muestra el carrito.</p>
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Datos para transferencia</label>
+          <textarea value="{{ cfgPayTransfer }}" onChange="{{ onCfgPayTransfer }}" rows="4" placeholder="Banco Pichincha&#10;Cta. de ahorros 22XXXXXXXX&#10;Titular: … · Cédula: …&#10;Correo: lamadriguera.guayaquil@gmail.com" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none; resize:vertical;"></textarea>
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Estos datos se muestran en el carrito (con botón de copiar) cuando el cliente elige transferencia. Sin intermediarios ni comisiones.</p>
+        </div>
+        <div style="height:1px; background:#EADBC4;"></div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Conexión con tu app de reservas</label>
+          <input value="{{ cfgResKey }}" onChange="{{ onCfgResKey }}" placeholder="Pega aquí la clave API (AIza…) del proyecto la-madriguera-cb489" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Con esto la página muestra los eventos de tu app de reservas con <strong>cupos en vivo</strong> («Agotado» automático), y cada reserva web se anota en los <strong>Interesados</strong> de tu app. La clave está en Firebase → proyecto <strong>la-madriguera-cb489</strong> → Configuración del proyecto → Tus apps → apiKey. Estado: <strong>{{ resStatus }}</strong></p>
+        </div>
+        <div style="height:1px; background:#EADBC4;"></div>
+        <div>
           <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Clave de administrador</label>
           <input value="{{ cfgPass }}" onChange="{{ onCfgPass }}" placeholder="madriguera" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
           <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Es la clave que te pide la app al pulsar «Administrar» en el pie de tu página. Cámbiala por una que solo tú sepas. (Por defecto: madriguera)</p>
@@ -1069,12 +1166,17 @@
           <pre style="margin:12px 0 0; background:#1C2A20; border:1px solid rgba(247,239,226,0.14); border-radius:10px; padding:13px 15px; overflow-x:auto; font-family:ui-monospace,Menlo,monospace; font-size:11.5px; line-height:1.6; color:#CFE6CC; white-space:pre;">rules_version = '2';
 service cloud.firestore {
   match /databases/{db}/documents {
+    match /pedidos/{id} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
     match /{doc=**} {
       allow read: if true;
       allow write: if request.auth != null;
     }
   }
 }</pre>
+          <p style="margin:10px 0 0; font-size:12.5px; line-height:1.6; color:#AFBDA8;"><strong style="color:#E9CF8B;">Importante:</strong> la regla de <strong>pedidos</strong> permite que tus clientes (que no tienen usuario) registren su pedido en tu panel. Sin ella, los pedidos solo quedan en el navegador del cliente y nunca los verías aquí. Si ya habías pegado las reglas antiguas, vuelve a pegar estas y pulsa Publicar.</p>
         </div>
         <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
           <span onClick="{{ importSeed }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 8px 20px rgba(201,162,75,0.3);" style-hover="background:#d9b25b;">☁ Subir mi catálogo actual a la nube</span>
@@ -1150,7 +1252,35 @@ service cloud.firestore {
         <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:26px; color:#5E1F33;">{{ cartSubtotal }}</span>
       </div>
       <input value="{{ coName }}" onInput="{{ onCoName }}" placeholder="Tu nombre (opcional)" style="width:100%; padding:12px 14px; border:1px solid #E3D2B8; border-radius:10px; font-family:'Outfit',sans-serif; font-size:14.5px; color:#34251A; background:#FFFDF8; outline:none;">
-      <input value="{{ coNote }}" onInput="{{ onCoNote }}" placeholder="Nota: entrega, color, etc. (opcional)" style="width:100%; padding:12px 14px; border:1px solid #E3D2B8; border-radius:10px; font-family:'Outfit',sans-serif; font-size:14.5px; color:#34251A; background:#FFFDF8; outline:none;">
+      <input value="{{ coPhone }}" onInput="{{ onCoPhone }}" type="tel" inputmode="tel" placeholder="Tu celular * (para confirmarte el pedido)" style="width:100%; padding:12px 14px; border:1px solid #E3D2B8; border-radius:10px; font-family:'Outfit',sans-serif; font-size:14.5px; color:#34251A; background:#FFFDF8; outline:none;">
+      <select value="{{ coEntrega }}" onChange="{{ onCoEntrega }}" style="width:100%; padding:12px 14px; border:1px solid #E3D2B8; border-radius:10px; font-family:'Outfit',sans-serif; font-size:14.5px; font-weight:600; color:#34251A; background:#FFFDF8; outline:none;">
+        <option value="Retiro en local">🏠 Retiro en el local (Urdesa)</option>
+        <option value="Envío en Guayaquil">🛵 Envío dentro de Guayaquil</option>
+        <option value="Envío nacional">📦 Envío nacional</option>
+      </select>
+      <select value="{{ coPago }}" onChange="{{ onCoPago }}" style="width:100%; padding:12px 14px; border:1px solid #E3D2B8; border-radius:10px; font-family:'Outfit',sans-serif; font-size:14.5px; font-weight:600; color:#34251A; background:#FFFDF8; outline:none;">
+        <option value="Transferencia bancaria">🏦 Pago por transferencia</option>
+        <option value="Link de pago">💳 Pago con tarjeta (link de pago)</option>
+        <option value="Efectivo">💵 Efectivo al retirar o recibir</option>
+      </select>
+      <sc-if value="{{ payShowTransfer }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#EFE2CB; border:1px solid #E3D2B8; border-radius:11px; padding:12px 14px;">
+          <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Datos para tu transferencia</div>
+          <div style="font-size:13.5px; line-height:1.6; color:#3A2C1F; white-space:pre-line;">{{ payTransferText }}</div>
+          <span onClick="{{ copyPayData }}" style="display:inline-block; margin-top:9px; cursor:pointer; font-size:12.5px; font-weight:800; color:#5E1F33; border:1.5px solid #B9C4B4; padding:7px 14px; border-radius:999px;" style-hover="background:#F2E3E2;">📋 Copiar datos</span>
+          <div style="margin-top:8px; font-size:12px; color:#8A715A;">Envía el comprobante por WhatsApp junto con tu pedido.</div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ payShowLink }}" hint-placeholder-val="{{ false }}">
+        <a href="{{ payLinkHref }}" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; background:#2E6B41; color:#F4F9F3; font-weight:800; font-size:14.5px; padding:13px; border-radius:11px; box-shadow:0 6px 16px rgba(46,107,65,0.3); transition:background .15s ease;" style-hover="background:#245434;">💳 Pagar ahora · {{ cartSubtotal }}</a>
+      </sc-if>
+      <sc-if value="{{ payLinkMissing }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:12.5px; color:#8A715A; background:#F0E6D2; border-radius:10px; padding:10px 13px;">Te enviaremos el link de pago por WhatsApp al confirmar tu pedido.</div>
+      </sc-if>
+      <input value="{{ coNote }}" onInput="{{ onCoNote }}" placeholder="Nota: dirección, color, dedicatoria… (opcional)" style="width:100%; padding:12px 14px; border:1px solid #E3D2B8; border-radius:10px; font-family:'Outfit',sans-serif; font-size:14.5px; color:#34251A; background:#FFFDF8; outline:none;">
+      <sc-if value="{{ coHasErr }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:13px; font-weight:700; color:#9A4A3C;">{{ coErr }}</div>
+      </sc-if>
       <span onClick="{{ checkout }}" style="cursor:pointer; display:flex; align-items:center; justify-content:center; gap:9px; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:15.5px; padding:15px; border-radius:13px; box-shadow:0 8px 20px rgba(94,31,51,0.28); transition:background .15s ease;" style-hover="background:#244031;"><span style="width:8px; height:8px; border-radius:50%; background:#9CD9A6;"></span>Enviar pedido por WhatsApp</span>
       <div style="display:flex; align-items:center; justify-content:space-between;">
         <span onClick="{{ clearCart }}" style="cursor:pointer; font-size:12.5px; font-weight:700; color:#9A4A3C;">Vaciar carrito</span>
@@ -1158,6 +1288,46 @@ service cloud.firestore {
       </div>
     </div>
     </sc-if>
+  </div>
+</div>
+</sc-if>
+
+<!-- ============ FICHA DE PRODUCTO ============ -->
+<sc-if value="{{ detailOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeDetail }}" style="position:fixed; inset:0; z-index:290; background:rgba(42,28,18,0.55); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); display:flex; align-items:center; justify-content:center; padding:16px;">
+  <div onClick="{{ stop }}" data-noscroll="" style="width:100%; max-width:780px; max-height:92vh; overflow-y:auto; background:#FFFDF8; border-radius:22px; box-shadow:0 30px 70px rgba(42,28,18,0.45); font-family:'Outfit',sans-serif;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:0;">
+      <div style="position:relative; min-height:340px; background:repeating-linear-gradient(135deg,#F1E5D0,#F1E5D0 12px,#E9D9BE 12px,#E9D9BE 24px);">
+        <sc-if value="{{ dHasImg }}" hint-placeholder-val="{{ false }}"><div style="{{ dImgStyle }}"></div></sc-if>
+        <sc-if value="{{ dHasOld }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; left:14px; top:14px; background:#9A7A1E; color:#FBF3E0; font-weight:800; font-size:12.5px; padding:5px 12px; border-radius:999px; box-shadow:0 4px 12px rgba(42,28,18,0.3);">{{ dOffLabel }}</span></sc-if>
+        <sc-if value="{{ dHasCode }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; left:14px; bottom:14px; font-family:ui-monospace,Menlo,monospace; font-size:11px; background:rgba(52,37,26,0.74); color:#F7EFE2; padding:4px 9px; border-radius:6px; letter-spacing:.04em;">{{ dCode }}</span></sc-if>
+      </div>
+      <div style="padding:clamp(20px,3.5vw,30px); display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+          <span style="font-size:11px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:#7C2F3E;">{{ dKindLabel }}</span>
+          <span onClick="{{ closeDetail }}" style="cursor:pointer; flex-shrink:0; font-size:20px; line-height:1; color:#A07F5E; padding:2px 6px;">✕</span>
+        </div>
+        <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(24px,3vw,30px); line-height:1.12; color:#34251A; text-wrap:balance;">{{ dTitle }}</h3>
+        <sc-if value="{{ dHasSub }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:16px; color:#8A715A;">{{ dSub }}</span></sc-if>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <sc-if value="{{ dHasBadge1 }}" hint-placeholder-val="{{ false }}"><span style="{{ dBadge1Style }}">{{ dBadge1 }}</span></sc-if>
+          <sc-if value="{{ dHasBadge2 }}" hint-placeholder-val="{{ false }}"><span style="{{ dBadge2Style }}">{{ dBadge2 }}</span></sc-if>
+        </div>
+        <sc-if value="{{ dHasDesc }}" hint-placeholder-val="{{ false }}"><p style="margin:2px 0 0; font-size:14.5px; line-height:1.55; color:#5E4632;">{{ dDesc }}</p></sc-if>
+        <div style="margin-top:4px; display:flex; align-items:baseline; gap:10px;">
+          <sc-if value="{{ dHasOld }}" hint-placeholder-val="{{ false }}"><span style="font-size:15px; font-weight:700; color:#A07F5E; text-decoration:line-through;">{{ dOldLabel }}</span></sc-if>
+          <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:30px; color:#7C2F3E;">{{ dPriceLabel }}</span>
+        </div>
+        <div style="margin-top:10px; display:flex; flex-direction:column; gap:9px;">
+          <sc-if value="{{ dCanCart }}" hint-placeholder-val="{{ false }}">
+            <span onClick="{{ dAdd }}" style="display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:15px; padding:14px; border-radius:12px; box-shadow:0 8px 20px rgba(94,31,51,0.28); transition:background .15s ease;" style-hover="background:#244031;"><span style="font-size:17px; line-height:1;">＋</span>Agregar al carrito</span>
+          </sc-if>
+          <a href="{{ dWaHref }}" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; background:transparent; color:#5E1F33; border:1.5px solid #B9C4B4; font-weight:700; font-size:13.5px; padding:12px; border-radius:12px; transition:background .15s ease;" style-hover="background:#F2E3E2;"><span style="width:7px; height:7px; border-radius:50%; background:#2E6B41;"></span>{{ dWaLabel }}</a>
+          <span onClick="{{ shareDetail }}" style="display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; background:transparent; color:#9A7A1E; border:1.5px solid #D9BC77; font-weight:700; font-size:13.5px; padding:12px; border-radius:12px; transition:background .15s ease;" style-hover="background:#F1E6CF;">🔗 Compartir link</span>
+        </div>
+        <span style="margin-top:4px; font-size:12px; color:#A07F5E; text-align:center;">Comparte el link por WhatsApp o Instagram: se abre directo en esta ficha.</span>
+      </div>
+    </div>
   </div>
 </div>
 </sc-if>
@@ -1222,6 +1392,40 @@ service cloud.firestore {
 </div>
 </sc-if>
 
+<!-- ============ SELECTOR DE PORTADAS ============ -->
+<sc-if value="{{ coverOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeCover }}" style="position:fixed; inset:0; z-index:330; background:rgba(42,28,18,0.55); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); display:flex; align-items:center; justify-content:center; padding:16px;">
+  <div onClick="{{ stop }}" data-noscroll="" style="width:100%; max-width:640px; max-height:90vh; overflow-y:auto; background:#FFFDF8; border-radius:20px; padding:clamp(20px,3.5vw,28px); box-shadow:0 30px 70px rgba(42,28,18,0.45); font-family:'Outfit',sans-serif;">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+      <div>
+        <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:21px; color:#5E1F33;">Elige la portada</h3>
+        <p style="margin:4px 0 0; font-size:13.5px; color:#8A715A;">{{ coverTitle }} · {{ coverSub }}</p>
+      </div>
+      <span onClick="{{ closeCover }}" style="cursor:pointer; flex-shrink:0; font-size:20px; line-height:1; color:#A07F5E; padding:2px 6px;">✕</span>
+    </div>
+    <sc-if value="{{ coverLoading }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:36px 0; text-align:center; font-size:14.5px; font-weight:700; color:#8A715A;">Buscando portadas…</div>
+    </sc-if>
+    <sc-if value="{{ coverHasErr }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:14px; font-size:13.5px; font-weight:700; color:#9A4A3C; line-height:1.5;">{{ coverErr }}</div>
+    </sc-if>
+    <sc-if value="{{ coverHasOpts }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:16px; display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:14px;">
+        <sc-for list="{{ coverOpts }}" as="o" hint-placeholder-count="4">
+          <div onClick="{{ o.onUse }}" style="cursor:pointer; display:flex; flex-direction:column; gap:6px; border:1px solid #E3D2B8; border-radius:12px; padding:8px; transition:border-color .15s ease;" style-hover="border-color:#C9A24B;">
+            <div style="position:relative; aspect-ratio:3/4; border-radius:8px; overflow:hidden; background:#F1E5D0;">
+              <div style="{{ o.imgStyle }}"></div>
+            </div>
+            <span style="font-size:11px; line-height:1.35; color:#6E5946;">{{ o.label }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <p style="margin:14px 0 0; font-size:12px; color:#A07F5E;">Toca una portada para usarla. Si ninguna es tu edición, cierra y sube tu propia foto haciendo click en la portada del libro.</p>
+    </sc-if>
+  </div>
+</div>
+</sc-if>
+
 <!-- ============ TOAST ============ -->
 <sc-if value="{{ toastShow }}" hint-placeholder-val="{{ false }}">
 <div style="position:fixed; left:50%; bottom:26px; transform:translateX(-50%); z-index:340; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:14px; padding:13px 22px; border-radius:999px; box-shadow:0 12px 30px rgba(42,28,18,0.4); animation:lmtoast .2s ease; display:flex; align-items:center; gap:9px;"><span style="width:8px; height:8px; border-radius:50%; background:#9CD9A6;"></span>{{ toast }}</div>
@@ -1234,12 +1438,15 @@ service cloud.firestore {
 class Component extends DCLogic {
   state = {
     view: 'store', page: 'inicio', search: '', category: 'todos',
-    adminTab: 'libros',
+    merchCat: 'todas', merchSearch: '',
+    adminTab: 'libros', aSearch: '', pedidoFilter: 'todos',
     cms: null, savedAt: 0,
-    cart: [], cartOpen: false, coName: '', coNote: '',
+    detail: null,
+    cart: [], cartOpen: false, coName: '', coPhone: '', coEntrega: 'Retiro en local', coPago: 'Transferencia bancaria', coNote: '', coErr: '',
     lead: null, leadName: '', leadPhone: '', leadErr: '',
     pwOpen: false, pwInput: '', pwEmail: '', pwErr: '',
     bulkOpen: false, bulkText: '', bulkErr: '',
+    cover: null, coversBusy: false, coversDone: 0, coversTotal: 0, coversFound: 0,
     fb: 'connecting', authed: false, adminEmail: '',
     mailStatus: '', toast: ''
   };
@@ -1292,17 +1499,20 @@ class Component extends DCLogic {
     this._onStorage = () => this.loadCMS();
     window.addEventListener('storage', this._onStorage);
     window.addEventListener('focus', this._onStorage);
+    this.applyHash();
+    window.addEventListener('hashchange', this.applyHash);
     this.syncChips();
     this.bootFirebase(0);
   }
   componentWillUnmount() {
     window.removeEventListener('storage', this._onStorage);
     window.removeEventListener('focus', this._onStorage);
+    window.removeEventListener('hashchange', this.applyHash);
     (this._unsubs || []).forEach(fn => { try { fn(); } catch (e) {} });
     if (this._fbTimer) clearTimeout(this._fbTimer);
     if (this._toastT) clearTimeout(this._toastT);
   }
-  componentDidUpdate() { this.syncChips(); }
+  componentDidUpdate() { this.syncChips(); this.bootReservas(); }
 
   // ---------- Firebase ----------
   loadFbScript(src) {
@@ -1343,6 +1553,58 @@ class Component extends DCLogic {
       .then(start)
       .catch((e) => { console.error('[LM] Firebase load', e); this.setState({ fb: 'offline' }); });
   }
+  // ---------- conexión con la app de reservas (la-madriguera-cb489) ----------
+  RES_PROJECT = { authDomain: 'la-madriguera-cb489.firebaseapp.com', projectId: 'la-madriguera-cb489' };
+  bootReservas() {
+    if (this._resBooted) return;
+    const key = ((this.cfg().reservasKey || '') + '').trim();
+    if (!key) return;
+    if (!(typeof window !== 'undefined' && window.firebase && window.firebase.firestore)) return;
+    try {
+      this._resBooted = true;
+      let app;
+      try { app = window.firebase.app('reservas'); }
+      catch (e) { app = window.firebase.initializeApp(Object.assign({ apiKey: key }, this.RES_PROJECT), 'reservas'); }
+      this.resDb = app.firestore();
+      this._unsubs = this._unsubs || [];
+      const u = this.resDb.collection('lm_eventos').onSnapshot((snap) => {
+        const arr = [];
+        snap.forEach((d) => arr.push(Object.assign({ id: d.id }, d.data())));
+        this._resEventos = arr;
+        this.setState({ savedAt: Date.now() });
+      }, (e) => { console.error('[LM] reservas', e); this._resErr = true; this.setState({ savedAt: Date.now() }); });
+      this._unsubs.push(u);
+    } catch (e) { console.error('[LM] reservas init', e); this._resBooted = false; }
+  }
+  fmtFechaCorta(f) {
+    const p = ((f || '') + '').split('-');
+    if (p.length !== 3) return (f || '') + '';
+    const d = new Date(+p[0], +p[1] - 1, +p[2]);
+    if (isNaN(d.getTime())) return (f || '') + '';
+    const dias = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+    return dias[d.getDay()] + ' ' + d.getDate() + ' ' + meses[d.getMonth()];
+  }
+  resEventos() {
+    return (this._resEventos || []).map(ev => {
+      const vend = (typeof ev.vendidas === 'number') ? ev.vendidas : 0;
+      const disp = Math.max(0, (ev.cuposTotal || 0) - vend);
+      return {
+        id: 'res_' + ev.id,
+        name: ev.nombre || 'Evento',
+        date: this.fmtFechaCorta(ev.fecha),
+        fecha: ev.fecha || '',
+        time: ev.hora || '',
+        includes: ev.descripcion || '',
+        price: (+ev.precio > 0) ? ('$' + ev.precio) : 'Entrada libre',
+        cupos: disp > 0 ? (disp + (disp === 1 ? ' cupo' : ' cupos')) : 'Agotado',
+        agotado: disp <= 0,
+        imagen: '',
+        resLive: true
+      };
+    });
+  }
+
   subscribe() {
     if (!this.db) return;
     this._live = this._live || this.defaultCMS();
@@ -1413,6 +1675,121 @@ class Component extends DCLogic {
   logoBox(url, size, extra) {
     const s = { width: size + 'px', height: size + 'px', borderRadius: '12px', overflow: 'hidden', background: '#FFFDF8', backgroundImage: 'url("' + (url || '') + '")', backgroundSize: 'cover', backgroundPosition: 'center' };
     return extra ? Object.assign(s, extra) : s;
+  }
+
+  // ---------- rutas y ficha de producto ----------
+  PAGES = ['inicio', 'catalogo', 'segunda', 'merch', 'eventos', 'vender', 'comprar', 'visitanos'];
+  applyHash = () => {
+    if (typeof window === 'undefined') return;
+    let h = (window.location.hash || '').replace(/^#/, '');
+    try { h = decodeURIComponent(h); } catch (e) {}
+    if (!h) return;
+    const parts = h.split('/');
+    const kindPage = { libro: 'catalogo', merch: 'merch', evento: 'eventos' };
+    if (kindPage[parts[0]] && parts[1]) {
+      this.setState({ page: kindPage[parts[0]], detail: { kind: parts[0], id: parts.slice(1).join('/') } });
+    } else if (this.PAGES.indexOf(h) >= 0) {
+      this.setState({ page: h, detail: null });
+    }
+  };
+  setHash(h) {
+    if (typeof window === 'undefined') return;
+    try { window.history.replaceState(null, '', h ? ('#' + h) : (window.location.pathname + window.location.search)); }
+    catch (e) { window.location.hash = h || ''; }
+  }
+  openDetail(kind, id) {
+    this.setState({ detail: { kind, id: (id || '') + '' } });
+    this.setHash(kind + '/' + encodeURIComponent((id || '') + ''));
+  }
+  closeDetail = () => {
+    const pg = this.state.page;
+    this.setState({ detail: null });
+    this.setHash(pg === 'inicio' ? '' : pg);
+  };
+  detailUrl() {
+    const det = this.state.detail;
+    if (!det || typeof window === 'undefined') return '';
+    return window.location.origin + window.location.pathname + window.location.search + '#' + det.kind + '/' + encodeURIComponent(det.id);
+  }
+  shareDetail = () => {
+    const url = this.detailUrl();
+    if (!url) return;
+    const nav = (typeof navigator !== 'undefined') ? navigator : null;
+    if (nav && nav.share) { nav.share({ title: 'La Madriguera', url }).catch(() => {}); return; }
+    if (nav && nav.clipboard && nav.clipboard.writeText) {
+      nav.clipboard.writeText(url).then(() => this.flash('Link copiado ✓')).catch(() => { try { window.prompt('Copia el link:', url); } catch (e) {} });
+      return;
+    }
+    try { window.prompt('Copia el link:', url); } catch (e) {}
+  };
+
+  // ---------- fechas de eventos ----------
+  MESES = { ene: 0, feb: 1, mar: 2, abr: 3, may: 4, jun: 5, jul: 6, ago: 7, sep: 8, set: 8, oct: 9, nov: 10, dic: 11 };
+  evtTime(e) {
+    if (e && e.fecha) {
+      const p = ((e.fecha) + '').split('-');
+      if (p.length === 3) { const d = new Date(+p[0], +p[1] - 1, +p[2], 23, 59); if (!isNaN(d.getTime())) return d.getTime(); }
+    }
+    const m = /(\d{1,2})\s*(?:de\s+)?(ene|feb|mar|abr|may|jun|jul|ago|sep|set|oct|nov|dic)/i.exec(((e && e.date) || '') + '');
+    if (m) {
+      const now = new Date();
+      const d = new Date(now.getFullYear(), this.MESES[m[2].toLowerCase()], +m[1], 23, 59);
+      if (!isNaN(d.getTime())) return d.getTime();
+    }
+    return null;
+  }
+  isPastEvent(e) { const t = this.evtTime(e); return t != null && t < Date.now(); }
+
+  // ---------- stock ----------
+  hasStockNum(x) { return !!x && typeof x.stock === 'number' && isFinite(x.stock); }
+  stockOf(kind, id) {
+    if (!id) return null;
+    const C = this.currentCMS();
+    if (kind === 'Libro') {
+      const l = (C.libros || []).find(x => x.id === id || x.code === id);
+      if (l) return this.hasStockNum(l) ? l.stock : null;
+      const c = (C.consig || []).find(x => x.id === id || x.code === id);
+      if (c) return 1;
+      return null;
+    }
+    if (kind === 'Merch') {
+      const m = (C.merch || []).find(x => x.id === id);
+      return this.hasStockNum(m) ? m.stock : null;
+    }
+    return null;
+  }
+  setNumOpt(coll, id, key, val) {
+    const s = ((val || '') + '').trim();
+    if (s === '') { this.setField(coll, id, key, null); return; }
+    const n = parseFloat(s);
+    this.setField(coll, id, key, isNaN(n) ? null : n);
+  }
+  discountStock(p) {
+    let n = 0;
+    (p.items || []).forEach(it => {
+      if (!it.id) return;
+      const coll = it.kind === 'Merch' ? 'merch' : 'libros';
+      const C = this.currentCMS();
+      const item = (C[coll] || []).find(x => x.id === it.id);
+      if (item && this.hasStockNum(item)) {
+        const ns = Math.max(0, item.stock - (it.qty || 1));
+        this.setField(coll, item.id, 'stock', ns);
+        if (ns === 0) this.setField(coll, item.id, 'disp', 'Vendido');
+        n++;
+      }
+    });
+    if (n) this.flash('Stock descontado automáticamente ✓');
+  }
+  setPedidoEstado(p, val) {
+    this.setField('pedidos', p.id, 'estado', val);
+    if (val === 'Entregado' && !p.stockDescontado && (p.items || []).some(it => it.id)) {
+      this.discountStock(p);
+      this.setField('pedidos', p.id, 'stockDescontado', true);
+    }
+  }
+
+  chipStyle(on) {
+    return { display: 'inline-block', padding: '8px 16px', borderRadius: '999px', fontSize: '13.5px', fontWeight: on ? 800 : 700, cursor: 'pointer', whiteSpace: 'nowrap', background: on ? '#7C2F3E' : '#FBF6EC', color: on ? '#FFF7EC' : '#5E4632', border: on ? '1px solid #7C2F3E' : '1px solid #E3D2B8', fontFamily: "'Outfit',sans-serif", transition: 'all .15s ease' };
   }
 
   // ---------- CMS (caché local) ----------
@@ -1548,6 +1925,101 @@ class Component extends DCLogic {
     reader.readAsDataURL(file);
   };
 
+  // ---------- portadas automáticas (OpenLibrary) ----------
+  searchCovers(title, author) {
+    const base = 'https://openlibrary.org/search.json?limit=12&fields=title,author_name,cover_i,first_publish_year&';
+    const pick = (docs) => (docs || []).filter(d => d.cover_i).slice(0, 6).map(d => ({
+      url: 'https://covers.openlibrary.org/b/id/' + d.cover_i + '-L.jpg',
+      thumb: 'https://covers.openlibrary.org/b/id/' + d.cover_i + '-M.jpg',
+      label: ((d.title || '') + (d.author_name && d.author_name.length ? ' · ' + d.author_name[0] : '') + (d.first_publish_year ? ' (' + d.first_publish_year + ')' : ''))
+    }));
+    const q1 = base + 'title=' + encodeURIComponent(title) + (author ? '&author=' + encodeURIComponent(author) : '');
+    return fetch(q1).then(r => r.json()).then(j => {
+      const opts = pick(j.docs);
+      if (opts.length) return opts;
+      return fetch(base + 'q=' + encodeURIComponent(title + ' ' + (author || ''))).then(r => r.json()).then(j2 => pick(j2.docs));
+    });
+  }
+  saveCoverFromUrl(url, coll, id) {
+    return fetch(url).then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.blob(); }).then(blob => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const img = new Image();
+        img.onload = () => {
+          try {
+            const max = 900;
+            let w = img.width, h = img.height;
+            if (w > max || h > max) { const r2 = Math.min(max / w, max / h); w = Math.round(w * r2); h = Math.round(h * r2); }
+            const cnv = document.createElement('canvas'); cnv.width = w; cnv.height = h;
+            const ctx = cnv.getContext('2d');
+            ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, w, h);
+            ctx.drawImage(img, 0, 0, w, h);
+            this.setField(coll, id, 'imagen', cnv.toDataURL('image/jpeg', 0.82));
+            resolve();
+          } catch (e) { reject(e); }
+        };
+        img.onerror = () => reject(new Error('img'));
+        img.src = ev.target.result;
+      };
+      reader.onerror = () => reject(new Error('read'));
+      reader.readAsDataURL(blob);
+    }));
+  }
+  findCover(coll, id) {
+    const it = (this.currentCMS()[coll] || []).find(x => x.id === id);
+    if (!it) return;
+    if (!((it.title || '').trim())) { this.flash('Escribe primero el título del libro.'); return; }
+    this.setState({ cover: { coll, id, title: it.title || '', author: it.author || '', loading: true, opts: [], err: '' } });
+    this.searchCovers(it.title || '', it.author || '').then(opts => {
+      const cv = this.state.cover;
+      if (!cv || cv.id !== id) return;
+      this.setState({ cover: Object.assign({}, cv, { loading: false, opts, err: opts.length ? '' : 'No encontramos portadas para este título. Prueba simplificar el título o sube una foto tuya.' }) });
+    }).catch(() => {
+      const cv = this.state.cover;
+      if (cv && cv.id === id) this.setState({ cover: Object.assign({}, cv, { loading: false, err: 'No se pudo buscar. Revisa tu conexión a internet.' }) });
+    });
+  }
+  useCover(opt) {
+    const cv = this.state.cover;
+    if (!cv) return;
+    this.setState({ cover: Object.assign({}, cv, { loading: true, err: '' }) });
+    this.saveCoverFromUrl(opt.url, cv.coll, cv.id)
+      .then(() => { this.setState({ cover: null }); this.flash('Portada guardada ✓'); })
+      .catch(() => {
+        const c2 = this.state.cover;
+        if (c2) this.setState({ cover: Object.assign({}, c2, { loading: false, err: 'No se pudo descargar esa portada. Prueba con otra.' }) });
+      });
+  }
+  closeCover = () => this.setState({ cover: null });
+  copyPayData = () => {
+    const t = ((this.cfg().payTransfer || '') + '').trim();
+    if (!t) return;
+    const nav = (typeof navigator !== 'undefined') ? navigator : null;
+    if (nav && nav.clipboard && nav.clipboard.writeText) nav.clipboard.writeText(t).then(() => this.flash('Datos copiados ✓')).catch(() => {});
+    else { try { window.prompt('Copia los datos:', t); } catch (e) {} }
+  };
+  bulkCovers = () => {
+    if (this.state.coversBusy) return;
+    const C = this.currentCMS();
+    const missing = (C.libros || []).filter(l => !l.imagen && ((l.title || '') + '').trim()).slice(0, 25);
+    if (!missing.length) { this.flash('Todos tus libros ya tienen portada 🎉'); return; }
+    this.setState({ coversBusy: true, coversDone: 0, coversTotal: missing.length, coversFound: 0 });
+    let i = 0, found = 0;
+    const next = () => {
+      if (i >= missing.length) {
+        this.setState({ coversBusy: false });
+        this.flash('Listo: ' + found + ' de ' + missing.length + ' portadas encontradas ✓');
+        return;
+      }
+      const l = missing[i]; i++;
+      this.searchCovers(l.title, l.author || '')
+        .then(opts => opts.length ? this.saveCoverFromUrl(opts[0].url, 'libros', l.id).then(() => { found++; this.setState({ coversFound: found }); }) : null)
+        .catch(() => {})
+        .then(() => { this.setState({ coversDone: i }); setTimeout(next, 400); });
+    };
+    next();
+  };
+
   // ---------- bulk ----------
   parseBulk(text) {
     const out = [];
@@ -1667,9 +2139,20 @@ class Component extends DCLogic {
   cuposStyle() { return { display: 'inline-block', padding: '4px 11px', borderRadius: '999px', fontSize: '11px', fontWeight: 800, background: 'rgba(247,239,226,0.94)', color: '#2E6B41', whiteSpace: 'nowrap', fontFamily: "'Outfit',sans-serif" }; }
 
   // ---------- catalog mapping ----------
+  effDisp(x) {
+    let disp = x.disp;
+    if (this.hasStockNum(x)) {
+      if (x.stock <= 0) disp = 'Vendido';
+      else if (x.stock === 1 && disp !== 'Reservado' && disp !== 'Por encargo') disp = 'Última unidad';
+      else if (disp === 'Vendido' && x.stock > 0) disp = 'Disponible';
+    }
+    return disp;
+  }
+  hasOffer(x) { return typeof x.priceOld === 'number' && isFinite(x.priceOld) && x.priceOld > (+x.price || 0) && (+x.price || 0) > 0; }
   toBook(l) {
     const g = ((l.genre || '') + '').toLowerCase();
     const cats = [];
+    const disp = this.effDisp(l);
     if (((l.estado || '') + '').toLowerCase().indexOf('usado') >= 0 || l.estado === 'Con detalles visibles' || l.estado === 'Como nuevo' || l.consigna) cats.push('usados');
     if ((l.estado || '') === 'Nuevo' && !cats.includes('usados')) cats.push('novedades');
     if (g.indexOf('roman') >= 0) cats.push('romance');
@@ -1678,10 +2161,11 @@ class Component extends DCLogic {
     if (g.indexOf('infantil') >= 0 || g.indexOf('juvenil') >= 0) cats.push('infantil');
     if (g.indexOf('clásic') >= 0 || g.indexOf('clasic') >= 0) cats.push('clasicos');
     if (g.indexOf('thriller') >= 0 || g.indexOf('misterio') >= 0 || g.indexOf('suspenso') >= 0) cats.push('thriller');
-    if (l.disp === 'Última unidad') cats.push('ultima');
-    if (l.disp === 'Oferta') cats.push('ofertas');
-    return Object.assign({}, l, { code: l.code || l.id, cats });
+    if (disp === 'Última unidad') cats.push('ultima');
+    if (disp === 'Oferta' || this.hasOffer(l)) cats.push('ofertas');
+    return Object.assign({}, l, { code: l.code || l.id, cats, disp });
   }
+  toMerch(m) { return Object.assign({}, m, { disp: this.effDisp(m) }); }
 
   // ---------- WhatsApp ----------
   waNum() { return (((this.cfg().whatsapp || '') + '').replace(/[^0-9]/g, '')) || this.WA; }
@@ -1698,6 +2182,19 @@ class Component extends DCLogic {
     const info = this.state.lead || {};
     const name = (this.state.leadName || '').trim();
     this.notifyEmail(info.subject || 'Pedido web · La Madriguera', Object.assign({}, info.fields || {}, { nombre_cliente: name || '(no indicado)', celular_cliente: phone, mensaje: 'El cliente dejó sus datos en la web para que lo contactes.' }));
+    if (this.resDb && info.kind === 'Evento') {
+      try {
+        this.resDb.collection('lm_interesados').add({
+          nombre: name || 'Cliente web',
+          telefono: phone,
+          correo: '',
+          interes: ((info.title || '') + (info.sub ? (' · ' + info.sub) : '') + ' — reserva desde la web'),
+          avisadoEl: null,
+          origen: 'web-madriguera',
+          createdAt: (window.firebase && window.firebase.firestore && window.firebase.firestore.FieldValue) ? window.firebase.firestore.FieldValue.serverTimestamp() : new Date()
+        }).catch(function () {});
+      } catch (e) {}
+    }
     this.saveOrder({ id: 'p' + Date.now(), tipo: info.kind || 'Consulta', canal: 'Consulta', estado: 'Nuevo', cliente: name, celular: phone, nota: info.title || '', total: 0, items: [{ title: info.title || '', qty: 1, price: 0 }], ts: Date.now(), order: Date.now() });
     if (info.waHref && typeof window !== 'undefined') window.open(info.waHref, '_blank', 'noopener');
     this.flash('¡Gracias! Te contactaremos pronto.');
@@ -1718,12 +2215,28 @@ class Component extends DCLogic {
     const cart = this.state.cart.slice();
     const key = kind + ':' + (item.id || item.code || item.title);
     const ex = cart.find(x => x.key === key);
+    const limit = this.stockOf(kind, item.id);
+    const cur = ex ? ex.qty : 0;
+    if (limit != null && cur + 1 > limit) {
+      this.flash(limit === 0 ? 'Lo sentimos, está agotado.' : ('Solo queda' + (limit === 1 ? '' : 'n') + ' ' + limit + ' unidad' + (limit === 1 ? '' : 'es') + '.'));
+      return;
+    }
     if (ex) ex.qty += 1;
     else cart.push({ key, kind, id: item.id, title: item.title, sub: item.sub || '', price: +item.price || 0, imagen: item.imagen || '', qty: 1 });
     this.saveCart(cart);
     this.flash('Agregado al carrito ✓');
   }
-  cartInc(key) { const cart = this.state.cart.map(x => x.key === key ? Object.assign({}, x, { qty: x.qty + 1 }) : x); this.saveCart(cart); }
+  cartInc(key) {
+    const it = this.state.cart.find(x => x.key === key);
+    if (it) {
+      const limit = this.stockOf(it.kind, it.id);
+      if (limit != null && it.qty + 1 > limit) {
+        this.flash('Solo queda' + (limit === 1 ? '' : 'n') + ' ' + limit + ' unidad' + (limit === 1 ? '' : 'es') + '.');
+        return;
+      }
+    }
+    const cart = this.state.cart.map(x => x.key === key ? Object.assign({}, x, { qty: x.qty + 1 }) : x); this.saveCart(cart);
+  }
   cartDec(key) { const cart = this.state.cart.map(x => x.key === key ? Object.assign({}, x, { qty: x.qty - 1 }) : x).filter(x => x.qty > 0); this.saveCart(cart); }
   cartRemove(key) { this.saveCart(this.state.cart.filter(x => x.key !== key)); }
   clearCart = () => this.saveCart([]);
@@ -1742,46 +2255,78 @@ class Component extends DCLogic {
   checkout = () => {
     if (!this.state.cart.length) return;
     const name = (this.state.coName || '').trim();
+    const phone = (this.state.coPhone || '').trim();
+    const entrega = this.state.coEntrega || 'Retiro en local';
     const note = (this.state.coNote || '').trim();
+    if (phone.replace(/[^0-9]/g, '').length < 7) {
+      this.setState({ coErr: 'Escribe tu celular (mínimo 7 dígitos) para poder confirmarte el pedido.' });
+      return;
+    }
+    const pago = this.state.coPago || 'Transferencia bancaria';
     let msg = 'Hola La Madriguera, quiero hacer este pedido:\n\n';
     this.state.cart.forEach(x => { msg += '• ' + x.qty + '× ' + x.title + ' — $' + (x.price * x.qty) + '\n'; });
     msg += '\nTotal: $' + this.cartTotal();
     if (name) msg += '\nNombre: ' + name;
+    msg += '\nCelular: ' + phone;
+    msg += '\nEntrega: ' + entrega;
+    msg += '\nPago: ' + pago;
+    if (pago === 'Transferencia bancaria') msg += ' (envío mi comprobante por aquí)';
+    if (pago === 'Link de pago' && !((this.cfg().payLink || '') + '').trim()) msg += ' (envíenme el link, por favor)';
     if (note) msg += '\nNota: ' + note;
-    const fields = { tipo: 'Pedido carrito', detalle: this.state.cart.map(x => x.qty + 'x ' + x.title + ' ($' + (x.price * x.qty) + ')').join(' | '), total: '$' + this.cartTotal(), nombre_cliente: name || '(no indicado)', nota: note || '' };
+    const fields = { tipo: 'Pedido carrito', detalle: this.state.cart.map(x => x.qty + 'x ' + x.title + ' ($' + (x.price * x.qty) + ')').join(' | '), total: '$' + this.cartTotal(), nombre_cliente: name || '(no indicado)', celular_cliente: phone, entrega: entrega, pago: pago, nota: note || '' };
     this.notifyEmail('Pedido web · Carrito La Madriguera', fields);
-    this.saveOrder({ id: 'p' + Date.now(), tipo: 'Pedido', canal: 'Carrito', estado: 'Nuevo', cliente: name, celular: '', nota: note, total: this.cartTotal(), items: this.state.cart.map(x => ({ title: x.title, qty: x.qty, price: x.price })), ts: Date.now(), order: Date.now() });
+    this.saveOrder({ id: 'p' + Date.now(), tipo: 'Pedido', canal: 'Carrito', estado: 'Nuevo', cliente: name, celular: phone, entrega: entrega, pago: pago, nota: note, total: this.cartTotal(), items: this.state.cart.map(x => ({ id: x.id || '', kind: x.kind || '', title: x.title, qty: x.qty, price: x.price })), ts: Date.now(), order: Date.now() });
     if (typeof window !== 'undefined') window.open(this.waText(msg), '_blank', 'noopener');
     this.saveCart([]);
-    this.setState({ cartOpen: false, coName: '', coNote: '' });
+    this.setState({ cartOpen: false, coName: '', coPhone: '', coNote: '', coErr: '', coPago: 'Transferencia bancaria' });
     this.flash('Pedido enviado ✓ Abriendo WhatsApp…');
   };
 
   // ---------- decorate for cards ----------
+  offerBits(x) {
+    const has = this.hasOffer(x);
+    return {
+      hasOld: has,
+      oldLabel: has ? ('$' + x.priceOld) : '',
+      offLabel: has ? ('-' + Math.round((1 - (+x.price || 0) / x.priceOld) * 100) + '%') : ''
+    };
+  }
   decBook(b) {
-    return Object.assign({}, b, {
+    return Object.assign({}, b, this.offerBits(b), {
       priceLabel: '$' + b.price, estadoStyle: this.estadoStyle(b.estado), dispStyle: this.dispStyle(b.disp),
       waHref: this.waBook(b), hasImg: !!b.imagen, imgStyle: this.coverStyle(b.imagen),
+      onOpen: () => this.openDetail('libro', b.code || b.id),
       onAdd: () => this.addToCart('Libro', { id: b.id || b.code, title: b.title, sub: b.author || '', price: b.price, imagen: b.imagen }),
       onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Libro', subject: 'Consulta web · Libro: ' + b.title, title: b.title, sub: [b.author, b.code].filter(Boolean).join(' · '), waHref: this.waBook(b), fields: { tipo: 'Libro', titulo: b.title, autor: b.author || '', codigo: b.code || '', precio: '$' + b.price } }); }
     });
   }
   decMerch(m) {
-    return Object.assign({}, m, {
+    return Object.assign({}, m, this.offerBits(m), {
       priceLabel: '$' + m.price, dispStyle: this.dispStyle(m.disp), waHref: this.waMerch(m), hasImg: !!m.imagen, imgStyle: this.coverStyle(m.imagen),
+      onOpen: () => this.openDetail('merch', m.id || m.name),
       onAdd: () => this.addToCart('Merch', { id: m.id || m.name, title: m.name, sub: m.cat || '', price: m.price, imagen: m.imagen }),
       onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Merch', subject: 'Consulta web · Merch: ' + m.name, title: m.name, sub: m.cat || '', waHref: this.waMerch(m), fields: { tipo: 'Merch', producto: m.name, categoria: m.cat || '', precio: '$' + m.price } }); }
     });
   }
   decEvent(e) {
+    const agotado = !!e.agotado;
     return Object.assign({}, e, {
-      dispStyle: this.cuposStyle(), waHref: this.waEvent(e), hasImg: !!e.imagen, imgStyle: this.coverStyle(e.imagen),
+      dispStyle: agotado ? this.badge('#F3D9D0', '#9A4A3C') : this.cuposStyle(),
+      waHref: agotado
+        ? this.waText('Hola, el evento "' + e.name + '" del ' + e.date + ' aparece agotado. ¿Me pueden anotar en la lista de espera?')
+        : this.waEvent(e),
+      hasImg: !!e.imagen, imgStyle: this.coverStyle(e.imagen),
+      onOpen: () => this.openDetail('evento', e.id || e.name),
       onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Evento', subject: 'Reserva web · Evento: ' + e.name, title: e.name, sub: [e.date, e.time].filter(Boolean).join(' · '), waHref: this.waEvent(e), fields: { tipo: 'Evento', evento: e.name, fecha: (e.date || '') + ' ' + (e.time || ''), precio: e.price || '' } }); }
     });
   }
 
   // ---------- nav ----------
-  go(key) { this.setState({ page: key }); if (typeof window !== 'undefined') window.scrollTo({ top: 0, left: 0 }); }
+  go(key) {
+    this.setState({ page: key, detail: null });
+    this.setHash(key === 'inicio' ? '' : key);
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0, left: 0 });
+  }
   navStyle(active) {
     const base = { display: 'inline-block', padding: '8px 15px', borderRadius: '999px', fontSize: '14px', fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap', border: '1px solid transparent', fontFamily: "'Outfit',sans-serif", transition: 'all .15s ease' };
     return active ? Object.assign({}, base, { background: '#5E1F33', color: '#F7EFE2' }) : Object.assign({}, base, { background: 'transparent', color: '#5E4632' });
@@ -1800,11 +2345,20 @@ class Component extends DCLogic {
     const brandSlots = brandDefs.map(d => ({ key: d[0], label: d[1], desc: d[2], url: brand[d[0]] || '', has: !!brand[d[0]], imgStyle: this.coverStyle(brand[d[0]] || ''), onPick: () => this.pickBrand(d[0]), onClear: () => this.clearBrand(d[0]) }));
 
     // ---- store data ----
-    const adminLibros = cms ? (cms.libros || []).filter(b => b.disp !== 'Vendido').map(b => this.toBook(b)) : [];
+    const adminLibros = cms ? (cms.libros || []).map(b => this.toBook(b)).filter(b => b.disp !== 'Vendido') : [];
     const consigPub = cms ? (cms.consig || []).filter(c => c.estado === 'En venta').map(c => this.toBook(Object.assign({}, c, { estado: 'En consignación', disp: 'Disponible', consigna: true }))) : [];
     const baseBooks = adminLibros.concat(consigPub);
-    const baseMerch = cms ? (cms.merch || []).filter(m => m.disp !== 'Vendido') : [];
-    const baseEvents = cms ? (cms.eventos || []) : [];
+    const baseMerch = cms ? (cms.merch || []).map(m => this.toMerch(m)).filter(m => m.disp !== 'Vendido') : [];
+    const baseEvents = this.resEventos().concat(cms ? (cms.eventos || []) : [])
+      .filter(e => !this.isPastEvent(e))
+      .slice()
+      .sort((a, b2) => {
+        const ta = this.evtTime(a), tb = this.evtTime(b2);
+        if (ta == null && tb == null) return 0;
+        if (ta == null) return 1;
+        if (tb == null) return -1;
+        return ta - tb;
+      });
 
     let books = baseBooks;
     if (category !== 'todos') books = books.filter(b => (b.cats || []).includes(category));
@@ -1816,6 +2370,45 @@ class Component extends DCLogic {
 
     const navList = [['inicio', 'Inicio'], ['catalogo', 'Catálogo'], ['segunda', 'Segunda historia'], ['merch', 'Merch'], ['eventos', 'Eventos'], ['vender', 'Vender'], ['comprar', 'Cómo comprar'], ['visitanos', 'Visítanos']];
     const navItems = navList.map(([k, label]) => ({ label, onClick: () => this.go(k), style: this.navStyle(k === page) }));
+
+    // ---- merch: filtros y búsqueda ----
+    const mq = (this.state.merchSearch || '').trim().toLowerCase();
+    const merchCats = [];
+    baseMerch.forEach(m => { const c = ((m.cat || '') + '').trim(); if (c && merchCats.indexOf(c) < 0) merchCats.push(c); });
+    let merchList = baseMerch;
+    if (this.state.merchCat !== 'todas') merchList = merchList.filter(m => ((m.cat || '') + '').trim() === this.state.merchCat);
+    if (mq) merchList = merchList.filter(m => ((m.name || '') + ' ' + (m.desc || '') + ' ' + (m.cat || '')).toLowerCase().indexOf(mq) >= 0);
+    const merchChips = [{ key: 'todas', label: 'Todo' }].concat(merchCats.map(c => ({ key: c, label: c }))).map(c => ({
+      label: c.label,
+      onClick: () => this.setState({ merchCat: c.key }),
+      style: this.chipStyle(this.state.merchCat === c.key)
+    }));
+
+    // ---- ficha de producto ----
+    const det = this.state.detail;
+    let dv = { detailOpen: false, dKindLabel: '', dTitle: '', dSub: '', dHasSub: false, dDesc: '', dHasDesc: false, dPriceLabel: '', dHasOld: false, dOldLabel: '', dOffLabel: '', dHasImg: false, dImgStyle: {}, dHasBadge1: false, dBadge1: '', dBadge1Style: {}, dHasBadge2: false, dBadge2: '', dBadge2Style: {}, dCanCart: false, dAdd: () => {}, dWaHref: '#', dWaLabel: '', dHasCode: false, dCode: '' };
+    if (det && cms) {
+      if (det.kind === 'libro') {
+        const all = (cms.libros || []).map(x => this.toBook(x)).concat((cms.consig || []).map(c2 => this.toBook(Object.assign({}, c2, { estado: 'En consignación', disp: c2.estado === 'En venta' ? 'Disponible' : 'Vendido', consigna: true }))));
+        const f = all.find(x => (x.code + '') === det.id || x.id === det.id);
+        if (f) {
+          const d = this.decBook(f);
+          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Libro', dTitle: d.title, dSub: d.author || '', dHasSub: !!d.author, dDesc: d.genre || '', dHasDesc: !!d.genre, dPriceLabel: d.priceLabel, dHasOld: d.hasOld, dOldLabel: d.oldLabel, dOffLabel: d.offLabel, dHasImg: d.hasImg, dImgStyle: d.imgStyle, dHasBadge1: !!d.estado, dBadge1: d.estado, dBadge1Style: d.estadoStyle, dHasBadge2: !!d.disp, dBadge2: d.disp, dBadge2Style: d.dispStyle, dCanCart: d.disp !== 'Vendido', dAdd: d.onAdd, dWaHref: d.waHref, dWaLabel: 'Consultar por WhatsApp', dHasCode: !!d.code, dCode: d.code + '' });
+        }
+      } else if (det.kind === 'merch') {
+        const f = (cms.merch || []).map(x => this.toMerch(x)).find(x => x.id === det.id || x.name === det.id);
+        if (f) {
+          const d = this.decMerch(f);
+          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Merch lector', dTitle: d.name, dSub: d.cat || '', dHasSub: !!d.cat, dDesc: d.desc || '', dHasDesc: !!d.desc, dPriceLabel: d.priceLabel, dHasOld: d.hasOld, dOldLabel: d.oldLabel, dOffLabel: d.offLabel, dHasImg: d.hasImg, dImgStyle: d.imgStyle, dHasBadge1: !!d.disp, dBadge1: d.disp, dBadge1Style: d.dispStyle, dCanCart: d.disp !== 'Vendido', dAdd: d.onAdd, dWaHref: d.waHref, dWaLabel: 'Pedir por WhatsApp' });
+        }
+      } else if (det.kind === 'evento') {
+        const f = this.resEventos().concat(cms.eventos || []).find(x => x.id === det.id || x.name === det.id);
+        if (f) {
+          const d = this.decEvent(f);
+          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Evento', dTitle: d.name, dSub: [d.date, d.time].filter(Boolean).join(' · '), dHasSub: !!(d.date || d.time), dDesc: d.includes || '', dHasDesc: !!d.includes, dPriceLabel: (d.price || '') + '', dHasBadge1: !!d.cupos, dBadge1: d.cupos, dBadge1Style: d.agotado ? this.badge('#F3D9D0', '#9A4A3C') : this.badge('#E3EDE3', '#2E6B41'), dCanCart: false, dWaHref: d.waHref, dWaLabel: d.agotado ? 'Anotarme en lista de espera' : 'Reservar por WhatsApp', dHasImg: d.hasImg, dImgStyle: d.imgStyle });
+        }
+      }
+    }
 
     // ---- admin lists ----
     const C = this.currentCMS();
@@ -1829,9 +2422,22 @@ class Component extends DCLogic {
       onDisp: (e) => this.setField(coll, l.id, 'disp', e.target.value),
       onPick: () => this.pickImage(coll, l.id),
       onClearImg: () => this.setField(coll, l.id, 'imagen', ''),
-      onDel: () => this.delItem(coll, l.id)
+      onDel: () => this.delItem(coll, l.id),
+      onFindCover: () => this.findCover(coll, l.id),
+      stockVal: this.hasStockNum(l) ? l.stock : '',
+      priceOldVal: (typeof l.priceOld === 'number' && isFinite(l.priceOld)) ? l.priceOld : '',
+      onStock: (e) => this.setNumOpt(coll, l.id, 'stock', e.target.value),
+      onPriceOld: (e) => this.setNumOpt(coll, l.id, 'priceOld', e.target.value),
+      onSold: () => {
+        this.setField(coll, l.id, 'disp', 'Vendido');
+        if (this.hasStockNum(l)) this.setField(coll, l.id, 'stock', 0);
+        this.flash('Marcado como vendido ✓ Ya no se muestra en la página.');
+      }
     });
-    const libros = (C.libros || []).map(l => mkBook(l, 'libros'));
+    const aq = (this.state.aSearch || '').trim().toLowerCase();
+    let librosRaw = (C.libros || []);
+    if (aq) librosRaw = librosRaw.filter(l => ((l.title || '') + ' ' + (l.author || '') + ' ' + (l.code || '')).toLowerCase().indexOf(aq) >= 0);
+    const libros = librosRaw.map(l => mkBook(l, 'libros'));
     const consig = (C.consig || []).map(c => Object.assign(mkBook(c, 'consig'), {
       estadoBadge: this.consigBadge(c.estado),
       onOwner: (e) => this.setField('consig', c.id, 'owner', e.target.value),
@@ -1847,7 +2453,16 @@ class Component extends DCLogic {
       onDisp: (e) => this.setField('merch', m.id, 'disp', e.target.value),
       onPick: () => this.pickImage('merch', m.id),
       onClearImg: () => this.setField('merch', m.id, 'imagen', ''),
-      onDel: () => this.delItem('merch', m.id)
+      onDel: () => this.delItem('merch', m.id),
+      stockVal: this.hasStockNum(m) ? m.stock : '',
+      priceOldVal: (typeof m.priceOld === 'number' && isFinite(m.priceOld)) ? m.priceOld : '',
+      onStock: (e) => this.setNumOpt('merch', m.id, 'stock', e.target.value),
+      onPriceOld: (e) => this.setNumOpt('merch', m.id, 'priceOld', e.target.value),
+      onSold: () => {
+        this.setField('merch', m.id, 'disp', 'Vendido');
+        if (this.hasStockNum(m)) this.setField('merch', m.id, 'stock', 0);
+        this.flash('Marcado como agotado ✓ Ya no se muestra en la página.');
+      }
     }));
     const eventos = (C.eventos || []).map(e => Object.assign({}, e, {
       hasImg: !!e.imagen, imgStyle: this.coverStyle(e.imagen),
@@ -1859,20 +2474,33 @@ class Component extends DCLogic {
       onIncludes: (ev) => this.setField('eventos', e.id, 'includes', ev.target.value),
       onPick: () => this.pickImage('eventos', e.id),
       onClearImg: () => this.setField('eventos', e.id, 'imagen', ''),
-      onDel: () => this.delItem('eventos', e.id)
+      onDel: () => this.delItem('eventos', e.id),
+      fechaVal: e.fecha || '',
+      onFecha: (ev) => this.setField('eventos', e.id, 'fecha', ev.target.value),
+      isPast: this.isPastEvent(e)
     }));
 
-    const pedidos = (C.pedidos || []).map(p => ({
+    const pedidosAll = (C.pedidos || []).map(p => ({
       id: p.id, tipo: p.tipo || 'Pedido', canal: p.canal || 'Carrito', estado: p.estado || 'Nuevo',
       fecha: this.fmtDate(p.ts), totalLabel: '$' + (p.total || 0),
       clienteLabel: (p.cliente && p.cliente.trim()) ? p.cliente : 'Sin nombre',
       celular: p.celular || '', hasCel: !!(p.celular && (p.celular + '').trim()), waCliente: this.waPhone(p.celular),
+      entrega: p.entrega || '', hasEntrega: !!(p.entrega && (p.entrega + '').trim()),
+      pago: p.pago || '', hasPago: !!(p.pago && (p.pago + '').trim()),
       itemsLabel: (p.items || []).map(it => it.qty + '× ' + it.title).join(', ') || '—',
       nota: p.nota || '', hasNota: !!(p.nota && (p.nota + '').trim()),
       canalBadge: this.canalBadge(p.canal),
-      onEstado: (e) => this.setField('pedidos', p.id, 'estado', e.target.value),
+      onEstado: (e) => this.setPedidoEstado(p, e.target.value),
       onDel: () => this.delItem('pedidos', p.id)
     }));
+    const pf = this.state.pedidoFilter;
+    const pedidos = pf === 'todos' ? pedidosAll : pedidosAll.filter(p => p.estado === pf);
+    const pedidoChips = [['todos', 'Todos'], ['Nuevo', '🔴 Nuevos'], ['Atendido', '🟡 Atendidos'], ['Entregado', '🟢 Entregados'], ['Cancelado', '⚪ Cancelados']].map(([k, label]) => ({
+      label: label + (k === 'todos' ? ' (' + pedidosAll.length + ')' : ' (' + pedidosAll.filter(p => p.estado === k).length + ')'),
+      onClick: () => this.setState({ pedidoFilter: k }),
+      style: this.chipStyle(pf === k)
+    }));
+    const ventasEntregadas = '$' + (C.pedidos || []).filter(p => p.estado === 'Entregado').reduce((s, p) => s + (+p.total || 0), 0);
 
     const tabList = [['libros', 'Libros', '#5E1F33', '#F7EFE2'], ['consig', 'Consignación', '#9A7A1E', '#FBF3E0'], ['merch', 'Merch', '#7C2F3E', '#FFF7EC'], ['eventos', 'Eventos', '#2A1C12', '#F4E9D8'], ['pedidos', 'Pedidos', '#3A5A6B', '#EAF2F6'], ['config', 'Configuración', '#5A6472', '#F4F6F8']];
     const adminTabs = tabList.map(([k, label, bg, fg]) => ({ label, onClick: () => this.setState({ adminTab: k }), style: this.tabStyle(adminTab === k, bg, fg) }));
@@ -1906,8 +2534,15 @@ class Component extends DCLogic {
       homeEventos: baseEvents.slice(0, 3).map(e => this.decEvent(e)),
       recomendados: (recs.length ? recs : baseBooks.slice(0, 3)).map(b => this.decBook(b)),
       segundaBooks: usados,
-      merchAll: baseMerch.map(m => this.decMerch(m)),
+      merchAll: merchList.map(m => this.decMerch(m)),
+      merchShownCount: merchList.length, merchHasResults: merchList.length > 0, merchNoResults: merchList.length === 0,
+      merchSearch: this.state.merchSearch, onMerchSearch: (e) => this.setState({ merchSearch: e.target.value }),
+      merchChips,
       eventsAll: baseEvents.map(e => this.decEvent(e)),
+
+      // ficha de producto
+      ...dv,
+      closeDetail: this.closeDetail, shareDetail: this.shareDetail,
       ventaPasos: this.ventaPasos, compraPasos: this.compraPasos,
       waVender: this.waText('Hola, quiero registrar mis libros para venderlos en consignación en La Madriguera. ¿Cómo empiezo?'),
       waGeneral: 'https://wa.me/' + this.waNum(),
@@ -1926,8 +2561,10 @@ class Component extends DCLogic {
       adminTabs,
       aLibros: adminTab === 'libros', aConsig: adminTab === 'consig', aMerch: adminTab === 'merch', aEventos: adminTab === 'eventos', aPedidos: adminTab === 'pedidos', aConfig: adminTab === 'config',
       libros, consig, merch, eventos, pedidos,
-      librosCount: libros.length, consigCount: consig.length, merchCount: merch.length, eventosCount: eventos.length,
-      pedidosCount: pedidos.length, pedidosNuevos: pedidos.filter(p => p.estado === 'Nuevo').length, pedidosEmpty: pedidos.length === 0,
+      librosCount: (C.libros || []).length, consigCount: consig.length, merchCount: merch.length, eventosCount: eventos.length,
+      pedidosCount: pedidosAll.length, pedidosNuevos: pedidosAll.filter(p => p.estado === 'Nuevo').length, pedidosEmpty: pedidosAll.length === 0,
+      pedidoChips, ventasEntregadas,
+      aSearch: this.state.aSearch, onASearch: (e) => this.setState({ aSearch: e.target.value }),
       addLibro: this.addLibro, addConsig: this.addConsig, addMerch: this.addMerch, addEvento: this.addEvento,
       exitAdmin: () => this.setState({ view: 'store' }),
       logout: this.logout, adminEmail: this.state.adminEmail,
@@ -1947,8 +2584,31 @@ class Component extends DCLogic {
       bulkMore: Math.max(0, bulkRows.length - 4), bulkMoreShow: bulkRows.length > 4,
       commitBulk: this.commitBulk, downloadTemplate: this.downloadTemplate, pickBulkFile: this.pickBulkFile,
 
+      // portadas automáticas
+      bulkCovers: this.bulkCovers,
+      coversBtnLabel: this.state.coversBusy ? ('Buscando… ' + this.state.coversDone + '/' + this.state.coversTotal + ' (' + this.state.coversFound + ' ✓)') : '🖼 Portadas automáticas',
+      coverOpen: !!this.state.cover,
+      coverLoading: !!(this.state.cover && this.state.cover.loading),
+      coverTitle: this.state.cover ? this.state.cover.title : '',
+      coverSub: this.state.cover ? (this.state.cover.author || '') : '',
+      coverErr: this.state.cover ? (this.state.cover.err || '') : '',
+      coverHasErr: !!(this.state.cover && this.state.cover.err),
+      coverHasOpts: !!(this.state.cover && !this.state.cover.loading && (this.state.cover.opts || []).length),
+      coverOpts: (this.state.cover ? (this.state.cover.opts || []) : []).map(o => ({
+        label: o.label,
+        imgStyle: this.coverStyle(o.thumb),
+        onUse: () => this.useCover(o)
+      })),
+      closeCover: this.closeCover,
+
       // config
       cfgEmail: cfg.email || '', cfgWhatsapp: cfg.whatsapp || '', cfgPass: cfg.adminPass || '', cfgInstagram: cfg.instagram || '', cfgTiktok: cfg.tiktok || '', cfgMaps: cfg.maps || '',
+      cfgPayLink: cfg.payLink || '', onCfgPayLink: (e) => this.setConfig('payLink', (e.target.value || '').trim()),
+      cfgPayTransfer: cfg.payTransfer || '', onCfgPayTransfer: (e) => this.setConfig('payTransfer', e.target.value),
+      cfgResKey: cfg.reservasKey || '',
+      onCfgResKey: (e) => { this.setConfig('reservasKey', (e.target.value || '').trim()); this._resBooted = false; this._resErr = false; this.bootReservas(); },
+      resStatus: this._resEventos ? ('Conectada ✓ · ' + this._resEventos.length + ' eventos en vivo') : (this._resErr ? 'Error de conexión — revisa la clave y las reglas' : (((cfg.reservasKey || '') + '').trim() ? 'Conectando…' : 'Sin conectar')),
+      resEventosNota: this._resEventos ? ('Además, ' + this.resEventos().length + ' eventos llegan en vivo desde tu app de reservas (edítalos allá).') : 'Si conectas tu app de reservas (Configuración), sus eventos aparecen aquí solos con cupos en vivo.',
       onCfgEmail: (e) => this.setConfig('email', e.target.value),
       onCfgWhatsapp: (e) => this.setConfig('whatsapp', e.target.value),
       onCfgPass: (e) => this.setConfig('adminPass', e.target.value),
@@ -1965,6 +2625,16 @@ class Component extends DCLogic {
       cartSubtotal: '$' + this.cartTotal(),
       coName: this.state.coName, coNote: this.state.coNote,
       onCoName: (e) => this.setState({ coName: e.target.value }), onCoNote: (e) => this.setState({ coNote: e.target.value }),
+      coPhone: this.state.coPhone, onCoPhone: (e) => this.setState({ coPhone: e.target.value, coErr: '' }),
+      coEntrega: this.state.coEntrega, onCoEntrega: (e) => this.setState({ coEntrega: e.target.value }),
+      coPago: this.state.coPago, onCoPago: (e) => this.setState({ coPago: e.target.value }),
+      payShowTransfer: this.state.coPago === 'Transferencia bancaria' && !!(((cfg.payTransfer || '') + '').trim()),
+      payTransferText: ((cfg.payTransfer || '') + '').trim(),
+      copyPayData: this.copyPayData,
+      payShowLink: this.state.coPago === 'Link de pago' && !!(((cfg.payLink || '') + '').trim()),
+      payLinkHref: ((cfg.payLink || '') + '').trim() || '#',
+      payLinkMissing: this.state.coPago === 'Link de pago' && !(((cfg.payLink || '') + '').trim()),
+      coErr: this.state.coErr, coHasErr: !!this.state.coErr,
       checkout: this.checkout, clearCart: this.clearCart,
       goCatalogFromCart: () => this.setState({ cartOpen: false, page: 'catalogo' }),
 
