@@ -664,8 +664,8 @@
           <span onClick="{{ closeBulk }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#8A715A; padding:6px 12px; border-radius:999px; border:1px solid #E3D2B8;" style-hover="background:#F0E6D2;">Cerrar ✕</span>
         </div>
         <div style="margin-top:14px; background:#F0E6D2; border-radius:10px; padding:12px 15px; font-size:12.5px; color:#5E4632; line-height:1.6;">
-          <strong>Orden de columnas:</strong> Título · Autor · Género · Precio · Estado · Disponibilidad<br>
-          <span style="color:#8A715A;">Estado: Nuevo / Usado excelente / Usado bueno / Con detalles visibles · Disponibilidad: Disponible / Última unidad / Reservado / Oferta. Si dejas un campo vacío usamos «Nuevo» y «Disponible».</span>
+          <strong>Orden de columnas:</strong> Título · Autor · Género · Precio · Estado · Disponibilidad · ISBN (opcional)<br>
+          <span style="color:#8A715A;">Estado: Nuevo / Usado excelente / Usado bueno / Con detalles visibles · Disponibilidad: Disponible / Última unidad / Reservado / Oferta. Si dejas un campo vacío usamos «Nuevo» y «Disponible». El ISBN ayuda a que «Portadas automáticas» encuentre la edición exacta.</span>
         </div>
         <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
           <span onClick="{{ downloadTemplate }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#5E1F33; padding:9px 16px; border-radius:999px; border:1.5px solid #B9C4B4;" style-hover="background:#F2E3E2;">⬇ Descargar plantilla CSV</span>
@@ -737,6 +737,10 @@
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Género</label>
                   <input value="{{ l.genre }}" onChange="{{ l.onGenre }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">ISBN</label>
+                  <input value="{{ l.isbn }}" onChange="{{ l.onIsbn }}" inputmode="numeric" placeholder="978… (mejora la búsqueda de portada)" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio ($)</label>
@@ -825,6 +829,10 @@
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Género</label>
                   <input value="{{ c.genre }}" onChange="{{ c.onGenre }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">ISBN</label>
+                  <input value="{{ c.isbn }}" onChange="{{ c.onIsbn }}" inputmode="numeric" placeholder="978… (opcional)" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Dueño del libro</label>
@@ -1852,11 +1860,11 @@ class Component extends DCLogic {
   }
   addLibro = () => {
     const n = (this.currentCMS().libros || []).length + 1;
-    this.addItem('libros', { id: 'b' + Date.now(), code: 'LM-N-' + this.pad(n), title: 'Nuevo libro', author: '', genre: '', estado: 'Nuevo', disp: 'Disponible', price: 0, imagen: '', order: Date.now() }, 'Libro añadido — edítalo abajo.');
+    this.addItem('libros', { id: 'b' + Date.now(), code: 'LM-N-' + this.pad(n), title: 'Nuevo libro', author: '', genre: '', isbn: '', estado: 'Nuevo', disp: 'Disponible', price: 0, imagen: '', order: Date.now() }, 'Libro añadido — edítalo abajo.');
   };
   addConsig = () => {
     const n = (this.currentCMS().consig || []).length + 1;
-    this.addItem('consig', { id: 'c' + Date.now(), code: 'LM-C-' + this.pad(n), title: 'Libro recibido', author: '', genre: '', owner: '', contact: '', price: 0, payout: 0, estado: 'En venta', imagen: '', order: Date.now() }, 'Registro creado y publicado.');
+    this.addItem('consig', { id: 'c' + Date.now(), code: 'LM-C-' + this.pad(n), title: 'Libro recibido', author: '', genre: '', isbn: '', owner: '', contact: '', price: 0, payout: 0, estado: 'En venta', imagen: '', order: Date.now() }, 'Registro creado y publicado.');
   };
   addMerch = () => {
     this.addItem('merch', { id: 'm' + Date.now(), name: 'Nuevo producto', cat: '', desc: '', price: 0, disp: 'Disponible', imagen: '', order: Date.now() }, 'Producto añadido.');
@@ -1926,19 +1934,19 @@ class Component extends DCLogic {
   };
 
   // ---------- portadas automáticas (OpenLibrary) ----------
-  searchCovers(title, author) {
+  searchCovers(title, author, isbn) {
     const base = 'https://openlibrary.org/search.json?limit=12&fields=title,author_name,cover_i,first_publish_year&';
     const pick = (docs) => (docs || []).filter(d => d.cover_i).slice(0, 6).map(d => ({
       url: 'https://covers.openlibrary.org/b/id/' + d.cover_i + '-L.jpg',
       thumb: 'https://covers.openlibrary.org/b/id/' + d.cover_i + '-M.jpg',
       label: ((d.title || '') + (d.author_name && d.author_name.length ? ' · ' + d.author_name[0] : '') + (d.first_publish_year ? ' (' + d.first_publish_year + ')' : ''))
     }));
-    const q1 = base + 'title=' + encodeURIComponent(title) + (author ? '&author=' + encodeURIComponent(author) : '');
-    return fetch(q1).then(r => r.json()).then(j => {
-      const opts = pick(j.docs);
-      if (opts.length) return opts;
-      return fetch(base + 'q=' + encodeURIComponent(title + ' ' + (author || ''))).then(r => r.json()).then(j2 => pick(j2.docs));
-    });
+    const get = (qs) => fetch(base + qs).then(r => r.json()).then(j => pick(j.docs));
+    const cleanIsbn = ((isbn || '') + '').replace(/[^0-9Xx]/g, '');
+    const byIsbn = cleanIsbn.length >= 10 ? get('isbn=' + cleanIsbn).catch(() => []) : Promise.resolve([]);
+    return byIsbn
+      .then(o1 => o1.length ? o1 : get('title=' + encodeURIComponent(title) + (author ? '&author=' + encodeURIComponent(author) : '')))
+      .then(o2 => o2.length ? o2 : get('q=' + encodeURIComponent(title + ' ' + (author || ''))));
   }
   saveCoverFromUrl(url, coll, id) {
     return fetch(url).then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.blob(); }).then(blob => new Promise((resolve, reject) => {
@@ -1970,7 +1978,7 @@ class Component extends DCLogic {
     if (!it) return;
     if (!((it.title || '').trim())) { this.flash('Escribe primero el título del libro.'); return; }
     this.setState({ cover: { coll, id, title: it.title || '', author: it.author || '', loading: true, opts: [], err: '' } });
-    this.searchCovers(it.title || '', it.author || '').then(opts => {
+    this.searchCovers(it.title || '', it.author || '', it.isbn || '').then(opts => {
       const cv = this.state.cover;
       if (!cv || cv.id !== id) return;
       this.setState({ cover: Object.assign({}, cv, { loading: false, opts, err: opts.length ? '' : 'No encontramos portadas para este título. Prueba simplificar el título o sube una foto tuya.' }) });
@@ -2012,7 +2020,7 @@ class Component extends DCLogic {
         return;
       }
       const l = missing[i]; i++;
-      this.searchCovers(l.title, l.author || '')
+      this.searchCovers(l.title, l.author || '', l.isbn || '')
         .then(opts => opts.length ? this.saveCoverFromUrl(opts[0].url, 'libros', l.id).then(() => { found++; this.setState({ coversFound: found }); }) : null)
         .catch(() => {})
         .then(() => { this.setState({ coversDone: i }); setTimeout(next, 400); });
@@ -2033,7 +2041,8 @@ class Component extends DCLogic {
       out.push({
         title: c[0], author: c[1] || '', genre: c[2] || '',
         price: parseFloat((c[3] || '').replace(/[^0-9.]/g, '')) || 0,
-        estado: c[4] || 'Nuevo', disp: c[5] || 'Disponible'
+        estado: c[4] || 'Nuevo', disp: c[5] || 'Disponible',
+        isbn: (c[6] || '').trim()
       });
     });
     return out;
@@ -2055,7 +2064,7 @@ class Component extends DCLogic {
     const cms = this.currentCMS();
     cms.libros = cms.libros || [];
     let n = cms.libros.length;
-    const created = rows.map(r => { n++; return { id: 'b' + Date.now() + '_' + n, code: 'LM-N-' + this.pad(n), title: r.title, author: r.author, genre: r.genre, estado: r.estado, disp: r.disp, price: r.price, imagen: '', order: Date.now() + n }; });
+    const created = rows.map(r => { n++; return { id: 'b' + Date.now() + '_' + n, code: 'LM-N-' + this.pad(n), title: r.title, author: r.author, genre: r.genre, estado: r.estado, disp: r.disp, price: r.price, isbn: r.isbn || '', imagen: '', order: Date.now() + n }; });
     cms.libros = created.concat(cms.libros);
     this.cacheCMS(cms);
     if (this.online()) { try { const batch = this.db.batch(); created.forEach(it => batch.set(this.itemRef('libros', it.id), this.clean(it))); batch.commit().catch((e) => this.flash(this.fbErr(e))); } catch (e) {} }
@@ -2063,7 +2072,7 @@ class Component extends DCLogic {
     this.flash(created.length + ' libros agregados ✓');
   };
   downloadTemplate = () => {
-    const csv = 'Título,Autor,Género,Precio,Estado,Disponibilidad\nAlas de sangre,Rebecca Yarros,Fantasía,28,Nuevo,Última unidad\nEl nombre del viento,Patrick Rothfuss,Fantasía,14,Usado excelente,Disponible\n';
+    const csv = 'Título,Autor,Género,Precio,Estado,Disponibilidad,ISBN\nAlas de sangre,Rebecca Yarros,Fantasía,28,Nuevo,Última unidad,9788408249856\nEl nombre del viento,Patrick Rothfuss,Fantasía,14,Usado excelente,Disponible,\n';
     this.download('plantilla-libros.csv', csv, 'text/csv');
   };
 
@@ -2393,7 +2402,7 @@ class Component extends DCLogic {
         const f = all.find(x => (x.code + '') === det.id || x.id === det.id);
         if (f) {
           const d = this.decBook(f);
-          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Libro', dTitle: d.title, dSub: d.author || '', dHasSub: !!d.author, dDesc: d.genre || '', dHasDesc: !!d.genre, dPriceLabel: d.priceLabel, dHasOld: d.hasOld, dOldLabel: d.oldLabel, dOffLabel: d.offLabel, dHasImg: d.hasImg, dImgStyle: d.imgStyle, dHasBadge1: !!d.estado, dBadge1: d.estado, dBadge1Style: d.estadoStyle, dHasBadge2: !!d.disp, dBadge2: d.disp, dBadge2Style: d.dispStyle, dCanCart: d.disp !== 'Vendido', dAdd: d.onAdd, dWaHref: d.waHref, dWaLabel: 'Consultar por WhatsApp', dHasCode: !!d.code, dCode: d.code + '' });
+          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Libro', dTitle: d.title, dSub: d.author || '', dHasSub: !!d.author, dDesc: (d.genre || '') + (d.isbn ? ((d.genre ? ' · ' : '') + 'ISBN ' + d.isbn) : ''), dHasDesc: !!(d.genre || d.isbn), dPriceLabel: d.priceLabel, dHasOld: d.hasOld, dOldLabel: d.oldLabel, dOffLabel: d.offLabel, dHasImg: d.hasImg, dImgStyle: d.imgStyle, dHasBadge1: !!d.estado, dBadge1: d.estado, dBadge1Style: d.estadoStyle, dHasBadge2: !!d.disp, dBadge2: d.disp, dBadge2Style: d.dispStyle, dCanCart: d.disp !== 'Vendido', dAdd: d.onAdd, dWaHref: d.waHref, dWaLabel: 'Consultar por WhatsApp', dHasCode: !!d.code, dCode: d.code + '' });
         }
       } else if (det.kind === 'merch') {
         const f = (cms.merch || []).map(x => this.toMerch(x)).find(x => x.id === det.id || x.name === det.id);
@@ -2413,10 +2422,12 @@ class Component extends DCLogic {
     // ---- admin lists ----
     const C = this.currentCMS();
     const mkBook = (l, coll) => Object.assign({}, l, {
+      isbn: l.isbn || '',
       hasImg: !!l.imagen, imgStyle: this.coverStyle(l.imagen),
       onTitle: (e) => this.setField(coll, l.id, 'title', e.target.value),
       onAuthor: (e) => this.setField(coll, l.id, 'author', e.target.value),
       onGenre: (e) => this.setField(coll, l.id, 'genre', e.target.value),
+      onIsbn: (e) => this.setField(coll, l.id, 'isbn', e.target.value.trim()),
       onPrice: (e) => this.setNum(coll, l.id, 'price', e.target.value),
       onEstado: (e) => this.setField(coll, l.id, 'estado', e.target.value),
       onDisp: (e) => this.setField(coll, l.id, 'disp', e.target.value),
