@@ -1520,7 +1520,87 @@ class Component extends DCLogic {
     if (this._fbTimer) clearTimeout(this._fbTimer);
     if (this._toastT) clearTimeout(this._toastT);
   }
-  componentDidUpdate() { this.syncChips(); this.bootReservas(); }
+  componentDidUpdate() { this.syncChips(); this.bootReservas(); this.seoSync(); this.seoTitle(); }
+
+  // ---------- SEO dinámico (Schema.org) ----------
+  seoSync() {
+    if (typeof document === 'undefined' || typeof window === 'undefined') return;
+    const cms = this.state.cms;
+    if (!cms) return;
+    const sig = [(cms.libros || []).length, (cms.consig || []).length, (cms.merch || []).length, (cms.eventos || []).length, (this._resEventos || []).length, this.state.savedAt].join(':');
+    if (sig === this._seoSig) return;
+    this._seoSig = sig;
+    try {
+      const base = window.location.origin + window.location.pathname + window.location.search;
+      const negocio = 'https://lamadriguera.ec/#negocio';
+      const okImg = (u) => (u && (u + '').indexOf('data:') !== 0) ? u : undefined;
+      const items = [];
+      const books = (cms.libros || []).map(b => this.toBook(b)).filter(b => b.disp !== 'Vendido')
+        .concat((cms.consig || []).filter(c => c.estado === 'En venta').map(c => this.toBook(Object.assign({}, c, { estado: 'En consignación', disp: 'Disponible', consigna: true }))));
+      books.slice(0, 60).forEach(b => {
+        const it = {
+          '@type': 'Product',
+          name: b.title,
+          description: [b.author, b.genre, b.estado].filter(Boolean).join(' · '),
+          url: base + '#libro/' + encodeURIComponent(b.code || b.id),
+          offers: { '@type': 'Offer', price: +b.price || 0, priceCurrency: 'USD', availability: 'https://schema.org/InStock', seller: { '@id': negocio } }
+        };
+        if (b.isbn) it.gtin13 = ((b.isbn + '').replace(/[^0-9]/g, '')) || undefined;
+        if (okImg(b.imagen)) it.image = b.imagen;
+        if (this.hasOffer(b)) it.offers.priceValidUntil = undefined;
+        items.push(it);
+      });
+      (cms.merch || []).map(m => this.toMerch(m)).filter(m => m.disp !== 'Vendido').slice(0, 30).forEach(m => {
+        const it = {
+          '@type': 'Product',
+          name: m.name,
+          description: [m.cat, m.desc].filter(Boolean).join(' · '),
+          url: base + '#merch/' + encodeURIComponent(m.id || m.name),
+          offers: { '@type': 'Offer', price: +m.price || 0, priceCurrency: 'USD', availability: 'https://schema.org/InStock', seller: { '@id': negocio } }
+        };
+        if (okImg(m.imagen)) it.image = m.imagen;
+        items.push(it);
+      });
+      const graph = [];
+      if (items.length) {
+        graph.push({ '@type': 'ItemList', name: 'Catálogo de La Madriguera', itemListElement: items.map((it, i) => ({ '@type': 'ListItem', position: i + 1, item: it })) });
+      }
+      this.resEventos().concat(cms.eventos || []).filter(e => !this.isPastEvent(e)).slice(0, 12).forEach(e => {
+        if (!e.fecha) return;
+        const ev = {
+          '@type': 'Event',
+          name: e.name,
+          startDate: e.fecha + (e.time ? ('T' + e.time) : ''),
+          eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+          location: { '@type': 'Place', name: 'La Madriguera Specialty Coffee & Books', address: { '@type': 'PostalAddress', streetAddress: 'Circunvalación Sur y Ficus, Urdesa', addressLocality: 'Guayaquil', addressCountry: 'EC' } },
+          organizer: { '@id': negocio }
+        };
+        if (e.includes) ev.description = e.includes;
+        const precioNum = parseFloat(((e.price || '') + '').replace(/[^0-9.]/g, ''));
+        if (!isNaN(precioNum)) ev.offers = { '@type': 'Offer', price: precioNum, priceCurrency: 'USD', availability: e.agotado ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock' };
+        graph.push(ev);
+      });
+      if (!graph.length) return;
+      let el = document.getElementById('lm-seo-dynamic');
+      if (!el) {
+        el = document.createElement('script');
+        el.type = 'application/ld+json';
+        el.id = 'lm-seo-dynamic';
+        document.head.appendChild(el);
+      }
+      el.textContent = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+    } catch (e) {}
+  }
+  seoTitle() {
+    if (typeof document === 'undefined') return;
+    const names = { catalogo: 'Catálogo de libros', segunda: 'Libros con segunda historia', merch: 'Merch para lectores', eventos: 'Eventos literarios', vender: 'Vende tus libros', comprar: 'Cómo comprar', visitanos: 'Visítanos' };
+    const base = 'La Madriguera · Librería y café de especialidad en Guayaquil';
+    let t = base;
+    if (this.state.view === 'admin') t = 'Panel · La Madriguera';
+    else if (this._dTitle) t = this._dTitle + ' · La Madriguera';
+    else if (names[this.state.page]) t = names[this.state.page] + ' · La Madriguera';
+    if (document.title !== t) document.title = t;
+  }
 
   // ---------- Firebase ----------
   loadFbScript(src) {
@@ -1914,7 +1994,7 @@ class Component extends DCLogic {
       const img = new Image();
       img.onload = () => {
         const isLogo = tgt.brand === 'logo';
-        const max = isLogo ? 512 : (tgt.brand ? 1280 : 900);
+        const max = isLogo ? 512 : (tgt.brand ? 1280 : 700);
         let w = img.width, h = img.height;
         if (w > max || h > max) { const r = Math.min(max / w, max / h); w = Math.round(w * r); h = Math.round(h * r); }
         const c = document.createElement('canvas'); c.width = w; c.height = h;
@@ -1922,7 +2002,7 @@ class Component extends DCLogic {
         if (!isLogo) { ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, w, h); }
         ctx.drawImage(img, 0, 0, w, h);
         let data;
-        try { data = isLogo ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', tgt.brand ? 0.85 : 0.82); }
+        try { data = isLogo ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', tgt.brand ? 0.85 : 0.78); }
         catch (x) { data = ev.target.result; }
         if (tgt.brand) this.setBrand(tgt.brand, data); else this.setField(tgt.coll, tgt.id, 'imagen', data);
         this.flash('Foto cargada ✓');
@@ -1948,31 +2028,6 @@ class Component extends DCLogic {
       .then(o1 => o1.length ? o1 : get('title=' + encodeURIComponent(title) + (author ? '&author=' + encodeURIComponent(author) : '')))
       .then(o2 => o2.length ? o2 : get('q=' + encodeURIComponent(title + ' ' + (author || ''))));
   }
-  saveCoverFromUrl(url, coll, id) {
-    return fetch(url).then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.blob(); }).then(blob => new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const img = new Image();
-        img.onload = () => {
-          try {
-            const max = 900;
-            let w = img.width, h = img.height;
-            if (w > max || h > max) { const r2 = Math.min(max / w, max / h); w = Math.round(w * r2); h = Math.round(h * r2); }
-            const cnv = document.createElement('canvas'); cnv.width = w; cnv.height = h;
-            const ctx = cnv.getContext('2d');
-            ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, w, h);
-            ctx.drawImage(img, 0, 0, w, h);
-            this.setField(coll, id, 'imagen', cnv.toDataURL('image/jpeg', 0.82));
-            resolve();
-          } catch (e) { reject(e); }
-        };
-        img.onerror = () => reject(new Error('img'));
-        img.src = ev.target.result;
-      };
-      reader.onerror = () => reject(new Error('read'));
-      reader.readAsDataURL(blob);
-    }));
-  }
   findCover(coll, id) {
     const it = (this.currentCMS()[coll] || []).find(x => x.id === id);
     if (!it) return;
@@ -1990,13 +2045,11 @@ class Component extends DCLogic {
   useCover(opt) {
     const cv = this.state.cover;
     if (!cv) return;
-    this.setState({ cover: Object.assign({}, cv, { loading: true, err: '' }) });
-    this.saveCoverFromUrl(opt.url, cv.coll, cv.id)
-      .then(() => { this.setState({ cover: null }); this.flash('Portada guardada ✓'); })
-      .catch(() => {
-        const c2 = this.state.cover;
-        if (c2) this.setState({ cover: Object.assign({}, c2, { loading: false, err: 'No se pudo descargar esa portada. Prueba con otra.' }) });
-      });
+    // Se guarda solo el LINK de la portada (no la imagen completa):
+    // la página queda liviana y Firebase casi no se llena.
+    this.setField(cv.coll, cv.id, 'imagen', opt.url);
+    this.setState({ cover: null });
+    this.flash('Portada guardada ✓');
   }
   closeCover = () => this.setState({ cover: null });
   copyPayData = () => {
@@ -2021,7 +2074,7 @@ class Component extends DCLogic {
       }
       const l = missing[i]; i++;
       this.searchCovers(l.title, l.author || '', l.isbn || '')
-        .then(opts => opts.length ? this.saveCoverFromUrl(opts[0].url, 'libros', l.id).then(() => { found++; this.setState({ coversFound: found }); }) : null)
+        .then(opts => { if (opts.length) { this.setField('libros', l.id, 'imagen', opts[0].url); found++; this.setState({ coversFound: found }); } })
         .catch(() => {})
         .then(() => { this.setState({ coversDone: i }); setTimeout(next, 400); });
     };
@@ -2418,6 +2471,7 @@ class Component extends DCLogic {
         }
       }
     }
+    this._dTitle = dv.detailOpen ? dv.dTitle : '';
 
     // ---- admin lists ----
     const C = this.currentCMS();
