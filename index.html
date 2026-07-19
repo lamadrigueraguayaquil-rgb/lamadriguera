@@ -289,6 +289,26 @@
       </div>
     </section>
 
+    <section style="background:#244031; color:#F4E9D8; position:relative; overflow:hidden;">
+      <div style="position:absolute; top:-90px; right:8%; width:300px; height:300px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.25), rgba(201,162,75,0) 70%);"></div>
+      <div style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(38px,5vw,60px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:clamp(24px,4vw,44px); align-items:center;">
+        <div>
+          <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#C9A24B;">Club de lectores</span>
+          <h2 style="margin:8px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(26px,3.2vw,36px); color:#F4E9D8; text-wrap:balance;">Entérate antes que nadie</h2>
+          <p style="margin:14px 0 0; font-size:16px; line-height:1.6; color:#DCE6D8; max-width:30em;">Déjanos tu contacto y te avisamos de novedades, ofertas lectoras y nuevos eventos de La Madriguera. Sin spam, solo pequeñas magias.</p>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:11px;">
+          <input value="{{ newsName }}" onInput="{{ onNewsName }}" placeholder="Tu nombre *" style="width:100%; padding:13px 15px; border:1px solid rgba(244,233,216,0.3); border-radius:11px; font-family:'Outfit',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;">
+          <input value="{{ newsPhone }}" onInput="{{ onNewsPhone }}" type="tel" inputmode="tel" placeholder="Tu celular (WhatsApp)" style="width:100%; padding:13px 15px; border:1px solid rgba(244,233,216,0.3); border-radius:11px; font-family:'Outfit',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;">
+          <input value="{{ newsMail }}" onInput="{{ onNewsMail }}" type="email" inputmode="email" placeholder="Tu correo (opcional)" style="width:100%; padding:13px 15px; border:1px solid rgba(244,233,216,0.3); border-radius:11px; font-family:'Outfit',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;">
+          <sc-if value="{{ newsHasErr }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:13px; font-weight:700; color:#F3C4B4;">{{ newsErr }}</div>
+          </sc-if>
+          <span onClick="{{ submitNews }}" style="cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:15px; padding:14px; border-radius:12px; box-shadow:0 8px 20px rgba(201,162,75,0.3); transition:background .15s ease;" style-hover="background:#d9b25b;">✨ Avísame de novedades</span>
+        </div>
+      </div>
+    </section>
+
     <section style="background:linear-gradient(180deg,#F4E9D8,#EFE2CB);">
       <div style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:clamp(28px,4vw,48px); align-items:center;">
         <div style="position:relative; aspect-ratio:16/11; border-radius:20px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 20px 44px rgba(52,37,26,0.16); background:repeating-linear-gradient(135deg,#E7D8BD,#E7D8BD 13px,#DECCAC 13px,#DECCAC 26px);">
@@ -474,25 +494,77 @@
       </div>
       <div style="margin-top:40px; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:24px;">
         <div style="background:#EFE2CB; border-radius:20px; padding:26px;">
-          <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:20px; color:#5E1F33;">Entrega</h3>
-          <ul style="margin:14px 0 0; padding-left:18px; color:#5E4632; font-size:15px; line-height:1.9;">
-            <li>Retiro en local</li>
-            <li>Envío dentro de Guayaquil</li>
-            <li>Envío nacional según disponibilidad</li>
-          </ul>
+          <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:20px; color:#5E1F33;">🛵 Política de envíos</h3>
+          <div style="margin:14px 0 0; color:#5E4632; font-size:14.5px; line-height:1.8; white-space:pre-line;">{{ polEnvioText }}</div>
         </div>
         <div style="background:#F2E3E2; border-radius:20px; padding:26px;">
-          <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:20px; color:#5E1F33;">Pago</h3>
-          <ul style="margin:14px 0 0; padding-left:18px; color:#5E4632; font-size:15px; line-height:1.9;">
-            <li>Transferencia bancaria</li>
-            <li>Tarjeta de crédito en local</li>
-            <li>Link de pago, si aplica</li>
+          <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:20px; color:#5E1F33;">🔁 Cambios y devoluciones</h3>
+          <div style="margin:14px 0 0; color:#5E4632; font-size:14.5px; line-height:1.8; white-space:pre-line;">{{ polCambiosText }}</div>
+        </div>
+        <div style="background:#E3EDE3; border-radius:20px; padding:26px;">
+          <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:20px; color:#5E1F33;">💳 Formas de pago</h3>
+          <ul style="margin:14px 0 0; padding-left:18px; color:#5E4632; font-size:14.5px; line-height:1.9;">
+            <li>Transferencia bancaria (datos en el carrito)</li>
+            <li>Link de pago con tarjeta</li>
+            <li>Efectivo al retirar o recibir</li>
+            <li>Tarjeta en el local</li>
           </ul>
         </div>
       </div>
       <div style="margin-top:32px; display:flex; flex-wrap:wrap; gap:12px;">
         <span onClick="{{ nav.catalogo }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:9px; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:15px; padding:14px 26px; border-radius:999px; transition:background .15s ease;" style-hover="background:#244031;">Explorar el catálogo</span>
         <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; text-decoration:none; background:transparent; color:#5E1F33; border:1.5px solid #B9C4B4; font-weight:700; font-size:15px; padding:13px 24px; border-radius:999px; transition:background .15s ease;" style-hover="background:#F2E3E2;">Escríbenos por WhatsApp</a>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <!-- NUESTRA HISTORIA -->
+  <sc-if value="{{ isHistoria }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Nuestra historia">
+    <section style="background:linear-gradient(180deg,#EFE2CB,#F4E9D8);">
+      <div style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px);">
+        <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7C2F3E;">Nosotros</span>
+        <h1 style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#5E1F33; line-height:1.05; text-wrap:balance;">Nuestra historia</h1>
+        <p style="margin:14px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:clamp(17px,2vw,21px); color:#9A7A1E;">Una casa para quienes viven entre páginas.</p>
+      </div>
+    </section>
+    <section style="max-width:1180px; margin:0 auto; padding:clamp(34px,4vw,56px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:clamp(28px,4vw,52px); align-items:start;">
+      <div style="font-size:16.5px; line-height:1.75; color:#4A3826; white-space:pre-line;">{{ historiaText }}</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+        <div style="position:relative; grid-column:1/-1; aspect-ratio:16/10; border-radius:18px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 18px 40px rgba(52,37,26,0.15); background:repeating-linear-gradient(135deg,#E7D8BD,#E7D8BD 13px,#DECCAC 13px,#DECCAC 26px);">
+          <sc-if value="{{ hasHistoria1 }}" hint-placeholder-val="{{ false }}"><div style="{{ historia1Style }}"></div></sc-if>
+          <div style="position:absolute; inset:0; background:radial-gradient(100% 80% at 30% 20%, rgba(255,243,214,0.45), rgba(255,243,214,0) 60%);"></div>
+        </div>
+        <div style="position:relative; aspect-ratio:1/1; border-radius:16px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 14px 30px rgba(52,37,26,0.13); background:repeating-linear-gradient(135deg,#EBDDC4,#EBDDC4 12px,#E2D0B2 12px,#E2D0B2 24px);">
+          <sc-if value="{{ hasHistoria2 }}" hint-placeholder-val="{{ false }}"><div style="{{ historia2Style }}"></div></sc-if>
+        </div>
+        <div style="position:relative; aspect-ratio:1/1; border-radius:16px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 14px 30px rgba(52,37,26,0.13); background:repeating-linear-gradient(135deg,#E7D8BD,#E7D8BD 12px,#DECCAC 12px,#DECCAC 24px);">
+          <sc-if value="{{ hasLocal }}" hint-placeholder-val="{{ false }}"><div style="{{ localStyle }}"></div></sc-if>
+        </div>
+      </div>
+    </section>
+    <section style="max-width:1180px; margin:0 auto; padding:0 clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:clamp(14px,2vw,22px);">
+        <div style="background:#F2E3E2; border-radius:18px; padding:22px;">
+          <div style="font-size:26px;">📚</div>
+          <h3 style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:18px; color:#5E1F33;">Libros con curaduría</h3>
+          <p style="margin:7px 0 0; font-size:14px; line-height:1.5; color:#6E5946;">Novedades y segunda mano elegidas con cariño, una a una.</p>
+        </div>
+        <div style="background:#EFE2CB; border-radius:18px; padding:22px;">
+          <div style="font-size:26px;">☕</div>
+          <h3 style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:18px; color:#5E1F33;">Café de especialidad</h3>
+          <p style="margin:7px 0 0; font-size:14px; line-height:1.5; color:#6E5946;">El acompañante perfecto de cada capítulo, con postres de la casa.</p>
+        </div>
+        <div style="background:#E3EDE3; border-radius:18px; padding:22px;">
+          <div style="font-size:26px;">✨</div>
+          <h3 style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:18px; color:#5E1F33;">Comunidad lectora</h3>
+          <p style="margin:7px 0 0; font-size:14px; line-height:1.5; color:#6E5946;">Clubes, cenas temáticas, cine y talleres para vivir las historias.</p>
+        </div>
+      </div>
+      <div style="margin-top:34px; display:flex; flex-wrap:wrap; gap:12px;">
+        <span onClick="{{ nav.visitanos }}" style="cursor:pointer; display:inline-flex; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:14.5px; padding:13px 24px; border-radius:999px; transition:background .15s ease;" style-hover="background:#244031;">Visítanos en Urdesa</span>
+        <span onClick="{{ nav.catalogo }}" style="cursor:pointer; display:inline-flex; background:transparent; color:#5E1F33; border:1.5px solid #B9C4B4; font-weight:700; font-size:14.5px; padding:12px 22px; border-radius:999px; transition:background .15s ease;" style-hover="background:#F2E3E2;">Explorar el catálogo</span>
       </div>
     </section>
   </div>
@@ -579,6 +651,10 @@
       </div>
     </div>
   </footer>
+
+  <a href="{{ waGeneral }}" target="_blank" rel="noopener" title="Escríbenos por WhatsApp" style="position:fixed; right:18px; bottom:18px; z-index:280; width:58px; height:58px; border-radius:50%; background:#25D366; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 26px rgba(37,211,102,0.45); transition:transform .15s ease;" style-hover="transform:scale(1.08);">
+    <svg viewBox="0 0 32 32" width="30" height="30" fill="#FFFFFF" aria-hidden="true"><path d="M16.05 4.5c-6.35 0-11.5 5.15-11.5 11.5 0 2.03.53 4.01 1.54 5.76L4.5 27.5l5.9-1.55a11.44 11.44 0 0 0 5.65 1.48h.01c6.34 0 11.49-5.15 11.49-11.5S22.4 4.5 16.05 4.5zm0 20.98h-.01a9.5 9.5 0 0 1-4.84-1.33l-.35-.2-3.5.92.93-3.41-.23-.35a9.46 9.46 0 0 1-1.46-5.06c0-5.25 4.27-9.52 9.53-9.52a9.5 9.5 0 0 1 9.51 9.53c0 5.25-4.27 9.52-9.52 9.52zm5.22-7.13c-.29-.14-1.69-.83-1.95-.93s-.45-.14-.64.15-.74.92-.9 1.11-.33.21-.62.07a7.79 7.79 0 0 1-2.29-1.41 8.6 8.6 0 0 1-1.58-1.97c-.17-.29-.02-.44.12-.58.13-.13.29-.33.43-.5s.19-.29.29-.48.05-.36-.02-.5-.64-1.55-.88-2.12c-.23-.56-.47-.48-.64-.49h-.55c-.19 0-.5.07-.76.36s-1 .98-1 2.38 1.02 2.76 1.17 2.95 2.01 3.07 4.88 4.31c.68.29 1.21.47 1.63.6.68.22 1.3.19 1.79.11.55-.08 1.69-.69 1.93-1.36s.24-1.24.17-1.36-.26-.19-.55-.33z"/></svg>
+  </a>
 
 </div>
 </sc-if>
@@ -1110,6 +1186,26 @@
           <input value="{{ cfgWhatsapp }}" onChange="{{ onCfgWhatsapp }}" placeholder="593960186336 (con código de país, sin +)" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
         </div>
         <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Google Analytics (ID de medición)</label>
+          <input value="{{ cfgGaId }}" onChange="{{ onCfgGaId }}" placeholder="G-XXXXXXXXXX" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Crea una propiedad gratis en <strong>analytics.google.com</strong>, copia el «ID de medición» (empieza con G-) y pégalo aquí. Medirás visitas, libros más vistos, carritos y pedidos. Estado: <strong>{{ gaStatus }}</strong></p>
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Texto de «Nuestra historia»</label>
+          <textarea value="{{ cfgHistoria }}" onChange="{{ onCfgHistoria }}" rows="5" placeholder="Déjalo vacío para usar el texto que ya escribimos por ti. Escribe aquí si quieres contar tu historia con tus propias palabras." style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none; resize:vertical;"></textarea>
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Se muestra en la página <strong>Nosotros</strong>. Las fotos del local se suben arriba, en «Imágenes de la página» (Foto Nosotros 1 y 2).</p>
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Política de envíos</label>
+          <textarea value="{{ cfgPolEnvio }}" onChange="{{ onCfgPolEnvio }}" rows="4" placeholder="Déjalo vacío para usar la política estándar que ya escribimos (retiro gratis, Guayaquil 24–48 h, nacional 2–4 días)." style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none; resize:vertical;"></textarea>
+        </div>
+        <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Política de cambios y devoluciones</label>
+          <textarea value="{{ cfgPolCambios }}" onChange="{{ onCfgPolCambios }}" rows="4" placeholder="Déjalo vacío para usar la política estándar (3 días para cambios con comprobante, usados según ficha)." style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none; resize:vertical;"></textarea>
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Ambas políticas se muestran en la página <strong>Cómo comprar</strong>.</p>
+        </div>
+        <div style="height:1px; background:#EADBC4;"></div>
+        <div>
           <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Link de pago con tarjeta</label>
           <input value="{{ cfgPayLink }}" onChange="{{ onCfgPayLink }}" placeholder="https://ppls.me/… (Payphone, De Una, PlacetoPay…)" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
           <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Si tienes un link de cobro (Payphone, De Una, etc.), pégalo aquí: el carrito mostrará el botón <strong>«Pagar ahora»</strong> cuando el cliente elija pago con tarjeta. El cliente escribe el monto total que le muestra el carrito.</p>
@@ -1452,6 +1548,7 @@ class Component extends DCLogic {
     detail: null,
     cart: [], cartOpen: false, coName: '', coPhone: '', coEntrega: 'Retiro en local', coPago: 'Transferencia bancaria', coNote: '', coErr: '',
     lead: null, leadName: '', leadPhone: '', leadErr: '',
+    newsName: '', newsPhone: '', newsMail: '', newsErr: '',
     pwOpen: false, pwInput: '', pwEmail: '', pwErr: '',
     bulkOpen: false, bulkText: '', bulkErr: '',
     cover: null, coversBusy: false, coversDone: 0, coversTotal: 0, coversFound: 0,
@@ -1520,7 +1617,26 @@ class Component extends DCLogic {
     if (this._fbTimer) clearTimeout(this._fbTimer);
     if (this._toastT) clearTimeout(this._toastT);
   }
-  componentDidUpdate() { this.syncChips(); this.bootReservas(); this.seoSync(); this.seoTitle(); }
+  componentDidUpdate() { this.syncChips(); this.bootReservas(); this.bootAnalytics(); this.seoSync(); this.seoTitle(); }
+
+  // ---------- Google Analytics 4 ----------
+  bootAnalytics() {
+    if (this._gaBooted || typeof document === 'undefined' || typeof window === 'undefined') return;
+    const id = ((this.cfg().gaId || '') + '').trim();
+    if (!/^G-[A-Z0-9]+$/i.test(id)) return;
+    this._gaBooted = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', id);
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+    document.head.appendChild(s);
+  }
+  track(ev, params) {
+    try { if (this._gaBooted && typeof window !== 'undefined' && window.gtag) window.gtag('event', ev, params || {}); } catch (e) {}
+  }
 
   // ---------- SEO dinámico (Schema.org) ----------
   seoSync() {
@@ -1593,7 +1709,7 @@ class Component extends DCLogic {
   }
   seoTitle() {
     if (typeof document === 'undefined') return;
-    const names = { catalogo: 'Catálogo de libros', segunda: 'Libros con segunda historia', merch: 'Merch para lectores', eventos: 'Eventos literarios', vender: 'Vende tus libros', comprar: 'Cómo comprar', visitanos: 'Visítanos' };
+    const names = { catalogo: 'Catálogo de libros', segunda: 'Libros con segunda historia', merch: 'Merch para lectores', eventos: 'Eventos literarios', vender: 'Vende tus libros', comprar: 'Cómo comprar', historia: 'Nuestra historia', visitanos: 'Visítanos' };
     const base = 'La Madriguera · Librería y café de especialidad en Guayaquil';
     let t = base;
     if (this.state.view === 'admin') t = 'Panel · La Madriguera';
@@ -1765,8 +1881,13 @@ class Component extends DCLogic {
     return extra ? Object.assign(s, extra) : s;
   }
 
+  // ---------- textos editables (con valores por defecto) ----------
+  DEF_HISTORIA = 'La Madriguera nació del sueño de tener una casa para quienes viven entre páginas: un rincón de Urdesa donde el café de especialidad huele a historias y cada estantería esconde un mundo por descubrir.\n\nSomos una librería independiente de Guayaquil. Aquí encuentras novedades y joyas de segunda mano, acompañas tu lectura con un buen café y te quedas a los clubes de lectura, cenas temáticas y tardes de cine que armamos para vivir los libros más allá del papel.\n\nCada libro que entra y sale de La Madriguera pasa por nuestras manos con cariño. Gracias por ser parte de esta historia — la tuya también empieza aquí.';
+  DEF_ENVIO = '• Retiro gratis en el local: Urdesa, Circunvalación Sur y Ficus.\n• Guayaquil: entrega en 24–48 horas por courier. El costo depende del sector y te lo confirmamos por WhatsApp antes de enviar.\n• Resto de Ecuador: envío por Servientrega en 2–4 días laborables, costo según destino.\n• Tu pedido se despacha una vez confirmado el pago.';
+  DEF_CAMBIOS = '• Tienes 3 días desde la entrega para cambios, presentando tu comprobante.\n• El libro o producto debe estar en el mismo estado en que lo recibiste.\n• Los libros usados se venden en el estado descrito en su ficha; revísala antes de comprar.\n• ¿Llegó con daños de transporte? Escríbenos con una foto y lo resolvemos.';
+
   // ---------- rutas y ficha de producto ----------
-  PAGES = ['inicio', 'catalogo', 'segunda', 'merch', 'eventos', 'vender', 'comprar', 'visitanos'];
+  PAGES = ['inicio', 'catalogo', 'segunda', 'merch', 'eventos', 'vender', 'comprar', 'historia', 'visitanos'];
   applyHash = () => {
     if (typeof window === 'undefined') return;
     let h = (window.location.hash || '').replace(/^#/, '');
@@ -1788,6 +1909,7 @@ class Component extends DCLogic {
   openDetail(kind, id) {
     this.setState({ detail: { kind, id: (id || '') + '' } });
     this.setHash(kind + '/' + encodeURIComponent((id || '') + ''));
+    this.track('view_item', { item_id: (id || '') + '', item_category: kind });
   }
   closeDetail = () => {
     const pg = this.state.page;
@@ -2236,6 +2358,33 @@ class Component extends DCLogic {
   waMerch(m) { return this.waText('Hola, vi en la web de La Madriguera el producto ' + m.name + '. ¿Sigue disponible?'); }
   waEvent(e) { return this.waText('Hola, quiero reservar para el evento "' + e.name + '" del ' + e.date + '. ¿Hay cupos disponibles?'); }
 
+  // ---------- club de lectores (novedades) ----------
+  submitNews = () => {
+    const nombre = (this.state.newsName || '').trim();
+    const telefono = (this.state.newsPhone || '').trim();
+    const correo = (this.state.newsMail || '').trim();
+    if (!nombre) { this.setState({ newsErr: 'Escribe tu nombre.' }); return; }
+    if (telefono.replace(/[^0-9]/g, '').length < 7 && correo.indexOf('@') < 0) {
+      this.setState({ newsErr: 'Déjanos tu celular o un correo válido para poder avisarte.' });
+      return;
+    }
+    if (this.resDb) {
+      try {
+        this.resDb.collection('lm_interesados').add({
+          nombre, telefono, correo,
+          interes: 'Novedades, ofertas y eventos — web',
+          avisadoEl: null,
+          origen: 'web-madriguera',
+          createdAt: (window.firebase && window.firebase.firestore && window.firebase.firestore.FieldValue) ? window.firebase.firestore.FieldValue.serverTimestamp() : new Date()
+        }).catch(function () {});
+      } catch (e) {}
+    }
+    this.notifyEmail('Nuevo lector interesado · web La Madriguera', { nombre_cliente: nombre, celular_cliente: telefono || '(no dejó)', correo_cliente: correo || '(no dejó)', mensaje: 'Se anotó en la web para recibir novedades y eventos.' });
+    this.track('sign_up', { method: 'club_lectores' });
+    this.setState({ newsName: '', newsPhone: '', newsMail: '', newsErr: '' });
+    this.flash('¡Listo, ' + nombre.split(' ')[0] + '! Te avisaremos de las novedades ✨');
+  };
+
   // ---------- lead ----------
   openLead(info) { this.setState({ lead: info, leadName: '', leadPhone: '', leadErr: '' }); }
   submitLead = () => {
@@ -2286,6 +2435,7 @@ class Component extends DCLogic {
     if (ex) ex.qty += 1;
     else cart.push({ key, kind, id: item.id, title: item.title, sub: item.sub || '', price: +item.price || 0, imagen: item.imagen || '', qty: 1 });
     this.saveCart(cart);
+    this.track('add_to_cart', { currency: 'USD', value: +item.price || 0, item_name: item.title });
     this.flash('Agregado al carrito ✓');
   }
   cartInc(key) {
@@ -2338,6 +2488,7 @@ class Component extends DCLogic {
     const fields = { tipo: 'Pedido carrito', detalle: this.state.cart.map(x => x.qty + 'x ' + x.title + ' ($' + (x.price * x.qty) + ')').join(' | '), total: '$' + this.cartTotal(), nombre_cliente: name || '(no indicado)', celular_cliente: phone, entrega: entrega, pago: pago, nota: note || '' };
     this.notifyEmail('Pedido web · Carrito La Madriguera', fields);
     this.saveOrder({ id: 'p' + Date.now(), tipo: 'Pedido', canal: 'Carrito', estado: 'Nuevo', cliente: name, celular: phone, entrega: entrega, pago: pago, nota: note, total: this.cartTotal(), items: this.state.cart.map(x => ({ id: x.id || '', kind: x.kind || '', title: x.title, qty: x.qty, price: x.price })), ts: Date.now(), order: Date.now() });
+    this.track('purchase', { currency: 'USD', value: this.cartTotal(), transaction_id: 'p' + Date.now() });
     if (typeof window !== 'undefined') window.open(this.waText(msg), '_blank', 'noopener');
     this.saveCart([]);
     this.setState({ cartOpen: false, coName: '', coPhone: '', coNote: '', coErr: '', coPago: 'Transferencia bancaria' });
@@ -2387,6 +2538,7 @@ class Component extends DCLogic {
   go(key) {
     this.setState({ page: key, detail: null });
     this.setHash(key === 'inicio' ? '' : key);
+    this.track('page_view', { page_title: key, page_location: (typeof window !== 'undefined' ? window.location.href : '') });
     if (typeof window !== 'undefined') window.scrollTo({ top: 0, left: 0 });
   }
   navStyle(active) {
@@ -2403,7 +2555,7 @@ class Component extends DCLogic {
     const q = (search || '').trim().toLowerCase();
     const cms = this.state.cms;
     const brand = (cms && cms.brand) || {};
-    const brandDefs = [['logo', 'Logo', 'Cuadrado, fondo claro'], ['hero', 'Banner principal', 'Se ve en el inicio'], ['local', 'Foto del local', 'Sección Visítanos'], ['eventos', 'Imagen de Eventos', 'Encabezado de Eventos'], ['vender', 'Imagen de Vender', 'Encabezado de Vender']];
+    const brandDefs = [['logo', 'Logo', 'Cuadrado, fondo claro'], ['hero', 'Banner principal', 'Se ve en el inicio'], ['local', 'Foto del local', 'Sección Visítanos'], ['eventos', 'Imagen de Eventos', 'Encabezado de Eventos'], ['vender', 'Imagen de Vender', 'Encabezado de Vender'], ['historia1', 'Foto Nosotros 1', 'Página Nuestra historia'], ['historia2', 'Foto Nosotros 2', 'Página Nuestra historia']];
     const brandSlots = brandDefs.map(d => ({ key: d[0], label: d[1], desc: d[2], url: brand[d[0]] || '', has: !!brand[d[0]], imgStyle: this.coverStyle(brand[d[0]] || ''), onPick: () => this.pickBrand(d[0]), onClear: () => this.clearBrand(d[0]) }));
 
     // ---- store data ----
@@ -2430,7 +2582,7 @@ class Component extends DCLogic {
     const novedades = baseBooks.filter(b => (b.cats || []).includes('novedades'));
     const recs = [7, 3, 1].map(i => baseBooks[i]).filter(Boolean);
 
-    const navList = [['inicio', 'Inicio'], ['catalogo', 'Catálogo'], ['segunda', 'Segunda historia'], ['merch', 'Merch'], ['eventos', 'Eventos'], ['vender', 'Vender'], ['comprar', 'Cómo comprar'], ['visitanos', 'Visítanos']];
+    const navList = [['inicio', 'Inicio'], ['catalogo', 'Catálogo'], ['segunda', 'Segunda historia'], ['merch', 'Merch'], ['eventos', 'Eventos'], ['vender', 'Vender'], ['comprar', 'Cómo comprar'], ['historia', 'Nosotros'], ['visitanos', 'Visítanos']];
     const navItems = navList.map(([k, label]) => ({ label, onClick: () => this.go(k), style: this.navStyle(k === page) }));
 
     // ---- merch: filtros y búsqueda ----
@@ -2588,8 +2740,13 @@ class Component extends DCLogic {
       page,
       isInicio: page === 'inicio', isCatalogo: page === 'catalogo', isSegunda: page === 'segunda',
       isVender: page === 'vender', isMerch: page === 'merch', isEventos: page === 'eventos',
-      isComprar: page === 'comprar', isVisitanos: page === 'visitanos',
-      nav: { inicio: () => this.go('inicio'), catalogo: () => this.go('catalogo'), segunda: () => this.go('segunda'), vender: () => this.go('vender'), merch: () => this.go('merch'), eventos: () => this.go('eventos'), comprar: () => this.go('comprar'), visitanos: () => this.go('visitanos') },
+      isComprar: page === 'comprar', isHistoria: page === 'historia', isVisitanos: page === 'visitanos',
+      nav: { inicio: () => this.go('inicio'), catalogo: () => this.go('catalogo'), segunda: () => this.go('segunda'), vender: () => this.go('vender'), merch: () => this.go('merch'), eventos: () => this.go('eventos'), comprar: () => this.go('comprar'), historia: () => this.go('historia'), visitanos: () => this.go('visitanos') },
+      historiaText: (((cfg.historia || '') + '').trim()) || this.DEF_HISTORIA,
+      polEnvioText: (((cfg.polEnvio || '') + '').trim()) || this.DEF_ENVIO,
+      polCambiosText: (((cfg.polCambios || '') + '').trim()) || this.DEF_CAMBIOS,
+      hasHistoria1: !!brand.historia1, historia1Style: this.coverStyle(brand.historia1 || ''),
+      hasHistoria2: !!brand.historia2, historia2Style: this.coverStyle(brand.historia2 || ''),
       navItems,
       search, onSearch: (e) => this.setState({ search: e.target.value }), category,
       catalogBooks, catalogCount: catalogBooks.length, hasResults: catalogBooks.length > 0, noResults: catalogBooks.length === 0,
@@ -2668,6 +2825,11 @@ class Component extends DCLogic {
 
       // config
       cfgEmail: cfg.email || '', cfgWhatsapp: cfg.whatsapp || '', cfgPass: cfg.adminPass || '', cfgInstagram: cfg.instagram || '', cfgTiktok: cfg.tiktok || '', cfgMaps: cfg.maps || '',
+      cfgGaId: cfg.gaId || '', onCfgGaId: (e) => { this.setConfig('gaId', (e.target.value || '').trim()); this._gaBooted = false; this.bootAnalytics(); },
+      gaStatus: this._gaBooted ? 'Activo ✓' : ((((cfg.gaId || '') + '').trim()) ? 'Guardado — se activa al recargar' : 'Sin configurar'),
+      cfgHistoria: cfg.historia || '', onCfgHistoria: (e) => this.setConfig('historia', e.target.value),
+      cfgPolEnvio: cfg.polEnvio || '', onCfgPolEnvio: (e) => this.setConfig('polEnvio', e.target.value),
+      cfgPolCambios: cfg.polCambios || '', onCfgPolCambios: (e) => this.setConfig('polCambios', e.target.value),
       cfgPayLink: cfg.payLink || '', onCfgPayLink: (e) => this.setConfig('payLink', (e.target.value || '').trim()),
       cfgPayTransfer: cfg.payTransfer || '', onCfgPayTransfer: (e) => this.setConfig('payTransfer', e.target.value),
       cfgResKey: cfg.reservasKey || '',
@@ -2702,6 +2864,13 @@ class Component extends DCLogic {
       coErr: this.state.coErr, coHasErr: !!this.state.coErr,
       checkout: this.checkout, clearCart: this.clearCart,
       goCatalogFromCart: () => this.setState({ cartOpen: false, page: 'catalogo' }),
+
+      // club de lectores
+      newsName: this.state.newsName, onNewsName: (e) => this.setState({ newsName: e.target.value, newsErr: '' }),
+      newsPhone: this.state.newsPhone, onNewsPhone: (e) => this.setState({ newsPhone: e.target.value, newsErr: '' }),
+      newsMail: this.state.newsMail, onNewsMail: (e) => this.setState({ newsMail: e.target.value, newsErr: '' }),
+      newsErr: this.state.newsErr, newsHasErr: !!this.state.newsErr,
+      submitNews: this.submitNews,
 
       // lead
       leadOpen: !!this.state.lead, leadKind: this.state.lead ? this.state.lead.kind : '', leadTitle: this.state.lead ? this.state.lead.title : '', leadSub: this.state.lead ? this.state.lead.sub : '',
