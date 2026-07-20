@@ -131,6 +131,18 @@
   @keyframes lmslide { from { transform: translateX(100%); } to { transform: translateX(0); } }
   @keyframes lmtoast { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: translateY(0); } }
   .lm-chip { display:inline-block; padding:8px 16px; border-radius:999px; font-size:13.5px; font-weight:700; cursor:pointer; white-space:nowrap; transition:all .15s ease; }
+  /* Merch: layout con barra lateral vertical (escritorio) y acordeón (móvil) */
+  .lm-merch-layout { display:flex; gap:clamp(20px,3vw,34px); align-items:flex-start; }
+  .lm-merch-side { width:240px; flex-shrink:0; position:sticky; top:88px; }
+  .lm-merch-toggle { display:none; }
+  .lm-merch-list { display:flex; flex-direction:column; gap:6px; }
+  @media (max-width:820px) {
+    .lm-merch-layout { flex-direction:column; }
+    .lm-merch-side { width:100%; position:static; top:auto; }
+    .lm-merch-toggle { display:flex; }
+    .lm-merch-list { display:none; margin-top:8px; }
+    .lm-merch-list.open { display:flex; }
+  }
 </style>
 </helmet>
 
@@ -340,7 +352,11 @@
         <span style="position:absolute; left:18px; top:50%; transform:translateY(-50%); width:14px; height:14px; border:2px solid #A07F5E; border-radius:50%;"></span>
         <input value="{{ search }}" onInput="{{ onSearch }}" placeholder="Busca por título, autor, saga o género…" style="width:100%; padding:15px 18px 15px 46px; font-family:'Outfit',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; border:1px solid #E3D2B8; border-radius:999px; outline:none; box-shadow:0 6px 18px rgba(52,37,26,0.06);">
       </div>
-      <div data-noscroll="" data-chipbar="" style="margin-top:18px; display:flex; gap:9px; overflow-x:auto; white-space:nowrap; padding-bottom:4px; min-height:38px;"></div>
+      <div data-noscroll="" style="margin-top:18px; display:flex; gap:9px; overflow-x:auto; white-space:nowrap; padding-bottom:4px; min-height:38px;">
+        <sc-for list="{{ catChips }}" as="chip" hint-placeholder-count="6">
+          <span onClick="{{ chip.onClick }}" style="{{ chip.style }}">{{ chip.label }}</span>
+        </sc-for>
+      </div>
     </section>
     <section style="max-width:1180px; margin:0 auto; padding:18px clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
@@ -429,28 +445,39 @@
         <span style="position:absolute; left:18px; top:50%; transform:translateY(-50%); width:14px; height:14px; border:2px solid #A07F5E; border-radius:50%;"></span>
         <input value="{{ merchSearch }}" onInput="{{ onMerchSearch }}" placeholder="Busca separadores, tazas, stickers…" style="width:100%; padding:14px 18px 14px 46px; font-family:'Outfit',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; border:1px solid #E3D2B8; border-radius:999px; outline:none; box-shadow:0 6px 18px rgba(52,37,26,0.06);">
       </div>
-      <div data-noscroll="" style="margin-top:16px; display:flex; gap:9px; overflow-x:auto; white-space:nowrap; padding-bottom:4px;">
-        <sc-for list="{{ merchChips }}" as="chip" hint-placeholder-count="6">
-          <span onClick="{{ chip.onClick }}" style="{{ chip.style }}">{{ chip.label }}</span>
-        </sc-for>
-      </div>
     </section>
     <section style="max-width:1180px; margin:0 auto; padding:24px clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
-      <div style="margin-bottom:16px;"><span style="font-size:13px; font-weight:700; color:#8A715A;">{{ merchShownCount }} productos</span></div>
-      <sc-if value="{{ merchHasResults }}" hint-placeholder-val="{{ true }}">
-        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:clamp(14px,2vw,22px);">
-          <sc-for list="{{ merchAll }}" as="m" hint-placeholder-count="9">
-            <dc-import name="MerchCard" merch="{{ m }}" hint-size="100%,400px"></dc-import>
-          </sc-for>
+      <div class="lm-merch-layout">
+        <aside class="lm-merch-side">
+          <span class="lm-merch-toggle" onClick="{{ toggleMerchNav }}" style="align-items:center; justify-content:space-between; gap:10px; width:100%; cursor:pointer; padding:12px 15px; border-radius:12px; background:#FBF6EC; border:1px solid #E3D2B8; font-weight:800; font-size:14.5px; color:#5E1F33; font-family:'Outfit',sans-serif;">
+            <span>Categoría: {{ merchCurrentLabel }}</span>
+            <span style="font-size:12px;">▾</span>
+          </span>
+          <div class="{{ merchListClass }}">
+            <div style="font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#A07F5E; padding:4px 8px 8px;">Categorías</div>
+            <sc-for list="{{ merchNav }}" as="c" hint-placeholder-count="6">
+              <span onClick="{{ c.onClick }}" style="{{ c.style }}"><span>{{ c.label }}</span><span style="opacity:.72; font-size:12.5px; font-weight:700;">{{ c.count }}</span></span>
+            </sc-for>
+          </div>
+        </aside>
+        <div style="flex:1; min-width:0;">
+          <div style="margin-bottom:16px;"><span style="font-size:13px; font-weight:700; color:#8A715A;">{{ merchShownCount }} productos</span></div>
+          <sc-if value="{{ merchHasResults }}" hint-placeholder-val="{{ true }}">
+            <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:clamp(14px,2vw,22px);">
+              <sc-for list="{{ merchAll }}" as="m" hint-placeholder-count="9">
+                <dc-import name="MerchCard" merch="{{ m }}" hint-size="100%,400px"></dc-import>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ merchNoResults }}" hint-placeholder-val="{{ false }}">
+            <div style="text-align:center; padding:50px 20px; color:#8A715A;">
+              <div style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:21px; color:#5E4632;">No encontramos ese producto… todavía.</div>
+              <p style="margin:10px 0 0; font-size:15px;">Escríbenos por WhatsApp y te contamos qué tenemos o lo hacemos por encargo.</p>
+              <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="display:inline-block; margin-top:16px; text-decoration:none; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:14px; padding:12px 22px; border-radius:999px;">Preguntar por WhatsApp</a>
+            </div>
+          </sc-if>
         </div>
-      </sc-if>
-      <sc-if value="{{ merchNoResults }}" hint-placeholder-val="{{ false }}">
-        <div style="text-align:center; padding:50px 20px; color:#8A715A;">
-          <div style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:21px; color:#5E4632;">No encontramos ese producto… todavía.</div>
-          <p style="margin:10px 0 0; font-size:15px;">Escríbenos por WhatsApp y te contamos qué tenemos o lo hacemos por encargo.</p>
-          <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="display:inline-block; margin-top:16px; text-decoration:none; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:14px; padding:12px 22px; border-radius:999px;">Preguntar por WhatsApp</a>
-        </div>
-      </sc-if>
+      </div>
     </section>
   </div>
   </sc-if>
@@ -724,7 +751,8 @@
           <span onClick="{{ addLibro }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(94,31,51,0.25);" style-hover="background:#244031;">+ Añadir libro</span>
         </div>
       </div>
-      <div style="margin-bottom:16px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">En <strong>Género</strong> usa palabras como Fantasía, Romance, Manga, Infantil, Clásicos o Thriller para que el libro aparezca en los filtros del catálogo. Los libros marcados <strong>Vendido</strong> (o con stock 0) dejan de mostrarse en la página. Si llenas <strong>Precio antes</strong>, se muestra la oferta con el % de descuento.</div>
+      <div style="margin-bottom:16px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">Elige una <strong>Categoría</strong> para cada libro (escribe una nueva o elígela de la lista): así aparece en los filtros del catálogo. La <strong>Sinopsis</strong> se muestra en la ficha del libro. Activa <strong>★ Recomendado</strong> para destacarlo en el inicio y ordénalos con las flechas. Los libros <strong>Vendido</strong> (o con stock 0) dejan de mostrarse. Si llenas <strong>Precio antes</strong>, se muestra la oferta con el % de descuento.</div>
+      <datalist id="lm-bookcats"><sc-for list="{{ bookCatOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.v }}"></option></sc-for></datalist>
       <div style="margin-bottom:22px; position:relative; max-width:460px;">
         <span style="position:absolute; left:16px; top:50%; transform:translateY(-50%); width:13px; height:13px; border:2px solid #A07F5E; border-radius:50%;"></span>
         <input value="{{ aSearch }}" onInput="{{ onASearch }}" placeholder="Buscar por título, autor o código…" style="width:100%; padding:12px 16px 12px 42px; font-family:'Outfit',sans-serif; font-size:14.5px; color:#34251A; background:#FFFDF8; border:1px solid #E3D2B8; border-radius:999px; outline:none;">
@@ -781,8 +809,15 @@
       <div style="display:flex; flex-direction:column; gap:18px;">
         <sc-for list="{{ libros }}" as="l" hint-placeholder-count="3">
           <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;">
-              <span style="font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:#8A715A; background:#F0E6D2; padding:4px 9px; border-radius:6px;">{{ l.code }}</span>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                <span style="font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:#8A715A; background:#F0E6D2; padding:4px 9px; border-radius:6px;">{{ l.code }}</span>
+                <span onClick="{{ l.onToggleRec }}" title="Marcar como recomendado" style="{{ l.recPillStyle }}">{{ l.recPillLabel }}</span>
+                <sc-if value="{{ l.recomendado }}" hint-placeholder-val="{{ false }}">
+                  <span onClick="{{ l.onRecUp }}" title="Subir en recomendados" style="cursor:pointer; font-size:13px; font-weight:800; color:#5E1F33; padding:5px 9px; border-radius:8px; border:1px solid #E3D2B8; line-height:1;" style-hover="background:#F2E3E2;">↑</span>
+                  <span onClick="{{ l.onRecDown }}" title="Bajar en recomendados" style="cursor:pointer; font-size:13px; font-weight:800; color:#5E1F33; padding:5px 9px; border-radius:8px; border:1px solid #E3D2B8; line-height:1;" style-hover="background:#F2E3E2;">↓</span>
+                </sc-if>
+              </div>
               <div style="display:flex; align-items:center; gap:8px;">
                 <span onClick="{{ l.onSold }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#2E6B41; padding:6px 12px; border-radius:999px; border:1px solid #B9C4B4;" style-hover="background:#E3EDE3;">✓ Marcar vendido</span>
                 <span onClick="{{ l.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
@@ -809,6 +844,10 @@
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Autor</label>
                   <input value="{{ l.author }}" onChange="{{ l.onAuthor }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Categoría</label>
+                  <input value="{{ l.cat }}" onChange="{{ l.onCat }}" list="lm-bookcats" placeholder="Elige o escribe una nueva…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Género</label>
@@ -850,6 +889,10 @@
                     <option value="Vendido">Vendido</option>
                   </select>
                 </div>
+                <div style="grid-column:1/-1;">
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Sinopsis · descripción breve (se muestra en la ficha del libro)</label>
+                  <textarea value="{{ l.sinopsis }}" onChange="{{ l.onSinopsis }}" rows="3" placeholder="Ej. Una novela de fantasía ambientada en un mundo donde los recuerdos pueden comprarse y venderse. Ideal para lectores que disfrutan de aventuras con misterio y personajes entrañables." style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none; resize:vertical; line-height:1.5;"></textarea>
+                </div>
               </div>
             </div>
           </div>
@@ -869,6 +912,7 @@
         <span onClick="{{ addConsig }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#9A7A1E; color:#FBF3E0; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(154,122,30,0.3);" style-hover="background:#866916;">+ Registrar libro recibido</span>
       </div>
       <div style="margin-bottom:22px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">Cuando alguien te deja libros en el local, regístralos aquí con los datos del dueño. Solo los que marques <strong>En venta</strong> aparecen en la página, en la sección <strong>Segunda historia</strong>. Cuando se venda, cámbialo a <strong>Vendido</strong> y luego a <strong>Pagado al dueño</strong> cuando le entregues su parte.</div>
+      <datalist id="lm-bookcats-consig"><sc-for list="{{ bookCatOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.v }}"></option></sc-for></datalist>
 
       <div style="display:flex; flex-direction:column; gap:18px;">
         <sc-for list="{{ consig }}" as="c" hint-placeholder-count="2">
@@ -905,6 +949,10 @@
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Género</label>
                   <input value="{{ c.genre }}" onChange="{{ c.onGenre }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Categoría</label>
+                  <input value="{{ c.cat }}" onChange="{{ c.onCat }}" list="lm-bookcats-consig" placeholder="Elige o escribe una nueva…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">ISBN</label>
@@ -953,6 +1001,8 @@
         </div>
         <span onClick="{{ addMerch }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#7C2F3E; color:#FFF7EC; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(124,47,62,0.3);" style-hover="background:#672836;">+ Añadir producto</span>
       </div>
+      <div style="margin-bottom:18px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">Asigna una <strong>Categoría</strong> a cada producto (elígela de la lista o escribe una nueva): así se agrupan en la barra lateral de la página de Merch. Los productos marcados <strong>Agotado</strong> dejan de mostrarse.</div>
+      <datalist id="lm-merchcats"><sc-for list="{{ merchCatOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.v }}"></option></sc-for></datalist>
       <div style="display:flex; flex-direction:column; gap:18px;">
         <sc-for list="{{ merch }}" as="m" hint-placeholder-count="2">
           <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
@@ -979,7 +1029,7 @@
                 </div>
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Categoría</label>
-                  <input value="{{ m.cat }}" onChange="{{ m.onCat }}" placeholder="Tazas, Stickers, Pines…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                  <input value="{{ m.cat }}" onChange="{{ m.onCat }}" list="lm-merchcats" placeholder="Elige o escribe una nueva…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio ($)</label>
@@ -1565,7 +1615,7 @@ service cloud.firestore {
 class Component extends DCLogic {
   state = {
     view: 'store', page: 'inicio', search: '', category: 'todos',
-    merchCat: 'todas', merchSearch: '',
+    merchCat: 'todas', merchSearch: '', merchNavOpen: false,
     adminTab: 'libros', aSearch: '', pedidoFilter: 'todos',
     cms: null, savedAt: 0,
     detail: null,
@@ -1606,6 +1656,22 @@ class Component extends DCLogic {
     ['manga', 'Manga'], ['infantil', 'Infantil y juvenil'], ['clasicos', 'Clásicos'], ['thriller', 'Thriller'],
     ['usados', 'Libros usados'], ['ofertas', 'Ofertas lectoras'], ['ultima', 'Última unidad']
   ];
+
+  // Categorías sugeridas por defecto (el administrador puede crear otras)
+  BOOK_CATS = ['Ficción', 'Romance', 'Fantasía', 'Ciencia ficción', 'Novela juvenil', 'Infantil', 'Manga', 'Terror', 'Desarrollo personal', 'Historia', 'Clásicos', 'Outlet / Ofertas'];
+  MERCH_CATS = ['Tazas', 'Separadores', 'Stickers', 'Tote Bags', 'Libretas', 'Pines', 'Llaveros', 'Figuras', 'Papelería', 'Decoración', 'Outlet'];
+
+  // Lista completa de categorías (por defecto + creadas por el admin + en uso), sin repetir
+  catList(defaults, colls, custom) {
+    const set = [];
+    const add = (c) => { c = ((c || '') + '').trim(); if (c && set.indexOf(c) < 0) set.push(c); };
+    (defaults || []).forEach(add);
+    (custom || []).forEach(add);
+    (colls || []).forEach(arr => (arr || []).forEach(it => add(it.cat)));
+    return set;
+  }
+  bookCatList() { const cms = this.currentCMS(); return this.catList(this.BOOK_CATS, [cms.libros, cms.consig], cms.bookCats); }
+  merchCatList() { const cms = this.currentCMS(); return this.catList(this.MERCH_CATS, [cms.merch], cms.merchCats); }
 
   ventaPasos = [
     { n: '1', title: 'Registra tu libro', text: 'Cuéntanos qué tienes: título, autor y estado. Te guiamos por WhatsApp.' },
@@ -2059,6 +2125,10 @@ class Component extends DCLogic {
   chipStyle(on) {
     return { display: 'inline-block', padding: '8px 16px', borderRadius: '999px', fontSize: '13.5px', fontWeight: on ? 800 : 700, cursor: 'pointer', whiteSpace: 'nowrap', background: on ? '#7C2F3E' : '#FBF6EC', color: on ? '#FFF7EC' : '#5E4632', border: on ? '1px solid #7C2F3E' : '1px solid #E3D2B8', fontFamily: "'Outfit',sans-serif", transition: 'all .15s ease' };
   }
+  // Estilo de cada categoría en la barra lateral vertical del merch
+  merchNavStyle(on) {
+    return { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', width: '100%', padding: '11px 15px', borderRadius: '12px', fontSize: '14.5px', fontWeight: on ? 800 : 600, cursor: 'pointer', background: on ? '#7C2F3E' : 'transparent', color: on ? '#FFF7EC' : '#5E4632', border: on ? '1px solid #7C2F3E' : '1px solid transparent', fontFamily: "'Outfit',sans-serif", transition: 'all .15s ease' };
+  }
 
   // ---------- CMS (caché local) ----------
   defaultCMS() { return { libros: [], consig: [], merch: [], eventos: [], eventosImg: [], pedidos: [], brand: {}, config: {} }; }
@@ -2118,13 +2188,27 @@ class Component extends DCLogic {
     if (this.online()) this.itemRef(coll, item.id).set(this.clean(item)).catch((e) => this.flash(this.fbErr(e)));
     this.flash(msg);
   }
+  // Reordena un libro dentro de la lista de recomendados (dir: -1 sube, +1 baja)
+  moveRec(coll, id, dir) {
+    const cms = this.currentCMS();
+    const recs = (cms[coll] || []).filter(b => b.recomendado).sort((a, b) => (a.recOrder || 0) - (b.recOrder || 0));
+    recs.forEach((b, i) => { if (typeof b.recOrder !== 'number') b.recOrder = i; });
+    const idx = recs.findIndex(b => b.id === id);
+    const j = idx + dir;
+    if (idx < 0 || j < 0 || j >= recs.length) return;
+    const a = recs[idx], b = recs[j];
+    const tmp = a.recOrder; a.recOrder = b.recOrder; b.recOrder = tmp;
+    this.setField(coll, a.id, 'recOrder', a.recOrder);
+    this.setField(coll, b.id, 'recOrder', b.recOrder);
+    this.flash('Orden de recomendados actualizado.');
+  }
   addLibro = () => {
     const n = (this.currentCMS().libros || []).length + 1;
-    this.addItem('libros', { id: 'b' + Date.now(), code: 'LM-N-' + this.pad(n), title: 'Nuevo libro', author: '', genre: '', isbn: '', estado: 'Nuevo', disp: 'Disponible', price: 0, imagen: '', order: Date.now() }, 'Libro añadido — edítalo abajo.');
+    this.addItem('libros', { id: 'b' + Date.now(), code: 'LM-N-' + this.pad(n), title: 'Nuevo libro', author: '', genre: '', cat: '', sinopsis: '', recomendado: false, isbn: '', estado: 'Nuevo', disp: 'Disponible', price: 0, imagen: '', order: Date.now() }, 'Libro añadido — edítalo abajo.');
   };
   addConsig = () => {
     const n = (this.currentCMS().consig || []).length + 1;
-    this.addItem('consig', { id: 'c' + Date.now(), code: 'LM-C-' + this.pad(n), title: 'Libro recibido', author: '', genre: '', isbn: '', owner: '', contact: '', price: 0, payout: 0, estado: 'En venta', imagen: '', order: Date.now() }, 'Registro creado y publicado.');
+    this.addItem('consig', { id: 'c' + Date.now(), code: 'LM-C-' + this.pad(n), title: 'Libro recibido', author: '', genre: '', cat: '', sinopsis: '', isbn: '', owner: '', contact: '', price: 0, payout: 0, estado: 'En venta', imagen: '', order: Date.now() }, 'Registro creado y publicado.');
   };
   addMerch = () => {
     this.addItem('merch', { id: 'm' + Date.now(), name: 'Nuevo producto', cat: '', desc: '', price: 0, disp: 'Disponible', imagen: '', order: Date.now() }, 'Producto añadido.');
@@ -2348,27 +2432,8 @@ class Component extends DCLogic {
   };
 
   // ---------- chips (catálogo) ----------
-  syncChips() {
-    if (typeof document === 'undefined') return;
-    const bar = document.querySelector('[data-chipbar]');
-    if (!bar) return;
-    if (bar.childElementCount !== this.CATS.length) {
-      bar.innerHTML = '';
-      this.CATS.forEach(([k, label]) => {
-        const s = document.createElement('span');
-        s.textContent = label; s.setAttribute('data-cat', k); s.className = 'lm-chip';
-        s.onclick = () => this.setState({ category: k });
-        bar.appendChild(s);
-      });
-    }
-    const active = this.state.category;
-    Array.from(bar.children).forEach(s => {
-      const on = s.getAttribute('data-cat') === active;
-      s.style.background = on ? '#7C2F3E' : '#FBF6EC';
-      s.style.color = on ? '#FFF7EC' : '#5E4632';
-      s.style.border = on ? '1px solid #7C2F3E' : '1px solid #E3D2B8';
-    });
-  }
+  // Los filtros del catálogo ahora se renderizan de forma declarativa (ver catChips en renderVals()).
+  syncChips() { /* reemplazado por filtros declarativos (catChips) */ }
 
   // ---------- badges ----------
   badge(bg, color) { return { display: 'inline-block', padding: '3px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: 800, letterSpacing: '.02em', background: bg, color: color, whiteSpace: 'nowrap', fontFamily: "'Outfit',sans-serif" }; }
@@ -2397,6 +2462,25 @@ class Component extends DCLogic {
     return disp;
   }
   hasOffer(x) { return typeof x.priceOld === 'number' && isFinite(x.priceOld) && x.priceOld > (+x.price || 0) && (+x.price || 0) > 0; }
+  // Categoría efectiva: la explícita del libro o, si está vacía, una deducida del género principal
+  effCat(b) {
+    const c = ((b.cat || '') + '').trim();
+    if (c) return c;
+    let g = ((b.genre || '') + '').toLowerCase();
+    if (!g) return '';
+    g = g.split(/[·,\/|]/)[0].trim(); // toma el género principal (antes del primer separador)
+    if (g.indexOf('cienc') >= 0 || g.indexOf('sci') >= 0) return 'Ciencia ficción';
+    if (g.indexOf('fantas') >= 0) return 'Fantasía';
+    if (g.indexOf('manga') >= 0) return 'Manga';
+    if (g.indexOf('terror') >= 0 || g.indexOf('horror') >= 0) return 'Terror';
+    if (g.indexOf('infantil') >= 0) return 'Infantil';
+    if (g.indexOf('juvenil') >= 0) return 'Novela juvenil';
+    if (g.indexOf('desarrollo') >= 0 || g.indexOf('autoayuda') >= 0) return 'Desarrollo personal';
+    if (g.indexOf('histor') >= 0) return 'Historia';
+    if (g.indexOf('clásic') >= 0 || g.indexOf('clasic') >= 0) return 'Clásicos';
+    if (g.indexOf('roman') >= 0) return 'Romance';
+    return '';
+  }
   toBook(l) {
     const g = ((l.genre || '') + '').toLowerCase();
     const cats = [];
@@ -2411,7 +2495,7 @@ class Component extends DCLogic {
     if (g.indexOf('thriller') >= 0 || g.indexOf('misterio') >= 0 || g.indexOf('suspenso') >= 0) cats.push('thriller');
     if (disp === 'Última unidad') cats.push('ultima');
     if (disp === 'Oferta' || this.hasOffer(l)) cats.push('ofertas');
-    return Object.assign({}, l, { code: l.code || l.id, cats, disp });
+    return Object.assign({}, l, { code: l.code || l.id, cats, disp, cat: this.effCat(l) });
   }
   toMerch(m) { return Object.assign({}, m, { disp: this.effDisp(m) }); }
 
@@ -2641,28 +2725,47 @@ class Component extends DCLogic {
       });
 
     let books = baseBooks;
-    if (category !== 'todos') books = books.filter(b => (b.cats || []).includes(category));
-    if (q) books = books.filter(b => (b.title + ' ' + b.author + ' ' + b.genre).toLowerCase().includes(q));
+    if (category !== 'todos') books = books.filter(b => ((b.cat || '') + '').trim() === category);
+    if (q) books = books.filter(b => (b.title + ' ' + b.author + ' ' + b.genre + ' ' + (b.cat || '')).toLowerCase().includes(q));
     const catalogBooks = books.map(b => this.decBook(b));
     const usados = baseBooks.filter(b => (b.cats || []).includes('usados')).map(b => this.decBook(b));
     const novedades = baseBooks.filter(b => (b.cats || []).includes('novedades'));
-    const recs = [7, 3, 1].map(i => baseBooks[i]).filter(Boolean);
+    // Recomendados: los marcados en el panel, en el orden definido con las flechas
+    const recMarked = baseBooks.filter(b => b.recomendado).sort((a, b2) => (a.recOrder || 0) - (b2.recOrder || 0));
+    const recs = recMarked.length ? recMarked : [7, 3, 1].map(i => baseBooks[i]).filter(Boolean);
+
+    // Filtros de categoría del catálogo: "Todos" + categorías que tienen libros
+    const usedBookCats = [];
+    baseBooks.forEach(b => { const c = ((b.cat || '') + '').trim(); if (c && usedBookCats.indexOf(c) < 0) usedBookCats.push(c); });
+    const orderedBookCats = this.bookCatList().filter(c => usedBookCats.indexOf(c) >= 0);
+    const catChips = [{ key: 'todos', label: 'Todos' }].concat(orderedBookCats.map(c => ({ key: c, label: c }))).map(c => ({
+      label: c.label,
+      onClick: () => this.setState({ category: c.key }),
+      style: this.chipStyle(category === c.key)
+    }));
 
     const navList = [['inicio', 'Inicio'], ['catalogo', 'Catálogo'], ['segunda', 'Segunda historia'], ['merch', 'Merch'], ['eventos', 'Eventos'], ['vender', 'Vender'], ['comprar', 'Cómo comprar'], ['historia', 'Nosotros'], ['visitanos', 'Visítanos']];
     const navItems = navList.map(([k, label]) => ({ label, onClick: () => this.go(k), style: this.navStyle(k === page) }));
 
     // ---- merch: filtros y búsqueda ----
     const mq = (this.state.merchSearch || '').trim().toLowerCase();
-    const merchCats = [];
-    baseMerch.forEach(m => { const c = ((m.cat || '') + '').trim(); if (c && merchCats.indexOf(c) < 0) merchCats.push(c); });
+    const usedMerchCats = [];
+    baseMerch.forEach(m => { const c = ((m.cat || '') + '').trim(); if (c && usedMerchCats.indexOf(c) < 0) usedMerchCats.push(c); });
+    const orderedMerchCats = this.merchCatList().filter(c => usedMerchCats.indexOf(c) >= 0);
     let merchList = baseMerch;
     if (this.state.merchCat !== 'todas') merchList = merchList.filter(m => ((m.cat || '') + '').trim() === this.state.merchCat);
     if (mq) merchList = merchList.filter(m => ((m.name || '') + ' ' + (m.desc || '') + ' ' + (m.cat || '')).toLowerCase().indexOf(mq) >= 0);
-    const merchChips = [{ key: 'todas', label: 'Todo' }].concat(merchCats.map(c => ({ key: c, label: c }))).map(c => ({
-      label: c.label,
-      onClick: () => this.setState({ merchCat: c.key }),
-      style: this.chipStyle(this.state.merchCat === c.key)
+    const merchCatCount = (key) => key === 'todas' ? baseMerch.length : baseMerch.filter(m => ((m.cat || '') + '').trim() === key).length;
+    const merchNavDefs = [{ key: 'todas', label: 'Todo' }].concat(orderedMerchCats.map(c => ({ key: c, label: c })));
+    const selMerch = this.state.merchCat;
+    // Barra lateral vertical de categorías (con contador y resaltado de la activa)
+    const merchNav = merchNavDefs.map(c => ({
+      key: c.key, label: c.label, count: merchCatCount(c.key),
+      onClick: () => this.setState({ merchCat: c.key, merchNavOpen: false }),
+      style: this.merchNavStyle(selMerch === c.key)
     }));
+    const merchCurrent = merchNavDefs.find(c => c.key === selMerch) || merchNavDefs[0];
+    const merchChips = merchNav;
 
     // ---- ficha de producto ----
     const det = this.state.detail;
@@ -2673,7 +2776,8 @@ class Component extends DCLogic {
         const f = all.find(x => (x.code + '') === det.id || x.id === det.id);
         if (f) {
           const d = this.decBook(f);
-          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Libro', dTitle: d.title, dSub: d.author || '', dHasSub: !!d.author, dDesc: (d.genre || '') + (d.isbn ? ((d.genre ? ' · ' : '') + 'ISBN ' + d.isbn) : ''), dHasDesc: !!(d.genre || d.isbn), dPriceLabel: d.priceLabel, dHasOld: d.hasOld, dOldLabel: d.oldLabel, dOffLabel: d.offLabel, dHasImg: d.hasImg, dImgStyle: d.imgStyle, dHasBadge1: !!d.estado, dBadge1: d.estado, dBadge1Style: d.estadoStyle, dHasBadge2: !!d.disp, dBadge2: d.disp, dBadge2Style: d.dispStyle, dCanCart: d.disp !== 'Vendido', dAdd: d.onAdd, dWaHref: d.waHref, dWaLabel: 'Consultar por WhatsApp', dHasCode: !!d.code, dCode: d.code + '' });
+          const bSyn = ((d.sinopsis || '') + '').trim();
+          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Libro', dTitle: d.title, dSub: d.author || '', dHasSub: !!d.author, dDesc: bSyn, dHasDesc: !!bSyn, dPriceLabel: d.priceLabel, dHasOld: d.hasOld, dOldLabel: d.oldLabel, dOffLabel: d.offLabel, dHasImg: d.hasImg, dImgStyle: d.imgStyle, dHasBadge1: !!d.estado, dBadge1: d.estado, dBadge1Style: d.estadoStyle, dHasBadge2: !!d.disp, dBadge2: d.disp, dBadge2Style: d.dispStyle, dCanCart: d.disp !== 'Vendido', dAdd: d.onAdd, dWaHref: d.waHref, dWaLabel: 'Consultar por WhatsApp', dHasCode: !!d.code, dCode: d.code + '' });
         }
       } else if (det.kind === 'merch') {
         const f = (cms.merch || []).map(x => this.toMerch(x)).find(x => x.id === det.id || x.name === det.id);
@@ -2699,6 +2803,23 @@ class Component extends DCLogic {
       onTitle: (e) => this.setField(coll, l.id, 'title', e.target.value),
       onAuthor: (e) => this.setField(coll, l.id, 'author', e.target.value),
       onGenre: (e) => this.setField(coll, l.id, 'genre', e.target.value),
+      onCat: (e) => this.setField(coll, l.id, 'cat', e.target.value),
+      onSinopsis: (e) => this.setField(coll, l.id, 'sinopsis', e.target.value),
+      recomendado: !!l.recomendado,
+      recPillLabel: l.recomendado ? '★ Recomendado' : '☆ Recomendar',
+      recPillStyle: {
+        cursor: 'pointer', fontSize: '12.5px', fontWeight: 800, padding: '6px 12px', borderRadius: '999px',
+        background: l.recomendado ? '#C9A24B' : 'transparent', color: l.recomendado ? '#2A1C12' : '#9A7A1E',
+        border: l.recomendado ? '1px solid #C9A24B' : '1px solid #D9BC77', whiteSpace: 'nowrap'
+      },
+      onToggleRec: () => {
+        const on = !l.recomendado;
+        this.setField(coll, l.id, 'recomendado', on);
+        if (on && typeof l.recOrder !== 'number') this.setField(coll, l.id, 'recOrder', Date.now());
+        this.flash(on ? 'Añadido a recomendados ★' : 'Quitado de recomendados.');
+      },
+      onRecUp: () => this.moveRec(coll, l.id, -1),
+      onRecDown: () => this.moveRec(coll, l.id, 1),
       onIsbn: (e) => this.setField(coll, l.id, 'isbn', e.target.value.trim()),
       onPrice: (e) => this.setNum(coll, l.id, 'price', e.target.value),
       onEstado: (e) => this.setField(coll, l.id, 'estado', e.target.value),
@@ -2822,7 +2943,7 @@ class Component extends DCLogic {
       hasHistoria1: !!brand.historia1, historia1Style: this.coverStyle(brand.historia1 || ''),
       hasHistoria2: !!brand.historia2, historia2Style: this.coverStyle(brand.historia2 || ''),
       navItems,
-      search, onSearch: (e) => this.setState({ search: e.target.value }), category,
+      search, onSearch: (e) => this.setState({ search: e.target.value }), category, catChips,
       catalogBooks, catalogCount: catalogBooks.length, hasResults: catalogBooks.length > 0, noResults: catalogBooks.length === 0,
       homeNovedades: novedades.slice(0, 6).map(b => this.decBook(b)),
       homeSegunda: usados.slice(0, 4),
@@ -2833,7 +2954,11 @@ class Component extends DCLogic {
       merchAll: merchList.map(m => this.decMerch(m)),
       merchShownCount: merchList.length, merchHasResults: merchList.length > 0, merchNoResults: merchList.length === 0,
       merchSearch: this.state.merchSearch, onMerchSearch: (e) => this.setState({ merchSearch: e.target.value }),
-      merchChips,
+      merchChips, merchNav,
+      merchCurrentLabel: merchCurrent.label,
+      merchListClass: 'lm-merch-list' + (this.state.merchNavOpen ? ' open' : ''),
+      toggleMerchNav: () => this.setState({ merchNavOpen: !this.state.merchNavOpen }),
+      bookCatOptions: this.bookCatList().map(c => ({ v: c })), merchCatOptions: this.merchCatList().map(c => ({ v: c })),
       eventsAll: baseEvents.map(e => this.decEvent(e)),
 
       // ficha de producto
