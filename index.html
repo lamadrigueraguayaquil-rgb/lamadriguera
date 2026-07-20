@@ -1828,6 +1828,7 @@ class Component extends DCLogic {
         includes: ev.descripcion || '',
         price: (+ev.precio > 0) ? ('$' + ev.precio) : 'Entrada libre',
         cupos: disp > 0 ? (disp + (disp === 1 ? ' cupo' : ' cupos')) : 'Agotado',
+        cuposDisp: disp,
         agotado: disp <= 0,
         imagen: (img && img.imagen) || '',
         resLive: true
@@ -1970,20 +1971,42 @@ class Component extends DCLogic {
 
   // ---------- fechas de eventos ----------
   MESES = { ene: 0, feb: 1, mar: 2, abr: 3, may: 4, jun: 5, jul: 6, ago: 7, sep: 8, set: 8, oct: 9, nov: 10, dic: 11 };
+  // hora del evento como [hh, mm]; si no hay hora usa fin del día (23:59)
+  evtHM(e) {
+    const m = /(\d{1,2}):(\d{2})/.exec(((e && (e.time || e.hora)) || '') + '');
+    if (m) { const h = +m[1], mi = +m[2]; if (h >= 0 && h < 24 && mi >= 0 && mi < 60) return [h, mi]; }
+    return [23, 59];
+  }
   evtTime(e) {
+    const hm = this.evtHM(e);
     if (e && e.fecha) {
       const p = ((e.fecha) + '').split('-');
-      if (p.length === 3) { const d = new Date(+p[0], +p[1] - 1, +p[2], 23, 59); if (!isNaN(d.getTime())) return d.getTime(); }
+      if (p.length === 3) { const d = new Date(+p[0], +p[1] - 1, +p[2], hm[0], hm[1]); if (!isNaN(d.getTime())) return d.getTime(); }
     }
     const m = /(\d{1,2})\s*(?:de\s+)?(ene|feb|mar|abr|may|jun|jul|ago|sep|set|oct|nov|dic)/i.exec(((e && e.date) || '') + '');
     if (m) {
       const now = new Date();
-      const d = new Date(now.getFullYear(), this.MESES[m[2].toLowerCase()], +m[1], 23, 59);
+      const d = new Date(now.getFullYear(), this.MESES[m[2].toLowerCase()], +m[1], hm[0], hm[1]);
       if (!isNaN(d.getTime())) return d.getTime();
     }
     return null;
   }
   isPastEvent(e) { const t = this.evtTime(e); return t != null && t < Date.now(); }
+  // cupos_disponibles del evento: número si se conoce, null si no se puede determinar
+  eventSpots(e) {
+    if (e && typeof e.cuposDisp === 'number') return e.cuposDisp;
+    const m = /(\d+)/.exec(((e && e.cupos) || '') + '');
+    return m ? +m[1] : null;
+  }
+  // agotado: eventos en vivo usan su bandera; manuales se leen del texto de cupos
+  isSoldOut(e) {
+    if (e && e.resLive) return !!e.agotado;
+    if (/agotado/i.test(((e && e.cupos) || '') + '')) return true;
+    const n = this.eventSpots(e);
+    return n != null && n <= 0;
+  }
+  // reservable: fecha/hora futura y con cupos disponibles (> 0)
+  isBookableEvent(e) { return !this.isPastEvent(e) && !this.isSoldOut(e); }
 
   // ---------- stock ----------
   hasStockNum(x) { return !!x && typeof x.stock === 'number' && isFinite(x.stock); }
@@ -2605,8 +2628,10 @@ class Component extends DCLogic {
     const baseBooks = adminLibros.concat(consigPub);
     const baseMerch = cms ? (cms.merch || []).map(m => this.toMerch(m)).filter(m => m.disp !== 'Vendido') : [];
     const baseEvents = this.resEventos().concat(cms ? (cms.eventos || []) : [])
-      .filter(e => !this.isPastEvent(e))
+      // solo eventos reservables: fecha/hora futura y con cupos disponibles (> 0)
+      .filter(e => this.isBookableEvent(e))
       .slice()
+      // orden por fecha y hora ascendente: primero el evento más próximo
       .sort((a, b2) => {
         const ta = this.evtTime(a), tb = this.evtTime(b2);
         if (ta == null && tb == null) return 0;
