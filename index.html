@@ -1024,6 +1024,29 @@
         </div>
         <span onClick="{{ addEvento }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#2A1C12; color:#F4E9D8; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(42,28,18,0.3);" style-hover="background:#3d2a1c;">+ Añadir evento</span>
       </div>
+
+      <sc-if value="{{ resAdminShow }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-bottom:26px; background:#FFFDF8; border:1px solid #C9A24B; border-radius:16px; padding:clamp(18px,3vw,24px);">
+        <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:21px; color:#5E1F33;">📡 Eventos de tu app (en vivo)</h3>
+        <p style="margin:6px 0 14px; font-size:13.5px; color:#6E5946; line-height:1.5;">Estos eventos llegan de tu app de reservas con cupos en vivo — sus datos se editan allá. Aquí solo les pones la <strong>foto</strong> que se ve en la página: haz click en cada recuadro.</p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:16px;">
+          <sc-for list="{{ resAdminEventos }}" as="re" hint-placeholder-count="3">
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div onClick="{{ re.onPick }}" title="Click para subir la imagen" style="position:relative; width:100%; aspect-ratio:16/10; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F7EFE2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
+                <span style="font-size:11px; color:#A07F5E; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>imagen</span>
+                <sc-if value="{{ re.hasImg }}" hint-placeholder-val="{{ false }}"><div style="{{ re.imgStyle }}"></div></sc-if>
+              </div>
+              <div>
+                <div style="font-size:14px; font-weight:800; color:#34251A; line-height:1.25;">{{ re.name }}</div>
+                <div style="font-size:12px; color:#8A715A; margin-top:2px;">{{ re.sub }}</div>
+              </div>
+              <sc-if value="{{ re.hasImg }}" hint-placeholder-val="{{ false }}"><span onClick="{{ re.onClearImg }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C;">Quitar imagen</span></sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
       <div style="display:flex; flex-direction:column; gap:18px;">
         <sc-for list="{{ eventos }}" as="e" hint-placeholder-count="2">
           <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
@@ -1790,11 +1813,14 @@ class Component extends DCLogic {
     return dias[d.getDay()] + ' ' + d.getDate() + ' ' + meses[d.getMonth()];
   }
   resEventos() {
+    const imgs = ((this.state.cms && this.state.cms.eventosImg) || []);
     return (this._resEventos || []).map(ev => {
       const vend = (typeof ev.vendidas === 'number') ? ev.vendidas : 0;
       const disp = Math.max(0, (ev.cuposTotal || 0) - vend);
+      const img = imgs.find(x => x.id === ev.id);
       return {
         id: 'res_' + ev.id,
+        rawId: ev.id,
         name: ev.nombre || 'Evento',
         date: this.fmtFechaCorta(ev.fecha),
         fecha: ev.fecha || '',
@@ -1803,10 +1829,19 @@ class Component extends DCLogic {
         price: (+ev.precio > 0) ? ('$' + ev.precio) : 'Entrada libre',
         cupos: disp > 0 ? (disp + (disp === 1 ? ' cupo' : ' cupos')) : 'Agotado',
         agotado: disp <= 0,
-        imagen: '',
+        imagen: (img && img.imagen) || '',
         resLive: true
       };
     });
+  }
+  setEventoImg(id, val) {
+    const cms = this.currentCMS();
+    cms.eventosImg = cms.eventosImg || [];
+    const ex = cms.eventosImg.find(x => x.id === id);
+    if (ex) ex.imagen = val;
+    else cms.eventosImg.push({ id, imagen: val });
+    this.cacheCMS(cms);
+    if (this.online()) this.itemRef('eventosImg', id).set({ id, imagen: val }, { merge: true }).catch((e) => this.flash(this.fbErr(e)));
   }
 
   subscribe() {
@@ -1814,7 +1849,7 @@ class Component extends DCLogic {
     this._live = this._live || this.defaultCMS();
     this._unsubs = this._unsubs || [];
     const ok = () => { if (this.state.fb !== 'online') this.setState({ fb: 'online' }); if (this._fbTimer) clearTimeout(this._fbTimer); };
-    ['libros', 'consig', 'merch', 'eventos', 'pedidos'].forEach((coll) => {
+    ['libros', 'consig', 'merch', 'eventos', 'eventosImg', 'pedidos'].forEach((coll) => {
       const u = this.db.collection(coll).onSnapshot((snap) => {
         const arr = [];
         snap.forEach((d) => arr.push(Object.assign({ id: d.id }, d.data())));
@@ -2003,7 +2038,7 @@ class Component extends DCLogic {
   }
 
   // ---------- CMS (caché local) ----------
-  defaultCMS() { return { libros: [], consig: [], merch: [], eventos: [], pedidos: [], brand: {}, config: {} }; }
+  defaultCMS() { return { libros: [], consig: [], merch: [], eventos: [], eventosImg: [], pedidos: [], brand: {}, config: {} }; }
 
   loadCMS() {
     if (this.online()) return;
@@ -2126,10 +2161,16 @@ class Component extends DCLogic {
         let data;
         try { data = isLogo ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', tgt.brand ? 0.85 : 0.78); }
         catch (x) { data = ev.target.result; }
-        if (tgt.brand) this.setBrand(tgt.brand, data); else this.setField(tgt.coll, tgt.id, 'imagen', data);
+        if (tgt.brand) this.setBrand(tgt.brand, data);
+        else if (tgt.coll === 'eventosImg') this.setEventoImg(tgt.id, data);
+        else this.setField(tgt.coll, tgt.id, 'imagen', data);
         this.flash('Foto cargada ✓');
       };
-      img.onerror = () => { if (tgt.brand) this.setBrand(tgt.brand, ev.target.result); else this.setField(tgt.coll, tgt.id, 'imagen', ev.target.result); };
+      img.onerror = () => {
+        if (tgt.brand) this.setBrand(tgt.brand, ev.target.result);
+        else if (tgt.coll === 'eventosImg') this.setEventoImg(tgt.id, ev.target.result);
+        else this.setField(tgt.coll, tgt.id, 'imagen', ev.target.result);
+      };
       img.src = ev.target.result;
     };
     reader.readAsDataURL(file);
@@ -2696,6 +2737,14 @@ class Component extends DCLogic {
       onFecha: (ev) => this.setField('eventos', e.id, 'fecha', ev.target.value),
       isPast: this.isPastEvent(e)
     }));
+    const resAdminEventos = this.resEventos().map(e => ({
+      name: e.name,
+      sub: [e.date, e.time].filter(Boolean).join(' · ') + ' · ' + e.cupos,
+      hasImg: !!e.imagen,
+      imgStyle: this.coverStyle(e.imagen),
+      onPick: () => this.pickImage('eventosImg', e.rawId),
+      onClearImg: () => this.setEventoImg(e.rawId, '')
+    }));
 
     const pedidosAll = (C.pedidos || []).map(p => ({
       id: p.id, tipo: p.tipo || 'Pedido', canal: p.canal || 'Carrito', estado: p.estado || 'Nuevo',
@@ -2783,6 +2832,7 @@ class Component extends DCLogic {
       adminTabs,
       aLibros: adminTab === 'libros', aConsig: adminTab === 'consig', aMerch: adminTab === 'merch', aEventos: adminTab === 'eventos', aPedidos: adminTab === 'pedidos', aConfig: adminTab === 'config',
       libros, consig, merch, eventos, pedidos,
+      resAdminEventos, resAdminShow: resAdminEventos.length > 0,
       librosCount: (C.libros || []).length, consigCount: consig.length, merchCount: merch.length, eventosCount: eventos.length,
       pedidosCount: pedidosAll.length, pedidosNuevos: pedidosAll.filter(p => p.estado === 'Nuevo').length, pedidosEmpty: pedidosAll.length === 0,
       pedidoChips, ventasEntregadas,
