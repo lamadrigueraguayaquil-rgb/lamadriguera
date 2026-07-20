@@ -299,6 +299,9 @@
           <dc-import name="BookCard" book="{{ b }}" hint-size="100%,470px"></dc-import>
         </sc-for>
       </div>
+      <div style="margin-top:28px; text-align:center;">
+        <span onClick="{{ nav.catalogo }}" style="cursor:pointer; display:inline-block; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:14.5px; padding:13px 26px; border-radius:999px; box-shadow:0 8px 20px rgba(94,31,51,0.25);" style-hover="background:#244031;">Ver catálogo completo →</span>
+      </div>
     </section>
 
     <section style="background:#244031; color:#F4E9D8; position:relative; overflow:hidden;">
@@ -768,8 +771,8 @@
           <span onClick="{{ closeBulk }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#8A715A; padding:6px 12px; border-radius:999px; border:1px solid #E3D2B8;" style-hover="background:#F0E6D2;">Cerrar ✕</span>
         </div>
         <div style="margin-top:14px; background:#F0E6D2; border-radius:10px; padding:12px 15px; font-size:12.5px; color:#5E4632; line-height:1.6;">
-          <strong>Orden de columnas:</strong> Título · Autor · Género · Precio · Estado · Disponibilidad · ISBN (opcional)<br>
-          <span style="color:#8A715A;">Estado: Nuevo / Usado excelente / Usado bueno / Con detalles visibles · Disponibilidad: Disponible / Última unidad / Reservado / Oferta. Si dejas un campo vacío usamos «Nuevo» y «Disponible». El ISBN ayuda a que «Portadas automáticas» encuentre la edición exacta.</span>
+          <strong>Orden de columnas:</strong> Título · Autor · Género · Categoría · Precio · Estado · Disponibilidad · ISBN (opcional)<br>
+          <span style="color:#8A715A;">Lo más fácil: descarga la plantilla, llénala en Excel/Google Sheets y súbela (o copia las filas y pégalas). Acepta separación por comas, punto y coma o tabulación. Si un título tiene comas, ponlo entre "comillas". Estado: Nuevo / Usado excelente / Usado bueno / Con detalles visibles · Disponibilidad: Disponible / Última unidad / Reservado / Oferta. Si dejas un campo vacío usamos «Nuevo» y «Disponible». El ISBN ayuda a que «Portadas automáticas» encuentre la edición exacta.</span>
         </div>
         <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
           <span onClick="{{ downloadTemplate }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#5E1F33; padding:9px 16px; border-radius:999px; border:1.5px solid #B9C4B4;" style-hover="background:#F2E3E2;">⬇ Descargar plantilla CSV</span>
@@ -911,16 +914,18 @@
         </div>
         <span onClick="{{ addConsig }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#9A7A1E; color:#FBF3E0; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(154,122,30,0.3);" style-hover="background:#866916;">+ Registrar libro recibido</span>
       </div>
-      <div style="margin-bottom:22px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">Cuando alguien te deja libros en el local, regístralos aquí con los datos del dueño. Solo los que marques <strong>En venta</strong> aparecen en la página, en la sección <strong>Segunda historia</strong>. Cuando se venda, cámbialo a <strong>Vendido</strong> y luego a <strong>Pagado al dueño</strong> cuando le entregues su parte.</div>
+      <div style="margin-bottom:22px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">Cuando alguien te deja libros en el local, regístralos aquí con los datos del dueño. El <strong>Estado</strong> es la condición del libro (Nuevo, Usado…) y es lo que ve el cliente. La <strong>Situación de venta</strong> controla la publicación: solo los que marques <strong>En venta</strong> aparecen en la página, en <strong>Segunda historia</strong>; cuando se venda, cámbialo a <strong>Vendido</strong>. El <strong>Pago al dueño</strong> se lleva aparte, con su propio botón, cuando le entregues su parte.</div>
       <datalist id="lm-bookcats-consig"><sc-for list="{{ bookCatOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.v }}"></option></sc-for></datalist>
 
       <div style="display:flex; flex-direction:column; gap:18px;">
         <sc-for list="{{ consig }}" as="c" hint-placeholder-count="2">
           <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
             <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;">
-              <div style="display:flex; align-items:center; gap:10px;">
+              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                 <span style="font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:#8A715A; background:#F0E6D2; padding:4px 9px; border-radius:6px;">{{ c.code }}</span>
+                <span style="{{ c.condBadge }}">{{ c.condicion }}</span>
                 <span style="{{ c.estadoBadge }}">{{ c.estado }}</span>
+                <sc-if value="{{ c.pagado }}" hint-placeholder-val="{{ false }}"><span style="{{ c.pagoBadge }}">✓ Pagado al dueño</span></sc-if>
               </div>
               <span onClick="{{ c.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
             </div>
@@ -975,13 +980,25 @@
                   <input value="{{ c.payout }}" onChange="{{ c.onPayout }}" type="number" min="0" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Estado</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Estado (condición del libro)</label>
+                  <select value="{{ c.condicion }}" onChange="{{ c.onCondicion }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                    <option value="Nuevo">Nuevo</option>
+                    <option value="Usado excelente">Usado excelente</option>
+                    <option value="Usado bueno">Usado bueno</option>
+                    <option value="Con detalles visibles">Con detalles visibles</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Situación de venta</label>
                   <select value="{{ c.estado }}" onChange="{{ c.onEstado }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                     <option value="Recibido">Recibido (aún no publicado)</option>
                     <option value="En venta">En venta (visible en la página)</option>
                     <option value="Vendido">Vendido</option>
-                    <option value="Pagado al dueño">Pagado al dueño</option>
                   </select>
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Pago al dueño</label>
+                  <span onClick="{{ c.onTogglePagado }}" style="{{ c.pagoPillStyle }}">{{ c.pagoPillLabel }}</span>
                 </div>
               </div>
             </div>
@@ -1383,7 +1400,7 @@ service cloud.firestore {
       <span onClick="{{ closeCart }}" style="cursor:pointer; font-size:20px; line-height:1; color:#A07F5E; padding:4px 8px;">✕</span>
     </div>
 
-    <div data-noscroll="" style="flex:1; overflow-y:auto; padding:clamp(14px,3vw,20px);">
+    <div data-noscroll="" style="flex:1 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:clamp(14px,3vw,20px);">
       <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ true }}">
         <div style="text-align:center; padding:60px 20px; color:#8A715A;">
           <div style="width:54px; height:54px; margin:0 auto; border-radius:16px; background:#EFE2CB; display:flex; align-items:center; justify-content:center; font-size:26px; color:#9A7A1E;">☕</div>
@@ -1741,7 +1758,7 @@ class Component extends DCLogic {
       const okImg = (u) => (u && (u + '').indexOf('data:') !== 0) ? u : undefined;
       const items = [];
       const books = (cms.libros || []).map(b => this.toBook(b)).filter(b => b.disp !== 'Vendido')
-        .concat((cms.consig || []).filter(c => c.estado === 'En venta').map(c => this.toBook(Object.assign({}, c, { estado: 'En consignación', disp: 'Disponible', consigna: true }))));
+        .concat((cms.consig || []).filter(c => c.estado === 'En venta').map(c => this.toBook(Object.assign({}, c, { estado: (c.condicion || 'Usado bueno'), disp: 'Disponible', consigna: true }))));
       books.slice(0, 60).forEach(b => {
         const it = {
           '@type': 'Product',
@@ -2208,7 +2225,7 @@ class Component extends DCLogic {
   };
   addConsig = () => {
     const n = (this.currentCMS().consig || []).length + 1;
-    this.addItem('consig', { id: 'c' + Date.now(), code: 'LM-C-' + this.pad(n), title: 'Libro recibido', author: '', genre: '', cat: '', sinopsis: '', isbn: '', owner: '', contact: '', price: 0, payout: 0, estado: 'En venta', imagen: '', order: Date.now() }, 'Registro creado y publicado.');
+    this.addItem('consig', { id: 'c' + Date.now(), code: 'LM-C-' + this.pad(n), title: 'Libro recibido', author: '', genre: '', cat: '', sinopsis: '', isbn: '', owner: '', contact: '', price: 0, payout: 0, condicion: 'Usado bueno', estado: 'En venta', pagado: false, imagen: '', order: Date.now() }, 'Registro creado y publicado.');
   };
   addMerch = () => {
     this.addItem('merch', { id: 'm' + Date.now(), name: 'Nuevo producto', cat: '', desc: '', price: 0, disp: 'Disponible', imagen: '', order: Date.now() }, 'Producto añadido.');
@@ -2352,20 +2369,50 @@ class Component extends DCLogic {
   };
 
   // ---------- bulk ----------
+  // Divide una línea respetando comillas (CSV real): "Tokyo Revengers, Vol. 1" no se parte
+  splitCSVLine(line, delim) {
+    const out = []; let cur = ''; let q = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (q) {
+        if (ch === '"') { if (line[i + 1] === '"') { cur += '"'; i++; } else q = false; }
+        else cur += ch;
+      } else {
+        if (ch === '"') q = true;
+        else if (ch === delim) { out.push(cur); cur = ''; }
+        else cur += ch;
+      }
+    }
+    out.push(cur);
+    return out;
+  }
   parseBulk(text) {
+    text = (text || '').replace(/^﻿/, ''); // quita BOM de Excel
+    const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
+    if (!lines.length) return [];
+    // Detecta el separador a partir de la primera línea: tabulación, punto y coma o coma
+    let delim = '\t';
+    if (lines[0].indexOf('\t') < 0) {
+      const semis = (lines[0].match(/;/g) || []).length;
+      const commas = (lines[0].match(/,/g) || []).length;
+      delim = semis > commas ? ';' : ',';
+    }
+    const numOf = (s) => {
+      let v = ((s || '') + '').replace(/[^0-9.,]/g, '').trim();
+      if (v.indexOf(',') >= 0 && v.indexOf('.') < 0) v = v.replace(',', '.'); // decimal con coma
+      else v = v.replace(/,/g, ''); // separador de miles
+      return parseFloat(v) || 0;
+    };
     const out = [];
-    (text || '').split(/\r?\n/).forEach(line => {
-      const raw = line.trim();
-      if (!raw) return;
-      const cells = raw.indexOf('\t') >= 0 ? raw.split('\t') : raw.split(',');
-      const c = cells.map(x => (x || '').trim());
+    lines.forEach(line => {
+      const c = this.splitCSVLine(line, delim).map(x => (x || '').trim());
       if (!c[0]) return;
-      if (/^t[ií]tulo$/i.test(c[0])) return; // skip header
+      if (/^t[ií]tulo$/i.test(c[0])) return; // salta la fila de encabezado
       out.push({
-        title: c[0], author: c[1] || '', genre: c[2] || '',
-        price: parseFloat((c[3] || '').replace(/[^0-9.]/g, '')) || 0,
-        estado: c[4] || 'Nuevo', disp: c[5] || 'Disponible',
-        isbn: (c[6] || '').trim()
+        title: c[0], author: c[1] || '', genre: c[2] || '', cat: c[3] || '',
+        price: numOf(c[4]),
+        estado: c[5] || 'Nuevo', disp: c[6] || 'Disponible',
+        isbn: (c[7] || '').replace(/[^0-9Xx]/g, '')
       });
     });
     return out;
@@ -2387,7 +2434,7 @@ class Component extends DCLogic {
     const cms = this.currentCMS();
     cms.libros = cms.libros || [];
     let n = cms.libros.length;
-    const created = rows.map(r => { n++; return { id: 'b' + Date.now() + '_' + n, code: 'LM-N-' + this.pad(n), title: r.title, author: r.author, genre: r.genre, estado: r.estado, disp: r.disp, price: r.price, isbn: r.isbn || '', imagen: '', order: Date.now() + n }; });
+    const created = rows.map(r => { n++; return { id: 'b' + Date.now() + '_' + n, code: 'LM-N-' + this.pad(n), title: r.title, author: r.author, genre: r.genre, cat: r.cat || '', sinopsis: '', recomendado: false, estado: r.estado, disp: r.disp, price: r.price, isbn: r.isbn || '', imagen: '', order: Date.now() + n }; });
     cms.libros = created.concat(cms.libros);
     this.cacheCMS(cms);
     if (this.online()) { try { const batch = this.db.batch(); created.forEach(it => batch.set(this.itemRef('libros', it.id), this.clean(it))); batch.commit().catch((e) => this.flash(this.fbErr(e))); } catch (e) {} }
@@ -2395,7 +2442,12 @@ class Component extends DCLogic {
     this.flash(created.length + ' libros agregados ✓');
   };
   downloadTemplate = () => {
-    const csv = 'Título,Autor,Género,Precio,Estado,Disponibilidad,ISBN\nAlas de sangre,Rebecca Yarros,Fantasía,28,Nuevo,Última unidad,9788408249856\nEl nombre del viento,Patrick Rothfuss,Fantasía,14,Usado excelente,Disponible,\n';
+    const csv = '﻿' + [
+      'Título,Autor,Género,Categoría,Precio,Estado,Disponibilidad,ISBN',
+      'Alas de sangre,Rebecca Yarros,Fantasía,Fantasía,28,Nuevo,Última unidad,9788408249856',
+      'El nombre del viento,Patrick Rothfuss,Fantasía,Fantasía,14,Usado excelente,Disponible,',
+      '"Tokyo Revengers, Vol. 1",Ken Wakui,Manga,Manga,9,Nuevo,Disponible,'
+    ].join('\n') + '\n';
     this.download('plantilla-libros.csv', csv, 'text/csv');
   };
 
@@ -2708,7 +2760,7 @@ class Component extends DCLogic {
 
     // ---- store data ----
     const adminLibros = cms ? (cms.libros || []).map(b => this.toBook(b)).filter(b => b.disp !== 'Vendido') : [];
-    const consigPub = cms ? (cms.consig || []).filter(c => c.estado === 'En venta').map(c => this.toBook(Object.assign({}, c, { estado: 'En consignación', disp: 'Disponible', consigna: true }))) : [];
+    const consigPub = cms ? (cms.consig || []).filter(c => c.estado === 'En venta').map(c => this.toBook(Object.assign({}, c, { estado: (c.condicion || 'Usado bueno'), disp: 'Disponible', consigna: true }))) : [];
     const baseBooks = adminLibros.concat(consigPub);
     const baseMerch = cms ? (cms.merch || []).map(m => this.toMerch(m)).filter(m => m.disp !== 'Vendido') : [];
     const baseEvents = this.resEventos().concat(cms ? (cms.eventos || []) : [])
@@ -2772,7 +2824,7 @@ class Component extends DCLogic {
     let dv = { detailOpen: false, dKindLabel: '', dTitle: '', dSub: '', dHasSub: false, dDesc: '', dHasDesc: false, dPriceLabel: '', dHasOld: false, dOldLabel: '', dOffLabel: '', dHasImg: false, dImgStyle: {}, dHasBadge1: false, dBadge1: '', dBadge1Style: {}, dHasBadge2: false, dBadge2: '', dBadge2Style: {}, dCanCart: false, dAdd: () => {}, dWaHref: '#', dWaLabel: '', dHasCode: false, dCode: '' };
     if (det && cms) {
       if (det.kind === 'libro') {
-        const all = (cms.libros || []).map(x => this.toBook(x)).concat((cms.consig || []).map(c2 => this.toBook(Object.assign({}, c2, { estado: 'En consignación', disp: c2.estado === 'En venta' ? 'Disponible' : 'Vendido', consigna: true }))));
+        const all = (cms.libros || []).map(x => this.toBook(x)).concat((cms.consig || []).map(c2 => this.toBook(Object.assign({}, c2, { estado: (c2.condicion || 'Usado bueno'), disp: c2.estado === 'En venta' ? 'Disponible' : 'Vendido', consigna: true }))));
         const f = all.find(x => (x.code + '') === det.id || x.id === det.id);
         if (f) {
           const d = this.decBook(f);
@@ -2842,12 +2894,35 @@ class Component extends DCLogic {
     let librosRaw = (C.libros || []);
     if (aq) librosRaw = librosRaw.filter(l => ((l.title || '') + ' ' + (l.author || '') + ' ' + (l.code || '')).toLowerCase().indexOf(aq) >= 0);
     const libros = librosRaw.map(l => mkBook(l, 'libros'));
-    const consig = (C.consig || []).map(c => Object.assign(mkBook(c, 'consig'), {
-      estadoBadge: this.consigBadge(c.estado),
-      onOwner: (e) => this.setField('consig', c.id, 'owner', e.target.value),
-      onContact: (e) => this.setField('consig', c.id, 'contact', e.target.value),
-      onPayout: (e) => this.setNum('consig', c.id, 'payout', e.target.value)
-    }));
+    const validLife = ['Recibido', 'En venta', 'Vendido'];
+    const consig = (C.consig || []).map(c => {
+      const rawEstado = ((c.estado || '') + '');
+      const lifeVal = validLife.indexOf(rawEstado) >= 0 ? rawEstado : (rawEstado === 'Pagado al dueño' ? 'Vendido' : 'En venta');
+      const pagado = !!c.pagado || rawEstado === 'Pagado al dueño';
+      const condicion = ((c.condicion || '') + '').trim() || 'Usado bueno';
+      return Object.assign(mkBook(c, 'consig'), {
+        estado: lifeVal, condicion, pagado,
+        condBadge: this.estadoStyle(condicion),
+        estadoBadge: this.consigBadge(lifeVal),
+        pagoBadge: this.badge('#F4E9CC', '#9A7A1E'),
+        pagoPillLabel: pagado ? '✓ Pagado al dueño' : 'Marcar pago al dueño',
+        pagoPillStyle: {
+          cursor: 'pointer', display: 'inline-block', width: '100%', textAlign: 'center', fontSize: '13px', fontWeight: 800, padding: '10px 12px', borderRadius: '8px',
+          background: pagado ? '#F4E9CC' : 'transparent', color: pagado ? '#9A7A1E' : '#8A715A',
+          border: pagado ? '1px solid #D9BC77' : '1px solid #E3D2B8', fontFamily: "'Outfit',sans-serif"
+        },
+        onCondicion: (e) => this.setField('consig', c.id, 'condicion', e.target.value),
+        onTogglePagado: () => {
+          const on = !pagado;
+          this.setField('consig', c.id, 'pagado', on);
+          if (on && validLife.indexOf(((c.estado || '') + '')) >= 0 && c.estado !== 'Vendido') this.setField('consig', c.id, 'estado', 'Vendido');
+          this.flash(on ? 'Registrado: pagado al dueño ✓' : 'Marcado como pago pendiente.');
+        },
+        onOwner: (e) => this.setField('consig', c.id, 'owner', e.target.value),
+        onContact: (e) => this.setField('consig', c.id, 'contact', e.target.value),
+        onPayout: (e) => this.setNum('consig', c.id, 'payout', e.target.value)
+      });
+    });
     const merch = (C.merch || []).map(m => Object.assign({}, m, {
       hasImg: !!m.imagen, imgStyle: this.coverStyle(m.imagen),
       onName: (e) => this.setField('merch', m.id, 'name', e.target.value),
@@ -2919,7 +2994,7 @@ class Component extends DCLogic {
 
     // ---- bulk preview ----
     const bulkRows = this.parseBulk(this.state.bulkText);
-    const bulkPreview = bulkRows.slice(0, 4).map((r, i) => ({ n: i + 1, title: r.title, sub: [r.author, r.genre].filter(Boolean).join(' · ') || '—', priceLabel: '$' + r.price }));
+    const bulkPreview = bulkRows.slice(0, 4).map((r, i) => ({ n: i + 1, title: r.title, sub: [r.author, r.cat, r.genre].filter(Boolean).join(' · ') || '—', priceLabel: '$' + r.price }));
 
     // ---- cart ----
     const cartItems = this.state.cart.map(x => ({
@@ -2945,11 +3020,11 @@ class Component extends DCLogic {
       navItems,
       search, onSearch: (e) => this.setState({ search: e.target.value }), category, catChips,
       catalogBooks, catalogCount: catalogBooks.length, hasResults: catalogBooks.length > 0, noResults: catalogBooks.length === 0,
-      homeNovedades: novedades.slice(0, 6).map(b => this.decBook(b)),
-      homeSegunda: usados.slice(0, 4),
-      homeMerch: baseMerch.slice(0, 6).map(m => this.decMerch(m)),
+      homeNovedades: novedades.slice(0, 3).map(b => this.decBook(b)),
+      homeSegunda: usados.slice(0, 3),
+      homeMerch: baseMerch.slice(0, 3).map(m => this.decMerch(m)),
       homeEventos: baseEvents.slice(0, 3).map(e => this.decEvent(e)),
-      recomendados: (recs.length ? recs : baseBooks.slice(0, 3)).map(b => this.decBook(b)),
+      recomendados: (recs.length ? recs : baseBooks.slice(0, 3)).slice(0, 3).map(b => this.decBook(b)),
       segundaBooks: usados,
       merchAll: merchList.map(m => this.decMerch(m)),
       merchShownCount: merchList.length, merchHasResults: merchList.length > 0, merchNoResults: merchList.length === 0,
