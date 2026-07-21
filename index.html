@@ -485,6 +485,87 @@
   </div>
   </sc-if>
 
+  <!-- CAFETERÍA (menú / platos de temporada) -->
+  <sc-if value="{{ isCafeteria }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Cafetería">
+    <section style="max-width:1180px; margin:0 auto; padding:clamp(36px,5vw,56px) clamp(16px,4vw,32px) 8px;">
+      <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#8A5A2B;">Nuestra cafetería</span>
+      <h1 style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#5E1F33; line-height:1.05;">Menú &amp; platos de temporada</h1>
+      <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:48em;">Bocados y bebidas para acompañar tu lectura. Nuestra carta cambia con la temporada; escríbenos por WhatsApp para reservar o preguntar por disponibilidad.</p>
+      <div data-noscroll="" style="margin-top:16px; display:flex; gap:9px; overflow-x:auto; white-space:nowrap; padding-bottom:4px;">
+        <sc-for list="{{ cafeChips }}" as="chip" hint-placeholder-count="4">
+          <span onClick="{{ chip.onClick }}" style="{{ chip.style }}">{{ chip.label }}</span>
+        </sc-for>
+      </div>
+    </section>
+    <section style="max-width:1180px; margin:0 auto; padding:22px clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
+      <div style="margin-bottom:16px;"><span style="font-size:13px; font-weight:700; color:#8A715A;">{{ cafeShownCount }} en el menú</span></div>
+      <sc-if value="{{ cafeHasResults }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:clamp(14px,2vw,22px);">
+          <sc-for list="{{ cafeItems }}" as="m" hint-placeholder-count="6">
+            <div style="display:flex; flex-direction:column; background:#FFFDF8; border:1px solid #EADBC4; border-radius:16px; overflow:hidden; box-shadow:0 8px 22px rgba(52,37,26,0.07); height:100%;">
+              <div style="position:relative; aspect-ratio:4/3; background:repeating-linear-gradient(135deg,#F1E5D0,#F1E5D0 11px,#E9D9BE 11px,#E9D9BE 22px); display:flex; align-items:center; justify-content:center;">
+                <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.06em; color:#A8916F; text-transform:lowercase; text-align:center; padding:0 10px;">{{ m.cat }}</span>
+                <sc-if value="{{ m.hasImg }}" hint-placeholder-val="{{ false }}"><div style="{{ m.imgStyle }}"></div></sc-if>
+                <span style="{{ m.dispStyle }}; position:absolute; left:10px; top:10px;">{{ m.disp }}</span>
+              </div>
+              <div style="padding:14px 14px 16px; display:flex; flex-direction:column; gap:7px; flex:1;">
+                <sc-if value="{{ m.hasCat }}" hint-placeholder-val="{{ false }}"><span style="font-size:10.5px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#A07F5E;">{{ m.cat }}</span></sc-if>
+                <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:18px; line-height:1.15; color:#34251A; text-wrap:pretty;">{{ m.name }}</h3>
+                <sc-if value="{{ m.hasDesc }}" hint-placeholder-val="{{ false }}"><p style="margin:0; font-size:13px; line-height:1.45; color:#8A715A;">{{ m.desc }}</p></sc-if>
+                <div style="margin-top:auto; display:flex; align-items:center; justify-content:space-between; gap:8px; padding-top:6px;">
+                  <sc-if value="{{ m.hasPrice }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:21px; color:#7C2F3E;">{{ m.priceLabel }}</span></sc-if>
+                  <a href="{{ m.waHref }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:7px; text-decoration:none; background:transparent; color:#5E1F33; border:1.5px solid #B9C4B4; font-weight:700; font-size:12.5px; padding:9px 14px; border-radius:11px; transition:background .15s ease;" style-hover="background:#F2E3E2;"><span style="width:7px; height:7px; border-radius:50%; background:#2E6B41;"></span>Consultar</a>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ cafeNoResults }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center; padding:50px 20px; color:#8A715A;">
+          <div style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:21px; color:#5E4632;">Pronto publicaremos nuestro menú de temporada.</div>
+          <p style="margin:10px 0 0; font-size:15px;">Mientras tanto, escríbenos por WhatsApp y te contamos qué tenemos hoy.</p>
+          <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="display:inline-block; margin-top:16px; text-decoration:none; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:14px; padding:12px 22px; border-radius:999px;">Preguntar por WhatsApp</a>
+        </div>
+      </sc-if>
+    </section>
+  </div>
+  </sc-if>
+
+  <!-- CAFÉ DE ESPECIALIDAD Y EDICIONES ESPECIALES -->
+  <sc-if value="{{ isEspecialidad }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Café de especialidad">
+    <section style="max-width:1180px; margin:0 auto; padding:clamp(36px,5vw,56px) clamp(16px,4vw,32px) 8px;">
+      <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#4A3B2A;">De la casa</span>
+      <h1 style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#5E1F33; line-height:1.05;">Café de especialidad &amp; ediciones especiales</h1>
+      <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:48em;">Nuestra selección de café de especialidad, métodos, accesorios y ediciones especiales para llevar la experiencia de La Madriguera a tu casa.</p>
+      <div data-noscroll="" style="margin-top:16px; display:flex; gap:9px; overflow-x:auto; white-space:nowrap; padding-bottom:4px;">
+        <sc-for list="{{ espChips }}" as="chip" hint-placeholder-count="4">
+          <span onClick="{{ chip.onClick }}" style="{{ chip.style }}">{{ chip.label }}</span>
+        </sc-for>
+      </div>
+    </section>
+    <section style="max-width:1180px; margin:0 auto; padding:22px clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
+      <div style="margin-bottom:16px;"><span style="font-size:13px; font-weight:700; color:#8A715A;">{{ espShownCount }} productos</span></div>
+      <sc-if value="{{ espHasResults }}" hint-placeholder-val="{{ true }}">
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:clamp(14px,2vw,22px);">
+          <sc-for list="{{ espItems }}" as="m" hint-placeholder-count="6">
+            <dc-import name="MerchCard" merch="{{ m }}" hint-size="100%,400px"></dc-import>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ espNoResults }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center; padding:50px 20px; color:#8A715A;">
+          <div style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:21px; color:#5E4632;">Muy pronto nuestras ediciones especiales.</div>
+          <p style="margin:10px 0 0; font-size:15px;">Escríbenos por WhatsApp y te avisamos apenas estén disponibles.</p>
+          <a href="{{ waGeneral }}" target="_blank" rel="noopener" style="display:inline-block; margin-top:16px; text-decoration:none; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:14px; padding:12px 22px; border-radius:999px;">Preguntar por WhatsApp</a>
+        </div>
+      </sc-if>
+    </section>
+  </div>
+  </sc-if>
+
   <!-- EVENTOS -->
   <sc-if value="{{ isEventos }}" hint-placeholder-val="{{ false }}">
   <div data-screen-label="Eventos">
@@ -1072,6 +1153,135 @@
                 <div style="grid-column:1/-1;">
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Descripción</label>
                   <input value="{{ m.desc }}" onChange="{{ m.onDesc }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ADMIN CAFETERÍA -->
+    <sc-if value="{{ aCafeteria }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Admin Cafetería">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:22px;">
+        <div>
+          <h2 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:30px; color:#8A5A2B;">Menú de la cafetería</h2>
+          <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ cafeteriaCount }} platos/bebidas · click en la foto para cambiarla.</p>
+        </div>
+        <span onClick="{{ addCafeteria }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#8A5A2B; color:#F6ECE0; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(138,90,43,0.3);" style-hover="background:#754a22;">+ Añadir al menú</span>
+      </div>
+      <div style="margin-bottom:18px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">Sube aquí los platos y bebidas de tu carta (por ejemplo <strong>Platos de temporada</strong>). Elige una <strong>Categoría</strong> para agruparlos en la página. En la web se muestran como menú con botón de WhatsApp (sin carrito). Marca <strong>No disponible</strong> para ocultar un plato.</div>
+      <datalist id="lm-cafecats"><sc-for list="{{ cafeCatOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.v }}"></option></sc-for></datalist>
+      <div style="display:flex; flex-direction:column; gap:18px;">
+        <sc-for list="{{ cafeteriaAdmin }}" as="p" hint-placeholder-count="2">
+          <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
+            <div style="display:flex; align-items:center; justify-content:flex-end; gap:8px; margin-bottom:14px;">
+              <span onClick="{{ p.onSold }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#2E6B41; padding:6px 12px; border-radius:999px; border:1px solid #B9C4B4;" style-hover="background:#E3EDE3;">✓ Marcar no disponible</span>
+              <span onClick="{{ p.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
+            </div>
+            <div style="display:grid; grid-template-columns:130px 1fr; gap:20px; align-items:start;">
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <div onClick="{{ p.onPick }}" title="Click para subir la foto" style="position:relative; width:130px; aspect-ratio:4/3; border-radius:10px; overflow:hidden; border:2px dashed #D9BC77; background:#F7EFE2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
+                  <span style="font-size:11px; color:#A07F5E; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>foto</span>
+                  <sc-if value="{{ p.hasImg }}" hint-placeholder-val="{{ false }}"><div style="{{ p.imgStyle }}"></div></sc-if>
+                </div>
+                <sc-if value="{{ p.hasImg }}" hint-placeholder-val="{{ false }}"><span onClick="{{ p.onClearImg }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span></sc-if>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px;">
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Nombre</label>
+                  <input value="{{ p.name }}" onChange="{{ p.onName }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Categoría</label>
+                  <input value="{{ p.cat }}" onChange="{{ p.onCat }}" list="lm-cafecats" placeholder="Platos de temporada, Bebidas…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio ($)</label>
+                  <input value="{{ p.price }}" onChange="{{ p.onPrice }}" type="number" min="0" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Disponibilidad</label>
+                  <select value="{{ p.disp }}" onChange="{{ p.onDisp }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                    <option value="Disponible">Disponible</option>
+                    <option value="Por encargo">Por encargo</option>
+                    <option value="Vendido">No disponible</option>
+                  </select>
+                </div>
+                <div style="grid-column:1/-1;">
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Descripción</label>
+                  <input value="{{ p.desc }}" onChange="{{ p.onDesc }}" placeholder="Ingredientes o detalle breve" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ADMIN CAFÉ DE ESPECIALIDAD -->
+    <sc-if value="{{ aEspecialidad }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Admin Café de especialidad">
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:22px;">
+        <div>
+          <h2 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:30px; color:#4A3B2A;">Café de especialidad y ediciones</h2>
+          <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ especialidadCount }} productos · se venden con carrito, como el merch.</p>
+        </div>
+        <span onClick="{{ addEspecialidad }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#4A3B2A; color:#F1EAE0; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(74,59,42,0.3);" style-hover="background:#3a2e20;">+ Añadir producto</span>
+      </div>
+      <div style="margin-bottom:18px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">Sube aquí tu <strong>café de especialidad</strong>, métodos, accesorios y <strong>ediciones especiales</strong>. Elige una <strong>Categoría</strong> para agruparlos. En la web se muestran con botón <strong>Agregar al carrito</strong>. Si llenas <strong>Stock</strong>, al llegar a 0 se marca agotado solo; si pones <strong>Precio antes</strong>, se muestra la oferta.</div>
+      <datalist id="lm-espcats"><sc-for list="{{ espCatOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.v }}"></option></sc-for></datalist>
+      <div style="display:flex; flex-direction:column; gap:18px;">
+        <sc-for list="{{ especialidadAdmin }}" as="p" hint-placeholder-count="2">
+          <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
+            <div style="display:flex; align-items:center; justify-content:flex-end; gap:8px; margin-bottom:14px;">
+              <span onClick="{{ p.onSold }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#2E6B41; padding:6px 12px; border-radius:999px; border:1px solid #B9C4B4;" style-hover="background:#E3EDE3;">✓ Marcar agotado</span>
+              <span onClick="{{ p.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
+            </div>
+            <div style="display:grid; grid-template-columns:130px 1fr; gap:20px; align-items:start;">
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <div onClick="{{ p.onPick }}" title="Click para subir la foto" style="position:relative; width:130px; aspect-ratio:4/3; border-radius:10px; overflow:hidden; border:2px dashed #D9BC77; background:#F7EFE2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
+                  <span style="font-size:11px; color:#A07F5E; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>foto</span>
+                  <sc-if value="{{ p.hasImg }}" hint-placeholder-val="{{ false }}"><div style="{{ p.imgStyle }}"></div></sc-if>
+                </div>
+                <sc-if value="{{ p.hasImg }}" hint-placeholder-val="{{ false }}"><span onClick="{{ p.onClearImg }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span></sc-if>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px;">
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Nombre</label>
+                  <input value="{{ p.name }}" onChange="{{ p.onName }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Categoría</label>
+                  <input value="{{ p.cat }}" onChange="{{ p.onCat }}" list="lm-espcats" placeholder="Café en grano, Ediciones especiales…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio ($)</label>
+                  <input value="{{ p.price }}" onChange="{{ p.onPrice }}" type="number" min="0" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio antes ($)</label>
+                  <input value="{{ p.priceOldVal }}" onChange="{{ p.onPriceOld }}" type="number" min="0" placeholder="Solo si hay oferta" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Stock (unidades)</label>
+                  <input value="{{ p.stockVal }}" onChange="{{ p.onStock }}" type="number" min="0" placeholder="Vacío = sin control" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Disponibilidad</label>
+                  <select value="{{ p.disp }}" onChange="{{ p.onDisp }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                    <option value="Disponible">Disponible</option>
+                    <option value="Última unidad">Última unidad</option>
+                    <option value="Por encargo">Por encargo</option>
+                    <option value="Vendido">Agotado</option>
+                  </select>
+                </div>
+                <div style="grid-column:1/-1;">
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Descripción</label>
+                  <input value="{{ p.desc }}" onChange="{{ p.onDesc }}" placeholder="Origen, notas de sabor, detalle…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
               </div>
             </div>
@@ -1671,7 +1881,7 @@ service cloud.firestore {
 class Component extends DCLogic {
   state = {
     view: 'store', page: 'inicio', search: '', category: 'todos',
-    merchCat: 'todas', merchSearch: '', merchNavOpen: false,
+    merchCat: 'todas', merchSearch: '', merchNavOpen: false, cafeCat: 'todas', espCat: 'todas',
     adminTab: 'libros', aSearch: '', pedidoFilter: 'todos', showPastEvents: false,
     cms: null, savedAt: 0,
     detail: null,
@@ -1728,6 +1938,12 @@ class Component extends DCLogic {
   }
   bookCatList() { const cms = this.currentCMS(); return this.catList(this.BOOK_CATS, [cms.libros, cms.consig], cms.bookCats); }
   merchCatList() { const cms = this.currentCMS(); return this.catList(this.MERCH_CATS, [cms.merch], cms.merchCats); }
+
+  // Categorías por defecto de las dos secciones nuevas (el admin puede crear otras)
+  CAFE_CATS = ['Platos de temporada', 'Desayunos', 'Bebidas calientes', 'Bebidas frías', 'Postres', 'Snacks'];
+  ESP_CATS = ['Café en grano', 'Métodos de preparación', 'Ediciones especiales', 'Accesorios', 'Kits de regalo'];
+  cafeCatList() { const cms = this.currentCMS(); return this.catList(this.CAFE_CATS, [cms.cafeteria], cms.cafeCats); }
+  espCatList() { const cms = this.currentCMS(); return this.catList(this.ESP_CATS, [cms.especialidad], cms.espCats); }
 
   ventaPasos = [
     { n: '1', title: 'Registra tu libro', text: 'Cuéntanos qué tienes: título, autor y estado. Te guiamos por WhatsApp.' },
@@ -1990,7 +2206,7 @@ class Component extends DCLogic {
     this._live = this._live || this.defaultCMS();
     this._unsubs = this._unsubs || [];
     const ok = () => { if (this.state.fb !== 'online') this.setState({ fb: 'online' }); if (this._fbTimer) clearTimeout(this._fbTimer); };
-    ['libros', 'consig', 'merch', 'eventos', 'eventosImg', 'pedidos'].forEach((coll) => {
+    ['libros', 'consig', 'merch', 'cafeteria', 'especialidad', 'eventos', 'eventosImg', 'pedidos'].forEach((coll) => {
       const u = this.db.collection(coll).onSnapshot((snap) => {
         const arr = [];
         snap.forEach((d) => arr.push(Object.assign({ id: d.id }, d.data())));
@@ -2034,7 +2250,7 @@ class Component extends DCLogic {
     if (!this.db || !d) return;
     try {
       const batch = this.db.batch();
-      ['libros', 'consig', 'merch', 'eventos'].forEach((coll) => {
+      ['libros', 'consig', 'merch', 'cafeteria', 'especialidad', 'eventos'].forEach((coll) => {
         const arr = d[coll] || [];
         arr.forEach((it, idx) => {
           const id = it.id || (coll.charAt(0) + Date.now() + '_' + idx);
@@ -2164,6 +2380,10 @@ class Component extends DCLogic {
       const m = (C.merch || []).find(x => x.id === id);
       return this.hasStockNum(m) ? m.stock : null;
     }
+    if (kind === 'Café de especialidad') {
+      const m = (C.especialidad || []).find(x => x.id === id);
+      return this.hasStockNum(m) ? m.stock : null;
+    }
     return null;
   }
   setNumOpt(coll, id, key, val) {
@@ -2205,7 +2425,7 @@ class Component extends DCLogic {
   }
 
   // ---------- CMS (caché local) ----------
-  defaultCMS() { return { libros: [], consig: [], merch: [], eventos: [], eventosImg: [], pedidos: [], brand: {}, config: {} }; }
+  defaultCMS() { return { libros: [], consig: [], merch: [], cafeteria: [], especialidad: [], eventos: [], eventosImg: [], pedidos: [], brand: {}, config: {} }; }
 
   loadCMS() {
     if (this.online()) return;
@@ -2294,6 +2514,12 @@ class Component extends DCLogic {
   };
   addMerch = () => {
     this.addItem('merch', { id: 'm' + Date.now(), name: 'Nuevo producto', cat: '', desc: '', price: 0, disp: 'Disponible', imagen: '', order: Date.now() }, 'Producto añadido.');
+  };
+  addCafeteria = () => {
+    this.addItem('cafeteria', { id: 'cf' + Date.now(), name: 'Nuevo plato', cat: 'Platos de temporada', desc: '', price: 0, disp: 'Disponible', imagen: '', order: Date.now() }, 'Plato añadido al menú.');
+  };
+  addEspecialidad = () => {
+    this.addItem('especialidad', { id: 'es' + Date.now(), name: 'Nuevo producto', cat: '', desc: '', price: 0, disp: 'Disponible', imagen: '', order: Date.now() }, 'Producto añadido.');
   };
   addEvento = () => {
     this.addItem('eventos', { id: 'e' + Date.now(), name: 'Nuevo evento', date: '', time: '', includes: '', price: '', cupos: '', imagen: '', order: Date.now() }, 'Evento añadido.');
@@ -2797,6 +3023,27 @@ class Component extends DCLogic {
       onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Merch', subject: 'Consulta web · Merch: ' + m.name, title: m.name, sub: m.cat || '', waHref: this.waMerch(m), fields: { tipo: 'Merch', producto: m.name, categoria: m.cat || '', precio: '$' + m.price } }); }
     });
   }
+  waEspecial(m) { return this.waText('Hola, me interesa "' + m.name + '" (café de especialidad / ediciones especiales) de La Madriguera. ¿Sigue disponible?'); }
+  waCafe(m) { return this.waText('Hola, quiero consultar por "' + m.name + '" del menú de la cafetería de La Madriguera. ¿Está disponible?'); }
+  // Café de especialidad y ediciones especiales: tarjetas con carrito (como el merch)
+  decEspecial(m) {
+    return Object.assign({}, m, this.offerBits(m), {
+      priceLabel: '$' + m.price, dispStyle: this.dispStyle(m.disp), waHref: this.waEspecial(m), hasImg: !!m.imagen, imgStyle: this.coverStyle(m.imagen),
+      onOpen: () => this.openDetail('especial', m.id || m.name),
+      onAdd: () => this.addToCart('Café de especialidad', { id: m.id || m.name, title: m.name, sub: m.cat || '', price: m.price, imagen: m.imagen }),
+      onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Café de especialidad', subject: 'Consulta web · Especialidad: ' + m.name, title: m.name, sub: m.cat || '', waHref: this.waEspecial(m), fields: { tipo: 'Café de especialidad', producto: m.name, categoria: m.cat || '', precio: '$' + m.price } }); }
+    });
+  }
+  // Menú de cafetería / platos de temporada: solo mostrar + WhatsApp (sin carrito)
+  decCafe(m) {
+    const hasPrice = (+m.price > 0);
+    return Object.assign({}, m, {
+      priceLabel: hasPrice ? ('$' + m.price) : '', hasPrice,
+      dispStyle: this.dispStyle(m.disp), hasImg: !!m.imagen, imgStyle: this.coverStyle(m.imagen),
+      hasDesc: !!((m.desc || '') + '').trim(), hasCat: !!((m.cat || '') + '').trim(),
+      waHref: this.waCafe(m)
+    });
+  }
   decEvent(e) {
     const agotado = !!e.agotado;
     return Object.assign({}, e, {
@@ -2872,7 +3119,7 @@ class Component extends DCLogic {
       style: this.chipStyle(category === c.key)
     }));
 
-    const navList = [['inicio', 'Inicio'], ['catalogo', 'Catálogo'], ['segunda', 'Segunda historia'], ['merch', 'Merch'], ['eventos', 'Eventos'], ['vender', 'Vender'], ['comprar', 'Cómo comprar'], ['historia', 'Nosotros'], ['visitanos', 'Visítanos']];
+    const navList = [['inicio', 'Inicio'], ['catalogo', 'Catálogo'], ['segunda', 'Segunda historia'], ['merch', 'Merch'], ['cafeteria', 'Cafetería'], ['especialidad', 'Café de especialidad'], ['eventos', 'Eventos'], ['vender', 'Vender'], ['comprar', 'Cómo comprar'], ['historia', 'Nosotros'], ['visitanos', 'Visítanos']];
     const navItems = navList.map(([k, label]) => ({ label, onClick: () => this.go(k), style: this.navStyle(k === page) }));
 
     // ---- merch: filtros y búsqueda ----
@@ -2895,6 +3142,32 @@ class Component extends DCLogic {
     const merchCurrent = merchNavDefs.find(c => c.key === selMerch) || merchNavDefs[0];
     const merchChips = merchNav;
 
+    // ---- Cafetería (menú / platos de temporada) ----
+    const baseCafe = cms ? (cms.cafeteria || []).map(m => this.toMerch(m)).filter(m => m.disp !== 'Vendido') : [];
+    const cafeUsed = [];
+    baseCafe.forEach(m => { const c = ((m.cat || '') + '').trim(); if (c && cafeUsed.indexOf(c) < 0) cafeUsed.push(c); });
+    const cafeOrdered = this.cafeCatList().filter(c => cafeUsed.indexOf(c) >= 0);
+    const cafeSel = this.state.cafeCat;
+    let cafeFiltered = baseCafe;
+    if (cafeSel !== 'todas') cafeFiltered = cafeFiltered.filter(m => ((m.cat || '') + '').trim() === cafeSel);
+    const cafeChips = [{ key: 'todas', label: 'Todo' }].concat(cafeOrdered.map(c => ({ key: c, label: c }))).map(c => ({
+      label: c.label, onClick: () => this.setState({ cafeCat: c.key }), style: this.chipStyle(cafeSel === c.key)
+    }));
+    const cafeItems = cafeFiltered.map(m => this.decCafe(m));
+
+    // ---- Café de especialidad y ediciones especiales (con carrito) ----
+    const baseEsp = cms ? (cms.especialidad || []).map(m => this.toMerch(m)).filter(m => m.disp !== 'Vendido') : [];
+    const espUsed = [];
+    baseEsp.forEach(m => { const c = ((m.cat || '') + '').trim(); if (c && espUsed.indexOf(c) < 0) espUsed.push(c); });
+    const espOrdered = this.espCatList().filter(c => espUsed.indexOf(c) >= 0);
+    const espSel = this.state.espCat;
+    let espFiltered = baseEsp;
+    if (espSel !== 'todas') espFiltered = espFiltered.filter(m => ((m.cat || '') + '').trim() === espSel);
+    const espChips = [{ key: 'todas', label: 'Todo' }].concat(espOrdered.map(c => ({ key: c, label: c }))).map(c => ({
+      label: c.label, onClick: () => this.setState({ espCat: c.key }), style: this.chipStyle(espSel === c.key)
+    }));
+    const espItems = espFiltered.map(m => this.decEspecial(m));
+
     // ---- ficha de producto ----
     const det = this.state.detail;
     let dv = { detailOpen: false, dKindLabel: '', dTitle: '', dSub: '', dHasSub: false, dDesc: '', dHasDesc: false, dPriceLabel: '', dHasOld: false, dOldLabel: '', dOffLabel: '', dHasImg: false, dImgStyle: {}, dHasBadge1: false, dBadge1: '', dBadge1Style: {}, dHasBadge2: false, dBadge2: '', dBadge2Style: {}, dCanCart: false, dAdd: () => {}, dWaHref: '#', dWaLabel: '', dHasCode: false, dCode: '' };
@@ -2912,6 +3185,12 @@ class Component extends DCLogic {
         if (f) {
           const d = this.decMerch(f);
           dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Merch lector', dTitle: d.name, dSub: d.cat || '', dHasSub: !!d.cat, dDesc: d.desc || '', dHasDesc: !!d.desc, dPriceLabel: d.priceLabel, dHasOld: d.hasOld, dOldLabel: d.oldLabel, dOffLabel: d.offLabel, dHasImg: d.hasImg, dImgStyle: d.imgStyle, dHasBadge1: !!d.disp, dBadge1: d.disp, dBadge1Style: d.dispStyle, dCanCart: d.disp !== 'Vendido', dAdd: d.onAdd, dWaHref: d.waHref, dWaLabel: 'Pedir por WhatsApp' });
+        }
+      } else if (det.kind === 'especial') {
+        const f = (cms.especialidad || []).map(x => this.toMerch(x)).find(x => x.id === det.id || x.name === det.id);
+        if (f) {
+          const d = this.decEspecial(f);
+          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Café de especialidad', dTitle: d.name, dSub: d.cat || '', dHasSub: !!d.cat, dDesc: d.desc || '', dHasDesc: !!d.desc, dPriceLabel: d.priceLabel, dHasOld: d.hasOld, dOldLabel: d.oldLabel, dOffLabel: d.offLabel, dHasImg: d.hasImg, dImgStyle: d.imgStyle, dHasBadge1: !!d.disp, dBadge1: d.disp, dBadge1Style: d.dispStyle, dCanCart: d.disp !== 'Vendido', dAdd: d.onAdd, dWaHref: d.waHref, dWaLabel: 'Pedir por WhatsApp' });
         }
       } else if (det.kind === 'evento') {
         const f = this.resEventos().concat(cms.eventos || []).find(x => x.id === det.id || x.name === det.id);
@@ -3019,6 +3298,29 @@ class Component extends DCLogic {
         this.flash('Marcado como agotado ✓ Ya no se muestra en la página.');
       }
     }));
+    // Builder genérico para las tarjetas de admin de Cafetería y Café de especialidad
+    const mkProduct = (coll, soldMsg) => (m) => Object.assign({}, m, {
+      hasImg: !!m.imagen, imgStyle: this.coverStyle(m.imagen),
+      onName: (e) => this.setField(coll, m.id, 'name', e.target.value),
+      onCat: (e) => this.setField(coll, m.id, 'cat', e.target.value),
+      onDesc: (e) => this.setField(coll, m.id, 'desc', e.target.value),
+      onPrice: (e) => this.setNum(coll, m.id, 'price', e.target.value),
+      onDisp: (e) => this.setField(coll, m.id, 'disp', e.target.value),
+      onPick: () => this.pickImage(coll, m.id),
+      onClearImg: () => this.setField(coll, m.id, 'imagen', ''),
+      onDel: () => this.delItem(coll, m.id),
+      stockVal: this.hasStockNum(m) ? m.stock : '',
+      priceOldVal: (typeof m.priceOld === 'number' && isFinite(m.priceOld)) ? m.priceOld : '',
+      onStock: (e) => this.setNumOpt(coll, m.id, 'stock', e.target.value),
+      onPriceOld: (e) => this.setNumOpt(coll, m.id, 'priceOld', e.target.value),
+      onSold: () => {
+        this.setField(coll, m.id, 'disp', 'Vendido');
+        if (this.hasStockNum(m)) this.setField(coll, m.id, 'stock', 0);
+        this.flash(soldMsg);
+      }
+    });
+    const cafeteriaAdmin = (C.cafeteria || []).map(mkProduct('cafeteria', 'Marcado como no disponible ✓ Ya no se muestra en la página.'));
+    const especialidadAdmin = (C.especialidad || []).map(mkProduct('especialidad', 'Marcado como agotado ✓ Ya no se muestra en la página.'));
     const eventosAll = (C.eventos || []).map(e => Object.assign({}, e, {
       hasImg: !!e.imagen, imgStyle: this.coverStyle(e.imagen),
       onName: (ev) => this.setField('eventos', e.id, 'name', ev.target.value),
@@ -3070,7 +3372,7 @@ class Component extends DCLogic {
     }));
     const ventasEntregadas = '$' + (C.pedidos || []).filter(p => p.estado === 'Entregado').reduce((s, p) => s + (+p.total || 0), 0);
 
-    const tabList = [['libros', 'Libros', '#5E1F33', '#F7EFE2'], ['consig', 'Consignación', '#9A7A1E', '#FBF3E0'], ['merch', 'Merch', '#7C2F3E', '#FFF7EC'], ['eventos', 'Eventos', '#2A1C12', '#F4E9D8'], ['pedidos', 'Pedidos', '#3A5A6B', '#EAF2F6'], ['config', 'Configuración', '#5A6472', '#F4F6F8']];
+    const tabList = [['libros', 'Libros', '#5E1F33', '#F7EFE2'], ['consig', 'Consignación', '#9A7A1E', '#FBF3E0'], ['merch', 'Merch', '#7C2F3E', '#FFF7EC'], ['cafeteria', 'Cafetería', '#8A5A2B', '#F6ECE0'], ['especialidad', 'Café de especialidad', '#4A3B2A', '#F1EAE0'], ['eventos', 'Eventos', '#2A1C12', '#F4E9D8'], ['pedidos', 'Pedidos', '#3A5A6B', '#EAF2F6'], ['config', 'Configuración', '#5A6472', '#F4F6F8']];
     const adminTabs = tabList.map(([k, label, bg, fg]) => ({ label, onClick: () => this.setState({ adminTab: k }), style: this.tabStyle(adminTab === k, bg, fg) }));
 
     // ---- bulk preview ----
@@ -3091,8 +3393,9 @@ class Component extends DCLogic {
       page,
       isInicio: page === 'inicio', isCatalogo: page === 'catalogo', isSegunda: page === 'segunda',
       isVender: page === 'vender', isMerch: page === 'merch', isEventos: page === 'eventos',
+      isCafeteria: page === 'cafeteria', isEspecialidad: page === 'especialidad',
       isComprar: page === 'comprar', isHistoria: page === 'historia', isVisitanos: page === 'visitanos',
-      nav: { inicio: () => this.go('inicio'), catalogo: () => this.go('catalogo'), segunda: () => this.go('segunda'), vender: () => this.go('vender'), merch: () => this.go('merch'), eventos: () => this.go('eventos'), comprar: () => this.go('comprar'), historia: () => this.go('historia'), visitanos: () => this.go('visitanos') },
+      nav: { inicio: () => this.go('inicio'), catalogo: () => this.go('catalogo'), segunda: () => this.go('segunda'), vender: () => this.go('vender'), merch: () => this.go('merch'), cafeteria: () => this.go('cafeteria'), especialidad: () => this.go('especialidad'), eventos: () => this.go('eventos'), comprar: () => this.go('comprar'), historia: () => this.go('historia'), visitanos: () => this.go('visitanos') },
       historiaText: (((cfg.historia || '') + '').trim()) || this.DEF_HISTORIA,
       polEnvioText: (((cfg.polEnvio || '') + '').trim()) || this.DEF_ENVIO,
       polCambiosText: (((cfg.polCambios || '') + '').trim()) || this.DEF_CAMBIOS,
@@ -3115,6 +3418,11 @@ class Component extends DCLogic {
       merchListClass: 'lm-merch-list' + (this.state.merchNavOpen ? ' open' : ''),
       toggleMerchNav: () => this.setState({ merchNavOpen: !this.state.merchNavOpen }),
       bookCatOptions: this.bookCatList().map(c => ({ v: c })), merchCatOptions: this.merchCatList().map(c => ({ v: c })),
+      cafeCatOptions: this.cafeCatList().map(c => ({ v: c })), espCatOptions: this.espCatList().map(c => ({ v: c })),
+      // Cafetería (menú)
+      cafeChips, cafeItems, cafeShownCount: cafeItems.length, cafeHasResults: cafeItems.length > 0, cafeNoResults: cafeItems.length === 0,
+      // Café de especialidad
+      espChips, espItems, espShownCount: espItems.length, espHasResults: espItems.length > 0, espNoResults: espItems.length === 0,
       eventsAll: baseEvents.map(e => this.decEvent(e)),
 
       // ficha de producto
@@ -3136,8 +3444,11 @@ class Component extends DCLogic {
 
       // admin
       adminTabs,
-      aLibros: adminTab === 'libros', aConsig: adminTab === 'consig', aMerch: adminTab === 'merch', aEventos: adminTab === 'eventos', aPedidos: adminTab === 'pedidos', aConfig: adminTab === 'config',
+      aLibros: adminTab === 'libros', aConsig: adminTab === 'consig', aMerch: adminTab === 'merch', aCafeteria: adminTab === 'cafeteria', aEspecialidad: adminTab === 'especialidad', aEventos: adminTab === 'eventos', aPedidos: adminTab === 'pedidos', aConfig: adminTab === 'config',
       libros, consig, merch, eventos, pedidos,
+      cafeteriaAdmin, especialidadAdmin,
+      cafeteriaCount: cafeteriaAdmin.length, especialidadCount: especialidadAdmin.length,
+      addCafeteria: this.addCafeteria, addEspecialidad: this.addEspecialidad,
       eventosPast, eventosPastCount: eventosPast.length, hasPastEvents: eventosPast.length > 0,
       showPastEvents: this.state.showPastEvents,
       togglePastEvents: () => this.setState({ showPastEvents: !this.state.showPastEvents }),
