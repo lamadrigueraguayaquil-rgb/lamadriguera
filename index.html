@@ -1087,7 +1087,7 @@
       <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:22px;">
         <div>
           <h2 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:30px; color:#2A1C12;">Eventos y experiencias</h2>
-          <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ eventosCount }} eventos manuales · los más próximos aparecen primero y los pasados se ocultan solos. {{ resEventosNota }}</p>
+          <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ eventosCount }} eventos próximos · aquí solo ves los vigentes, ordenados por fecha. Los pasados se guardan aparte (botón abajo) y no se muestran en la página. {{ resEventosNota }}</p>
         </div>
         <span onClick="{{ addEvento }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#2A1C12; color:#F4E9D8; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(42,28,18,0.3);" style-hover="background:#3d2a1c;">+ Añadir evento</span>
       </div>
@@ -1169,6 +1169,43 @@
           </div>
         </sc-for>
       </div>
+
+      <sc-if value="{{ hasPastEvents }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:26px; border-top:1px dashed #D9C7AC; padding-top:20px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <span onClick="{{ togglePastEvents }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:#F0E6D2; color:#5E4632; font-weight:800; font-size:13.5px; padding:10px 18px; border-radius:999px; border:1px solid #E3D2B8;" style-hover="background:#E9DBC0;">🗄 {{ pastEventsBtnLabel }}</span>
+          <sc-if value="{{ showPastEvents }}" hint-placeholder-val="{{ false }}">
+            <span onClick="{{ delAllPastEvents }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:9px 15px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar todos los pasados</span>
+          </sc-if>
+        </div>
+        <sc-if value="{{ showPastEvents }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:16px; display:flex; flex-direction:column; gap:12px;">
+          <sc-for list="{{ eventosPast }}" as="e" hint-placeholder-count="2">
+            <div style="background:#FBF6EC; border:1px solid #E3D2B8; border-radius:14px; padding:16px;">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; flex-wrap:wrap;">
+                <span style="display:inline-block; padding:4px 11px; border-radius:999px; font-size:11.5px; font-weight:800; background:#ECE5DA; color:#7A6450;">Ya pasó · oculto en la página</span>
+                <span onClick="{{ e.onDel }}" style="cursor:pointer; font-size:12.5px; font-weight:800; color:#9A4A3C; padding:6px 12px; border-radius:999px; border:1px solid #E0AE95;" style-hover="background:#F6E3D5;">Eliminar</span>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px;">
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Nombre del evento</label>
+                  <input value="{{ e.name }}" onChange="{{ e.onName }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Fecha real (cámbiala para reactivar)</label>
+                  <input value="{{ e.fechaVal }}" onChange="{{ e.onFecha }}" type="date" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Hora</label>
+                  <input value="{{ e.time }}" onChange="{{ e.onTime }}" placeholder="19:30" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        </sc-if>
+      </div>
+      </sc-if>
     </div>
     </sc-if>
 
@@ -1635,7 +1672,7 @@ class Component extends DCLogic {
   state = {
     view: 'store', page: 'inicio', search: '', category: 'todos',
     merchCat: 'todas', merchSearch: '', merchNavOpen: false,
-    adminTab: 'libros', aSearch: '', pedidoFilter: 'todos',
+    adminTab: 'libros', aSearch: '', pedidoFilter: 'todos', showPastEvents: false,
     cms: null, savedAt: 0,
     detail: null,
     cart: [], cartOpen: false, coName: '', coPhone: '', coEntrega: 'Retiro en local', coPago: 'Transferencia bancaria', coNote: '', coErr: '',
@@ -2242,6 +2279,17 @@ class Component extends DCLogic {
   };
   addEvento = () => {
     this.addItem('eventos', { id: 'e' + Date.now(), name: 'Nuevo evento', date: '', time: '', includes: '', price: '', cupos: '', imagen: '', order: Date.now() }, 'Evento añadido.');
+  };
+  delAllPastEvents = () => {
+    const cms = this.currentCMS();
+    const pasados = (cms.eventos || []).filter(e => this.isPastEvent(e));
+    if (!pasados.length) { this.flash('No hay eventos pasados que eliminar.'); return; }
+    if (typeof window !== 'undefined' && window.confirm && !window.confirm('¿Eliminar ' + pasados.length + ' evento(s) pasado(s)? Esta acción no se puede deshacer.')) return;
+    cms.eventos = (cms.eventos || []).filter(e => !this.isPastEvent(e));
+    this.cacheCMS(cms);
+    if (this.online()) pasados.forEach(e => this.itemRef('eventos', e.id).delete().catch(() => {}));
+    this.setState({ showPastEvents: false });
+    this.flash(pasados.length + ' evento(s) pasado(s) eliminado(s) ✓');
   };
   setConfig(key, val) {
     const cms = this.currentCMS();
@@ -2953,7 +3001,7 @@ class Component extends DCLogic {
         this.flash('Marcado como agotado ✓ Ya no se muestra en la página.');
       }
     }));
-    const eventos = (C.eventos || []).map(e => Object.assign({}, e, {
+    const eventosAll = (C.eventos || []).map(e => Object.assign({}, e, {
       hasImg: !!e.imagen, imgStyle: this.coverStyle(e.imagen),
       onName: (ev) => this.setField('eventos', e.id, 'name', ev.target.value),
       onDate: (ev) => this.setField('eventos', e.id, 'date', ev.target.value),
@@ -2968,6 +3016,10 @@ class Component extends DCLogic {
       onFecha: (ev) => this.setField('eventos', e.id, 'fecha', ev.target.value),
       isPast: this.isPastEvent(e)
     }));
+    // Panel: separa próximos (visibles) de pasados (ocultos tras un botón)
+    const evSort = (a, b) => { const ta = this.evtTime(a), tb = this.evtTime(b); if (ta == null && tb == null) return 0; if (ta == null) return 1; if (tb == null) return -1; return ta - tb; };
+    const eventos = eventosAll.filter(e => !e.isPast).slice().sort(evSort);
+    const eventosPast = eventosAll.filter(e => e.isPast).slice().sort(evSort).reverse();
     const resAdminEventos = this.resEventos().map(e => ({
       name: e.name,
       sub: [e.date, e.time].filter(Boolean).join(' · ') + ' · ' + e.cupos,
@@ -3067,6 +3119,11 @@ class Component extends DCLogic {
       adminTabs,
       aLibros: adminTab === 'libros', aConsig: adminTab === 'consig', aMerch: adminTab === 'merch', aEventos: adminTab === 'eventos', aPedidos: adminTab === 'pedidos', aConfig: adminTab === 'config',
       libros, consig, merch, eventos, pedidos,
+      eventosPast, eventosPastCount: eventosPast.length, hasPastEvents: eventosPast.length > 0,
+      showPastEvents: this.state.showPastEvents,
+      togglePastEvents: () => this.setState({ showPastEvents: !this.state.showPastEvents }),
+      pastEventsBtnLabel: (this.state.showPastEvents ? 'Ocultar eventos pasados' : 'Ver eventos pasados') + ' (' + eventosPast.length + ')',
+      delAllPastEvents: this.delAllPastEvents,
       resAdminEventos, resAdminShow: resAdminEventos.length > 0,
       librosCount: (C.libros || []).length, consigCount: consig.length, merchCount: merch.length, eventosCount: eventos.length,
       pedidosCount: pedidosAll.length, pedidosNuevos: pedidosAll.filter(p => p.estado === 'Nuevo').length, pedidosEmpty: pedidosAll.length === 0,
