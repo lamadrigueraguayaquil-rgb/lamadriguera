@@ -1934,18 +1934,36 @@ class Component extends DCLogic {
     const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
     return dias[d.getDay()] + ' ' + d.getDate() + ' ' + meses[d.getMonth()];
   }
+  // Normaliza la fecha del evento a texto AAAA-MM-DD, venga como string, Date o Timestamp de Firestore
+  toISODate(v) {
+    if (!v && v !== 0) return '';
+    if (typeof v === 'string') return v.trim().slice(0, 10);
+    try {
+      let d = null;
+      if (v instanceof Date) d = v;
+      else if (typeof v.toDate === 'function') d = v.toDate();
+      else if (typeof v.seconds === 'number') d = new Date(v.seconds * 1000);
+      else if (typeof v._seconds === 'number') d = new Date(v._seconds * 1000);
+      if (d && !isNaN(d.getTime())) {
+        const p = n => String(n).padStart(2, '0');
+        return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+      }
+    } catch (e) {}
+    return (v + '').slice(0, 10);
+  }
   resEventos() {
     const imgs = ((this.state.cms && this.state.cms.eventosImg) || []);
     return (this._resEventos || []).map(ev => {
       const vend = (typeof ev.vendidas === 'number') ? ev.vendidas : 0;
       const disp = Math.max(0, (ev.cuposTotal || 0) - vend);
       const img = imgs.find(x => x.id === ev.id);
+      const fechaIso = this.toISODate(ev.fecha);
       return {
         id: 'res_' + ev.id,
         rawId: ev.id,
         name: ev.nombre || 'Evento',
-        date: this.fmtFechaCorta(ev.fecha),
-        fecha: ev.fecha || '',
+        date: this.fmtFechaCorta(fechaIso),
+        fecha: fechaIso,
         time: ev.hora || '',
         includes: ev.descripcion || '',
         price: (+ev.precio > 0) ? ('$' + ev.precio) : 'Entrada libre',
