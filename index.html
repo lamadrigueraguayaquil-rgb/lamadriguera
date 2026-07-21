@@ -3020,7 +3020,8 @@ class Component extends DCLogic {
     const evSort = (a, b) => { const ta = this.evtTime(a), tb = this.evtTime(b); if (ta == null && tb == null) return 0; if (ta == null) return 1; if (tb == null) return -1; return ta - tb; };
     const eventos = eventosAll.filter(e => !e.isPast).slice().sort(evSort);
     const eventosPast = eventosAll.filter(e => e.isPast).slice().sort(evSort).reverse();
-    const resAdminEventos = this.resEventos().map(e => ({
+    // Eventos en vivo (app de reservas): solo los próximos; los pasados se ocultan igual que en la página
+    const resAdminEventos = this.resEventos().filter(e => !this.isPastEvent(e)).slice().sort(evSort).map(e => ({
       name: e.name,
       sub: [e.date, e.time].filter(Boolean).join(' · ') + ' · ' + e.cupos,
       hasImg: !!e.imagen,
