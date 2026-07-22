@@ -2715,23 +2715,31 @@ class Component extends DCLogic {
       im.src = o.thumb;
     }))).then(r => r.filter(Boolean).slice(0, 6));
   }
+  // country=EC evita el error de "ubicación no soportada" de Google Books fuera de EE.UU.
+  gbUrl(q) { return 'https://www.googleapis.com/books/v1/volumes?country=EC&maxResults=8&q=' + q; }
+  gbGet(url) {
+    return fetch(url).then(r => r.json()).then(j => {
+      if (j && j.error) { this._gbErr = (j.error.code || '') + ' ' + (j.error.message || ''); return {}; }
+      return j || {};
+    }).catch(() => { this._gbErr = 'sin conexión'; return {}; });
+  }
   searchCovers(title, author, isbn) {
     const enc = encodeURIComponent;
+    this._gbErr = '';
     const olBase = 'https://openlibrary.org/search.json?limit=10&fields=title,author_name,cover_i,first_publish_year&';
-    const gbBase = 'https://www.googleapis.com/books/v1/volumes?maxResults=8&q=';
-    const jget = (url) => fetch(url).then(r => r.json()).catch(() => ({}));
+    const jget = (url) => this.gbGet(url);
     const dedupe = (arr) => { const seen = {}; return arr.filter(o => o && !seen[o.url] && (seen[o.url] = 1)); };
     const clean = ((isbn || '') + '').replace(/[^0-9Xx]/g, '');
     const byIsbn = clean.length >= 10
-      ? Promise.all([jget(gbBase + 'isbn:' + clean), jget(olBase + 'isbn=' + clean)])
+      ? Promise.all([jget(this.gbUrl('isbn:' + clean)), jget(olBase + 'isbn=' + clean)])
           .then(rs => dedupe(this.gbPick(rs[0].items).concat(this.olPick(rs[1].docs))))
       : Promise.resolve([]);
     return byIsbn
       .then(o1 => o1.length ? o1 : Promise.all([
-        jget(gbBase + enc('intitle:"' + title + '"' + (author ? ' inauthor:"' + author + '"' : ''))),
+        jget(this.gbUrl(enc('intitle:"' + title + '"' + (author ? ' inauthor:"' + author + '"' : '')))),
         jget(olBase + 'title=' + enc(title) + (author ? '&author=' + enc(author) : ''))
       ]).then(rs => dedupe(this.gbPick(rs[0].items).concat(this.olPick(rs[1].docs)))))
-      .then(o2 => o2.length ? o2 : jget(gbBase + enc(title + ' ' + (author || ''))).then(g => dedupe(this.gbPick(g.items))))
+      .then(o2 => o2.length ? o2 : jget(this.gbUrl(enc(title + ' ' + (author || '')))).then(g => dedupe(this.gbPick(g.items))))
       .then(opts => this.verifyCovers(opts));
   }
   findCover(coll, id) {
@@ -2768,8 +2776,8 @@ class Component extends DCLogic {
   // ---------- sinopsis automática (Google Books) ----------
   searchSinopsis(title, author, isbn) {
     const enc = encodeURIComponent;
-    const gbBase = 'https://www.googleapis.com/books/v1/volumes?maxResults=8&q=';
-    const jget = (url) => fetch(url).then(r => r.json()).catch(() => ({}));
+    this._gbErr = '';
+    const jget = (url) => this.gbGet(url);
     const clean = ((isbn || '') + '').replace(/[^0-9Xx]/g, '');
     const pickDesc = (items) => {
       const all = (items || []).map(v => v.volumeInfo || {}).filter(vi => vi.description && (vi.description + '').length > 40);
@@ -2784,11 +2792,24 @@ class Component extends DCLogic {
       const p = cut.lastIndexOf('. ');
       return p > 150 ? cut.slice(0, p + 1) : (cut + '…');
     };
-    const q1 = clean.length >= 10 ? jget(gbBase + 'isbn:' + clean).then(j => pickDesc(j.items)) : Promise.resolve('');
+    // Respaldo: descripción de la obra en OpenLibrary
+    const olFall = () => fetch('https://openlibrary.org/search.json?limit=5&fields=key,title&title=' + enc(title) + (author ? '&author=' + enc(author) : ''))
+      .then(r => r.json())
+      .then(j => {
+        const d = ((j && j.docs) || []).find(x => x.key);
+        if (!d) return '';
+        return fetch('https://openlibrary.org' + d.key + '.json').then(r => r.json()).then(w => {
+          const desc = w && w.description;
+          return (typeof desc === 'string' ? desc : ((desc && desc.value) || '')) + '';
+        });
+      })
+      .catch(() => '');
+    const q1 = clean.length >= 10 ? jget(this.gbUrl('isbn:' + clean)).then(j => pickDesc(j.items)) : Promise.resolve('');
     return q1
-      .then(d => d ? d : jget(gbBase + enc('intitle:"' + title + '"' + (author ? ' inauthor:"' + author + '"' : ''))).then(j => pickDesc(j.items)))
-      .then(d => d ? d : jget(gbBase + enc(title + ' ' + (author || ''))).then(j => pickDesc(j.items)))
-      .then(d => d ? trimDesc(d) : '');
+      .then(d => d ? d : jget(this.gbUrl(enc('intitle:"' + title + '"' + (author ? ' inauthor:"' + author + '"' : '')))).then(j => pickDesc(j.items)))
+      .then(d => d ? d : jget(this.gbUrl(enc(title + ' ' + (author || '')))).then(j => pickDesc(j.items)))
+      .then(d => d ? d : olFall())
+      .then(d => (d && (d + '').length > 40) ? trimDesc(d) : '');
   }
   findSinopsis(coll, id) {
     const it = (this.currentCMS()[coll] || []).find(x => x.id === id);
@@ -2797,7 +2818,8 @@ class Component extends DCLogic {
     this.flash('Buscando sinopsis…');
     this.searchSinopsis(it.title, it.author || '', it.isbn || '').then(d => {
       if (d) { this.setField(coll, id, 'sinopsis', d); this.flash('Sinopsis encontrada ✓ Revísala y ajústala a tu estilo.'); }
-      else this.flash('No encontramos sinopsis para este título. Puedes escribirla tú.');
+      else if (this._gbErr) this.flash('Google Books no respondió (' + this._gbErr + '). Espera unos minutos e intenta de nuevo.');
+      else this.flash('No encontramos sinopsis para este título. Prueba agregando el ISBN o escríbela tú.');
     }).catch(() => this.flash('No se pudo buscar. Revisa tu internet.'));
   }
   bulkCovers = () => {
