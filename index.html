@@ -109,6 +109,11 @@
   }
 }
 </script>
+<link rel="preconnect" href="https://firestore.googleapis.com" crossorigin="">
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin="">
+<link rel="dns-prefetch" href="https://covers.openlibrary.org">
+<link rel="dns-prefetch" href="https://books.google.com">
+<link rel="dns-prefetch" href="https://www.googleapis.com">
 <script src="./support.js"></script>
 </head>
 <body>
@@ -923,6 +928,7 @@
                   </sc-if>
                 </div>
                 <span onClick="{{ l.onFindCover }}" style="cursor:pointer; font-size:11.5px; font-weight:800; color:#9A7A1E; text-align:center; border:1px solid #D9BC77; border-radius:999px; padding:6px 8px;" style-hover="background:#F1E6CF;">🔍 Buscar portada</span>
+                <span onClick="{{ l.onFindSinopsis }}" style="cursor:pointer; font-size:11.5px; font-weight:800; color:#5E1F33; text-align:center; border:1px solid #B9C4B4; border-radius:999px; padding:6px 8px;" style-hover="background:#F2E3E2;">✍️ Buscar sinopsis</span>
                 <sc-if value="{{ l.hasImg }}" hint-placeholder-val="{{ false }}">
                   <span onClick="{{ l.onClearImg }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span>
                 </sc-if>
@@ -1030,6 +1036,7 @@
                   </sc-if>
                 </div>
                 <span onClick="{{ c.onFindCover }}" style="cursor:pointer; font-size:11.5px; font-weight:800; color:#9A7A1E; text-align:center; border:1px solid #D9BC77; border-radius:999px; padding:6px 8px;" style-hover="background:#F1E6CF;">🔍 Buscar portada</span>
+                <span onClick="{{ c.onFindSinopsis }}" style="cursor:pointer; font-size:11.5px; font-weight:800; color:#5E1F33; text-align:center; border:1px solid #B9C4B4; border-radius:999px; padding:6px 8px;" style-hover="background:#F2E3E2;">✍️ Buscar sinopsis</span>
                 <sc-if value="{{ c.hasImg }}" hint-placeholder-val="{{ false }}">
                   <span onClick="{{ c.onClearImg }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span>
                 </sc-if>
@@ -2648,7 +2655,7 @@ class Component extends DCLogic {
       const img = new Image();
       img.onload = () => {
         const isLogo = tgt.brand === 'logo';
-        const max = isLogo ? 512 : (tgt.brand ? 1280 : 700);
+        const max = isLogo ? 320 : (tgt.brand ? 1100 : 700);
         let w = img.width, h = img.height;
         if (w > max || h > max) { const r = Math.min(max / w, max / h); w = Math.round(w * r); h = Math.round(h * r); }
         const c = document.createElement('canvas'); c.width = w; c.height = h;
@@ -2656,7 +2663,7 @@ class Component extends DCLogic {
         if (!isLogo) { ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, w, h); }
         ctx.drawImage(img, 0, 0, w, h);
         let data;
-        try { data = isLogo ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', tgt.brand ? 0.85 : 0.78); }
+        try { data = isLogo ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', tgt.brand ? 0.78 : 0.78); }
         catch (x) { data = ev.target.result; }
         if (tgt.brand) this.setBrand(tgt.brand, data);
         else if (tgt.coll === 'eventosImg') this.setEventoImg(tgt.id, data);
@@ -2758,24 +2765,67 @@ class Component extends DCLogic {
     if (nav && nav.clipboard && nav.clipboard.writeText) nav.clipboard.writeText(t).then(() => this.flash('Datos copiados ✓')).catch(() => {});
     else { try { window.prompt('Copia los datos:', t); } catch (e) {} }
   };
+  // ---------- sinopsis automática (Google Books) ----------
+  searchSinopsis(title, author, isbn) {
+    const enc = encodeURIComponent;
+    const gbBase = 'https://www.googleapis.com/books/v1/volumes?maxResults=8&q=';
+    const jget = (url) => fetch(url).then(r => r.json()).catch(() => ({}));
+    const clean = ((isbn || '') + '').replace(/[^0-9Xx]/g, '');
+    const pickDesc = (items) => {
+      const all = (items || []).map(v => v.volumeInfo || {}).filter(vi => vi.description && (vi.description + '').length > 40);
+      if (!all.length) return '';
+      const es = all.find(vi => vi.language === 'es');
+      return ((es || all[0]).description) + '';
+    };
+    const trimDesc = (t) => {
+      t = (t + '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      if (t.length <= 420) return t;
+      const cut = t.slice(0, 420);
+      const p = cut.lastIndexOf('. ');
+      return p > 150 ? cut.slice(0, p + 1) : (cut + '…');
+    };
+    const q1 = clean.length >= 10 ? jget(gbBase + 'isbn:' + clean).then(j => pickDesc(j.items)) : Promise.resolve('');
+    return q1
+      .then(d => d ? d : jget(gbBase + enc('intitle:"' + title + '"' + (author ? ' inauthor:"' + author + '"' : ''))).then(j => pickDesc(j.items)))
+      .then(d => d ? d : jget(gbBase + enc(title + ' ' + (author || ''))).then(j => pickDesc(j.items)))
+      .then(d => d ? trimDesc(d) : '');
+  }
+  findSinopsis(coll, id) {
+    const it = (this.currentCMS()[coll] || []).find(x => x.id === id);
+    if (!it) return;
+    if (!((it.title || '') + '').trim()) { this.flash('Escribe primero el título del libro.'); return; }
+    this.flash('Buscando sinopsis…');
+    this.searchSinopsis(it.title, it.author || '', it.isbn || '').then(d => {
+      if (d) { this.setField(coll, id, 'sinopsis', d); this.flash('Sinopsis encontrada ✓ Revísala y ajústala a tu estilo.'); }
+      else this.flash('No encontramos sinopsis para este título. Puedes escribirla tú.');
+    }).catch(() => this.flash('No se pudo buscar. Revisa tu internet.'));
+  }
   bulkCovers = () => {
     if (this.state.coversBusy) return;
     const C = this.currentCMS();
-    const missing = (C.libros || []).filter(l => !l.imagen && ((l.title || '') + '').trim()).slice(0, 25);
-    if (!missing.length) { this.flash('Todos tus libros ya tienen portada 🎉'); return; }
+    const missing = (C.libros || []).filter(l => (((l.title || '') + '').trim()) && (!l.imagen || !(((l.sinopsis || '') + '').trim()))).slice(0, 25);
+    if (!missing.length) { this.flash('Todos tus libros ya tienen portada y sinopsis 🎉'); return; }
     this.setState({ coversBusy: true, coversDone: 0, coversTotal: missing.length, coversFound: 0 });
-    let i = 0, found = 0;
+    let i = 0, found = 0, sins = 0;
     const next = () => {
       if (i >= missing.length) {
         this.setState({ coversBusy: false });
-        this.flash('Listo: ' + found + ' de ' + missing.length + ' portadas encontradas ✓');
+        this.flash('Listo: ' + found + ' portadas y ' + sins + ' sinopsis nuevas ✓');
         return;
       }
       const l = missing[i]; i++;
-      this.searchCovers(l.title, l.author || '', l.isbn || '')
-        .then(opts => { if (opts.length) { this.setField('libros', l.id, 'imagen', opts[0].url); found++; this.setState({ coversFound: found }); } })
-        .catch(() => {})
-        .then(() => { this.setState({ coversDone: i }); setTimeout(next, 400); });
+      const tasks = [];
+      if (!l.imagen) {
+        tasks.push(this.searchCovers(l.title, l.author || '', l.isbn || '')
+          .then(opts => { if (opts.length) { this.setField('libros', l.id, 'imagen', opts[0].url); found++; this.setState({ coversFound: found }); } })
+          .catch(() => {}));
+      }
+      if (!(((l.sinopsis || '') + '').trim())) {
+        tasks.push(this.searchSinopsis(l.title, l.author || '', l.isbn || '')
+          .then(d => { if (d) { this.setField('libros', l.id, 'sinopsis', d); sins++; } })
+          .catch(() => {}));
+      }
+      Promise.all(tasks).then(() => { this.setState({ coversDone: i }); setTimeout(next, 400); });
     };
     next();
   };
@@ -3356,6 +3406,7 @@ class Component extends DCLogic {
       onClearImg: () => this.setField(coll, l.id, 'imagen', ''),
       onDel: () => this.delItem(coll, l.id),
       onFindCover: () => this.findCover(coll, l.id),
+      onFindSinopsis: () => this.findSinopsis(coll, l.id),
       stockVal: this.hasStockNum(l) ? l.stock : '',
       priceOldVal: (typeof l.priceOld === 'number' && isFinite(l.priceOld)) ? l.priceOld : '',
       onStock: (e) => this.setNumOpt(coll, l.id, 'stock', e.target.value),
@@ -3601,7 +3652,7 @@ class Component extends DCLogic {
 
       // portadas automáticas
       bulkCovers: this.bulkCovers,
-      coversBtnLabel: this.state.coversBusy ? ('Buscando… ' + this.state.coversDone + '/' + this.state.coversTotal + ' (' + this.state.coversFound + ' ✓)') : '🖼 Portadas automáticas',
+      coversBtnLabel: this.state.coversBusy ? ('Buscando… ' + this.state.coversDone + '/' + this.state.coversTotal + ' (' + this.state.coversFound + ' ✓)') : '🖼 Portadas y sinopsis automáticas',
       coverOpen: !!this.state.cover,
       coverLoading: !!(this.state.cover && this.state.cover.loading),
       coverTitle: this.state.cover ? this.state.cover.title : '',
