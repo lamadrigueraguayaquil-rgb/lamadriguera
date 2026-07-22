@@ -1551,6 +1551,11 @@
           <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Escribe tu calificación (ej. <strong>4.8</strong>) y aparecerá el sello «★ 4.8 en Google» en el inicio de tu página, con link a tus reseñas. Déjalo vacío para ocultarlo. Actualízalo tú misma si cambia.</p>
         </div>
         <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Clave de Google Books (portadas y sinopsis)</label>
+          <input value="{{ cfgBooksKey }}" onChange="{{ onCfgBooksKey }}" placeholder="AIza… (clave API de Google Books)" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Sin clave, las búsquedas usan una cuota <strong>compartida</strong> que a veces se agota (error 429). Con tu clave gratuita tienes <strong>1.000 búsquedas diarias propias</strong>. Cómo crearla: <strong>console.cloud.google.com</strong> → elige tu proyecto <strong>adminpagweb</strong> → busca «Books API» → Habilitar → Credenciales → Crear credencial → Clave de API → cópiala y pégala aquí. (Recomendado: en la clave, «Restringir clave» → sitios web → agrega <strong>lamadriguera.ec</strong>.)</p>
+        </div>
+        <div>
           <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Google Analytics (ID de medición)</label>
           <input value="{{ cfgGaId }}" onChange="{{ onCfgGaId }}" placeholder="G-XXXXXXXXXX" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
           <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Crea una propiedad gratis en <strong>analytics.google.com</strong>, copia el «ID de medición» (empieza con G-) y pégalo aquí. Medirás visitas, libros más vistos, carritos y pedidos. Estado: <strong>{{ gaStatus }}</strong></p>
@@ -2716,7 +2721,14 @@ class Component extends DCLogic {
     }))).then(r => r.filter(Boolean).slice(0, 6));
   }
   // country=EC evita el error de "ubicación no soportada" de Google Books fuera de EE.UU.
-  gbUrl(q) { return 'https://www.googleapis.com/books/v1/volumes?country=EC&maxResults=8&q=' + q; }
+  // Con tu propia clave (Configuración) usas tu cuota diaria y no la compartida (error 429).
+  gbUrl(q, soloEs) {
+    const k = ((this.cfg().booksKey || '') + '').trim();
+    return 'https://www.googleapis.com/books/v1/volumes?country=EC&maxResults=8'
+      + (soloEs ? '&langRestrict=es' : '')
+      + (k ? ('&key=' + encodeURIComponent(k)) : '')
+      + '&q=' + q;
+  }
   gbGet(url) {
     return fetch(url).then(r => r.json()).then(j => {
       if (j && j.error) { this._gbErr = (j.error.code || '') + ' ' + (j.error.message || ''); return {}; }
@@ -2804,11 +2816,18 @@ class Component extends DCLogic {
         });
       })
       .catch(() => '');
-    const q1 = clean.length >= 10 ? jget(this.gbUrl('isbn:' + clean)).then(j => pickDesc(j.items)) : Promise.resolve('');
+    const qTA = enc('intitle:"' + title + '"' + (author ? ' inauthor:"' + author + '"' : ''));
+    const qLibre = enc(title + ' ' + (author || ''));
+    const marca = (d, es) => { if (d) this._sinEs = !!es; return d; };
+    this._sinEs = false;
+    // Orden: ISBN (edición exacta) → solo español → cualquier idioma → OpenLibrary
+    const q1 = clean.length >= 10 ? jget(this.gbUrl('isbn:' + clean)).then(j => { const vi = ((j.items || []).map(v => v.volumeInfo || {}).find(v2 => v2.description && (v2.description + '').length > 40)); return vi ? marca(vi.description + '', vi.language === 'es') : ''; }) : Promise.resolve('');
     return q1
-      .then(d => d ? d : jget(this.gbUrl(enc('intitle:"' + title + '"' + (author ? ' inauthor:"' + author + '"' : '')))).then(j => pickDesc(j.items)))
-      .then(d => d ? d : jget(this.gbUrl(enc(title + ' ' + (author || '')))).then(j => pickDesc(j.items)))
-      .then(d => d ? d : olFall())
+      .then(d => d ? d : jget(this.gbUrl(qTA, true)).then(j => marca(pickDesc(j.items), true)))
+      .then(d => d ? d : jget(this.gbUrl(qLibre, true)).then(j => marca(pickDesc(j.items), true)))
+      .then(d => d ? d : jget(this.gbUrl(qTA)).then(j => marca(pickDesc(j.items), false)))
+      .then(d => d ? d : jget(this.gbUrl(qLibre)).then(j => marca(pickDesc(j.items), false)))
+      .then(d => d ? d : olFall().then(d2 => marca(d2, false)))
       .then(d => (d && (d + '').length > 40) ? trimDesc(d) : '');
   }
   findSinopsis(coll, id) {
@@ -2817,7 +2836,9 @@ class Component extends DCLogic {
     if (!((it.title || '') + '').trim()) { this.flash('Escribe primero el título del libro.'); return; }
     this.flash('Buscando sinopsis…');
     this.searchSinopsis(it.title, it.author || '', it.isbn || '').then(d => {
-      if (d) { this.setField(coll, id, 'sinopsis', d); this.flash('Sinopsis encontrada ✓ Revísala y ajústala a tu estilo.'); }
+      if (d && this._sinEs) { this.setField(coll, id, 'sinopsis', d); this.flash('Sinopsis encontrada ✓ Revísala y ajústala a tu estilo.'); }
+      else if (d) { this.setField(coll, id, 'sinopsis', d); this.flash('La encontramos solo en otro idioma — revísala, tradúcela o bórrala.'); }
+      else if (this._gbErr && this._gbErr.indexOf('429') >= 0) this.flash('Google Books agotó la cuota gratuita de hoy. Pega tu propia clave en Configuración (es gratis) o inténtalo mañana.');
       else if (this._gbErr) this.flash('Google Books no respondió (' + this._gbErr + '). Espera unos minutos e intenta de nuevo.');
       else this.flash('No encontramos sinopsis para este título. Prueba agregando el ISBN o escríbela tú.');
     }).catch(() => this.flash('No se pudo buscar. Revisa tu internet.'));
@@ -2843,8 +2864,9 @@ class Component extends DCLogic {
           .catch(() => {}));
       }
       if (!(((l.sinopsis || '') + '').trim())) {
+        // En el modo masivo solo guardamos sinopsis en español (las de otros idiomas, mejor una a una)
         tasks.push(this.searchSinopsis(l.title, l.author || '', l.isbn || '')
-          .then(d => { if (d) { this.setField('libros', l.id, 'sinopsis', d); sins++; } })
+          .then(d => { if (d && this._sinEs) { this.setField('libros', l.id, 'sinopsis', d); sins++; } })
           .catch(() => {}));
       }
       Promise.all(tasks).then(() => { this.setState({ coversDone: i }); setTimeout(next, 400); });
@@ -3696,6 +3718,7 @@ class Component extends DCLogic {
       hasGoogleRating: !!(((cfg.gRating || '') + '').trim()),
       gRatingLabel: (((cfg.gRating || '') + '').trim()),
       gReviewsHref: this.realUrl(cfg.gReviews) || (cfg.maps || this.mapsHref),
+      cfgBooksKey: cfg.booksKey || '', onCfgBooksKey: (e) => this.setConfig('booksKey', (e.target.value || '').trim()),
       cfgGaId: cfg.gaId || '', onCfgGaId: (e) => { this.setConfig('gaId', (e.target.value || '').trim()); this._gaBooted = false; this.bootAnalytics(); },
       gaStatus: this._gaBooted ? 'Activo ✓' : ((((cfg.gaId || '') + '').trim()) ? 'Guardado — se activa al recargar' : 'Sin configurar'),
       cfgHistoria: cfg.historia || '', onCfgHistoria: (e) => this.setConfig('historia', e.target.value),
