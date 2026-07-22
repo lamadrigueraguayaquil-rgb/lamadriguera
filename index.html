@@ -204,6 +204,13 @@
             <span onClick="{{ nav.merch }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:transparent; color:#9A7A1E; font-weight:700; font-size:15px; padding:13px 22px; border-radius:999px; border:1.5px solid #D9BC77; transition:all .15s ease;" style-hover="background:#F1E6CF;">Ver merch lector</span>
             <span onClick="{{ nav.eventos }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:transparent; color:#5E1F33; font-weight:700; font-size:15px; padding:13px 22px; border-radius:999px; border:1.5px solid #B9C4B4; transition:all .15s ease;" style-hover="background:#F2E3E2;">Reservar evento</span>
           </div>
+          <sc-if value="{{ hasGoogleRating }}" hint-placeholder-val="{{ false }}">
+            <a href="{{ gReviewsHref }}" target="_blank" rel="noopener" style="margin-top:22px; display:inline-flex; align-items:center; gap:9px; text-decoration:none; background:#FFFDF8; border:1px solid #E3D2B8; border-radius:999px; padding:9px 18px; box-shadow:0 6px 16px rgba(52,37,26,0.08);">
+              <span style="color:#E8A62A; font-size:15px; letter-spacing:1px;">★★★★★</span>
+              <span style="font-weight:800; font-size:14px; color:#34251A;">{{ gRatingLabel }} en Google</span>
+              <span style="font-size:12.5px; font-weight:700; color:#8A715A;">· ver reseñas de lectores →</span>
+            </a>
+          </sc-if>
         </div>
         <div style="position:relative;">
           <div style="position:relative; aspect-ratio:4/5; border-radius:24px; overflow:hidden; box-shadow:0 30px 60px rgba(52,37,26,0.22); border:1px solid #E3D2B8; background:repeating-linear-gradient(135deg,#EBDDC4,#EBDDC4 14px,#E2D0B2 14px,#E2D0B2 28px);">
@@ -852,7 +859,7 @@
           <span onClick="{{ closeBulk }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#8A715A; padding:6px 12px; border-radius:999px; border:1px solid #E3D2B8;" style-hover="background:#F0E6D2;">Cerrar ✕</span>
         </div>
         <div style="margin-top:14px; background:#F0E6D2; border-radius:10px; padding:12px 15px; font-size:12.5px; color:#5E4632; line-height:1.6;">
-          <strong>Orden de columnas:</strong> Título · Autor · Género · Categoría · Precio · Estado · Disponibilidad · ISBN (opcional)<br>
+          <strong>Orden de columnas:</strong> Título · Autor · Género · Categoría · Precio · Estado · Disponibilidad · ISBN · Editorial (últimas dos opcionales)<br>
           <span style="color:#8A715A;">Lo más fácil: descarga la plantilla, llénala en Excel/Google Sheets y súbela (o copia las filas y pégalas). Acepta separación por comas, punto y coma o tabulación. Si un título tiene comas, ponlo entre "comillas". Estado: Nuevo / Usado excelente / Usado bueno / Con detalles visibles · Disponibilidad: Disponible / Última unidad / Reservado / Oferta. Si dejas un campo vacío usamos «Nuevo» y «Disponible». El ISBN ayuda a que «Portadas automáticas» encuentre la edición exacta.</span>
         </div>
         <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
@@ -928,6 +935,10 @@
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Autor</label>
                   <input value="{{ l.author }}" onChange="{{ l.onAuthor }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Editorial</label>
+                  <input value="{{ l.editorial }}" onChange="{{ l.onEditorial }}" placeholder="Planeta, Penguin, Norma…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Categoría</label>
@@ -1031,6 +1042,10 @@
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Autor</label>
                   <input value="{{ c.author }}" onChange="{{ c.onAuthor }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                </div>
+                <div>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Editorial</label>
+                  <input value="{{ c.editorial }}" onChange="{{ c.onEditorial }}" placeholder="Planeta, Penguin, Norma…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Género</label>
@@ -1523,6 +1538,12 @@
           <input value="{{ cfgWhatsapp }}" onChange="{{ onCfgWhatsapp }}" placeholder="593960186336 (con código de país, sin +)" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
         </div>
         <div>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Calificación de Google (sello de confianza)</label>
+          <input value="{{ cfgGRating }}" onChange="{{ onCfgGRating }}" placeholder="4.8" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+          <input value="{{ cfgGReviews }}" onChange="{{ onCfgGReviews }}" placeholder="Link a tus reseñas de Google (opcional; si no, usa tu link de Maps)" style="margin-top:8px; width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Escribe tu calificación (ej. <strong>4.8</strong>) y aparecerá el sello «★ 4.8 en Google» en el inicio de tu página, con link a tus reseñas. Déjalo vacío para ocultarlo. Actualízalo tú misma si cambia.</p>
+        </div>
+        <div>
           <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Google Analytics (ID de medición)</label>
           <input value="{{ cfgGaId }}" onChange="{{ onCfgGaId }}" placeholder="G-XXXXXXXXXX" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
           <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Crea una propiedad gratis en <strong>analytics.google.com</strong>, copia el «ID de medición» (empieza con G-) y pégalo aquí. Medirás visitas, libros más vistos, carritos y pedidos. Estado: <strong>{{ gaStatus }}</strong></p>
@@ -1659,8 +1680,8 @@ service cloud.firestore {
       <sc-if value="{{ cartHasItems }}" hint-placeholder-val="{{ false }}">
         <div style="display:flex; flex-direction:column; gap:12px;">
           <sc-for list="{{ cartItems }}" as="it" hint-placeholder-count="2">
-            <div style="display:grid; grid-template-columns:62px minmax(0,1fr) auto; gap:12px; align-items:center; background:#FFFDF8; border:1px solid #EADBC4; border-radius:14px; padding:10px;">
-              <div style="position:relative; width:62px; height:78px; border-radius:9px; overflow:hidden; background:repeating-linear-gradient(135deg,#F1E5D0,#F1E5D0 8px,#E9D9BE 8px,#E9D9BE 16px); flex-shrink:0;">
+            <div style="display:grid; grid-template-columns:50px minmax(0,1fr) auto; gap:10px; align-items:center; background:#FFFDF8; border:1px solid #EADBC4; border-radius:12px; padding:8px 10px;">
+              <div style="position:relative; width:50px; height:64px; border-radius:8px; overflow:hidden; background:repeating-linear-gradient(135deg,#F1E5D0,#F1E5D0 8px,#E9D9BE 8px,#E9D9BE 16px); flex-shrink:0;">
                 <sc-if value="{{ it.hasImg }}" hint-placeholder-val="{{ false }}"><div style="{{ it.imgStyle }}"></div></sc-if>
               </div>
               <div style="min-width:0;">
@@ -1697,12 +1718,7 @@ service cloud.firestore {
             <option value="Efectivo">💵 Efectivo al retirar o recibir</option>
           </select>
           <sc-if value="{{ payShowTransfer }}" hint-placeholder-val="{{ false }}">
-            <div style="background:#EFE2CB; border:1px solid #E3D2B8; border-radius:11px; padding:12px 14px;">
-              <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Datos para tu transferencia</div>
-              <div style="font-size:13.5px; line-height:1.6; color:#3A2C1F; white-space:pre-line;">{{ payTransferText }}</div>
-              <span onClick="{{ copyPayData }}" style="display:inline-block; margin-top:9px; cursor:pointer; font-size:12.5px; font-weight:800; color:#5E1F33; border:1.5px solid #B9C4B4; padding:7px 14px; border-radius:999px;" style-hover="background:#F2E3E2;">📋 Copiar datos</span>
-              <div style="margin-top:8px; font-size:12px; color:#8A715A;">Envía el comprobante por WhatsApp junto con tu pedido.</div>
-            </div>
+            <div style="font-size:12.5px; color:#8A715A; background:#F0E6D2; border-radius:10px; padding:10px 13px;">🏦 Al enviar tu pedido te mostraremos los datos para la transferencia.</div>
           </sc-if>
           <sc-if value="{{ payShowLink }}" hint-placeholder-val="{{ false }}">
             <a href="{{ payLinkHref }}" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; background:#2E6B41; color:#F4F9F3; font-weight:800; font-size:14.5px; padding:13px; border-radius:11px; box-shadow:0 6px 16px rgba(46,107,65,0.3); transition:background .15s ease;" style-hover="background:#245434;">💳 Pagar ahora · {{ cartSubtotal }}</a>
@@ -1720,8 +1736,8 @@ service cloud.firestore {
 
     <sc-if value="{{ cartHasItems }}" hint-placeholder-val="{{ false }}">
     <div style="flex-shrink:0; border-top:1px solid #E3D2B8; background:#FFFDF8; padding:clamp(14px,3vw,18px); display:flex; flex-direction:column; gap:10px;">
-      <div style="display:flex; align-items:center; justify-content:space-between;">
-        <span style="font-size:14px; font-weight:700; color:#5E4632;">Total</span>
+      <div style="display:flex; align-items:baseline; justify-content:space-between;">
+        <span style="font-size:14px; font-weight:700; color:#5E4632;">Total · {{ cartCountLabel }}</span>
         <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:26px; color:#5E1F33;">{{ cartSubtotal }}</span>
       </div>
       <span onClick="{{ checkout }}" style="cursor:pointer; display:flex; align-items:center; justify-content:center; gap:9px; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:15.5px; padding:15px; border-radius:13px; box-shadow:0 8px 20px rgba(94,31,51,0.28); transition:background .15s ease;" style-hover="background:#244031;"><span style="width:8px; height:8px; border-radius:50%; background:#9CD9A6;"></span>Enviar pedido por WhatsApp</span>
@@ -1731,6 +1747,34 @@ service cloud.firestore {
       </div>
     </div>
     </sc-if>
+  </div>
+</div>
+</sc-if>
+
+<!-- ============ PEDIDO ENVIADO · DATOS DE PAGO ============ -->
+<sc-if value="{{ payDoneOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closePayDone }}" style="position:fixed; inset:0; z-index:335; background:rgba(42,28,18,0.55); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); display:flex; align-items:center; justify-content:center; padding:18px;">
+  <div onClick="{{ stop }}" style="width:100%; max-width:420px; background:#FFFDF8; border-radius:20px; padding:clamp(22px,4vw,30px); box-shadow:0 30px 70px rgba(42,28,18,0.4); font-family:'Outfit',sans-serif;">
+    <div style="display:flex; align-items:center; gap:11px;">
+      <span style="flex-shrink:0; width:40px; height:40px; border-radius:50%; background:#E3EDE3; display:flex; align-items:center; justify-content:center; font-size:20px;">✅</span>
+      <div>
+        <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:21px; color:#5E1F33;">¡Pedido enviado!</h3>
+        <p style="margin:2px 0 0; font-size:13px; color:#8A715A;">Total: <strong>{{ payDoneTotal }}</strong> · {{ payDoneMetodo }}</p>
+      </div>
+    </div>
+    <sc-if value="{{ payDoneTransfer }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:16px; background:#EFE2CB; border:1px solid #E3D2B8; border-radius:12px; padding:14px 16px;">
+        <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Datos para tu transferencia</div>
+        <div style="font-size:14px; line-height:1.65; color:#3A2C1F; white-space:pre-line;">{{ payTransferText }}</div>
+        <span onClick="{{ copyPayData }}" style="display:inline-block; margin-top:10px; cursor:pointer; font-size:12.5px; font-weight:800; color:#5E1F33; border:1.5px solid #B9C4B4; padding:8px 15px; border-radius:999px;" style-hover="background:#F2E3E2;">📋 Copiar datos</span>
+      </div>
+      <p style="margin:12px 0 0; font-size:13px; line-height:1.5; color:#8A715A;">Haz la transferencia y envíanos el comprobante por el WhatsApp que se acaba de abrir.</p>
+    </sc-if>
+    <sc-if value="{{ payDoneLink }}" hint-placeholder-val="{{ false }}">
+      <a href="{{ payLinkHref }}" target="_blank" rel="noopener" style="display:flex; margin-top:16px; align-items:center; justify-content:center; gap:8px; text-decoration:none; background:#2E6B41; color:#F4F9F3; font-weight:800; font-size:15px; padding:14px; border-radius:12px; box-shadow:0 6px 16px rgba(46,107,65,0.3); transition:background .15s ease;" style-hover="background:#245434;">💳 Pagar ahora · {{ payDoneTotal }}</a>
+      <p style="margin:12px 0 0; font-size:13px; line-height:1.5; color:#8A715A;">Paga con tu tarjeta y envíanos el comprobante por el WhatsApp que se acaba de abrir.</p>
+    </sc-if>
+    <span onClick="{{ closePayDone }}" style="display:flex; margin-top:16px; align-items:center; justify-content:center; cursor:pointer; font-size:13.5px; font-weight:700; color:#8A715A; padding:8px;">Cerrar</span>
   </div>
 </div>
 </sc-if>
@@ -1756,6 +1800,7 @@ service cloud.firestore {
           <sc-if value="{{ dHasBadge1 }}" hint-placeholder-val="{{ false }}"><span style="{{ dBadge1Style }}">{{ dBadge1 }}</span></sc-if>
           <sc-if value="{{ dHasBadge2 }}" hint-placeholder-val="{{ false }}"><span style="{{ dBadge2Style }}">{{ dBadge2 }}</span></sc-if>
         </div>
+        <sc-if value="{{ dHasMeta }}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px; font-weight:700; color:#A07F5E;">{{ dMeta }}</div></sc-if>
         <sc-if value="{{ dHasDesc }}" hint-placeholder-val="{{ false }}"><p style="margin:2px 0 0; font-size:14.5px; line-height:1.55; color:#5E4632;">{{ dDesc }}</p></sc-if>
         <div style="margin-top:4px; display:flex; align-items:baseline; gap:10px;">
           <sc-if value="{{ dHasOld }}" hint-placeholder-val="{{ false }}"><span style="font-size:15px; font-weight:700; color:#A07F5E; text-decoration:line-through;">{{ dOldLabel }}</span></sc-if>
@@ -1766,9 +1811,7 @@ service cloud.firestore {
             <span onClick="{{ dAdd }}" style="display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:15px; padding:14px; border-radius:12px; box-shadow:0 8px 20px rgba(94,31,51,0.28); transition:background .15s ease;" style-hover="background:#244031;"><span style="font-size:17px; line-height:1;">＋</span>Agregar al carrito</span>
           </sc-if>
           <a href="{{ dWaHref }}" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; background:transparent; color:#5E1F33; border:1.5px solid #B9C4B4; font-weight:700; font-size:13.5px; padding:12px; border-radius:12px; transition:background .15s ease;" style-hover="background:#F2E3E2;"><span style="width:7px; height:7px; border-radius:50%; background:#2E6B41;"></span>{{ dWaLabel }}</a>
-          <span onClick="{{ shareDetail }}" style="display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; background:transparent; color:#9A7A1E; border:1.5px solid #D9BC77; font-weight:700; font-size:13.5px; padding:12px; border-radius:12px; transition:background .15s ease;" style-hover="background:#F1E6CF;">🔗 Compartir link</span>
         </div>
-        <span style="margin-top:4px; font-size:12px; color:#A07F5E; text-align:center;">Comparte el link por WhatsApp o Instagram: se abre directo en esta ficha.</span>
       </div>
     </div>
   </div>
@@ -1891,6 +1934,7 @@ class Component extends DCLogic {
     pwOpen: false, pwInput: '', pwEmail: '', pwErr: '',
     bulkOpen: false, bulkText: '', bulkErr: '',
     cover: null, coversBusy: false, coversDone: 0, coversTotal: 0, coversFound: 0,
+    payDone: null,
     fb: 'connecting', authed: false, adminEmail: '',
     mailStatus: '', toast: ''
   };
@@ -2010,7 +2054,34 @@ class Component extends DCLogic {
     try {
       const base = window.location.origin + window.location.pathname + window.location.search;
       const negocio = 'https://lamadriguera.ec/#negocio';
-      const okImg = (u) => (u && (u + '').indexOf('data:') !== 0) ? u : undefined;
+      const fallbackImg = 'https://lamadriguera.ec/og-image.jpg';
+      const okImg = (u) => (u && (u + '').indexOf('data:') !== 0) ? u : '';
+      // Requisitos de Google para fichas de comerciante:
+      const envio = {
+        '@type': 'OfferShippingDetails',
+        shippingRate: { '@type': 'MonetaryAmount', value: 0, currency: 'USD' },
+        shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'EC' },
+        deliveryTime: {
+          '@type': 'ShippingDeliveryTime',
+          handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 1, unitCode: 'DAY' },
+          transitTime: { '@type': 'QuantitativeValue', minValue: 1, maxValue: 4, unitCode: 'DAY' }
+        }
+      };
+      const devoluciones = {
+        '@type': 'MerchantReturnPolicy',
+        applicableCountry: 'EC',
+        returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+        merchantReturnDays: 3,
+        returnMethod: 'https://schema.org/ReturnInStore',
+        returnFees: 'https://schema.org/FreeReturn'
+      };
+      const mkOffer = (price) => ({
+        '@type': 'Offer', price: +price || 0, priceCurrency: 'USD',
+        availability: 'https://schema.org/InStock',
+        seller: { '@id': negocio },
+        shippingDetails: envio,
+        hasMerchantReturnPolicy: devoluciones
+      });
       const items = [];
       const books = (cms.libros || []).map(b => this.toBook(b)).filter(b => b.disp !== 'Vendido')
         .concat((cms.consig || []).filter(c => c.estado === 'En venta').map(c => this.toBook(Object.assign({}, c, { estado: (c.condicion || 'Usado bueno'), disp: 'Disponible', consigna: true }))));
@@ -2018,25 +2089,25 @@ class Component extends DCLogic {
         const it = {
           '@type': 'Product',
           name: b.title,
-          description: [b.author, b.genre, b.estado].filter(Boolean).join(' · '),
+          description: [b.author, b.editorial ? ('Editorial ' + b.editorial) : '', b.genre, b.estado].filter(Boolean).join(' · '),
+          image: okImg(b.imagen) || fallbackImg,
+          brand: { '@type': 'Brand', name: b.editorial || 'La Madriguera' },
           url: base + '#libro/' + encodeURIComponent(b.code || b.id),
-          offers: { '@type': 'Offer', price: +b.price || 0, priceCurrency: 'USD', availability: 'https://schema.org/InStock', seller: { '@id': negocio } }
+          offers: mkOffer(b.price)
         };
-        if (b.isbn) it.gtin13 = ((b.isbn + '').replace(/[^0-9]/g, '')) || undefined;
-        if (okImg(b.imagen)) it.image = b.imagen;
-        if (this.hasOffer(b)) it.offers.priceValidUntil = undefined;
+        if (b.isbn) { const g = ((b.isbn + '').replace(/[^0-9]/g, '')); if (g.length === 13) it.gtin13 = g; else if (g.length === 10) it.isbn = b.isbn; }
         items.push(it);
       });
       (cms.merch || []).map(m => this.toMerch(m)).filter(m => m.disp !== 'Vendido').slice(0, 30).forEach(m => {
-        const it = {
+        items.push({
           '@type': 'Product',
           name: m.name,
           description: [m.cat, m.desc].filter(Boolean).join(' · '),
+          image: okImg(m.imagen) || fallbackImg,
+          brand: { '@type': 'Brand', name: 'La Madriguera' },
           url: base + '#merch/' + encodeURIComponent(m.id || m.name),
-          offers: { '@type': 'Offer', price: +m.price || 0, priceCurrency: 'USD', availability: 'https://schema.org/InStock', seller: { '@id': negocio } }
-        };
-        if (okImg(m.imagen)) it.image = m.imagen;
-        items.push(it);
+          offers: mkOffer(m.price)
+        });
       });
       const graph = [];
       if (items.length) {
@@ -2507,10 +2578,10 @@ class Component extends DCLogic {
     return max + 1;
   }
   addLibro = () => {
-    this.addItem('libros', { id: 'b' + Date.now(), code: 'LM-N-' + this.pad(this.nextCodeNum('LM-N-')), title: 'Nuevo libro', author: '', genre: '', cat: '', sinopsis: '', recomendado: false, isbn: '', estado: 'Nuevo', disp: 'Disponible', price: 0, imagen: '', order: Date.now() }, 'Libro añadido — edítalo abajo.');
+    this.addItem('libros', { id: 'b' + Date.now(), code: 'LM-N-' + this.pad(this.nextCodeNum('LM-N-')), title: 'Nuevo libro', author: '', genre: '', cat: '', sinopsis: '', recomendado: false, isbn: '', editorial: '', estado: 'Nuevo', disp: 'Disponible', price: 0, imagen: '', order: Date.now() }, 'Libro añadido — edítalo abajo.');
   };
   addConsig = () => {
-    this.addItem('consig', { id: 'c' + Date.now(), code: 'LM-C-' + this.pad(this.nextCodeNum('LM-C-')), title: 'Libro recibido', author: '', genre: '', cat: '', sinopsis: '', isbn: '', owner: '', contact: '', price: 0, payout: 0, condicion: 'Usado bueno', estado: 'En venta', pagado: false, imagen: '', order: Date.now() }, 'Registro creado y publicado.');
+    this.addItem('consig', { id: 'c' + Date.now(), code: 'LM-C-' + this.pad(this.nextCodeNum('LM-C-')), title: 'Libro recibido', author: '', genre: '', cat: '', sinopsis: '', isbn: '', editorial: '', owner: '', contact: '', price: 0, payout: 0, condicion: 'Usado bueno', estado: 'En venta', pagado: false, imagen: '', order: Date.now() }, 'Registro creado y publicado.');
   };
   addMerch = () => {
     this.addItem('merch', { id: 'm' + Date.now(), name: 'Nuevo producto', cat: '', desc: '', price: 0, disp: 'Disponible', imagen: '', order: Date.now() }, 'Producto añadido.');
@@ -2603,19 +2674,58 @@ class Component extends DCLogic {
   };
 
   // ---------- portadas automáticas (OpenLibrary) ----------
-  searchCovers(title, author, isbn) {
-    const base = 'https://openlibrary.org/search.json?limit=12&fields=title,author_name,cover_i,first_publish_year&';
-    const pick = (docs) => (docs || []).filter(d => d.cover_i).slice(0, 6).map(d => ({
+  olPick(docs) {
+    return (docs || []).filter(d => d.cover_i).map(d => ({
       url: 'https://covers.openlibrary.org/b/id/' + d.cover_i + '-L.jpg',
       thumb: 'https://covers.openlibrary.org/b/id/' + d.cover_i + '-M.jpg',
       label: ((d.title || '') + (d.author_name && d.author_name.length ? ' · ' + d.author_name[0] : '') + (d.first_publish_year ? ' (' + d.first_publish_year + ')' : ''))
     }));
-    const get = (qs) => fetch(base + qs).then(r => r.json()).then(j => pick(j.docs));
-    const cleanIsbn = ((isbn || '') + '').replace(/[^0-9Xx]/g, '');
-    const byIsbn = cleanIsbn.length >= 10 ? get('isbn=' + cleanIsbn).catch(() => []) : Promise.resolve([]);
+  }
+  gbPick(items) {
+    return (items || []).map(v => {
+      const vi = v.volumeInfo || {};
+      const il = vi.imageLinks || {};
+      let t = (il.thumbnail || il.smallThumbnail || '') + '';
+      if (!t) return null;
+      t = t.replace(/^http:/, 'https:').replace('&edge=curl', '');
+      return {
+        url: t.indexOf('zoom=1') >= 0 ? t.replace('zoom=1', 'zoom=2') : t,
+        thumb: t,
+        label: ((vi.title || '') + (vi.authors && vi.authors.length ? ' · ' + vi.authors[0] : '') + (vi.publisher ? ' · ' + vi.publisher : '') + (vi.publishedDate ? ' (' + (vi.publishedDate + '').slice(0, 4) + ')' : ''))
+      };
+    }).filter(Boolean);
+  }
+  verifyCovers(opts) {
+    // Solo mostramos portadas que realmente cargan (evita opciones "en blanco")
+    if (typeof Image === 'undefined') return Promise.resolve(opts.slice(0, 6));
+    return Promise.all(opts.slice(0, 10).map(o => new Promise(res => {
+      let done = false;
+      const fin = (v) => { if (!done) { done = true; res(v); } };
+      const t = setTimeout(() => fin(null), 6000);
+      const im = new Image();
+      im.onload = () => { clearTimeout(t); fin(((im.naturalWidth || 100) > 20) ? o : null); };
+      im.onerror = () => { clearTimeout(t); fin(null); };
+      im.src = o.thumb;
+    }))).then(r => r.filter(Boolean).slice(0, 6));
+  }
+  searchCovers(title, author, isbn) {
+    const enc = encodeURIComponent;
+    const olBase = 'https://openlibrary.org/search.json?limit=10&fields=title,author_name,cover_i,first_publish_year&';
+    const gbBase = 'https://www.googleapis.com/books/v1/volumes?maxResults=8&q=';
+    const jget = (url) => fetch(url).then(r => r.json()).catch(() => ({}));
+    const dedupe = (arr) => { const seen = {}; return arr.filter(o => o && !seen[o.url] && (seen[o.url] = 1)); };
+    const clean = ((isbn || '') + '').replace(/[^0-9Xx]/g, '');
+    const byIsbn = clean.length >= 10
+      ? Promise.all([jget(gbBase + 'isbn:' + clean), jget(olBase + 'isbn=' + clean)])
+          .then(rs => dedupe(this.gbPick(rs[0].items).concat(this.olPick(rs[1].docs))))
+      : Promise.resolve([]);
     return byIsbn
-      .then(o1 => o1.length ? o1 : get('title=' + encodeURIComponent(title) + (author ? '&author=' + encodeURIComponent(author) : '')))
-      .then(o2 => o2.length ? o2 : get('q=' + encodeURIComponent(title + ' ' + (author || ''))));
+      .then(o1 => o1.length ? o1 : Promise.all([
+        jget(gbBase + enc('intitle:"' + title + '"' + (author ? ' inauthor:"' + author + '"' : ''))),
+        jget(olBase + 'title=' + enc(title) + (author ? '&author=' + enc(author) : ''))
+      ]).then(rs => dedupe(this.gbPick(rs[0].items).concat(this.olPick(rs[1].docs)))))
+      .then(o2 => o2.length ? o2 : jget(gbBase + enc(title + ' ' + (author || ''))).then(g => dedupe(this.gbPick(g.items))))
+      .then(opts => this.verifyCovers(opts));
   }
   findCover(coll, id) {
     const it = (this.currentCMS()[coll] || []).find(x => x.id === id);
@@ -2714,7 +2824,8 @@ class Component extends DCLogic {
         title: c[0], author: c[1] || '', genre: c[2] || '', cat: c[3] || '',
         price: numOf(c[4]),
         estado: c[5] || 'Nuevo', disp: c[6] || 'Disponible',
-        isbn: (c[7] || '').replace(/[^0-9Xx]/g, '')
+        isbn: (c[7] || '').replace(/[^0-9Xx]/g, ''),
+        editorial: c[8] || ''
       });
     });
     return out;
@@ -2736,7 +2847,7 @@ class Component extends DCLogic {
     const cms = this.currentCMS();
     cms.libros = cms.libros || [];
     let n = this.nextCodeNum('LM-N-') - 1;
-    const created = rows.map(r => { n++; return { id: 'b' + Date.now() + '_' + n, code: 'LM-N-' + this.pad(n), title: r.title, author: r.author, genre: r.genre, cat: r.cat || '', sinopsis: '', recomendado: false, estado: r.estado, disp: r.disp, price: r.price, isbn: r.isbn || '', imagen: '', order: Date.now() + n }; });
+    const created = rows.map(r => { n++; return { id: 'b' + Date.now() + '_' + n, code: 'LM-N-' + this.pad(n), title: r.title, author: r.author, genre: r.genre, cat: r.cat || '', sinopsis: '', recomendado: false, estado: r.estado, disp: r.disp, price: r.price, isbn: r.isbn || '', editorial: r.editorial || '', imagen: '', order: Date.now() + n }; });
     cms.libros = created.concat(cms.libros);
     this.cacheCMS(cms);
     if (this.online()) { try { const batch = this.db.batch(); created.forEach(it => batch.set(this.itemRef('libros', it.id), this.clean(it))); batch.commit().catch((e) => this.flash(this.fbErr(e))); } catch (e) {} }
@@ -2745,10 +2856,10 @@ class Component extends DCLogic {
   };
   downloadTemplate = () => {
     const csv = '﻿' + [
-      'Título,Autor,Género,Categoría,Precio,Estado,Disponibilidad,ISBN',
-      'Alas de sangre,Rebecca Yarros,Fantasía,Fantasía,28,Nuevo,Última unidad,9788408249856',
-      'El nombre del viento,Patrick Rothfuss,Fantasía,Fantasía,14,Usado excelente,Disponible,',
-      '"Tokyo Revengers, Vol. 1",Ken Wakui,Manga,Manga,9,Nuevo,Disponible,'
+      'Título,Autor,Género,Categoría,Precio,Estado,Disponibilidad,ISBN,Editorial',
+      'Alas de sangre,Rebecca Yarros,Fantasía,Fantasía,28,Nuevo,Última unidad,9788408249856,Planeta',
+      'El nombre del viento,Patrick Rothfuss,Fantasía,Fantasía,14,Usado excelente,Disponible,,',
+      '"Tokyo Revengers, Vol. 1",Ken Wakui,Manga,Manga,9,Nuevo,Disponible,,Norma'
     ].join('\n') + '\n';
     this.download('plantilla-libros.csv', csv, 'text/csv');
   };
@@ -2991,9 +3102,15 @@ class Component extends DCLogic {
     this.notifyEmail('Pedido web · Carrito La Madriguera', fields);
     this.saveOrder({ id: 'p' + Date.now(), tipo: 'Pedido', canal: 'Carrito', estado: 'Nuevo', cliente: name, celular: phone, entrega: entrega, pago: pago, nota: note, total: this.cartTotal(), items: this.state.cart.map(x => ({ id: x.id || '', kind: x.kind || '', title: x.title, qty: x.qty, price: x.price })), ts: Date.now(), order: Date.now() });
     this.track('purchase', { currency: 'USD', value: this.cartTotal(), transaction_id: 'p' + Date.now() });
+    const totalLabel = '$' + this.cartTotal();
+    const doneTransfer = pago === 'Transferencia bancaria' && !!(((this.cfg().payTransfer || '') + '').trim());
+    const doneLink = pago === 'Link de pago' && !!(((this.cfg().payLink || '') + '').trim());
     if (typeof window !== 'undefined') window.open(this.waText(msg), '_blank', 'noopener');
     this.saveCart([]);
-    this.setState({ cartOpen: false, coName: '', coPhone: '', coNote: '', coErr: '', coPago: 'Transferencia bancaria' });
+    this.setState({
+      cartOpen: false, coName: '', coPhone: '', coNote: '', coErr: '', coPago: 'Transferencia bancaria',
+      payDone: (doneTransfer || doneLink) ? { metodo: pago, total: totalLabel, transfer: doneTransfer, link: doneLink } : null
+    });
     this.flash('Pedido enviado ✓ Abriendo WhatsApp…');
   };
 
@@ -3099,7 +3216,8 @@ class Component extends DCLogic {
         return ta - tb;
       });
 
-    let books = baseBooks;
+    // Catálogo: primero los libros nuevos, después usados y consignación
+    let books = baseBooks.filter(b => (b.estado || '') === 'Nuevo').concat(baseBooks.filter(b => (b.estado || '') !== 'Nuevo'));
     if (category !== 'todos') books = books.filter(b => ((b.cat || '') + '').trim() === category);
     if (q) books = books.filter(b => (b.title + ' ' + b.author + ' ' + b.genre + ' ' + (b.cat || '')).toLowerCase().includes(q));
     const catalogBooks = books.map(b => this.decBook(b));
@@ -3170,7 +3288,7 @@ class Component extends DCLogic {
 
     // ---- ficha de producto ----
     const det = this.state.detail;
-    let dv = { detailOpen: false, dKindLabel: '', dTitle: '', dSub: '', dHasSub: false, dDesc: '', dHasDesc: false, dPriceLabel: '', dHasOld: false, dOldLabel: '', dOffLabel: '', dHasImg: false, dImgStyle: {}, dHasBadge1: false, dBadge1: '', dBadge1Style: {}, dHasBadge2: false, dBadge2: '', dBadge2Style: {}, dCanCart: false, dAdd: () => {}, dWaHref: '#', dWaLabel: '', dHasCode: false, dCode: '' };
+    let dv = { detailOpen: false, dKindLabel: '', dTitle: '', dSub: '', dHasSub: false, dDesc: '', dHasDesc: false, dMeta: '', dHasMeta: false, dPriceLabel: '', dHasOld: false, dOldLabel: '', dOffLabel: '', dHasImg: false, dImgStyle: {}, dHasBadge1: false, dBadge1: '', dBadge1Style: {}, dHasBadge2: false, dBadge2: '', dBadge2Style: {}, dCanCart: false, dAdd: () => {}, dWaHref: '#', dWaLabel: '', dHasCode: false, dCode: '' };
     if (det && cms) {
       if (det.kind === 'libro') {
         const all = (cms.libros || []).map(x => this.toBook(x)).concat((cms.consig || []).map(c2 => this.toBook(Object.assign({}, c2, { estado: (c2.condicion || 'Usado bueno'), disp: c2.estado === 'En venta' ? 'Disponible' : 'Vendido', consigna: true }))));
@@ -3178,7 +3296,8 @@ class Component extends DCLogic {
         if (f) {
           const d = this.decBook(f);
           const bSyn = ((d.sinopsis || '') + '').trim();
-          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Libro', dTitle: d.title, dSub: d.author || '', dHasSub: !!d.author, dDesc: bSyn, dHasDesc: !!bSyn, dPriceLabel: d.priceLabel, dHasOld: d.hasOld, dOldLabel: d.oldLabel, dOffLabel: d.offLabel, dHasImg: d.hasImg, dImgStyle: d.imgStyle, dHasBadge1: !!d.estado, dBadge1: d.estado, dBadge1Style: d.estadoStyle, dHasBadge2: !!d.disp, dBadge2: d.disp, dBadge2Style: d.dispStyle, dCanCart: d.disp !== 'Vendido', dAdd: d.onAdd, dWaHref: d.waHref, dWaLabel: 'Consultar por WhatsApp', dHasCode: !!d.code, dCode: d.code + '' });
+          const bMeta = [d.genre, d.editorial ? ('Editorial ' + d.editorial) : '', d.isbn ? ('ISBN ' + d.isbn) : ''].filter(Boolean).join(' · ');
+          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Libro', dTitle: d.title, dSub: d.author || '', dHasSub: !!d.author, dDesc: bSyn, dHasDesc: !!bSyn, dMeta: bMeta, dHasMeta: !!bMeta, dPriceLabel: d.priceLabel, dHasOld: d.hasOld, dOldLabel: d.oldLabel, dOffLabel: d.offLabel, dHasImg: d.hasImg, dImgStyle: d.imgStyle, dHasBadge1: !!d.estado, dBadge1: d.estado, dBadge1Style: d.estadoStyle, dHasBadge2: !!d.disp, dBadge2: d.disp, dBadge2Style: d.dispStyle, dCanCart: d.disp !== 'Vendido', dAdd: d.onAdd, dWaHref: d.waHref, dWaLabel: 'Consultar por WhatsApp', dHasCode: !!d.code, dCode: d.code + '' });
         }
       } else if (det.kind === 'merch') {
         const f = (cms.merch || []).map(x => this.toMerch(x)).find(x => x.id === det.id || x.name === det.id);
@@ -3206,6 +3325,8 @@ class Component extends DCLogic {
     const C = this.currentCMS();
     const mkBook = (l, coll) => Object.assign({}, l, {
       isbn: l.isbn || '',
+      editorial: l.editorial || '',
+      onEditorial: (e) => this.setField(coll, l.id, 'editorial', e.target.value),
       hasImg: !!l.imagen, imgStyle: this.coverStyle(l.imagen),
       onTitle: (e) => this.setField(coll, l.id, 'title', e.target.value),
       onAuthor: (e) => this.setField(coll, l.id, 'author', e.target.value),
@@ -3497,6 +3618,11 @@ class Component extends DCLogic {
 
       // config
       cfgEmail: cfg.email || '', cfgWhatsapp: cfg.whatsapp || '', cfgPass: cfg.adminPass || '', cfgInstagram: cfg.instagram || '', cfgTiktok: cfg.tiktok || '', cfgMaps: cfg.maps || '',
+      cfgGRating: cfg.gRating || '', onCfgGRating: (e) => this.setConfig('gRating', (e.target.value || '').trim()),
+      cfgGReviews: cfg.gReviews || '', onCfgGReviews: (e) => this.setConfig('gReviews', (e.target.value || '').trim()),
+      hasGoogleRating: !!(((cfg.gRating || '') + '').trim()),
+      gRatingLabel: (((cfg.gRating || '') + '').trim()),
+      gReviewsHref: this.realUrl(cfg.gReviews) || (cfg.maps || this.mapsHref),
       cfgGaId: cfg.gaId || '', onCfgGaId: (e) => { this.setConfig('gaId', (e.target.value || '').trim()); this._gaBooted = false; this.bootAnalytics(); },
       gaStatus: this._gaBooted ? 'Activo ✓' : ((((cfg.gaId || '') + '').trim()) ? 'Guardado — se activa al recargar' : 'Sin configurar'),
       cfgHistoria: cfg.historia || '', onCfgHistoria: (e) => this.setConfig('historia', e.target.value),
@@ -3527,6 +3653,12 @@ class Component extends DCLogic {
       coPhone: this.state.coPhone, onCoPhone: (e) => this.setState({ coPhone: e.target.value, coErr: '' }),
       coEntrega: this.state.coEntrega, onCoEntrega: (e) => this.setState({ coEntrega: e.target.value }),
       coPago: this.state.coPago, onCoPago: (e) => this.setState({ coPago: e.target.value }),
+      payDoneOpen: !!this.state.payDone,
+      payDoneMetodo: this.state.payDone ? this.state.payDone.metodo : '',
+      payDoneTotal: this.state.payDone ? this.state.payDone.total : '',
+      payDoneTransfer: !!(this.state.payDone && this.state.payDone.transfer),
+      payDoneLink: !!(this.state.payDone && this.state.payDone.link),
+      closePayDone: () => this.setState({ payDone: null }),
       payShowTransfer: this.state.coPago === 'Transferencia bancaria' && !!(((cfg.payTransfer || '') + '').trim()),
       payTransferText: ((cfg.payTransfer || '') + '').trim(),
       copyPayData: this.copyPayData,
