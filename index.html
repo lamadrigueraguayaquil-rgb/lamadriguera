@@ -2843,17 +2843,26 @@ class Component extends DCLogic {
       .then(d => d ? d : jget(this.gbUrl(qLibre, true)).then(j => marca(pickDesc(j.items))))
       .then(d => (d && (d + '').length > 40) ? trimDesc(d) : '');
   }
+  esProbablementeEspanol(t) {
+    t = (' ' + (t || '') + ' ').toLowerCase();
+    if (/[ñ¿¡áéíóú]/.test(t)) return true;
+    const es = (t.match(/\b(el|la|los|las|un|una|unos|unas|de|del|que|con|para|por|es|son|su|sus|como|pero|más|también|entre|cuando|vida|historia|amor|novela|cuento|mundo|libro)\b/g) || []).length;
+    const foreign = (t.match(/\b(the|of|and|his|her|with|when|this|that|they|from|life|world|story|young|le|les|des|une|dans|qui|est|sur|avec|pour|vie|monde|roman)\b/g) || []).length;
+    return es >= foreign;
+  }
   findSinopsis(coll, id) {
     const it = (this.currentCMS()[coll] || []).find(x => x.id === id);
     if (!it) return;
     if (!((it.title || '') + '').trim()) { this.flash('Escribe primero el título del libro.'); return; }
+    const actual = ((it.sinopsis || '') + '').trim();
     this.flash('Buscando sinopsis…');
     this.searchSinopsis(it.title, it.author || '', it.isbn || '').then(d => {
-      if (d && this._sinEs) { this.setField(coll, id, 'sinopsis', d); this.flash('Sinopsis encontrada ✓ Revísala y ajústala a tu estilo.'); }
-      else if (d) { this.setField(coll, id, 'sinopsis', d); this.flash('La encontramos solo en otro idioma — revísala, tradúcela o bórrala.'); }
-      else if (this._gbErr && this._gbErr.indexOf('429') >= 0) this.flash('Google Books agotó la cuota gratuita de hoy. Pega tu propia clave en Configuración (es gratis) o inténtalo mañana.');
-      else if (this._gbErr) this.flash('Google Books no respondió (' + this._gbErr + '). Espera unos minutos e intenta de nuevo.');
-      else this.flash('No encontramos sinopsis para este título. Prueba agregando el ISBN o escríbela tú.');
+      if (d && this._sinEs) { this.setField(coll, id, 'sinopsis', d); this.flash('Sinopsis en español encontrada ✓ Revísala y ajústala a tu estilo.'); return; }
+      // No hay en español: si la que estaba guardada está en otro idioma, la quitamos.
+      if (actual && !this.esProbablementeEspanol(actual)) { this.setField(coll, id, 'sinopsis', ''); this.flash('La sinopsis estaba en otro idioma; la quité. Escríbela tú en español.'); return; }
+      if (this._gbErr && this._gbErr.indexOf('429') >= 0) { this.flash('Google Books agotó la cuota gratuita de hoy. Pega tu propia clave en Configuración (es gratis) o inténtalo mañana.'); return; }
+      if (this._gbErr) { this.flash('Google Books no respondió (' + this._gbErr + '). Espera unos minutos e intenta de nuevo.'); return; }
+      this.flash('No encontramos sinopsis en español. Escríbela tú en el recuadro.');
     }).catch(() => this.flash('No se pudo buscar. Revisa tu internet.'));
   }
   bulkCovers = () => {
