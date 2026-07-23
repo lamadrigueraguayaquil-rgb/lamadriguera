@@ -929,7 +929,6 @@
                 </div>
                 <span onClick="{{ l.onFindCover }}" style="cursor:pointer; font-size:11.5px; font-weight:800; color:#9A7A1E; text-align:center; border:1px solid #D9BC77; border-radius:999px; padding:6px 8px;" style-hover="background:#F1E6CF;">🔍 Buscar portada</span>
                 <span onClick="{{ l.onFindSinopsis }}" style="cursor:pointer; font-size:11.5px; font-weight:800; color:#5E1F33; text-align:center; border:1px solid #B9C4B4; border-radius:999px; padding:6px 8px;" style-hover="background:#F2E3E2;">✍️ Buscar sinopsis</span>
-                <input value="{{ l.imgUrlVal }}" onChange="{{ l.onImgUrl }}" placeholder="o pega enlace…" title="Pega aquí el enlace (URL) de la portada, por ejemplo https://lamadriguera.ec/portadas/mi-libro.jpg" style="width:100%; box-sizing:border-box; padding:6px 8px; border:1px solid #D9BC77; border-radius:8px; font-size:11px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 <sc-if value="{{ l.hasImg }}" hint-placeholder-val="{{ false }}">
                   <span onClick="{{ l.onClearImg }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span>
                 </sc-if>
@@ -2310,13 +2309,6 @@ class Component extends DCLogic {
     this._unsubs.push(ub);
   }
   commitLive() {
-    // Agrupamos las muchas actualizaciones de Firebase en un solo re-dibujado.
-    // Antes se re-dibujaba ~10 veces seguidas al cargar y, con muchas fotos pesadas,
-    // las portadas parpadeaban y se quedaban en blanco.
-    if (this._clTimer) clearTimeout(this._clTimer);
-    this._clTimer = setTimeout(() => { this._clTimer = null; this._commitLiveNow(); }, 70);
-  }
-  _commitLiveNow() {
     let cms = Object.assign(this.defaultCMS(), JSON.parse(JSON.stringify(this._live || {})));
     const total = cms.libros.length + cms.merch.length + cms.eventos.length + cms.consig.length;
     if (total === 0 && !(cms.config && cms.config.seeded)) {
@@ -2324,14 +2316,7 @@ class Component extends DCLogic {
       if (src && src.libros) cms = Object.assign(this.defaultCMS(), JSON.parse(JSON.stringify(src)), { config: cms.config || {}, pedidos: cms.pedidos || [], brand: cms.brand || {} });
     }
     this.setState({ cms });
-    // No guardamos las fotos incrustadas (base64) en la memoria del navegador: pesan demasiado.
-    try { localStorage.setItem('lm-content', JSON.stringify(this.slimCache(cms))); } catch (e) {}
-  }
-  slimCache(cms) {
-    const strip = (arr) => (arr || []).map(it => (it && typeof it.imagen === 'string' && it.imagen.indexOf('data:') === 0) ? Object.assign({}, it, { imagen: '' }) : it);
-    const out = Object.assign({}, cms);
-    ['libros', 'consig', 'merch', 'cafeteria', 'especialidad', 'eventos'].forEach(k => { if (out[k]) out[k] = strip(out[k]); });
-    return out;
+    try { localStorage.setItem('lm-content', JSON.stringify(cms)); } catch (e) {}
   }
   maybeSeed() {
     if (this._seeded || !this.db || this.state.fb !== 'online' || !this._authed) return;
@@ -2541,7 +2526,7 @@ class Component extends DCLogic {
   }
   cacheCMS(cms) {
     this.setState({ cms, savedAt: Date.now() });
-    try { localStorage.setItem('lm-content', JSON.stringify(this.slimCache(cms))); }
+    try { localStorage.setItem('lm-content', JSON.stringify(cms)); }
     catch (e) { this.flash('Espacio local lleno. Usa fotos más livianas.'); }
   }
   saveCMS(cms) { this.cacheCMS(cms); }
@@ -2675,7 +2660,7 @@ class Component extends DCLogic {
       const img = new Image();
       img.onload = () => {
         const isLogo = tgt.brand === 'logo';
-        const max = isLogo ? 320 : (tgt.brand ? 1100 : 500);
+        const max = isLogo ? 320 : (tgt.brand ? 1100 : 700);
         let w = img.width, h = img.height;
         if (w > max || h > max) { const r = Math.min(max / w, max / h); w = Math.round(w * r); h = Math.round(h * r); }
         const c = document.createElement('canvas'); c.width = w; c.height = h;
@@ -2683,7 +2668,7 @@ class Component extends DCLogic {
         if (!isLogo) { ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, w, h); }
         ctx.drawImage(img, 0, 0, w, h);
         let data;
-        try { data = isLogo ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', tgt.brand ? 0.78 : 0.7); }
+        try { data = isLogo ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', tgt.brand ? 0.78 : 0.78); }
         catch (x) { data = ev.target.result; }
         if (tgt.brand) this.setBrand(tgt.brand, data);
         else if (tgt.coll === 'eventosImg') this.setEventoImg(tgt.id, data);
@@ -2807,10 +2792,10 @@ class Component extends DCLogic {
     const jget = (url) => this.gbGet(url);
     const clean = ((isbn || '') + '').replace(/[^0-9Xx]/g, '');
     const pickDesc = (items) => {
-      // Solo aceptamos descripciones marcadas como español (evita francés/inglés).
       const all = (items || []).map(v => v.volumeInfo || {}).filter(vi => vi.description && (vi.description + '').length > 40);
+      if (!all.length) return '';
       const es = all.find(vi => vi.language === 'es');
-      return es ? (es.description + '') : '';
+      return ((es || all[0]).description) + '';
     };
     const trimDesc = (t) => {
       t = (t + '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -2833,14 +2818,16 @@ class Component extends DCLogic {
       .catch(() => '');
     const qTA = enc('intitle:"' + title + '"' + (author ? ' inauthor:"' + author + '"' : ''));
     const qLibre = enc(title + ' ' + (author || ''));
-    const marca = (d) => { if (d) this._sinEs = true; return d; };
+    const marca = (d, es) => { if (d) this._sinEs = !!es; return d; };
     this._sinEs = false;
-    // Solo español: ISBN (edición exacta) → título+autor → búsqueda libre.
-    // Nunca guardamos descripciones en otros idiomas: si no hay en español, se deja vacío.
-    const q1 = clean.length >= 10 ? jget(this.gbUrl('isbn:' + clean)).then(j => { const vi = ((j.items || []).map(v => v.volumeInfo || {}).find(v2 => v2.description && (v2.description + '').length > 40 && v2.language === 'es')); return vi ? marca(vi.description + '') : ''; }) : Promise.resolve('');
+    // Orden: ISBN (edición exacta) → solo español → cualquier idioma → OpenLibrary
+    const q1 = clean.length >= 10 ? jget(this.gbUrl('isbn:' + clean)).then(j => { const vi = ((j.items || []).map(v => v.volumeInfo || {}).find(v2 => v2.description && (v2.description + '').length > 40)); return vi ? marca(vi.description + '', vi.language === 'es') : ''; }) : Promise.resolve('');
     return q1
-      .then(d => d ? d : jget(this.gbUrl(qTA, true)).then(j => marca(pickDesc(j.items))))
-      .then(d => d ? d : jget(this.gbUrl(qLibre, true)).then(j => marca(pickDesc(j.items))))
+      .then(d => d ? d : jget(this.gbUrl(qTA, true)).then(j => marca(pickDesc(j.items), true)))
+      .then(d => d ? d : jget(this.gbUrl(qLibre, true)).then(j => marca(pickDesc(j.items), true)))
+      .then(d => d ? d : jget(this.gbUrl(qTA)).then(j => marca(pickDesc(j.items), false)))
+      .then(d => d ? d : jget(this.gbUrl(qLibre)).then(j => marca(pickDesc(j.items), false)))
+      .then(d => d ? d : olFall().then(d2 => marca(d2, false)))
       .then(d => (d && (d + '').length > 40) ? trimDesc(d) : '');
   }
   findSinopsis(coll, id) {
@@ -3460,8 +3447,6 @@ class Component extends DCLogic {
       onEstado: (e) => this.setField(coll, l.id, 'estado', e.target.value),
       onDisp: (e) => this.setField(coll, l.id, 'disp', e.target.value),
       onPick: () => this.pickImage(coll, l.id),
-      imgUrlVal: (l.imagen && (l.imagen + '').indexOf('data:') !== 0) ? (l.imagen + '') : '',
-      onImgUrl: (e) => this.setField(coll, l.id, 'imagen', (e.target.value || '').trim()),
       onClearImg: () => this.setField(coll, l.id, 'imagen', ''),
       onDel: () => this.delItem(coll, l.id),
       onFindCover: () => this.findCover(coll, l.id),
