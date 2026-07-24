@@ -843,6 +843,7 @@
         </div>
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
           <span onClick="{{ bulkCovers }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#7C2F3E; color:#FFF7EC; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(124,47,62,0.3);" style-hover="background:#672836;">{{ coversBtnLabel }}</span>
+          <span onClick="{{ limpiarSinopsis }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(94,31,51,0.25);" style-hover="background:#244031;">🌐 Limpiar sinopsis en otro idioma</span>
           <span onClick="{{ openBulk }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(201,162,75,0.3);" style-hover="background:#d9b25b;">⬆ Carga masiva</span>
           <span onClick="{{ addLibro }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(94,31,51,0.25);" style-hover="background:#244031;">+ Añadir libro</span>
         </div>
@@ -2896,6 +2897,33 @@ class Component extends DCLogic {
     next();
   };
 
+  // Limpia de un solo toque TODAS las sinopsis que están en otro idioma:
+  // busca la versión en español; si no existe, deja el campo vacío.
+  limpiarSinopsis = () => {
+    if (this.state.coversBusy) return;
+    const C = this.currentCMS();
+    const target = (C.libros || []).filter(l => { const s = ((l.sinopsis || '') + '').trim(); return s && !this.esProbablementeEspanol(s); });
+    if (!target.length) { this.flash('No hay sinopsis en otro idioma 🎉'); return; }
+    this.setState({ coversBusy: true, coversDone: 0, coversTotal: target.length, coversFound: 0 });
+    let i = 0, arregladas = 0, borradas = 0;
+    const next = () => {
+      if (i >= target.length) {
+        this.setState({ coversBusy: false });
+        this.flash('Listo: ' + arregladas + ' quedaron en español y ' + borradas + ' se quitaron. Escribe a mano las vacías.');
+        return;
+      }
+      const l = target[i]; i++;
+      this.searchSinopsis(l.title, l.author || '', l.isbn || '')
+        .then(d => {
+          if (d && this._sinEs) { this.setField('libros', l.id, 'sinopsis', d); arregladas++; this.setState({ coversFound: arregladas }); }
+          else { this.setField('libros', l.id, 'sinopsis', ''); borradas++; }
+        })
+        .catch(() => {})
+        .then(() => { this.setState({ coversDone: i }); setTimeout(next, 400); });
+    };
+    next();
+  };
+
   // ---------- bulk ----------
   // Divide una línea respetando comillas (CSV real): "Tokyo Revengers, Vol. 1" no se parte
   splitCSVLine(line, delim) {
@@ -3720,6 +3748,7 @@ class Component extends DCLogic {
 
       // portadas automáticas
       bulkCovers: this.bulkCovers,
+      limpiarSinopsis: this.limpiarSinopsis,
       coversBtnLabel: this.state.coversBusy ? ('Buscando… ' + this.state.coversDone + '/' + this.state.coversTotal + ' (' + this.state.coversFound + ' ✓)') : '🖼 Portadas y sinopsis automáticas',
       coverOpen: !!this.state.cover,
       coverLoading: !!(this.state.cover && this.state.cover.loading),
