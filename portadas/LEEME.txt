@@ -1,0 +1,25 @@
+CARPETA DE PORTADAS
+===================
+
+Aquí pones las fotos de portada de los libros que Google Books NO tiene
+(infantiles, religiosos, locales, mangas sueltos, etc.).
+
+CÓMO USARLA
+-----------
+1. Guarda cada foto aquí dentro, con un nombre simple, sin espacios ni tildes.
+   Ejemplos buenos:  cebrita-testaruda.jpg   lobo-oveja.jpg   narnia-caspian.jpg
+   Ejemplos malos:   La Cebrita Testaruda.JPG   (tiene espacios y mayúsculas)
+
+2. Sube la carpeta "publicar" como siempre.
+
+3. En tu panel Administrar, en cada libro, pega el enlace en la casilla
+   "o pega enlace…" con esta forma:
+      https://lamadriguera.ec/portadas/NOMBRE-DEL-ARCHIVO.jpg
+   Ejemplo:
+      https://lamadriguera.ec/portadas/cebrita-testaruda.jpg
+
+CONSEJOS
+--------
+- Usa fotos livianas (menos de 300 KB). Puedes reducirlas en https://squoosh.app
+- Formatos: .jpg o .png
+- Al pegar el enlace, la foto pesada anterior se reemplaza sola (no ocupa espacio en Firebase).

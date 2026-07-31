@@ -2155,7 +2155,7 @@ class Component extends DCLogic {
   }
   seoTitle() {
     if (typeof document === 'undefined') return;
-    const names = { catalogo: 'Catálogo de libros', segunda: 'Libros con segunda historia', merch: 'Merch para lectores', eventos: 'Eventos literarios', vender: 'Vende tus libros', comprar: 'Cómo comprar', historia: 'Nuestra historia', visitanos: 'Visítanos' };
+    const names = { catalogo: 'Catálogo de libros', segunda: 'Libros con segunda historia', merch: 'Merch para lectores', cafeteria: 'Menú de la cafetería', especialidad: 'Café de especialidad', eventos: 'Eventos literarios', vender: 'Vende tus libros', comprar: 'Cómo comprar', historia: 'Nuestra historia', visitanos: 'Visítanos' };
     const base = 'La Madriguera · Librería y café de especialidad en Guayaquil';
     let t = base;
     if (this.state.view === 'admin') t = 'Panel · La Madriguera';
@@ -2378,7 +2378,7 @@ class Component extends DCLogic {
   DEF_CAMBIOS = '• Tienes 3 días desde la entrega para cambios, presentando tu comprobante.\n• El libro o producto debe estar en el mismo estado en que lo recibiste.\n• Los libros usados se venden en el estado descrito en su ficha; revísala antes de comprar.\n• ¿Llegó con daños de transporte? Escríbenos con una foto y lo resolvemos.';
 
   // ---------- rutas y ficha de producto ----------
-  PAGES = ['inicio', 'catalogo', 'segunda', 'merch', 'eventos', 'vender', 'comprar', 'historia', 'visitanos'];
+  PAGES = ['inicio', 'catalogo', 'segunda', 'merch', 'cafeteria', 'especialidad', 'eventos', 'vender', 'comprar', 'historia', 'visitanos'];
   applyHash = () => {
     if (typeof window === 'undefined') return;
     let h = (window.location.hash || '').replace(/^#/, '');
