@@ -237,7 +237,7 @@
         </div>
         <div style="position:relative;">
           <div style="position:relative; aspect-ratio:4/5; border-radius:24px; overflow:hidden; box-shadow:0 30px 60px rgba(52,37,26,0.22); border:1px solid #E3D2B8; background:repeating-linear-gradient(135deg,#EBDDC4,#EBDDC4 14px,#E2D0B2 14px,#E2D0B2 28px);">
-            <sc-if value="{{ hasHero }}" hint-placeholder-val="{{ false }}"><div style="{{ heroStyle }}"></div></sc-if>
+            <sc-if value="{{ hasHero }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ heroUrl }}" alt="{{ heroAlt }}" loading="lazy" decoding="async" style="{{ heroImg }}"></sc-if>
             <div style="position:absolute; inset:0; background:radial-gradient(110% 80% at 70% 15%, rgba(255,243,214,0.7), rgba(255,243,214,0) 55%), linear-gradient(180deg, rgba(94,31,51,0) 55%, rgba(94,31,51,0.28));"></div>
           </div>
           
@@ -357,7 +357,7 @@
     <section style="background:linear-gradient(180deg,#F4E9D8,#EFE2CB);">
       <div style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:clamp(28px,4vw,48px); align-items:center;">
         <div style="position:relative; aspect-ratio:16/11; border-radius:20px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 20px 44px rgba(52,37,26,0.16); background:repeating-linear-gradient(135deg,#E7D8BD,#E7D8BD 13px,#DECCAC 13px,#DECCAC 26px);">
-          <sc-if value="{{ hasLocal }}" hint-placeholder-val="{{ false }}"><div style="{{ localStyle }}"></div></sc-if>
+          <sc-if value="{{ hasLocal }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ localUrl }}" alt="{{ localAlt }}" loading="lazy" decoding="async" style="{{ localImg }}"></sc-if>
           <div style="position:absolute; inset:0; background:radial-gradient(100% 80% at 30% 20%, rgba(255,243,214,0.6), rgba(255,243,214,0) 60%);"></div>
         </div>
         <div>
@@ -440,7 +440,7 @@
   <sc-if value="{{ isVender }}" hint-placeholder-val="{{ false }}">
   <div data-screen-label="Vender">
     <section style="position:relative; overflow:hidden; background:#5E1F33; color:#F4E9D8;">
-      <sc-if value="{{ hasVenderImg }}" hint-placeholder-val="{{ false }}"><div style="{{ venderStyle }}"></div><div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(94,31,51,0.6), rgba(36,64,49,0.82));"></div></sc-if>
+      <sc-if value="{{ hasVenderImg }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ venderUrl }}" alt="{{ venderAlt }}" loading="lazy" decoding="async" style="{{ venderImg }}"><div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(94,31,51,0.6), rgba(36,64,49,0.82));"></div></sc-if>
       <div style="position:absolute; top:-90px; left:8%; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.3), rgba(201,162,75,0) 70%);"></div>
       <div style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,76px) clamp(16px,4vw,32px);">
         <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#E9CF8B;">Consignación</span>
@@ -536,7 +536,7 @@
             <div style="display:flex; flex-direction:column; background:#FFFDF8; border:1px solid #EADBC4; border-radius:16px; overflow:hidden; box-shadow:0 8px 22px rgba(52,37,26,0.07); height:100%;">
               <div style="position:relative; aspect-ratio:4/3; background:repeating-linear-gradient(135deg,#F1E5D0,#F1E5D0 11px,#E9D9BE 11px,#E9D9BE 22px); display:flex; align-items:center; justify-content:center;">
                 <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.06em; color:#A8916F; text-transform:lowercase; text-align:center; padding:0 10px;">{{ m.cat }}</span>
-                <sc-if value="{{ m.hasImg }}" hint-placeholder-val="{{ false }}"><div style="{{ m.imgStyle }}"></div></sc-if>
+                <sc-if value="{{ m.hasImg }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ m.imgUrl }}" alt="{{ m.imgAlt }}" loading="lazy" decoding="async" style="{{ m.imgTagStyle }}"></sc-if>
                 <span style="{{ m.dispStyle }}; position:absolute; left:10px; top:10px;">{{ m.disp }}</span>
               </div>
               <div style="padding:14px 14px 16px; display:flex; flex-direction:column; gap:7px; flex:1;">
@@ -600,7 +600,7 @@
   <sc-if value="{{ isEventos }}" hint-placeholder-val="{{ false }}">
   <div data-screen-label="Eventos">
     <section style="background:#2A1C12; color:#F4E9D8; position:relative; overflow:hidden;">
-      <sc-if value="{{ hasEventosImg }}" hint-placeholder-val="{{ false }}"><div style="{{ eventosStyle }}"></div><div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(42,28,18,0.55), rgba(42,28,18,0.78));"></div></sc-if>
+      <sc-if value="{{ hasEventosImg }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ eventosUrl }}" alt="{{ eventosAlt }}" loading="lazy" decoding="async" style="{{ eventosImg }}"><div style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(42,28,18,0.55), rgba(42,28,18,0.78));"></div></sc-if>
       <div style="position:absolute; bottom:-120px; left:12%; width:360px; height:360px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,75,0.26), rgba(201,162,75,0) 70%);"></div>
       <div style="position:relative; max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px);">
         
@@ -674,14 +674,14 @@
       <div style="font-size:16.5px; line-height:1.75; color:#4A3826; white-space:pre-line;">{{ historiaText }}</div>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
         <div style="position:relative; grid-column:1/-1; aspect-ratio:16/10; border-radius:18px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 18px 40px rgba(52,37,26,0.15); background:repeating-linear-gradient(135deg,#E7D8BD,#E7D8BD 13px,#DECCAC 13px,#DECCAC 26px);">
-          <sc-if value="{{ hasHistoria1 }}" hint-placeholder-val="{{ false }}"><div style="{{ historia1Style }}"></div></sc-if>
+          <sc-if value="{{ hasHistoria1 }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ historia1Url }}" alt="{{ historia1Alt }}" loading="lazy" decoding="async" style="{{ historia1Img }}"></sc-if>
           <div style="position:absolute; inset:0; background:radial-gradient(100% 80% at 30% 20%, rgba(255,243,214,0.45), rgba(255,243,214,0) 60%);"></div>
         </div>
         <div style="position:relative; aspect-ratio:1/1; border-radius:16px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 14px 30px rgba(52,37,26,0.13); background:repeating-linear-gradient(135deg,#EBDDC4,#EBDDC4 12px,#E2D0B2 12px,#E2D0B2 24px);">
-          <sc-if value="{{ hasHistoria2 }}" hint-placeholder-val="{{ false }}"><div style="{{ historia2Style }}"></div></sc-if>
+          <sc-if value="{{ hasHistoria2 }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ historia2Url }}" alt="{{ historia2Alt }}" loading="lazy" decoding="async" style="{{ historia2Img }}"></sc-if>
         </div>
         <div style="position:relative; aspect-ratio:1/1; border-radius:16px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 14px 30px rgba(52,37,26,0.13); background:repeating-linear-gradient(135deg,#E7D8BD,#E7D8BD 12px,#DECCAC 12px,#DECCAC 24px);">
-          <sc-if value="{{ hasLocal }}" hint-placeholder-val="{{ false }}"><div style="{{ localStyle }}"></div></sc-if>
+          <sc-if value="{{ hasLocal }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ localUrl }}" alt="{{ localAlt }}" loading="lazy" decoding="async" style="{{ localImg }}"></sc-if>
         </div>
       </div>
     </section>
@@ -1817,7 +1817,7 @@ service cloud.firestore {
   <div onClick="{{ stop }}" data-noscroll="" style="width:100%; max-width:780px; max-height:92vh; overflow-y:auto; background:#FFFDF8; border-radius:22px; box-shadow:0 30px 70px rgba(42,28,18,0.45); font-family:'Outfit',sans-serif;">
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:0;">
       <div style="position:relative; min-height:340px; background:repeating-linear-gradient(135deg,#F1E5D0,#F1E5D0 12px,#E9D9BE 12px,#E9D9BE 24px);">
-        <sc-if value="{{ dHasImg }}" hint-placeholder-val="{{ false }}"><div style="{{ dImgStyle }}"></div></sc-if>
+        <sc-if value="{{ dHasImg }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ dImgUrl }}" alt="{{ dImgAlt }}" loading="lazy" decoding="async" style="{{ dImgTagStyle }}"></sc-if>
         <sc-if value="{{ dHasOld }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; left:14px; top:14px; background:#9A7A1E; color:#FBF3E0; font-weight:800; font-size:12.5px; padding:5px 12px; border-radius:999px; box-shadow:0 4px 12px rgba(42,28,18,0.3);">{{ dOffLabel }}</span></sc-if>
         <sc-if value="{{ dHasCode }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; left:14px; bottom:14px; font-family:ui-monospace,Menlo,monospace; font-size:11px; background:rgba(52,37,26,0.74); color:#F7EFE2; padding:4px 9px; border-radius:6px; letter-spacing:.04em;">{{ dCode }}</span></sc-if>
       </div>
@@ -2383,6 +2383,10 @@ class Component extends DCLogic {
   clean(o) { return JSON.parse(JSON.stringify(o)); }
   coverStyle(url, extra) {
     const s = { position: 'absolute', inset: 0, backgroundImage: 'url("' + (url || '') + '")', backgroundSize: 'cover', backgroundPosition: 'center' };
+    return extra ? Object.assign(s, extra) : s;
+  }
+  coverImg(extra) {
+    const s = { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' };
     return extra ? Object.assign(s, extra) : s;
   }
   logoBox(url, size, extra) {
@@ -3289,6 +3293,8 @@ class Component extends DCLogic {
     return Object.assign({}, b, this.offerBits(b), {
       priceLabel: '$' + b.price, estadoStyle: this.estadoStyle(b.estado), dispStyle: this.dispStyle(b.disp),
       waHref: this.waBook(b), hasImg: !!b.imagen, imgStyle: this.coverStyle(b.imagen),
+      imgUrl: b.imagen || '', imgTagStyle: this.coverImg(),
+      imgAlt: 'Portada de ' + (b.title || 'libro') + (b.author ? ' — ' + b.author : '') + ' · La Madriguera, librería en Guayaquil',
       onOpen: () => this.openDetail('libro', b.id || b.code),
       onAdd: () => this.addToCart('Libro', { id: b.id || b.code, title: b.title, sub: b.author || '', price: b.price, imagen: b.imagen }),
       onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Libro', subject: 'Consulta web · Libro: ' + b.title, title: b.title, sub: [b.author, b.code].filter(Boolean).join(' · '), waHref: this.waBook(b), fields: { tipo: 'Libro', titulo: b.title, autor: b.author || '', codigo: b.code || '', precio: '$' + b.price } }); }
@@ -3297,6 +3303,8 @@ class Component extends DCLogic {
   decMerch(m) {
     return Object.assign({}, m, this.offerBits(m), {
       priceLabel: '$' + m.price, dispStyle: this.dispStyle(m.disp), waHref: this.waMerch(m), hasImg: !!m.imagen, imgStyle: this.coverStyle(m.imagen),
+      imgUrl: m.imagen || '', imgTagStyle: this.coverImg(),
+      imgAlt: (m.name || 'Producto') + (m.cat ? ' · ' + m.cat : '') + ' — merch para lectores de La Madriguera, Guayaquil',
       onOpen: () => this.openDetail('merch', m.id || m.name),
       onAdd: () => this.addToCart('Merch', { id: m.id || m.name, title: m.name, sub: m.cat || '', price: m.price, imagen: m.imagen }),
       onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Merch', subject: 'Consulta web · Merch: ' + m.name, title: m.name, sub: m.cat || '', waHref: this.waMerch(m), fields: { tipo: 'Merch', producto: m.name, categoria: m.cat || '', precio: '$' + m.price } }); }
@@ -3308,6 +3316,8 @@ class Component extends DCLogic {
   decEspecial(m) {
     return Object.assign({}, m, this.offerBits(m), {
       priceLabel: '$' + m.price, dispStyle: this.dispStyle(m.disp), waHref: this.waEspecial(m), hasImg: !!m.imagen, imgStyle: this.coverStyle(m.imagen),
+      imgUrl: m.imagen || '', imgTagStyle: this.coverImg(),
+      imgAlt: (m.name || 'Producto') + (m.cat ? ' · ' + m.cat : '') + ' — café de especialidad en La Madriguera, Urdesa',
       onOpen: () => this.openDetail('especial', m.id || m.name),
       onAdd: () => this.addToCart('Café de especialidad', { id: m.id || m.name, title: m.name, sub: m.cat || '', price: m.price, imagen: m.imagen }),
       onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Café de especialidad', subject: 'Consulta web · Especialidad: ' + m.name, title: m.name, sub: m.cat || '', waHref: this.waEspecial(m), fields: { tipo: 'Café de especialidad', producto: m.name, categoria: m.cat || '', precio: '$' + m.price } }); }
@@ -3319,6 +3329,8 @@ class Component extends DCLogic {
     return Object.assign({}, m, {
       priceLabel: hasPrice ? ('$' + m.price) : '', hasPrice,
       dispStyle: this.dispStyle(m.disp), hasImg: !!m.imagen, imgStyle: this.coverStyle(m.imagen),
+      imgUrl: m.imagen || '', imgTagStyle: this.coverImg(),
+      imgAlt: (m.name || 'Plato') + (m.cat ? ' · ' + m.cat : '') + ' — carta de La Madriguera, cafetería literaria en Urdesa',
       hasDesc: !!((m.desc || '') + '').trim(), hasCat: !!((m.cat || '') + '').trim(),
       waHref: this.waCafe(m)
     });
@@ -3326,6 +3338,8 @@ class Component extends DCLogic {
   decEvent(e) {
     const agotado = !!e.agotado;
     return Object.assign({}, e, {
+      imgUrl: e.imagen || '', imgTagStyle: this.coverImg(),
+      imgAlt: (e.name || 'Evento') + ' — evento literario en La Madriguera, Guayaquil',
       dispStyle: agotado ? this.badge('#F3D9D0', '#9A4A3C') : this.cuposStyle(),
       waHref: agotado
         ? this.waText('Hola, el evento "' + e.name + '" del ' + e.date + ' aparece agotado. ¿Me pueden anotar en la lista de espera?')
@@ -3450,7 +3464,7 @@ class Component extends DCLogic {
 
     // ---- ficha de producto ----
     const det = this.state.detail;
-    let dv = { detailOpen: false, dKindLabel: '', dTitle: '', dSub: '', dHasSub: false, dDesc: '', dHasDesc: false, dMeta: '', dHasMeta: false, dPriceLabel: '', dHasOld: false, dOldLabel: '', dOffLabel: '', dHasImg: false, dImgStyle: {}, dHasBadge1: false, dBadge1: '', dBadge1Style: {}, dHasBadge2: false, dBadge2: '', dBadge2Style: {}, dCanCart: false, dAdd: () => {}, dWaHref: '#', dWaLabel: '', dHasCode: false, dCode: '' };
+    let dv = { detailOpen: false, dKindLabel: '', dTitle: '', dSub: '', dHasSub: false, dDesc: '', dHasDesc: false, dMeta: '', dHasMeta: false, dPriceLabel: '', dHasOld: false, dOldLabel: '', dOffLabel: '', dHasImg: false, dImgStyle: {}, dImgUrl: '', dImgAlt: '', dImgTagStyle: {}, dHasBadge1: false, dBadge1: '', dBadge1Style: {}, dHasBadge2: false, dBadge2: '', dBadge2Style: {}, dCanCart: false, dAdd: () => {}, dWaHref: '#', dWaLabel: '', dHasCode: false, dCode: '' };
     if (det && cms) {
       if (det.kind === 'libro') {
         const all = (cms.libros || []).map(x => this.toBook(x)).concat((cms.consig || []).map(c2 => this.toBook(Object.assign({}, c2, { estado: (c2.condicion || 'Usado bueno'), disp: c2.estado === 'En venta' ? 'Disponible' : 'Vendido', consigna: true }))));
@@ -3459,19 +3473,19 @@ class Component extends DCLogic {
           const d = this.decBook(f);
           const bSyn = ((d.sinopsis || '') + '').trim();
           const bMeta = [d.genre, d.editorial ? ('Editorial ' + d.editorial) : '', d.isbn ? ('ISBN ' + d.isbn) : ''].filter(Boolean).join(' · ');
-          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Libro', dTitle: d.title, dSub: d.author || '', dHasSub: !!d.author, dDesc: bSyn, dHasDesc: !!bSyn, dMeta: bMeta, dHasMeta: !!bMeta, dPriceLabel: d.priceLabel, dHasOld: d.hasOld, dOldLabel: d.oldLabel, dOffLabel: d.offLabel, dHasImg: d.hasImg, dImgStyle: d.imgStyle, dHasBadge1: !!d.estado, dBadge1: d.estado, dBadge1Style: d.estadoStyle, dHasBadge2: !!d.disp, dBadge2: d.disp, dBadge2Style: d.dispStyle, dCanCart: d.disp !== 'Vendido', dAdd: d.onAdd, dWaHref: d.waHref, dWaLabel: 'Consultar por WhatsApp', dHasCode: !!d.code, dCode: d.code + '' });
+          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Libro', dTitle: d.title, dSub: d.author || '', dHasSub: !!d.author, dDesc: bSyn, dHasDesc: !!bSyn, dMeta: bMeta, dHasMeta: !!bMeta, dPriceLabel: d.priceLabel, dHasOld: d.hasOld, dOldLabel: d.oldLabel, dOffLabel: d.offLabel, dHasImg: d.hasImg, dImgStyle: d.imgStyle, dImgUrl: d.imgUrl || '', dImgAlt: d.imgAlt || '', dImgTagStyle: d.imgTagStyle || {}, dHasBadge1: !!d.estado, dBadge1: d.estado, dBadge1Style: d.estadoStyle, dHasBadge2: !!d.disp, dBadge2: d.disp, dBadge2Style: d.dispStyle, dCanCart: d.disp !== 'Vendido', dAdd: d.onAdd, dWaHref: d.waHref, dWaLabel: 'Consultar por WhatsApp', dHasCode: !!d.code, dCode: d.code + '' });
         }
       } else if (det.kind === 'merch') {
         const f = (cms.merch || []).map(x => this.toMerch(x)).find(x => x.id === det.id || x.name === det.id);
         if (f) {
           const d = this.decMerch(f);
-          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Merch lector', dTitle: d.name, dSub: d.cat || '', dHasSub: !!d.cat, dDesc: d.desc || '', dHasDesc: !!d.desc, dPriceLabel: d.priceLabel, dHasOld: d.hasOld, dOldLabel: d.oldLabel, dOffLabel: d.offLabel, dHasImg: d.hasImg, dImgStyle: d.imgStyle, dHasBadge1: !!d.disp, dBadge1: d.disp, dBadge1Style: d.dispStyle, dCanCart: d.disp !== 'Vendido', dAdd: d.onAdd, dWaHref: d.waHref, dWaLabel: 'Pedir por WhatsApp' });
+          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Merch lector', dTitle: d.name, dSub: d.cat || '', dHasSub: !!d.cat, dDesc: d.desc || '', dHasDesc: !!d.desc, dPriceLabel: d.priceLabel, dHasOld: d.hasOld, dOldLabel: d.oldLabel, dOffLabel: d.offLabel, dHasImg: d.hasImg, dImgStyle: d.imgStyle, dImgUrl: d.imgUrl || '', dImgAlt: d.imgAlt || '', dImgTagStyle: d.imgTagStyle || {}, dHasBadge1: !!d.disp, dBadge1: d.disp, dBadge1Style: d.dispStyle, dCanCart: d.disp !== 'Vendido', dAdd: d.onAdd, dWaHref: d.waHref, dWaLabel: 'Pedir por WhatsApp' });
         }
       } else if (det.kind === 'especial') {
         const f = (cms.especialidad || []).map(x => this.toMerch(x)).find(x => x.id === det.id || x.name === det.id);
         if (f) {
           const d = this.decEspecial(f);
-          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Café de especialidad', dTitle: d.name, dSub: d.cat || '', dHasSub: !!d.cat, dDesc: d.desc || '', dHasDesc: !!d.desc, dPriceLabel: d.priceLabel, dHasOld: d.hasOld, dOldLabel: d.oldLabel, dOffLabel: d.offLabel, dHasImg: d.hasImg, dImgStyle: d.imgStyle, dHasBadge1: !!d.disp, dBadge1: d.disp, dBadge1Style: d.dispStyle, dCanCart: d.disp !== 'Vendido', dAdd: d.onAdd, dWaHref: d.waHref, dWaLabel: 'Pedir por WhatsApp' });
+          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Café de especialidad', dTitle: d.name, dSub: d.cat || '', dHasSub: !!d.cat, dDesc: d.desc || '', dHasDesc: !!d.desc, dPriceLabel: d.priceLabel, dHasOld: d.hasOld, dOldLabel: d.oldLabel, dOffLabel: d.offLabel, dHasImg: d.hasImg, dImgStyle: d.imgStyle, dImgUrl: d.imgUrl || '', dImgAlt: d.imgAlt || '', dImgTagStyle: d.imgTagStyle || {}, dHasBadge1: !!d.disp, dBadge1: d.disp, dBadge1Style: d.dispStyle, dCanCart: d.disp !== 'Vendido', dAdd: d.onAdd, dWaHref: d.waHref, dWaLabel: 'Pedir por WhatsApp' });
         }
       } else if (det.kind === 'evento') {
         const f = this.resEventos().concat(cms.eventos || []).find(x => x.id === det.id || x.name === det.id);
@@ -3686,7 +3700,11 @@ class Component extends DCLogic {
       polEnvioText: (((cfg.polEnvio || '') + '').trim()) || this.DEF_ENVIO,
       polCambiosText: (((cfg.polCambios || '') + '').trim()) || this.DEF_CAMBIOS,
       hasHistoria1: !!brand.historia1, historia1Style: this.coverStyle(brand.historia1 || ''),
+      historia1Url: brand.historia1 || '', historia1Img: this.coverImg(),
+      historia1Alt: 'Interior de La Madriguera, librería y café de especialidad en Urdesa, Guayaquil',
       hasHistoria2: !!brand.historia2, historia2Style: this.coverStyle(brand.historia2 || ''),
+      historia2Url: brand.historia2 || '', historia2Img: this.coverImg(),
+      historia2Alt: 'Estanterías y rincón de lectura de La Madriguera, Guayaquil',
       navItems,
       search, onSearch: (e) => this.setState({ search: e.target.value }), category, catChips,
       catalogBooks, catalogCount: catalogBooks.length, hasResults: catalogBooks.length > 0, noResults: catalogBooks.length === 0,
@@ -3722,8 +3740,16 @@ class Component extends DCLogic {
       logoHeaderStyle: this.logoBox(brand.logo, 44, { border: '1px solid #E3D2B8', boxShadow: '0 4px 12px rgba(94,31,51,0.18)' }),
       logoFooterStyle: this.logoBox(brand.logo, 42),
       hasHero: !!brand.hero, heroUrl: brand.hero || '', heroStyle: this.coverStyle(brand.hero),
+      heroImg: this.coverImg(),
+      heroAlt: 'La Madriguera, librería y café de especialidad en Urdesa, Guayaquil',
       hasLocal: !!brand.local, localUrl: brand.local || '', localStyle: this.coverStyle(brand.local),
+      localImg: this.coverImg(),
+      localAlt: 'Local de La Madriguera en Circunvalación Sur y Ficus, Urdesa, Guayaquil',
+      eventosImg: this.coverImg({ opacity: 0.3 }),
+      eventosAlt: 'Eventos literarios en La Madriguera: club de lectura, cine inmersivo y talleres, Guayaquil',
       hasEventosImg: !!brand.eventos, eventosUrl: brand.eventos || '', eventosStyle: this.coverStyle(brand.eventos, { opacity: 0.3 }),
+      venderImg: this.coverImg({ opacity: 0.28 }),
+      venderAlt: 'Libros usados en consignación en La Madriguera, Guayaquil',
       hasVenderImg: !!brand.vender, venderUrl: brand.vender || '', venderStyle: this.coverStyle(brand.vender, { opacity: 0.28 }),
       brandSlots,
       year: 2026,
