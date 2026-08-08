@@ -2367,6 +2367,20 @@ class Component extends DCLogic {
     const s = { position: 'absolute', inset: 0, backgroundImage: 'url("' + (url || '') + '")', backgroundSize: 'cover', backgroundPosition: 'center' };
     return extra ? Object.assign(s, extra) : s;
   }
+  // Estilo para las etiquetas <img> de las tarjetas.
+  // fit 'contain' = se ve completa (portadas de libro); 'cover' = llena el recuadro (fotos propias).
+  imgTag(fit) {
+    return {
+      position: 'absolute', inset: 0, width: '100%', height: '100%',
+      objectFit: fit || 'cover', objectPosition: 'center',
+      display: 'block', border: 0,
+      background: fit === 'contain' ? '#FFFDF8' : 'transparent'
+    };
+  }
+  imgBits(url, alt, fit) {
+    return { imgUrl: url || '', imgAlt: alt || '', imgTagStyle: this.imgTag(fit) };
+  }
+
   // Portadas de libro: se ven COMPLETAS (sin recortar arriba y abajo),
   // porque las portadas de Google Books/OpenLibrary son más estrechas que el recuadro.
   bookCoverStyle(url, extra) {
@@ -3284,6 +3298,7 @@ class Component extends DCLogic {
     return Object.assign({}, b, this.offerBits(b), {
       priceLabel: '$' + b.price, estadoStyle: this.estadoStyle(b.estado), dispStyle: this.dispStyle(b.disp),
       waHref: this.waBook(b), hasImg: !!b.imagen, imgStyle: this.bookCoverStyle(b.imagen),
+      imgUrl: b.imagen || '', imgAlt: 'Portada de ' + (b.title || 'libro') + (b.author ? (' de ' + b.author) : ''), imgTagStyle: this.imgTag('contain'),
       onOpen: () => this.openDetail('libro', b.id || b.code),
       onAdd: () => this.addToCart('Libro', { id: b.id || b.code, title: b.title, sub: b.author || '', price: b.price, imagen: b.imagen }),
       onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Libro', subject: 'Consulta web · Libro: ' + b.title, title: b.title, sub: [b.author, b.code].filter(Boolean).join(' · '), waHref: this.waBook(b), fields: { tipo: 'Libro', titulo: b.title, autor: b.author || '', codigo: b.code || '', precio: '$' + b.price } }); }
@@ -3292,6 +3307,7 @@ class Component extends DCLogic {
   decMerch(m) {
     return Object.assign({}, m, this.offerBits(m), {
       priceLabel: '$' + m.price, dispStyle: this.dispStyle(m.disp), waHref: this.waMerch(m), hasImg: !!m.imagen, imgStyle: this.coverStyle(m.imagen),
+      imgUrl: m.imagen || '', imgAlt: (m.name || 'Producto') + ' — La Madriguera', imgTagStyle: this.imgTag('cover'),
       onOpen: () => this.openDetail('merch', m.id || m.name),
       onAdd: () => this.addToCart('Merch', { id: m.id || m.name, title: m.name, sub: m.cat || '', price: m.price, imagen: m.imagen }),
       onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Merch', subject: 'Consulta web · Merch: ' + m.name, title: m.name, sub: m.cat || '', waHref: this.waMerch(m), fields: { tipo: 'Merch', producto: m.name, categoria: m.cat || '', precio: '$' + m.price } }); }
@@ -3303,6 +3319,7 @@ class Component extends DCLogic {
   decEspecial(m) {
     return Object.assign({}, m, this.offerBits(m), {
       priceLabel: '$' + m.price, dispStyle: this.dispStyle(m.disp), waHref: this.waEspecial(m), hasImg: !!m.imagen, imgStyle: this.coverStyle(m.imagen),
+      imgUrl: m.imagen || '', imgAlt: (m.name || 'Producto') + ' — La Madriguera', imgTagStyle: this.imgTag('cover'),
       onOpen: () => this.openDetail('especial', m.id || m.name),
       onAdd: () => this.addToCart('Café de especialidad', { id: m.id || m.name, title: m.name, sub: m.cat || '', price: m.price, imagen: m.imagen }),
       onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Café de especialidad', subject: 'Consulta web · Especialidad: ' + m.name, title: m.name, sub: m.cat || '', waHref: this.waEspecial(m), fields: { tipo: 'Café de especialidad', producto: m.name, categoria: m.cat || '', precio: '$' + m.price } }); }
@@ -3314,6 +3331,7 @@ class Component extends DCLogic {
     return Object.assign({}, m, {
       priceLabel: hasPrice ? ('$' + m.price) : '', hasPrice,
       dispStyle: this.dispStyle(m.disp), hasImg: !!m.imagen, imgStyle: this.coverStyle(m.imagen),
+      imgUrl: m.imagen || '', imgAlt: (m.name || 'Plato') + ' — cafetería La Madriguera', imgTagStyle: this.imgTag('cover'),
       hasDesc: !!((m.desc || '') + '').trim(), hasCat: !!((m.cat || '') + '').trim(),
       waHref: this.waCafe(m)
     });
@@ -3326,6 +3344,7 @@ class Component extends DCLogic {
         ? this.waText('Hola, el evento "' + e.name + '" del ' + e.date + ' aparece agotado. ¿Me pueden anotar en la lista de espera?')
         : this.waEvent(e),
       hasImg: !!e.imagen, imgStyle: this.coverStyle(e.imagen),
+      imgUrl: e.imagen || '', imgAlt: (e.name || 'Evento') + ' en La Madriguera' + (e.date ? (' · ' + e.date) : ''), imgTagStyle: this.imgTag('cover'),
       onOpen: () => this.openDetail('evento', e.id || e.name),
       onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Evento', subject: 'Reserva web · Evento: ' + e.name, title: e.name, sub: [e.date, e.time].filter(Boolean).join(' · '), waHref: this.waEvent(e), fields: { tipo: 'Evento', evento: e.name, fecha: (e.date || '') + ' ' + (e.time || ''), precio: e.price || '' } }); }
     });
