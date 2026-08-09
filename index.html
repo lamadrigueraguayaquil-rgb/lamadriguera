@@ -848,7 +848,7 @@
           <span onClick="{{ addLibro }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(94,31,51,0.25);" style-hover="background:#244031;">+ Añadir libro</span>
         </div>
       </div>
-      <div style="margin-bottom:16px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">Elige una <strong>Categoría</strong> para cada libro (escribe una nueva o elígela de la lista): así aparece en los filtros del catálogo. La <strong>Sinopsis</strong> se muestra en la ficha del libro. Activa <strong>★ Recomendado</strong> para destacarlo en el inicio y ordénalos con las flechas. Los libros <strong>Vendido</strong> (o con stock 0) dejan de mostrarse. Si llenas <strong>Precio antes</strong>, se muestra la oferta con el % de descuento.</div>
+      <div style="margin-bottom:16px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;"><strong>Truco:</strong> escribe el <strong>ISBN</strong> (o pulsa «📖 Completar») y traemos solos el título, autor, editorial, portada y sinopsis. Elige una <strong>Categoría</strong> para cada libro (escribe una nueva o elígela de la lista): así aparece en los filtros del catálogo. La <strong>Sinopsis</strong> se muestra en la ficha del libro. Activa <strong>★ Recomendado</strong> para destacarlo en el inicio y ordénalos con las flechas. Los libros <strong>Vendido</strong> (o con stock 0) dejan de mostrarse. Si llenas <strong>Precio antes</strong>, se muestra la oferta con el % de descuento.</div>
       <datalist id="lm-bookcats"><sc-for list="{{ bookCatOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.v }}"></option></sc-for></datalist>
       <div style="margin-bottom:22px; position:relative; max-width:460px;">
         <span style="position:absolute; left:16px; top:50%; transform:translateY(-50%); width:13px; height:13px; border:2px solid #A07F5E; border-radius:50%;"></span>
@@ -958,7 +958,10 @@
                 </div>
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">ISBN</label>
-                  <input value="{{ l.isbn }}" onChange="{{ l.onIsbn }}" inputmode="numeric" placeholder="978… (mejora la búsqueda de portada)" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                  <div style="display:flex; gap:7px;">
+                    <input value="{{ l.isbn }}" onChange="{{ l.onIsbn }}" inputmode="numeric" placeholder="978… y completamos el libro solo" style="flex:1; min-width:0; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                    <span onClick="{{ l.onFillIsbn }}" title="Buscar título, autor, editorial, portada y sinopsis por ISBN" style="flex-shrink:0; cursor:pointer; display:flex; align-items:center; font-size:12.5px; font-weight:800; color:#5E1F33; border:1.5px solid #B9C4B4; border-radius:8px; padding:0 12px; white-space:nowrap;" style-hover="background:#F2E3E2;">📖 Completar</span>
+                  </div>
                 </div>
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio ($)</label>
@@ -1066,7 +1069,10 @@
                 </div>
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">ISBN</label>
-                  <input value="{{ c.isbn }}" onChange="{{ c.onIsbn }}" inputmode="numeric" placeholder="978… (opcional)" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                  <div style="display:flex; gap:7px;">
+                    <input value="{{ c.isbn }}" onChange="{{ c.onIsbn }}" inputmode="numeric" placeholder="978… y completamos el libro solo" style="flex:1; min-width:0; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
+                    <span onClick="{{ c.onFillIsbn }}" title="Buscar título, autor, editorial, portada y sinopsis por ISBN" style="flex-shrink:0; cursor:pointer; display:flex; align-items:center; font-size:12.5px; font-weight:800; color:#5E1F33; border:1.5px solid #B9C4B4; border-radius:8px; padding:0 12px; white-space:nowrap;" style-hover="background:#F2E3E2;">📖 Completar</span>
+                  </div>
                 </div>
                 <div>
                   <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Dueño del libro</label>
@@ -2864,6 +2870,92 @@ class Component extends DCLogic {
     if (nav && nav.clipboard && nav.clipboard.writeText) nav.clipboard.writeText(t).then(() => this.flash('Datos copiados ✓')).catch(() => {});
     else { try { window.prompt('Copia los datos:', t); } catch (e) {} }
   };
+  // ---------- completar libro desde el ISBN ----------
+  // Primero los géneros concretos y al final el rango de edad:
+  // «Juvenile Fiction / Fantasy» debe quedar como Fantasía, que es lo que buscan tus lectores.
+  GEN_MAP = [
+    ['fantasy', 'Fantasía'], ['romance', 'Romance'], ['comics', 'Cómic · manga'], ['graphic novels', 'Cómic · manga'],
+    ['detective', 'Thriller · misterio'], ['mystery', 'Thriller · misterio'], ['thriller', 'Thriller'], ['suspense', 'Thriller'],
+    ['science fiction', 'Ciencia ficción'], ['horror', 'Terror'], ['poetry', 'Poesía'], ['drama', 'Teatro'],
+    ['biography', 'Biografía'], ['autobiography', 'Biografía'], ['history', 'Historia'], ['philosophy', 'Filosofía'],
+    ['psychology', 'Psicología'], ['self-help', 'Autoayuda'], ['business', 'Negocios'], ['cooking', 'Cocina'],
+    ['travel', 'Viajes'], ['art', 'Arte'], ['religion', 'Religión'], ['science', 'Ciencia'], ['education', 'Educación'],
+    ['classic', 'Clásicos'],
+    ['juvenile fiction', 'Infantil y juvenil'], ['juvenile', 'Infantil y juvenil'], ['young adult', 'Infantil y juvenil'],
+    ['fiction', 'Ficción']
+  ];
+  generoEs(cats) {
+    const t = ((cats || '') + '').toLowerCase();
+    if (!t) return '';
+    for (let i = 0; i < this.GEN_MAP.length; i++) { if (t.indexOf(this.GEN_MAP[i][0]) >= 0) return this.GEN_MAP[i][1]; }
+    return '';
+  }
+  isbnOk(v) { const c = ((v || '') + '').replace(/[^0-9Xx]/g, ''); return (c.length === 10 || c.length === 13) ? c : ''; }
+  // Busca la ficha del libro por ISBN: Google Books y, si no está, OpenLibrary
+  lookupIsbnData(clean) {
+    const gb = this.gbGet(this.gbUrl('isbn:' + clean)).then(j => {
+      const vi = (((j.items || [])[0]) || {}).volumeInfo;
+      if (!vi) return null;
+      const il = vi.imageLinks || {};
+      let img = ((il.thumbnail || il.smallThumbnail || '') + '').replace(/^http:/, 'https:').replace('&edge=curl', '');
+      if (img.indexOf('zoom=1') >= 0) img = img.replace('zoom=1', 'zoom=2');
+      return {
+        title: (vi.title || '') + (vi.subtitle ? (': ' + vi.subtitle) : ''),
+        author: (vi.authors || []).join(', '),
+        editorial: vi.publisher || '',
+        genre: this.generoEs((vi.categories || []).join(' ')),
+        sinopsis: vi.description || '',
+        imagen: img
+      };
+    }).catch(() => null);
+    const ol = () => fetch('https://openlibrary.org/api/books?format=json&jscmd=data&bibkeys=ISBN:' + clean)
+      .then(r => r.json())
+      .then(j => {
+        const d = j && j['ISBN:' + clean];
+        if (!d) return null;
+        return {
+          title: d.title || '',
+          author: (d.authors || []).map(a => a.name).join(', '),
+          editorial: (d.publishers || []).map(x => x.name).join(', '),
+          genre: this.generoEs((d.subjects || []).map(x => x.name).join(' ')),
+          sinopsis: '',
+          imagen: (d.cover && (d.cover.large || d.cover.medium)) || ''
+        };
+      }).catch(() => null);
+    return gb.then(d => (d && d.title) ? d : ol());
+  }
+  fillFromIsbn(coll, id) {
+    const it = (this.currentCMS()[coll] || []).find(x => x.id === id);
+    if (!it) return;
+    const clean = this.isbnOk(it.isbn);
+    if (!clean) { this.flash('Escribe un ISBN de 10 o 13 dígitos.'); return; }
+    if (this._isbnBusy === id) return;
+    this._isbnBusy = id;
+    this.flash('Buscando el libro por ISBN…');
+    this.lookupIsbnData(clean).then(d => {
+      this._isbnBusy = '';
+      if (!d || !d.title) {
+        if (this._gbErr && this._gbErr.indexOf('429') >= 0) this.flash('Google Books agotó la cuota de hoy. Pega tu clave en Configuración (es gratis).');
+        else this.flash('No encontramos ese ISBN. Revísalo o llena los datos a mano.');
+        return;
+      }
+      const vacio = (v) => !(((v || '') + '').trim());
+      const actual = (this.currentCMS()[coll] || []).find(x => x.id === id) || {};
+      const puestos = [];
+      if (vacio(actual.title) || actual.title === 'Nuevo libro' || actual.title === 'Libro recibido') { this.setField(coll, id, 'title', d.title); puestos.push('título'); }
+      if (vacio(actual.author) && d.author) { this.setField(coll, id, 'author', d.author); puestos.push('autor'); }
+      if (vacio(actual.editorial) && d.editorial) { this.setField(coll, id, 'editorial', d.editorial); puestos.push('editorial'); }
+      if (vacio(actual.genre) && d.genre) { this.setField(coll, id, 'genre', d.genre); puestos.push('género'); }
+      if (vacio(actual.sinopsis) && d.sinopsis) {
+        let t = (d.sinopsis + '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+        if (t.length > 420) { const cut = t.slice(0, 420); const pt = cut.lastIndexOf('. '); t = pt > 150 ? cut.slice(0, pt + 1) : (cut + '…'); }
+        this.setField(coll, id, 'sinopsis', t); puestos.push('sinopsis');
+      }
+      if (vacio(actual.imagen) && d.imagen) { this.setField(coll, id, 'imagen', d.imagen); puestos.push('portada'); }
+      this.flash(puestos.length ? ('Listo: ' + puestos.join(', ') + ' ✓ Revisa y ajusta.') : 'Ese libro ya tenía todos los datos llenos.');
+    }).catch(() => { this._isbnBusy = ''; this.flash('No se pudo buscar. Revisa tu internet.'); });
+  }
+
   // ---------- sinopsis automática (Google Books) ----------
   searchSinopsis(title, author, isbn) {
     const enc = encodeURIComponent;
@@ -3560,7 +3652,14 @@ class Component extends DCLogic {
       },
       onRecUp: () => this.moveRec(coll, l.id, -1),
       onRecDown: () => this.moveRec(coll, l.id, 1),
-      onIsbn: (e) => this.setField(coll, l.id, 'isbn', e.target.value.trim()),
+      onIsbn: (e) => {
+        const v = e.target.value.trim();
+        this.setField(coll, l.id, 'isbn', v);
+        // Si el libro aún no tiene título propio, completamos solos al escribir el ISBN
+        const t = ((l.title || '') + '').trim();
+        if (this.isbnOk(v) && (!t || t === 'Nuevo libro' || t === 'Libro recibido')) setTimeout(() => this.fillFromIsbn(coll, l.id), 150);
+      },
+      onFillIsbn: () => this.fillFromIsbn(coll, l.id),
       onPrice: (e) => this.setNum(coll, l.id, 'price', e.target.value),
       onEstado: (e) => this.setField(coll, l.id, 'estado', e.target.value),
       onDisp: (e) => this.setField(coll, l.id, 'disp', e.target.value),
