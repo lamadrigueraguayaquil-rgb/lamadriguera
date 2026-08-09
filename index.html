@@ -1622,7 +1622,7 @@
           <div style="margin-top:15px; background:rgba(156,217,166,0.14); border:1px solid rgba(156,217,166,0.4); border-radius:12px; padding:13px 16px; font-size:13.5px; line-height:1.55; color:#DCEFD9;"><strong>Conectado a la nube ✓</strong> Todo lo que editas se guarda al instante en Firebase y tus clientes lo ven en vivo. No necesitas descargar ni subir nada.</div>
         </sc-if>
         <sc-if value="{{ fbOffline }}" hint-placeholder-val="{{ true }}">
-          <div style="margin-top:15px; background:rgba(224,161,76,0.16); border:1px solid rgba(224,161,76,0.42); border-radius:12px; padding:13px 16px; font-size:13.5px; line-height:1.55; color:#F1E5C8;"><strong>Sin conexión a la nube.</strong> Es normal dentro de esta vista previa; en tu web publicada se conecta a Firebase automáticamente. Mientras tanto, los cambios se guardan en este navegador.</div>
+          <div style="margin-top:15px; background:rgba(224,161,76,0.16); border:1px solid rgba(224,161,76,0.42); border-radius:12px; padding:13px 16px; font-size:13.5px; line-height:1.55; color:#F1E5C8;"><span onClick="{{ retryFirebase }}" style="float:right; cursor:pointer; font-size:12px; font-weight:800; color:#2A1C12; background:#C9A24B; padding:6px 12px; border-radius:999px;">↻ Reintentar</span><strong>Sin conexión a la nube.</strong> {{ fbReason }} Es normal dentro de esta vista previa; en tu web publicada se conecta a Firebase automáticamente. Mientras tanto, los cambios se guardan en este navegador.</div>
         </sc-if>
         <sc-if value="{{ cloudNoAuth }}" hint-placeholder-val="{{ false }}">
           <div style="margin-top:12px; background:rgba(154,74,60,0.16); border:1px solid rgba(154,74,60,0.45); border-radius:12px; padding:13px 16px; font-size:13.5px; line-height:1.55; color:#F3D9D0;"><strong>Entraste con la clave local.</strong> Para guardar en la nube debes iniciar sesión con tu <strong>usuario de Firebase</strong> (Authentication → Users). Cierra sesión, vuelve a «Administrar» y entra con ese correo y contraseña.</div>
@@ -1880,7 +1880,13 @@ service cloud.firestore {
     <p style="margin:16px 0 0; font-size:14px; line-height:1.5; color:#5E4632;">Inicia sesión con tu correo y contraseña para editar el catálogo, subir fotos y configurar la tienda.</p>
     <input value="{{ pwEmail }}" onInput="{{ onPwEmail }}" type="email" inputmode="email" autocomplete="username" placeholder="Correo de administrador" style="margin-top:14px; width:100%; padding:13px 15px; border:1px solid #E3D2B8; border-radius:11px; font-family:'Outfit',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;">
     <input value="{{ pwInput }}" onInput="{{ onPwInput }}" onKeyDown="{{ onPwKey }}" type="password" autocomplete="current-password" placeholder="Contraseña" style="margin-top:10px; width:100%; padding:13px 15px; border:1px solid #E3D2B8; border-radius:11px; font-family:'Outfit',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;">
-    <sc-if value="{{ pwLocal }}" hint-placeholder-val="{{ false }}"><div style="margin-top:10px; font-size:12px; color:#8A715A; line-height:1.5;">Vista previa sin nube: el correo se ignora, usa tu clave local (por defecto «madriguera»).</div></sc-if>
+    <sc-if value="{{ pwConnecting }}" hint-placeholder-val="{{ false }}"><div style="margin-top:10px; font-size:12px; color:#8A715A; line-height:1.5;">Conectando con la nube… espera unos segundos antes de entrar.</div></sc-if>
+    <sc-if value="{{ pwLocal }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:10px; background:#F6E3D5; border:1px solid #E0AE95; border-radius:10px; padding:11px 13px; font-size:12.5px; color:#8A4A3C; line-height:1.55;">
+        <strong>Sin conexión con Firebase en este navegador.</strong> {{ fbReason }}
+        <span onClick="{{ retryFirebase }}" style="display:inline-block; margin-top:9px; cursor:pointer; font-size:12.5px; font-weight:800; color:#5E1F33; background:#FFFDF8; border:1.5px solid #B9C4B4; padding:7px 14px; border-radius:999px;">↻ Reintentar conexión</span>
+      </div>
+    </sc-if>
     <sc-if value="{{ pwHasErr }}" hint-placeholder-val="{{ false }}">
       <div style="margin-top:10px; font-size:13px; font-weight:700; color:#9A4A3C;">{{ pwErr }}</div>
     </sc-if>
@@ -2181,28 +2187,58 @@ class Component extends DCLogic {
       document.head.appendChild(s);
     });
   }
-  bootFirebase() {
-    const base = 'https://www.gstatic.com/firebasejs/10.12.5/';
+  // Dos orígenes: si una red o extensión bloquea gstatic.com, se intenta el segundo.
+  FB_CDNS = ['https://www.gstatic.com/firebasejs/10.12.5/', 'https://cdn.jsdelivr.net/npm/firebase@10.12.5/'];
+  bootFirebase(intento) {
+    const idx = intento || 0;
+    const base = this.FB_CDNS[idx] || this.FB_CDNS[0];
     const start = () => {
       try {
         if (!window.firebase || !window.firebase.initializeApp || !window.firebase.firestore) {
+          this._fbReason = 'La librería de Firebase no se cargó en este navegador.';
           this.setState({ fb: 'offline' }); return;
         }
         if (!window.firebase.apps.length) window.firebase.initializeApp(this.FB_CFG);
         this.db = window.firebase.firestore();
         this.auth = window.firebase.auth();
+        this._fbReason = '';
         this.auth.onAuthStateChanged((u) => { this._authed = !!u; this.setState({ authed: !!u, adminEmail: u ? (u.email || '') : '' }); this.maybeSeed(); });
         this.subscribe();
-        this._fbTimer = setTimeout(() => { if (this.state.fb !== 'online') this.setState({ fb: 'offline' }); }, 7000);
-      } catch (e) { console.error('[LM] Firebase init', e); this.setState({ fb: 'offline' }); }
+        if (this._fbTimer) clearTimeout(this._fbTimer);
+        // 18 s: en conexiones lentas la primera respuesta puede tardar
+        this._fbTimer = setTimeout(() => {
+          if (this.state.fb !== 'online') {
+            this._fbReason = this._fbReason || 'La base de datos no respondió a tiempo (conexión lenta o red que bloquea Firebase).';
+            this.setState({ fb: 'offline' });
+          }
+        }, 18000);
+      } catch (e) {
+        console.error('[LM] Firebase init', e);
+        this._fbReason = 'No se pudo iniciar Firebase: ' + ((e && e.message) || e);
+        this.setState({ fb: 'offline' });
+      }
     };
     if (window.firebase && window.firebase.firestore && window.firebase.auth) { start(); return; }
+    this.setState({ fb: 'connecting' });
     this.loadFbScript(base + 'firebase-app-compat.js')
       .then(() => this.loadFbScript(base + 'firebase-firestore-compat.js'))
       .then(() => this.loadFbScript(base + 'firebase-auth-compat.js'))
       .then(start)
-      .catch((e) => { console.error('[LM] Firebase load', e); this.setState({ fb: 'offline' }); });
+      .catch((e) => {
+        console.error('[LM] Firebase load', e);
+        if (idx + 1 < this.FB_CDNS.length) { this.bootFirebase(idx + 1); return; }
+        this._fbReason = 'Este navegador no pudo descargar Firebase. Casi siempre es un bloqueador de anuncios/privacidad o una red (oficina, wifi público) que bloquea gstatic.com.';
+        this.setState({ fb: 'offline' });
+      });
   }
+  retryFirebase = () => {
+    this._fbReason = '';
+    this._fbBootedOnce = false;
+    if (this._fbTimer) clearTimeout(this._fbTimer);
+    this.setState({ fb: 'connecting', pwErr: '' });
+    this.flash('Reintentando conexión…');
+    this.bootFirebase(0);
+  };
   // ---------- conexión con la app de reservas (la-madriguera-cb489) ----------
   RES_PROJECT = { authDomain: 'la-madriguera-cb489.firebaseapp.com', projectId: 'la-madriguera-cb489' };
   bootReservas() {
@@ -3873,7 +3909,10 @@ class Component extends DCLogic {
       onPwKey: (e) => { if (e.key === 'Enter') this.submitPw(); },
       submitPw: this.submitPw,
       pwErr: this.state.pwErr, pwHasErr: !!this.state.pwErr,
-      pwLocal: this.state.fb !== 'online',
+      pwLocal: this.state.fb === 'offline',
+      pwConnecting: this.state.fb === 'connecting',
+      fbReason: this._fbReason || '',
+      retryFirebase: this.retryFirebase,
 
       // toast
       toast: this.state.toast, toastShow: !!this.state.toast,
@@ -3884,7 +3923,7 @@ class Component extends DCLogic {
   enterLocal(pass) {
     const localPass = (this.cfg().adminPass || 'madriguera');
     if (pass === localPass) this.setState({ view: 'admin', pwOpen: false, pwInput: '', pwErr: '' });
-    else this.setState({ pwErr: 'Sin conexión a la nube. Usa tu clave local (por defecto «madriguera»).' });
+    else this.setState({ pwErr: 'No hay conexión con Firebase, por eso tu correo y contraseña no se pueden verificar aquí. ' + (this._fbReason || '') + ' Pulsa «Reintentar conexión»; si sigue igual, prueba con otro navegador, sin extensiones o con otra red (por ejemplo, datos del celular).' });
   }
   submitPw = () => {
     const email = (this.state.pwEmail || '').trim();
