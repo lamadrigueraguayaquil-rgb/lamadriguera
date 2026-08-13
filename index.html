@@ -3069,7 +3069,7 @@ class Component extends DCLogic {
   bulkCovers = () => {
     if (this.state.coversBusy) return;
     const C = this.currentCMS();
-    const missing = (C.libros || []).filter(l => (((l.title || '') + '').trim()) && (!l.imagen || !(((l.sinopsis || '') + '').trim()))).slice(0, 25);
+    const missing = (C.libros || []).filter(l => (((l.title || '') + '').trim()) && (!l.imagen || !(((l.sinopsis || '') + '').trim()))).slice(0, 120);
     if (!missing.length) { this.flash('Todos tus libros ya tienen portada y sinopsis 🎉'); return; }
     this.setState({ coversBusy: true, coversDone: 0, coversTotal: missing.length, coversFound: 0 });
     let i = 0, found = 0, sins = 0;
