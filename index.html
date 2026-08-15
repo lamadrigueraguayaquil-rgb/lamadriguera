@@ -2662,10 +2662,23 @@ class Component extends DCLogic {
   saveCMS(cms) { this.cacheCMS(cms); }
   cfg() { return (this.state.cms && this.state.cms.config) || {}; }
 
-  flash(msg) {
+  flash(msg, ms) {
     this.setState({ toast: msg });
     if (this._toastT) clearTimeout(this._toastT);
-    this._toastT = setTimeout(() => this.setState({ toast: '' }), 2000);
+    this._toastT = setTimeout(() => this.setState({ toast: '' }), ms || 2000);
+  }
+  // Traduce el error crudo de Google Books a algo que se pueda accionar.
+  gbMsg() {
+    const e = ((this._gbErr || '') + '');
+    if (!e) return '';
+    const low = e.toLowerCase();
+    if (low.indexOf('sin conexi') >= 0) return 'No hay conexion con Google. Revisa tu internet.';
+    if (e.indexOf('429') >= 0) return 'Cuota agotada (429). Si ya pegaste tu clave en Configuracion, revisa que sea la correcta; si no, pegala.';
+    if (low.indexOf('referer') >= 0 || low.indexOf('referrer') >= 0) return 'Tu clave esta limitada a otros sitios web y bloquea lamadriguera.ec. En Google Cloud, quita esa restriccion o anade https://lamadriguera.ec/*';
+    if (low.indexOf('api key not valid') >= 0 || low.indexOf('api_key_invalid') >= 0) return 'La clave de Google Books no es valida. Vuelve a copiarla en Configuracion.';
+    if (e.indexOf('403') >= 0) return 'Google rechazo la clave (403): ' + e;
+    if (e.indexOf('400') >= 0) return 'Google rechazo la peticion (400): ' + e;
+    return 'Google Books respondio: ' + e;
   }
 
   // ---------- editing ----------
@@ -2892,7 +2905,8 @@ class Component extends DCLogic {
     this.searchCovers(it.title || '', it.author || '', it.isbn || '').then(opts => {
       const cv = this.state.cover;
       if (!cv || cv.id !== id) return;
-      this.setState({ cover: Object.assign({}, cv, { loading: false, opts, err: opts.length ? '' : 'No encontramos portadas para este título. Prueba simplificar el título o sube una foto tuya.' }) });
+      const gm = this.gbMsg();
+      this.setState({ cover: Object.assign({}, cv, { loading: false, opts, err: opts.length ? '' : (gm || 'No encontramos portadas para este título. Prueba simplificar el título o sube una foto tuya.') }) });
     }).catch(() => {
       const cv = this.state.cover;
       if (cv && cv.id === id) this.setState({ cover: Object.assign({}, cv, { loading: false, err: 'No se pudo buscar. Revisa tu conexión a internet.' }) });
@@ -2976,12 +2990,14 @@ class Component extends DCLogic {
     if (!clean) { this.flash('Escribe un ISBN de 10 o 13 dígitos.'); return; }
     if (this._isbnBusy === id) return;
     this._isbnBusy = id;
+    this._gbErr = '';
     this.flash('Buscando el libro por ISBN…');
     this.lookupIsbnData(clean).then(d => {
       this._isbnBusy = '';
       if (!d || !d.title) {
-        if (this._gbErr && this._gbErr.indexOf('429') >= 0) this.flash('Google Books agotó la cuota de hoy. Pega tu clave en Configuración (es gratis).');
-        else this.flash('No encontramos ese ISBN. Revísalo o llena los datos a mano.');
+        const gm = this.gbMsg();
+        if (gm) this.flash(gm, 12000);
+        else this.flash('No encontramos ese ISBN en Google Books ni en OpenLibrary. Revísalo o llena los datos a mano.', 6000);
         return;
       }
       const vacio = (v) => !(((v || '') + '').trim());
@@ -3061,8 +3077,8 @@ class Component extends DCLogic {
       if (d && this._sinEs) { this.setField(coll, id, 'sinopsis', d); this.flash('Sinopsis en español encontrada ✓ Revísala y ajústala a tu estilo.'); return; }
       // No hay en español: si la que estaba guardada está en otro idioma, la quitamos.
       if (actual && !this.esProbablementeEspanol(actual)) { this.setField(coll, id, 'sinopsis', ''); this.flash('La sinopsis estaba en otro idioma; la quité. Escríbela tú en español.'); return; }
-      if (this._gbErr && this._gbErr.indexOf('429') >= 0) { this.flash('Google Books agotó la cuota gratuita de hoy. Pega tu propia clave en Configuración (es gratis) o inténtalo mañana.'); return; }
-      if (this._gbErr) { this.flash('Google Books no respondió (' + this._gbErr + '). Espera unos minutos e intenta de nuevo.'); return; }
+      const gm = this.gbMsg();
+      if (gm) { this.flash(gm, 12000); return; }
       this.flash('No encontramos sinopsis en español. Escríbela tú en el recuadro.');
     }).catch(() => this.flash('No se pudo buscar. Revisa tu internet.'));
   }
