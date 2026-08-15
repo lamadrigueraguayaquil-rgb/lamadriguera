@@ -2676,6 +2676,7 @@ class Component extends DCLogic {
     if (e.indexOf('429') >= 0) return 'Cuota agotada (429). Si ya pegaste tu clave en Configuracion, revisa que sea la correcta; si no, pegala.';
     if (low.indexOf('referer') >= 0 || low.indexOf('referrer') >= 0) return 'Tu clave esta limitada a otros sitios web y bloquea lamadriguera.ec. En Google Cloud, quita esa restriccion o anade https://lamadriguera.ec/*';
     if (low.indexOf('api key not valid') >= 0 || low.indexOf('api_key_invalid') >= 0) return 'La clave de Google Books no es valida. Vuelve a copiarla en Configuracion.';
+    if (e.indexOf('503') >= 0 || e.indexOf('500') >= 0) return 'Google Books esta fallando temporalmente (503). Lo reintente 3 veces sin suerte. Espera un minuto y vuelve a pulsar Completar: no es tu clave, se arregla solo.';
     if (e.indexOf('403') >= 0) return 'Google rechazo la clave (403): ' + e;
     if (e.indexOf('400') >= 0) return 'Google rechazo la peticion (400): ' + e;
     return 'Google Books respondio: ' + e;
@@ -2872,9 +2873,19 @@ class Component extends DCLogic {
       + (k ? ('&key=' + encodeURIComponent(k)) : '')
       + '&q=' + q;
   }
-  gbGet(url) {
+  gbGet(url, tries) {
+    const n = (typeof tries === 'number') ? tries : 3;
     return fetch(url).then(r => r.json()).then(j => {
-      if (j && j.error) { this._gbErr = (j.error.code || '') + ' ' + (j.error.message || ''); return {}; }
+      if (j && j.error) {
+        const code = j.error.code || 0;
+        // 500/503 = fallo temporal del lado de Google. Reintentamos con pausa creciente
+        // en vez de rendirnos: casi siempre funciona en el segundo o tercer intento.
+        if ((code === 503 || code === 500) && n > 1) {
+          return new Promise(r2 => setTimeout(r2, 900 * (4 - n))).then(() => this.gbGet(url, n - 1));
+        }
+        this._gbErr = (code || '') + ' ' + (j.error.message || '');
+        return {};
+      }
       return j || {};
     }).catch(() => { this._gbErr = 'sin conexión'; return {}; });
   }
