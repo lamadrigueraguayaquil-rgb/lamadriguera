@@ -148,6 +148,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Outfit:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <script src="./datos.js"></script>
 <style>
+  /* ---- Comodidad en movil (revision de usabilidad) ----
+     Solo se aplica hasta 640px de ancho. El escritorio no cambia. */
+  @media (max-width: 640px) {
+    [style*="font-size:10px"],  [style*="font-size: 10px"],
+    [style*="font-size:10.5px"],[style*="font-size: 10.5px"],
+    [style*="font-size:11px"],  [style*="font-size: 11px"],
+    [style*="font-size:11.5px"],[style*="font-size: 11.5px"] { font-size: 12.5px !important; }
+    [style*="cursor:pointer"], [style*="cursor: pointer"], a, button {
+      min-height: 44px; display: inline-flex; align-items: center;
+    }
+    [style*="cursor:pointer"][style*="flex-direction:column"],
+    [style*="cursor:pointer"][style*="display:grid"],
+    [style*="cursor:pointer"][style*="position:absolute"],
+    [style*="cursor:pointer"][style*="aspect-ratio"] { display: block !important; }
+    p a, li a, span a { min-height: 0; display: inline; }
+  }
+
   /* Indicador de foco para quien navega con teclado.
      Solo se ve al usar Tab, nunca al hacer clic con el raton. */
   :focus-visible { outline: 3px solid #7C2F3E !important; outline-offset: 2px; border-radius: 4px; }
@@ -545,7 +562,7 @@
           <sc-for list="{{ cafeItems }}" as="m" hint-placeholder-count="6">
             <div style="display:flex; flex-direction:column; background:#FFFDF8; border:1px solid #EADBC4; border-radius:16px; overflow:hidden; box-shadow:0 8px 22px rgba(52,37,26,0.07); height:100%;">
               <div style="position:relative; aspect-ratio:4/3; background:repeating-linear-gradient(135deg,#F1E5D0,#F1E5D0 11px,#E9D9BE 11px,#E9D9BE 22px); display:flex; align-items:center; justify-content:center;">
-                <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.06em; color:#A8916F; text-transform:lowercase; text-align:center; padding:0 10px;">{{ m.cat }}</span>
+                <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.06em; color:#6F5E43; text-transform:lowercase; text-align:center; padding:0 10px;">{{ m.cat }}</span>
                 <sc-if value="{{ m.hasImg }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ m.imgUrl }}" alt="{{ m.imgAlt }}" loading="lazy" decoding="async" style="{{ m.imgTagStyle }}"></sc-if>
                 <span style="{{ m.dispStyle }}; position:absolute; left:10px; top:10px;">{{ m.disp }}</span>
               </div>
@@ -3278,16 +3295,16 @@ class Component extends DCLogic {
   // ---------- badges ----------
   badge(bg, color) { return { display: 'inline-block', padding: '3px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: 800, letterSpacing: '.02em', background: bg, color: color, whiteSpace: 'nowrap', fontFamily: "'Outfit',sans-serif" }; }
   estadoStyle(e) {
-    const m = { 'Nuevo': ['#E3EDE3', '#2E6B41'], 'Usado excelente': ['#F1E6CF', '#8A6A2E'], 'Usado bueno': ['#F3E2D6', '#A85A38'], 'Con detalles visibles': ['#ECE5DA', '#7A6450'], 'En consignación': ['#E2EAE6', '#37614A'] };
-    const c = m[e] || ['#ECE5DA', '#7A6450']; return this.badge(c[0], c[1]);
+    const m = { 'Nuevo': ['#E3EDE3', '#2E6B41'], 'Usado excelente': ['#F1E6CF', '#81632B'], 'Usado bueno': ['#F3E2D6', '#9C5334'], 'Con detalles visibles': ['#ECE5DA', '#796350'], 'En consignación': ['#E2EAE6', '#37614A'] };
+    const c = m[e] || ['#ECE5DA', '#796350']; return this.badge(c[0], c[1]);
   }
   dispStyle(d) {
-    const m = { 'Disponible': ['#E3EDE3', '#2E6B41'], 'Reservado': ['#ECE6DC', '#7C6651'], 'Vendido': ['#EFE0DC', '#9A4A3C'], 'Última unidad': ['#F3DEE3', '#93304A'], 'Oferta': ['#F4E9CC', '#816619'], 'Por encargo': ['#E7E9EC', '#5A6472'] };
+    const m = { 'Disponible': ['#E3EDE3', '#2E6B41'], 'Reservado': ['#ECE6DC', '#79644F'], 'Vendido': ['#EFE0DC', '#9A4A3C'], 'Última unidad': ['#F3DEE3', '#93304A'], 'Oferta': ['#F4E9CC', '#816619'], 'Por encargo': ['#E7E9EC', '#5A6472'] };
     const c = m[d] || ['#E3EDE3', '#2E6B41']; return this.badge(c[0], c[1]);
   }
   consigBadge(e) {
-    const m = { 'Recibido': ['#ECE6DC', '#7C6651'], 'En venta': ['#E3EDE3', '#2E6B41'], 'Vendido': ['#EFE0DC', '#9A4A3C'], 'Pagado al dueño': ['#F4E9CC', '#816619'] };
-    const c = m[e] || ['#ECE6DC', '#7C6651']; return this.badge(c[0], c[1]);
+    const m = { 'Recibido': ['#ECE6DC', '#79644F'], 'En venta': ['#E3EDE3', '#2E6B41'], 'Vendido': ['#EFE0DC', '#9A4A3C'], 'Pagado al dueño': ['#F4E9CC', '#816619'] };
+    const c = m[e] || ['#ECE6DC', '#79644F']; return this.badge(c[0], c[1]);
   }
   cuposStyle() { return { display: 'inline-block', padding: '4px 11px', borderRadius: '999px', fontSize: '11px', fontWeight: 800, background: 'rgba(247,239,226,0.94)', color: '#2E6B41', whiteSpace: 'nowrap', fontFamily: "'Outfit',sans-serif" }; }
 
