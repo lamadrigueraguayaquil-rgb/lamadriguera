@@ -1375,7 +1375,9 @@
 
   // src/index.ts
   var REACT_URL = "https://unpkg.com/react@18.3.1/umd/react.production.min.js";
-  var REACT_SRI = "sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z";
+  var REACT_LOCAL_URL = "./react.js";
+var REACT_DOM_LOCAL_URL = "./react-dom.js";
+var REACT_SRI = "sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z";
   var REACT_DOM_URL = "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js";
   var REACT_DOM_SRI = "sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1";
   function hideRawTemplate() {
@@ -1397,14 +1399,19 @@
     });
   }
   function loadReactUmd() {
-    const w = window;
-    if (w.React && w.ReactDOM) return Promise.resolve();
-    return Promise.all([
-      loadScript(REACT_URL, REACT_SRI),
-      loadScript(REACT_DOM_URL, REACT_DOM_SRI)
-    ]).then(() => void 0);
-  }
-  function init() {
+  const w = window;
+  if (w.React && w.ReactDOM) return Promise.resolve();
+  // React se carga desde nuestro propio dominio: mas rapido y sin depender de terceros.
+  // Si esos archivos faltaran o llegaran danados, se recurre a unpkg como antes.
+  // La firma SRI es la misma en ambos casos, asi que el navegador rechaza cualquier
+  // archivo que no sea el React 18.3.1 oficial.
+  const conRespaldo = (local, remoto, sri) => loadScript(local, sri).catch(() => loadScript(remoto, sri));
+  return Promise.all([
+    conRespaldo(REACT_LOCAL_URL, REACT_URL, REACT_SRI),
+    conRespaldo(REACT_DOM_LOCAL_URL, REACT_DOM_URL, REACT_DOM_SRI)
+  ]).then(() => void 0);
+}
+function init() {
     const runtime = createRuntime(document);
     let rootName = "Root";
     const baseCss = document.createElement("style");
