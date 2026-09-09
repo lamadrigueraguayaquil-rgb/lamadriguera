@@ -125,7 +125,7 @@
 <noscript>
 <div style="font-family:'Outfit',system-ui,sans-serif;max-width:640px;margin:0 auto;padding:40px 22px;color:#34251A;line-height:1.7">
 <h2 style="font-family:'Bricolage Grotesque',sans-serif;color:#5E1F33;font-size:28px;margin:0 0 6px">La Madriguera · Librería y café de especialidad</h2>
-<p style="color:#8A715A;margin:0 0 22px">Una casa para quienes viven entre páginas · Urdesa, Guayaquil</p>
+<p style="color:#7C6651;margin:0 0 22px">Una casa para quienes viven entre páginas · Urdesa, Guayaquil</p>
 <p>Nuestra tienda en línea necesita JavaScript para mostrar el catálogo. Si no puedes activarlo, aquí tienes lo esencial y también puedes escribirnos directamente.</p>
 <p><b>Dirección:</b> Circunvalación Sur 632 y Ficus, Urdesa, Guayaquil, Ecuador<br>
 <b>Horario:</b> Miércoles a sábado 12:00–20:00 · Domingos 10:00–18:00<br>
@@ -148,6 +148,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;family=Outfit:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
 <script src="./datos.js"></script>
 <style>
+  /* Indicador de foco para quien navega con teclado.
+     Solo se ve al usar Tab, nunca al hacer clic con el raton. */
+  :focus-visible { outline: 3px solid #7C2F3E !important; outline-offset: 2px; border-radius: 4px; }
+
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body { background: #F4E9D8; }
@@ -195,7 +199,7 @@
         </sc-if>
         <div style="display:flex; flex-direction:column; line-height:1;">
           <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:18px; letter-spacing:.01em; color:#5E1F33;">La Madriguera</span>
-          <span style="font-size:10px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:#A07F5E; margin-top:3px;">Coffee &amp; Books</span>
+          <span style="font-size:10px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:#80654B; margin-top:3px;">Coffee &amp; Books</span>
         </div>
       </div>
       <div style="display:flex; align-items:center; gap:10px; flex-shrink:0;">
@@ -227,17 +231,17 @@
         <div>
           
           
-          <h1 style="margin: 18px 0 0; font-family: 'Bricolage Grotesque',sans-serif; font-weight: 700; font-size: clamp(38px,6vw,62px); line-height: 1.04; letter-spacing: -0.01em; color: #5E1F33; text-wrap: balance; position: relative"><span style="display:block; font-family:'Outfit',sans-serif; font-size:clamp(12px,1.3vw,14px); font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#8A715A; margin-bottom:16px;">Librería y café de especialidad en Urdesa, Guayaquil</span>Una casa para quienes viven entre <span style="font-style:italic; color:#7C2F3E;"><span style="font-weight: normal; font-style: normal"><b>páginas</b></span></span></h1><p style="margin:22px 0 0; font-size:clamp(16px,1.6vw,19px); line-height:1.6; color:#5E4632; max-width:30em;">Libros, café, experiencias literarias y pequeños mundos por descubrir en La Madriguera.</p>
+          <h1 style="margin: 18px 0 0; font-family: 'Bricolage Grotesque',sans-serif; font-weight: 700; font-size: clamp(38px,6vw,62px); line-height: 1.04; letter-spacing: -0.01em; color: #5E1F33; text-wrap: balance; position: relative"><span style="display:block; font-family:'Outfit',sans-serif; font-size:clamp(12px,1.3vw,14px); font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#7C6651; margin-bottom:16px;">Librería y café de especialidad en Urdesa, Guayaquil</span>Una casa para quienes viven entre <span style="font-style:italic; color:#7C2F3E;"><span style="font-weight: normal; font-style: normal"><b>páginas</b></span></span></h1><p style="margin:22px 0 0; font-size:clamp(16px,1.6vw,19px); line-height:1.6; color:#5E4632; max-width:30em;">Libros, café, experiencias literarias y pequeños mundos por descubrir en La Madriguera.</p>
           <div style="margin-top:32px; display:flex; flex-wrap:wrap; gap:12px;">
             <span onClick="{{ nav.catalogo }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:15px; padding:14px 24px; border-radius:999px; box-shadow:0 8px 22px rgba(94,31,51,0.3); transition:transform .15s ease, background .15s ease;" style-hover="background:#244031; transform:translateY(-2px);">Explorar libros</span>
-            <span onClick="{{ nav.merch }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:transparent; color:#9A7A1E; font-weight:700; font-size:15px; padding:13px 22px; border-radius:999px; border:1.5px solid #D9BC77; transition:all .15s ease;" style-hover="background:#F1E6CF;">Ver merch lector</span>
+            <span onClick="{{ nav.merch }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:transparent; color:#816619; font-weight:700; font-size:15px; padding:13px 22px; border-radius:999px; border:1.5px solid #D9BC77; transition:all .15s ease;" style-hover="background:#F1E6CF;">Ver merch lector</span>
             <span onClick="{{ nav.eventos }}" style="cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:transparent; color:#5E1F33; font-weight:700; font-size:15px; padding:13px 22px; border-radius:999px; border:1.5px solid #B9C4B4; transition:all .15s ease;" style-hover="background:#F2E3E2;">Reservar evento</span>
           </div>
           <sc-if value="{{ hasGoogleRating }}" hint-placeholder-val="{{ false }}">
             <a sc-camel-href="{{ gReviewsHref }}" target="_blank" rel="noopener" style="margin-top:22px; display:inline-flex; align-items:center; gap:9px; text-decoration:none; background:#FFFDF8; border:1px solid #E3D2B8; border-radius:999px; padding:9px 18px; box-shadow:0 6px 16px rgba(52,37,26,0.08);">
               <span style="color:#E8A62A; font-size:15px; letter-spacing:1px;">★★★★★</span>
               <span style="font-weight:800; font-size:14px; color:#34251A;">{{ gRatingLabel }} en Google</span>
-              <span style="font-size:12.5px; font-weight:700; color:#8A715A;">· ver reseñas de lectores →</span>
+              <span style="font-size:12.5px; font-weight:700; color:#7C6651;">· ver reseñas de lectores →</span>
             </a>
           </sc-if>
         </div>
@@ -276,11 +280,11 @@
     <section style="background:linear-gradient(180deg,#EFE2CB,#F4E9D8);">
       <div style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:clamp(28px,4vw,48px); align-items:center;">
         <div>
-          <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#9A7A1E;">Usados &amp; consignación</span>
+          <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#816619;">Usados &amp; consignación</span>
           <h2 style="margin:8px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(28px,3.4vw,40px); color:#5E1F33; text-wrap:balance;">Libros con segunda historia</h2>
           <p style="margin:18px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:30em;">Algunos libros no terminan cuando alguien los cierra. <br>En La Madriguera les damos la oportunidad de encontrar un nuevo lector.</p>
           <div style="margin-top:26px; display:flex; flex-wrap:wrap; gap:12px;">
-            <span onClick="{{ nav.segunda }}" style="cursor:pointer; background:#9A7A1E; color:#FBF3E0; font-weight:700; font-size:14.5px; padding:13px 22px; border-radius:999px; transition:background .15s ease;" style-hover="background:#866916;">Comprar segunda historia</span>
+            <span onClick="{{ nav.segunda }}" style="cursor:pointer; background:#816619; color:#FBF3E0; font-weight:700; font-size:14.5px; padding:13px 22px; border-radius:999px; transition:background .15s ease;" style-hover="background:#866916;">Comprar segunda historia</span>
             <span onClick="{{ nav.vender }}" style="cursor:pointer; background:transparent; color:#5E1F33; font-weight:700; font-size:14.5px; padding:12px 21px; border-radius:999px; border:1.5px solid #B9C4B4; transition:background .15s ease;" style-hover="background:#F2E3E2;">Quiero vender mis libros</span>
           </div>
         </div>
@@ -388,7 +392,7 @@
       <h2 style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#5E1F33; line-height:1.05; text-wrap:balance;">Tu próxima historia empieza aquí</h2>
       <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:46em;">Explora libros nuevos, libros con segunda historia y recomendaciones especiales para lectores curiosos.</p>
       <div style="margin-top:26px; position:relative; max-width:560px;">
-        <span style="position:absolute; left:18px; top:50%; transform:translateY(-50%); width:14px; height:14px; border:2px solid #A07F5E; border-radius:50%;"></span>
+        <span style="position:absolute; left:18px; top:50%; transform:translateY(-50%); width:14px; height:14px; border:2px solid #80654B; border-radius:50%;"></span>
         <input value="{{ search }}" onInput="{{ onSearch }}" placeholder="Busca por título, autor, saga o género…" style="width:100%; padding:15px 18px 15px 46px; font-family:'Outfit',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; border:1px solid #E3D2B8; border-radius:999px; outline:none; box-shadow:0 6px 18px rgba(52,37,26,0.06);">
       </div>
       <div data-noscroll="" style="margin-top:18px; display:flex; gap:9px; overflow-x:auto; white-space:nowrap; padding-bottom:4px; min-height:38px;">
@@ -399,7 +403,7 @@
     </section>
     <section style="max-width:1180px; margin:0 auto; padding:18px clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
-        <span style="font-size:13px; font-weight:700; color:#8A715A;">{{ catalogCount }} libros</span>
+        <span style="font-size:13px; font-weight:700; color:#7C6651;">{{ catalogCount }} libros</span>
       </div>
       <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(216px,1fr)); gap:clamp(14px,2vw,22px);">
@@ -409,7 +413,7 @@
         </div>
       </sc-if>
       <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
-        <div style="text-align:center; padding:60px 20px; color:#8A715A;">
+        <div style="text-align:center; padding:60px 20px; color:#7C6651;">
           <div style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:22px; color:#5E4632;">No encontramos ese título… todavía.</div>
           <p style="margin:10px 0 0; font-size:15px;">Escríbenos por WhatsApp y lo buscamos para ti.</p>
           <a sc-camel-href="{{ waGeneral }}" target="_blank" rel="noopener" style="display:inline-block; margin-top:18px; text-decoration:none; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:14px; padding:12px 22px; border-radius:999px;">Pedir un libro por WhatsApp</a>
@@ -424,11 +428,11 @@
   <div data-screen-label="Segunda historia">
     <section style="background:linear-gradient(180deg,#EFE2CB,#F4E9D8);">
       <div style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px);">
-        <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#9A7A1E;">Usados &amp; consignación</span>
+        <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#816619;">Usados &amp; consignación</span>
         <h2 style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#5E1F33; line-height:1.05; text-wrap:balance;">Libros con segunda historia</h2>
         <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:42em;">Algunos libros no terminan cuando alguien los cierra. En La Madriguera les damos la oportunidad de encontrar un nuevo lector.</p>
         <div style="margin-top:24px; display:flex; flex-wrap:wrap; gap:12px;">
-          <span onClick="{{ nav.vender }}" style="cursor:pointer; background:#9A7A1E; color:#FBF3E0; font-weight:700; font-size:14.5px; padding:13px 22px; border-radius:999px; transition:background .15s ease;" style-hover="background:#866916;">Quiero vender mis libros</span>
+          <span onClick="{{ nav.vender }}" style="cursor:pointer; background:#816619; color:#FBF3E0; font-weight:700; font-size:14.5px; padding:13px 22px; border-radius:999px; transition:background .15s ease;" style-hover="background:#866916;">Quiero vender mis libros</span>
         </div>
       </div>
     </section>
@@ -458,7 +462,7 @@
       <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:clamp(16px,2vw,24px);">
         <sc-for list="{{ ventaPasos }}" as="p" hint-placeholder-count="4">
           <div style="background:#FFFDF8; border:1px solid #EADBC4; border-radius:18px; padding:24px; box-shadow:0 8px 22px rgba(52,37,26,0.06); position:relative;">
-            <div style="width:42px; height:42px; border-radius:12px; background:#EFE2CB; display:flex; align-items:center; justify-content:center; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:20px; color:#9A7A1E;">{{ p.n }}</div>
+            <div style="width:42px; height:42px; border-radius:12px; background:#EFE2CB; display:flex; align-items:center; justify-content:center; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:20px; color:#816619;">{{ p.n }}</div>
             <h3 style="margin:16px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:19px; color:#5E1F33;">{{ p.title }}</h3>
             <p style="margin:8px 0 0; font-size:14px; line-height:1.5; color:#6E5946;">{{ p.text }}</p>
           </div>
@@ -467,7 +471,7 @@
       <div style="margin-top:34px; display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center; background:linear-gradient(150deg,#EFE2CB,#F4E9D8); border:1px solid #E3D2B8; border-radius:22px; padding:clamp(30px,4vw,48px);">
         <div style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:clamp(19px,2.2vw,26px); color:#5E1F33; max-width:22em;">Libros con segunda historia, esperando a su próximo lector.</div>
         <a sc-camel-href="{{ waVender }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; text-decoration:none; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:15.5px; padding:15px 28px; border-radius:999px; box-shadow:0 10px 24px rgba(94,31,51,0.3); transition:background .15s ease;" style-hover="background:#244031;"><span style="width:7px; height:7px; border-radius:50%; background:#9CD9A6;"></span>Registrar mis libros</a>
-        <span style="font-size:13px; color:#8A715A;">Te respondemos por WhatsApp y coordinamos la revisión.</span>
+        <span style="font-size:13px; color:#7C6651;">Te respondemos por WhatsApp y coordinamos la revisión.</span>
       </div>
     </section>
   </div>
@@ -481,7 +485,7 @@
       <h2 style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#5E1F33; line-height:1.05;">Merch para lectores</h2>
       <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:48em;">Objetos creados para quienes viven entre páginas: separadores, stickers, pines, tazas, camisetas, tote bags, productos personalizados y pequeñas magias lectoras.</p>
       <div style="margin-top:24px; position:relative; max-width:560px;">
-        <span style="position:absolute; left:18px; top:50%; transform:translateY(-50%); width:14px; height:14px; border:2px solid #A07F5E; border-radius:50%;"></span>
+        <span style="position:absolute; left:18px; top:50%; transform:translateY(-50%); width:14px; height:14px; border:2px solid #80654B; border-radius:50%;"></span>
         <input value="{{ merchSearch }}" onInput="{{ onMerchSearch }}" placeholder="Busca separadores, tazas, stickers…" style="width:100%; padding:14px 18px 14px 46px; font-family:'Outfit',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; border:1px solid #E3D2B8; border-radius:999px; outline:none; box-shadow:0 6px 18px rgba(52,37,26,0.06);">
       </div>
     </section>
@@ -493,14 +497,14 @@
             <span style="font-size:12px;">▾</span>
           </span>
           <div class="{{ merchListClass }}">
-            <div style="font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#A07F5E; padding:4px 8px 8px;">Categorías</div>
+            <div style="font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#80654B; padding:4px 8px 8px;">Categorías</div>
             <sc-for list="{{ merchNav }}" as="c" hint-placeholder-count="6">
               <span onClick="{{ c.onClick }}" style="{{ c.style }}"><span>{{ c.label }}</span><span style="opacity:.72; font-size:12.5px; font-weight:700;">{{ c.count }}</span></span>
             </sc-for>
           </div>
         </aside>
         <div style="flex:1; min-width:0;">
-          <div style="margin-bottom:16px;"><span style="font-size:13px; font-weight:700; color:#8A715A;">{{ merchShownCount }} productos</span></div>
+          <div style="margin-bottom:16px;"><span style="font-size:13px; font-weight:700; color:#7C6651;">{{ merchShownCount }} productos</span></div>
           <sc-if value="{{ merchHasResults }}" hint-placeholder-val="{{ true }}">
             <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:clamp(14px,2vw,22px);">
               <sc-for list="{{ merchAll }}" as="m" hint-placeholder-count="9">
@@ -509,7 +513,7 @@
             </div>
           </sc-if>
           <sc-if value="{{ merchNoResults }}" hint-placeholder-val="{{ false }}">
-            <div style="text-align:center; padding:50px 20px; color:#8A715A;">
+            <div style="text-align:center; padding:50px 20px; color:#7C6651;">
               <div style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:21px; color:#5E4632;">No encontramos ese producto… todavía.</div>
               <p style="margin:10px 0 0; font-size:15px;">Escríbenos por WhatsApp y te contamos qué tenemos o lo hacemos por encargo.</p>
               <a sc-camel-href="{{ waGeneral }}" target="_blank" rel="noopener" style="display:inline-block; margin-top:16px; text-decoration:none; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:14px; padding:12px 22px; border-radius:999px;">Preguntar por WhatsApp</a>
@@ -535,7 +539,7 @@
       </div>
     </section>
     <section style="max-width:1180px; margin:0 auto; padding:22px clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
-      <div style="margin-bottom:16px;"><span style="font-size:13px; font-weight:700; color:#8A715A;">{{ cafeShownCount }} en el menú</span></div>
+      <div style="margin-bottom:16px;"><span style="font-size:13px; font-weight:700; color:#7C6651;">{{ cafeShownCount }} en el menú</span></div>
       <sc-if value="{{ cafeHasResults }}" hint-placeholder-val="{{ true }}">
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:clamp(14px,2vw,22px);">
           <sc-for list="{{ cafeItems }}" as="m" hint-placeholder-count="6">
@@ -546,9 +550,9 @@
                 <span style="{{ m.dispStyle }}; position:absolute; left:10px; top:10px;">{{ m.disp }}</span>
               </div>
               <div style="padding:14px 14px 16px; display:flex; flex-direction:column; gap:7px; flex:1;">
-                <sc-if value="{{ m.hasCat }}" hint-placeholder-val="{{ false }}"><span style="font-size:10.5px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#A07F5E;">{{ m.cat }}</span></sc-if>
+                <sc-if value="{{ m.hasCat }}" hint-placeholder-val="{{ false }}"><span style="font-size:10.5px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#80654B;">{{ m.cat }}</span></sc-if>
                 <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:18px; line-height:1.15; color:#34251A; text-wrap:pretty;">{{ m.name }}</h3>
-                <sc-if value="{{ m.hasDesc }}" hint-placeholder-val="{{ false }}"><p style="margin:0; font-size:13px; line-height:1.45; color:#8A715A;">{{ m.desc }}</p></sc-if>
+                <sc-if value="{{ m.hasDesc }}" hint-placeholder-val="{{ false }}"><p style="margin:0; font-size:13px; line-height:1.45; color:#7C6651;">{{ m.desc }}</p></sc-if>
                 <div style="margin-top:auto; display:flex; align-items:center; justify-content:space-between; gap:8px; padding-top:6px;">
                   <sc-if value="{{ m.hasPrice }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:21px; color:#7C2F3E;">{{ m.priceLabel }}</span></sc-if>
                   <a sc-camel-href="{{ m.waHref }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:7px; text-decoration:none; background:transparent; color:#5E1F33; border:1.5px solid #B9C4B4; font-weight:700; font-size:12.5px; padding:9px 14px; border-radius:11px; transition:background .15s ease;" style-hover="background:#F2E3E2;"><span style="width:7px; height:7px; border-radius:50%; background:#2E6B41;"></span>Consultar</a>
@@ -559,7 +563,7 @@
         </div>
       </sc-if>
       <sc-if value="{{ cafeNoResults }}" hint-placeholder-val="{{ false }}">
-        <div style="text-align:center; padding:50px 20px; color:#8A715A;">
+        <div style="text-align:center; padding:50px 20px; color:#7C6651;">
           <div style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:21px; color:#5E4632;">Pronto publicaremos nuestro menú de temporada.</div>
           <p style="margin:10px 0 0; font-size:15px;">Mientras tanto, escríbenos por WhatsApp y te contamos qué tenemos hoy.</p>
           <a sc-camel-href="{{ waGeneral }}" target="_blank" rel="noopener" style="display:inline-block; margin-top:16px; text-decoration:none; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:14px; padding:12px 22px; border-radius:999px;">Preguntar por WhatsApp</a>
@@ -583,7 +587,7 @@
       </div>
     </section>
     <section style="max-width:1180px; margin:0 auto; padding:22px clamp(16px,4vw,32px) clamp(48px,6vw,80px);">
-      <div style="margin-bottom:16px;"><span style="font-size:13px; font-weight:700; color:#8A715A;">{{ espShownCount }} productos</span></div>
+      <div style="margin-bottom:16px;"><span style="font-size:13px; font-weight:700; color:#7C6651;">{{ espShownCount }} productos</span></div>
       <sc-if value="{{ espHasResults }}" hint-placeholder-val="{{ true }}">
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:clamp(14px,2vw,22px);">
           <sc-for list="{{ espItems }}" as="m" hint-placeholder-count="6">
@@ -592,7 +596,7 @@
         </div>
       </sc-if>
       <sc-if value="{{ espNoResults }}" hint-placeholder-val="{{ false }}">
-        <div style="text-align:center; padding:50px 20px; color:#8A715A;">
+        <div style="text-align:center; padding:50px 20px; color:#7C6651;">
           <div style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:21px; color:#5E4632;">Muy pronto nuestras ediciones especiales.</div>
           <p style="margin:10px 0 0; font-size:15px;">Escríbenos por WhatsApp y te avisamos apenas estén disponibles.</p>
           <a sc-camel-href="{{ waGeneral }}" target="_blank" rel="noopener" style="display:inline-block; margin-top:16px; text-decoration:none; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:14px; padding:12px 22px; border-radius:999px;">Preguntar por WhatsApp</a>
@@ -673,7 +677,7 @@
       <div style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px);">
         <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7C2F3E;">Nosotros</span>
         <h2 style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#5E1F33; line-height:1.05; text-wrap:balance;">Nuestra historia</h2>
-        <p style="margin:14px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:clamp(17px,2vw,21px); color:#9A7A1E;">Una casa para quienes viven entre páginas.</p>
+        <p style="margin:14px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:clamp(17px,2vw,21px); color:#816619;">Una casa para quienes viven entre páginas.</p>
       </div>
     </section>
     <section style="max-width:1180px; margin:0 auto; padding:clamp(34px,4vw,56px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:clamp(28px,4vw,52px); align-items:start;">
@@ -728,18 +732,18 @@
         <div style="margin-top:26px; display:flex; flex-direction:column; gap:16px;">
           <div style="display:flex; gap:13px; align-items:flex-start;">
             <span style="width:10px; height:10px; border-radius:50%; background:#7C2F3E; margin-top:6px; flex-shrink:0;"></span>
-            <div><div style="font-weight:800; font-size:13px; letter-spacing:.04em; text-transform:uppercase; color:#A07F5E;">Dirección</div><div style="font-size:16px; color:#3A2C1F; margin-top:3px;">Urdesa, Circunvalación Sur 632 y Ficus<br>Guayaquil, Ecuador</div></div>
+            <div><div style="font-weight:800; font-size:13px; letter-spacing:.04em; text-transform:uppercase; color:#80654B;">Dirección</div><div style="font-size:16px; color:#3A2C1F; margin-top:3px;">Urdesa, Circunvalación Sur 632 y Ficus<br>Guayaquil, Ecuador</div></div>
           </div>
           <div style="display:flex; gap:13px; align-items:flex-start;">
             <span style="width:10px; height:10px; border-radius:50%; background:#5E1F33; margin-top:6px; flex-shrink:0;"></span>
-            <div><div style="font-weight:800; font-size:13px; letter-spacing:.04em; text-transform:uppercase; color:#A07F5E;">Horario</div><div style="font-size: 16px; color: #3A2C1F; margin-top: 3px; font-family: 'Outfit',sans-serif">Miércoles a sábado · 12:00–20:00<br>Domingos · 10:00–18:00</div></div>
+            <div><div style="font-weight:800; font-size:13px; letter-spacing:.04em; text-transform:uppercase; color:#80654B;">Horario</div><div style="font-size: 16px; color: #3A2C1F; margin-top: 3px; font-family: 'Outfit',sans-serif">Miércoles a sábado · 12:00–20:00<br>Domingos · 10:00–18:00</div></div>
           </div>
         </div>
         <div style="margin-top:28px; display:flex; flex-wrap:wrap; gap:11px;">
           <a sc-camel-href="{{ mapsHref }}" target="_blank" rel="noopener" style="text-decoration: none; background: #5E1F33; color: #F7EFE2; font-weight: 700; font-size: 14px; padding: 12px 20px; border-radius: 999px; transition: background .15s ease; font-family: 'Outfit',sans-serif" style-hover="background:#244031;">Google Maps</a>
           <a sc-camel-href="{{ waGeneral }}" target="_blank" rel="noopener" style="text-decoration:none; background:transparent; color:#5E1F33; font-weight:700; font-size:14px; padding:11px 19px; border-radius:999px; border:1.5px solid #B9C4B4; transition:background .15s ease;" style-hover="background:#F2E3E2;">WhatsApp</a>
           <a sc-camel-href="{{ igHref }}" target="_blank" rel="noopener" style="text-decoration:none; background:transparent; color:#7C2F3E; font-weight:700; font-size:14px; padding:11px 19px; border-radius:999px; border:1.5px solid #E0AE95; transition:background .15s ease;" style-hover="background:#F6E3D5;">Instagram</a>
-          <a sc-camel-href="{{ ttHref }}" target="_blank" rel="noopener" style="text-decoration:none; background:transparent; color:#9A7A1E; font-weight:700; font-size:14px; padding:11px 19px; border-radius:999px; border:1.5px solid #D9BC77; transition:background .15s ease;" style-hover="background:#F1E6CF;">TikTok</a><a sc-camel-href="{{ fbHref }}" target="_blank" rel="noopener" style="text-decoration:none; background:transparent; color:#9A7A1E; font-weight:700; font-size:14px; padding:11px 19px; border-radius:999px; border:1.5px solid #D9BC77; transition:background .15s ease;" style-hover="background:#F1E6CF;">Facebook</a>
+          <a sc-camel-href="{{ ttHref }}" target="_blank" rel="noopener" style="text-decoration:none; background:transparent; color:#816619; font-weight:700; font-size:14px; padding:11px 19px; border-radius:999px; border:1.5px solid #D9BC77; transition:background .15s ease;" style-hover="background:#F1E6CF;">TikTok</a><a sc-camel-href="{{ fbHref }}" target="_blank" rel="noopener" style="text-decoration:none; background:transparent; color:#816619; font-weight:700; font-size:14px; padding:11px 19px; border-radius:999px; border:1.5px solid #D9BC77; transition:background .15s ease;" style-hover="background:#F1E6CF;">Facebook</a>
         </div>
       </div>
       <div style="position:relative; aspect-ratio:3/4; border-radius:22px; overflow:hidden; border:1px solid #E3D2B8; box-shadow:0 24px 50px rgba(52,37,26,0.18); background:#E7D8BD;">
@@ -805,7 +809,7 @@
         <span style="font-size:12.5px; color:#9C8E78;">© {{ year }} La Madriguera Specialty Coffee &amp; Books</span>
         <div style="display:flex; align-items:center; gap:16px;">
           <span style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:13.5px; color:#9C8E78;">Lleva contigo una pequeña magia de La Madriguera.</span>
-          <span onClick="{{ openPw }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#6E6353; border:1px solid rgba(232,217,194,0.18); padding:5px 11px; border-radius:999px; transition:color .15s ease;" style-hover="color:#C9A24B;">Administrar</span>
+          <span onClick="{{ openPw }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#92846F; border:1px solid rgba(232,217,194,0.18); padding:5px 11px; border-radius:999px; transition:color .15s ease;" style-hover="color:#C9A24B;">Administrar</span>
         </div>
       </div>
     </div>
@@ -852,19 +856,19 @@
     <!-- RESUMEN -->
     <div style="margin-bottom:26px; display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px;">
       <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:14px; padding:15px 18px;">
-        <div style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#8A715A;">Pedidos nuevos</div>
+        <div style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#7C6651;">Pedidos nuevos</div>
         <div style="margin-top:4px; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:27px; color:#93304A;">{{ pedidosNuevos }}</div>
       </div>
       <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:14px; padding:15px 18px;">
-        <div style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#8A715A;">Ventas entregadas</div>
+        <div style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#7C6651;">Ventas entregadas</div>
         <div style="margin-top:4px; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:27px; color:#2E6B41;">{{ ventasEntregadas }}</div>
       </div>
       <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:14px; padding:15px 18px;">
-        <div style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#8A715A;">Libros publicados</div>
+        <div style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#7C6651;">Libros publicados</div>
         <div style="margin-top:4px; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:27px; color:#5E1F33;">{{ librosCount }}</div>
       </div>
       <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:14px; padding:15px 18px;">
-        <div style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#8A715A;">Merch publicado</div>
+        <div style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#7C6651;">Merch publicado</div>
         <div style="margin-top:4px; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:27px; color:#7C2F3E;">{{ merchCount }}</div>
       </div>
     </div>
@@ -887,7 +891,7 @@
       <div style="margin-bottom:16px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;"><strong>Truco:</strong> escribe el <strong>ISBN</strong> (o pulsa «📖 Completar») y traemos solos el título, autor, editorial, portada y sinopsis. Elige una <strong>Categoría</strong> para cada libro (escribe una nueva o elígela de la lista): así aparece en los filtros del catálogo. La <strong>Sinopsis</strong> se muestra en la ficha del libro. Activa <strong>★ Recomendado</strong> para destacarlo en el inicio y ordénalos con las flechas. Los libros <strong>Vendido</strong> (o con stock 0) dejan de mostrarse. Si llenas <strong>Precio antes</strong>, se muestra la oferta con el % de descuento.</div>
       <datalist id="lm-bookcats"><sc-for list="{{ bookCatOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.v }}"></option></sc-for></datalist>
       <div style="margin-bottom:22px; position:relative; max-width:460px;">
-        <span style="position:absolute; left:16px; top:50%; transform:translateY(-50%); width:13px; height:13px; border:2px solid #A07F5E; border-radius:50%;"></span>
+        <span style="position:absolute; left:16px; top:50%; transform:translateY(-50%); width:13px; height:13px; border:2px solid #80654B; border-radius:50%;"></span>
         <input value="{{ aSearch }}" onInput="{{ onASearch }}" placeholder="Buscar por título, autor o código…" style="width:100%; padding:12px 16px 12px 42px; font-family:'Outfit',sans-serif; font-size:14.5px; color:#34251A; background:#FFFDF8; border:1px solid #E3D2B8; border-radius:999px; outline:none;">
       </div>
 
@@ -898,15 +902,15 @@
             <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:21px; color:#5E1F33;">Carga masiva de libros</h3>
             <p style="margin:6px 0 0; font-size:13.5px; color:#6E5946; line-height:1.5; max-width:46em;">Copia las filas desde tu Excel o Google Sheets y <strong>pégalas</strong> abajo, o sube un archivo CSV. Las fotos se cargan después, haciendo click en la portada de cada libro.</p>
           </div>
-          <span onClick="{{ closeBulk }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#8A715A; padding:6px 12px; border-radius:999px; border:1px solid #E3D2B8;" style-hover="background:#F0E6D2;">Cerrar ✕</span>
+          <span onClick="{{ closeBulk }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#7C6651; padding:6px 12px; border-radius:999px; border:1px solid #E3D2B8;" style-hover="background:#F0E6D2;">Cerrar ✕</span>
         </div>
         <div style="margin-top:14px; background:#F0E6D2; border-radius:10px; padding:12px 15px; font-size:12.5px; color:#5E4632; line-height:1.6;">
           <strong>Orden de columnas:</strong> Título · Autor · Género · Categoría · Precio · Estado · Disponibilidad · ISBN · Editorial (últimas dos opcionales)<br>
-          <span style="color:#8A715A;">Lo más fácil: descarga la plantilla, llénala en Excel/Google Sheets y súbela (o copia las filas y pégalas). Acepta separación por comas, punto y coma o tabulación. Si un título tiene comas, ponlo entre "comillas". Estado: Nuevo / Usado excelente / Usado bueno / Con detalles visibles · Disponibilidad: Disponible / Última unidad / Reservado / Oferta. Si dejas un campo vacío usamos «Nuevo» y «Disponible». El ISBN ayuda a que «Portadas automáticas» encuentre la edición exacta.</span>
+          <span style="color:#7C6651;">Lo más fácil: descarga la plantilla, llénala en Excel/Google Sheets y súbela (o copia las filas y pégalas). Acepta separación por comas, punto y coma o tabulación. Si un título tiene comas, ponlo entre "comillas". Estado: Nuevo / Usado excelente / Usado bueno / Con detalles visibles · Disponibilidad: Disponible / Última unidad / Reservado / Oferta. Si dejas un campo vacío usamos «Nuevo» y «Disponible». El ISBN ayuda a que «Portadas automáticas» encuentre la edición exacta.</span>
         </div>
         <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
           <span onClick="{{ downloadTemplate }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#5E1F33; padding:9px 16px; border-radius:999px; border:1.5px solid #B9C4B4;" style-hover="background:#F2E3E2;">⬇ Descargar plantilla CSV</span>
-          <span onClick="{{ pickBulkFile }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#9A7A1E; padding:9px 16px; border-radius:999px; border:1.5px solid #D9BC77;" style-hover="background:#F1E6CF;">📄 Subir archivo CSV</span>
+          <span onClick="{{ pickBulkFile }}" style="cursor:pointer; font-size:13px; font-weight:800; color:#816619; padding:9px 16px; border-radius:999px; border:1.5px solid #D9BC77;" style-hover="background:#F1E6CF;">📄 Subir archivo CSV</span>
         </div>
         <textarea value="{{ bulkText }}" onInput="{{ onBulkText }}" placeholder="Pega aquí las filas copiadas de tu hoja de cálculo (una por línea)…" style="margin-top:14px; width:100%; min-height:150px; resize:vertical; padding:13px 15px; border:1px solid #E3D2B8; border-radius:10px; font-family:ui-monospace,Menlo,monospace; font-size:13px; line-height:1.6; color:#34251A; background:#FFFDF8; outline:none;"></textarea>
         <sc-if value="{{ bulkHasErr }}" hint-placeholder-val="{{ false }}">
@@ -918,23 +922,23 @@
             <div style="border:1px solid #E3D2B8; border-radius:10px; overflow:hidden;">
               <sc-for list="{{ bulkPreview }}" as="r" hint-placeholder-count="3">
                 <div style="display:grid; grid-template-columns:28px 1fr auto; gap:12px; align-items:center; padding:10px 14px; border-top:1px solid #F0E6D2;">
-                  <span style="font-family:ui-monospace,Menlo,monospace; font-size:12px; color:#A07F5E;">{{ r.n }}</span>
+                  <span style="font-family:ui-monospace,Menlo,monospace; font-size:12px; color:#80654B;">{{ r.n }}</span>
                   <div style="min-width:0;">
                     <div style="font-weight:700; font-size:14px; color:#34251A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.title }}</div>
-                    <div style="font-size:12.5px; color:#8A715A; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.sub }}</div>
+                    <div style="font-size:12.5px; color:#7C6651; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ r.sub }}</div>
                   </div>
                   <span style="font-weight:800; font-size:13.5px; color:#2E6B41;">{{ r.priceLabel }}</span>
                 </div>
               </sc-for>
             </div>
             <sc-if value="{{ bulkMoreShow }}" hint-placeholder-val="{{ false }}">
-              <div style="margin-top:8px; font-size:12.5px; color:#8A715A;">…y {{ bulkMore }} más.</div>
+              <div style="margin-top:8px; font-size:12.5px; color:#7C6651;">…y {{ bulkMore }} más.</div>
             </sc-if>
           </div>
         </sc-if>
         <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
           <span onClick="{{ commitBulk }}" style="cursor:pointer; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:14.5px; padding:13px 26px; border-radius:999px; box-shadow:0 6px 16px rgba(94,31,51,0.25);" style-hover="background:#244031;">Agregar {{ bulkCount }} libros</span>
-          <span onClick="{{ closeBulk }}" style="cursor:pointer; font-size:13.5px; font-weight:700; color:#8A715A; padding:11px 18px;">Cancelar</span>
+          <span onClick="{{ closeBulk }}" style="cursor:pointer; font-size:13.5px; font-weight:700; color:#7C6651; padding:11px 18px;">Cancelar</span>
         </div>
       </div>
       </sc-if>
@@ -944,7 +948,7 @@
           <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
             <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; flex-wrap:wrap;">
               <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                <span style="font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:#8A715A; background:#F0E6D2; padding:4px 9px; border-radius:6px;">{{ l.code }}</span>
+                <span style="font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:#7C6651; background:#F0E6D2; padding:4px 9px; border-radius:6px;">{{ l.code }}</span>
                 <span onClick="{{ l.onToggleRec }}" title="Marcar como recomendado" style="{{ l.recPillStyle }}">{{ l.recPillLabel }}</span>
                 <sc-if value="{{ l.recomendado }}" hint-placeholder-val="{{ false }}">
                   <span onClick="{{ l.onRecUp }}" title="Subir en recomendados" style="cursor:pointer; font-size:13px; font-weight:800; color:#5E1F33; padding:5px 9px; border-radius:8px; border:1px solid #E3D2B8; line-height:1;" style-hover="background:#F2E3E2;">↑</span>
@@ -959,12 +963,12 @@
             <div style="display:grid; grid-template-columns:110px 1fr; gap:20px; align-items:start;">
               <div style="display:flex; flex-direction:column; gap:8px;">
                 <div onClick="{{ l.onPick }}" title="Click para subir la portada" style="position:relative; width:110px; aspect-ratio:3/4; border-radius:10px; overflow:hidden; border:2px dashed #D9BC77; background:#F7EFE2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
-                  <span style="font-size:11px; color:#A07F5E; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>portada</span>
+                  <span style="font-size:11px; color:#80654B; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>portada</span>
                   <sc-if value="{{ l.hasImg }}" hint-placeholder-val="{{ false }}">
                     <div style="{{ l.imgStyle }}"></div>
                   </sc-if>
                 </div>
-                <span onClick="{{ l.onFindCover }}" style="cursor:pointer; font-size:11.5px; font-weight:800; color:#9A7A1E; text-align:center; border:1px solid #D9BC77; border-radius:999px; padding:6px 8px;" style-hover="background:#F1E6CF;">🔍 Buscar portada</span>
+                <span onClick="{{ l.onFindCover }}" style="cursor:pointer; font-size:11.5px; font-weight:800; color:#816619; text-align:center; border:1px solid #D9BC77; border-radius:999px; padding:6px 8px;" style-hover="background:#F1E6CF;">🔍 Buscar portada</span>
                 <span onClick="{{ l.onFindSinopsis }}" style="cursor:pointer; font-size:11.5px; font-weight:800; color:#5E1F33; text-align:center; border:1px solid #B9C4B4; border-radius:999px; padding:6px 8px;" style-hover="background:#F2E3E2;">✍️ Buscar sinopsis</span>
                 <input value="{{ l.imgUrlVal }}" onChange="{{ l.onImgUrl }}" placeholder="o pega enlace…" title="Pega aquí el enlace (URL) de la portada, por ejemplo https://lamadriguera.ec/portadas/mi-libro.jpg" style="width:100%; box-sizing:border-box; padding:6px 8px; border:1px solid #D9BC77; border-radius:8px; font-size:11px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 <sc-if value="{{ l.hasImg }}" hint-placeholder-val="{{ false }}">
@@ -973,46 +977,46 @@
               </div>
               <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px;">
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Título</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Título</label>
                   <input value="{{ l.title }}" onChange="{{ l.onTitle }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Autor</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Autor</label>
                   <input value="{{ l.author }}" onChange="{{ l.onAuthor }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Editorial</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Editorial</label>
                   <input value="{{ l.editorial }}" onChange="{{ l.onEditorial }}" placeholder="Planeta, Penguin, Norma…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Categoría</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Categoría</label>
                   <input value="{{ l.cat }}" onChange="{{ l.onCat }}" list="lm-bookcats" placeholder="Elige o escribe una nueva…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Género</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Género</label>
                   <input value="{{ l.genre }}" onChange="{{ l.onGenre }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">ISBN</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">ISBN</label>
                   <div style="display:flex; gap:7px;">
                     <input value="{{ l.isbn }}" onChange="{{ l.onIsbn }}" inputmode="numeric" placeholder="978… y completamos el libro solo" style="flex:1; min-width:0; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                     <span onClick="{{ l.onFillIsbn }}" title="Buscar título, autor, editorial, portada y sinopsis por ISBN" style="flex-shrink:0; cursor:pointer; display:flex; align-items:center; font-size:12.5px; font-weight:800; color:#5E1F33; border:1.5px solid #B9C4B4; border-radius:8px; padding:0 12px; white-space:nowrap;" style-hover="background:#F2E3E2;">📖 Completar</span>
                   </div>
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio ($)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Precio ($)</label>
                   <input value="{{ l.price }}" onChange="{{ l.onPrice }}" type="number" min="0" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio antes ($)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Precio antes ($)</label>
                   <input value="{{ l.priceOldVal }}" onChange="{{ l.onPriceOld }}" type="number" min="0" placeholder="Solo si hay oferta" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Stock (unidades)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Stock (unidades)</label>
                   <input value="{{ l.stockVal }}" onChange="{{ l.onStock }}" type="number" min="0" placeholder="Vacío = sin control" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Estado</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Estado</label>
                   <select value="{{ l.estado }}" onChange="{{ l.onEstado }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                     <option value="Nuevo">Nuevo</option>
                     <option value="Usado excelente">Usado excelente</option>
@@ -1021,7 +1025,7 @@
                   </select>
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Disponibilidad</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Disponibilidad</label>
                   <select value="{{ l.disp }}" onChange="{{ l.onDisp }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                     <option value="Disponible">Disponible</option>
                     <option value="Última unidad">Última unidad</option>
@@ -1032,7 +1036,7 @@
                   </select>
                 </div>
                 <div style="grid-column:1/-1;">
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Sinopsis · descripción breve (se muestra en la ficha del libro)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Sinopsis · descripción breve (se muestra en la ficha del libro)</label>
                   <textarea value="{{ l.sinopsis }}" onChange="{{ l.onSinopsis }}" rows="3" placeholder="Ej. Una novela de fantasía ambientada en un mundo donde los recuerdos pueden comprarse y venderse. Ideal para lectores que disfrutan de aventuras con misterio y personajes entrañables." style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none; resize:vertical; line-height:1.5;"></textarea>
                 </div>
               </div>
@@ -1048,10 +1052,10 @@
     <div data-screen-label="Admin Consignación">
       <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:10px;">
         <div>
-          <h2 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:30px; color:#9A7A1E;">Libros en consignación</h2>
+          <h2 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:30px; color:#816619;">Libros en consignación</h2>
           <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ consigCount }} registros · libros de segunda mano que te dejan para vender.</p>
         </div>
-        <span onClick="{{ addConsig }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#9A7A1E; color:#FBF3E0; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(154,122,30,0.3);" style-hover="background:#866916;">+ Registrar libro recibido</span>
+        <span onClick="{{ addConsig }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#816619; color:#FBF3E0; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(154,122,30,0.3);" style-hover="background:#866916;">+ Registrar libro recibido</span>
       </div>
       <div style="margin-bottom:22px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">Cuando alguien te deja libros en el local, regístralos aquí con los datos del dueño. El <strong>Estado</strong> es la condición del libro (Nuevo, Usado…) y es lo que ve el cliente. La <strong>Situación de venta</strong> controla la publicación: solo los que marques <strong>En venta</strong> aparecen en la página, en <strong>Segunda historia</strong>; cuando se venda, cámbialo a <strong>Vendido</strong>. El <strong>Pago al dueño</strong> se lleva aparte, con su propio botón, cuando le entregues su parte.</div>
       <datalist id="lm-bookcats-consig"><sc-for list="{{ bookCatOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.v }}"></option></sc-for></datalist>
@@ -1061,7 +1065,7 @@
           <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:20px; box-shadow:0 6px 18px rgba(52,37,26,0.05);">
             <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;">
               <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                <span style="font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:#8A715A; background:#F0E6D2; padding:4px 9px; border-radius:6px;">{{ c.code }}</span>
+                <span style="font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:#7C6651; background:#F0E6D2; padding:4px 9px; border-radius:6px;">{{ c.code }}</span>
                 <span style="{{ c.condBadge }}">{{ c.condicion }}</span>
                 <span style="{{ c.estadoBadge }}">{{ c.estado }}</span>
                 <sc-if value="{{ c.pagado }}" hint-placeholder-val="{{ false }}"><span style="{{ c.pagoBadge }}">✓ Pagado al dueño</span></sc-if>
@@ -1071,12 +1075,12 @@
             <div style="display:grid; grid-template-columns:110px 1fr; gap:20px; align-items:start;">
               <div style="display:flex; flex-direction:column; gap:8px;">
                 <div onClick="{{ c.onPick }}" title="Click para subir la portada" style="position:relative; width:110px; aspect-ratio:3/4; border-radius:10px; overflow:hidden; border:2px dashed #D9BC77; background:#F7EFE2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
-                  <span style="font-size:11px; color:#A07F5E; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>portada</span>
+                  <span style="font-size:11px; color:#80654B; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>portada</span>
                   <sc-if value="{{ c.hasImg }}" hint-placeholder-val="{{ false }}">
                     <div style="{{ c.imgStyle }}"></div>
                   </sc-if>
                 </div>
-                <span onClick="{{ c.onFindCover }}" style="cursor:pointer; font-size:11.5px; font-weight:800; color:#9A7A1E; text-align:center; border:1px solid #D9BC77; border-radius:999px; padding:6px 8px;" style-hover="background:#F1E6CF;">🔍 Buscar portada</span>
+                <span onClick="{{ c.onFindCover }}" style="cursor:pointer; font-size:11.5px; font-weight:800; color:#816619; text-align:center; border:1px solid #D9BC77; border-radius:999px; padding:6px 8px;" style-hover="background:#F1E6CF;">🔍 Buscar portada</span>
                 <span onClick="{{ c.onFindSinopsis }}" style="cursor:pointer; font-size:11.5px; font-weight:800; color:#5E1F33; text-align:center; border:1px solid #B9C4B4; border-radius:999px; padding:6px 8px;" style-hover="background:#F2E3E2;">✍️ Buscar sinopsis</span>
                 <sc-if value="{{ c.hasImg }}" hint-placeholder-val="{{ false }}">
                   <span onClick="{{ c.onClearImg }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span>
@@ -1084,50 +1088,50 @@
               </div>
               <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px;">
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Título</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Título</label>
                   <input value="{{ c.title }}" onChange="{{ c.onTitle }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Autor</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Autor</label>
                   <input value="{{ c.author }}" onChange="{{ c.onAuthor }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Editorial</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Editorial</label>
                   <input value="{{ c.editorial }}" onChange="{{ c.onEditorial }}" placeholder="Planeta, Penguin, Norma…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Género</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Género</label>
                   <input value="{{ c.genre }}" onChange="{{ c.onGenre }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Categoría</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Categoría</label>
                   <input value="{{ c.cat }}" onChange="{{ c.onCat }}" list="lm-bookcats-consig" placeholder="Elige o escribe una nueva…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">ISBN</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">ISBN</label>
                   <div style="display:flex; gap:7px;">
                     <input value="{{ c.isbn }}" onChange="{{ c.onIsbn }}" inputmode="numeric" placeholder="978… y completamos el libro solo" style="flex:1; min-width:0; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                     <span onClick="{{ c.onFillIsbn }}" title="Buscar título, autor, editorial, portada y sinopsis por ISBN" style="flex-shrink:0; cursor:pointer; display:flex; align-items:center; font-size:12.5px; font-weight:800; color:#5E1F33; border:1.5px solid #B9C4B4; border-radius:8px; padding:0 12px; white-space:nowrap;" style-hover="background:#F2E3E2;">📖 Completar</span>
                   </div>
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Dueño del libro</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Dueño del libro</label>
                   <input value="{{ c.owner }}" onChange="{{ c.onOwner }}" placeholder="Nombre de quien lo dejó" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Contacto del dueño</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Contacto del dueño</label>
                   <input value="{{ c.contact }}" onChange="{{ c.onContact }}" placeholder="Teléfono o WhatsApp" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio de venta ($)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Precio de venta ($)</label>
                   <input value="{{ c.price }}" onChange="{{ c.onPrice }}" type="number" min="0" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Pago al dueño ($)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Pago al dueño ($)</label>
                   <input value="{{ c.payout }}" onChange="{{ c.onPayout }}" type="number" min="0" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Estado (condición del libro)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Estado (condición del libro)</label>
                   <select value="{{ c.condicion }}" onChange="{{ c.onCondicion }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                     <option value="Nuevo">Nuevo</option>
                     <option value="Usado excelente">Usado excelente</option>
@@ -1136,7 +1140,7 @@
                   </select>
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Situación de venta</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Situación de venta</label>
                   <select value="{{ c.estado }}" onChange="{{ c.onEstado }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                     <option value="Recibido">Recibido (aún no publicado)</option>
                     <option value="En venta">En venta (visible en la página)</option>
@@ -1144,7 +1148,7 @@
                   </select>
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Pago al dueño</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Pago al dueño</label>
                   <span onClick="{{ c.onTogglePagado }}" style="{{ c.pagoPillStyle }}">{{ c.pagoPillLabel }}</span>
                 </div>
               </div>
@@ -1177,7 +1181,7 @@
             <div style="display:grid; grid-template-columns:130px 1fr; gap:20px; align-items:start;">
               <div style="display:flex; flex-direction:column; gap:8px;">
                 <div onClick="{{ m.onPick }}" title="Click para subir la foto" style="position:relative; width:130px; aspect-ratio:4/3; border-radius:10px; overflow:hidden; border:2px dashed #D9BC77; background:#F7EFE2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
-                  <span style="font-size:11px; color:#A07F5E; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>foto</span>
+                  <span style="font-size:11px; color:#80654B; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>foto</span>
                   <sc-if value="{{ m.hasImg }}" hint-placeholder-val="{{ false }}">
                     <div style="{{ m.imgStyle }}"></div>
                   </sc-if>
@@ -1188,27 +1192,27 @@
               </div>
               <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px;">
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Nombre</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Nombre</label>
                   <input value="{{ m.name }}" onChange="{{ m.onName }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Categoría</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Categoría</label>
                   <input value="{{ m.cat }}" onChange="{{ m.onCat }}" list="lm-merchcats" placeholder="Elige o escribe una nueva…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio ($)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Precio ($)</label>
                   <input value="{{ m.price }}" onChange="{{ m.onPrice }}" type="number" min="0" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio antes ($)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Precio antes ($)</label>
                   <input value="{{ m.priceOldVal }}" onChange="{{ m.onPriceOld }}" type="number" min="0" placeholder="Solo si hay oferta" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Stock (unidades)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Stock (unidades)</label>
                   <input value="{{ m.stockVal }}" onChange="{{ m.onStock }}" type="number" min="0" placeholder="Vacío = sin control" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Disponibilidad</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Disponibilidad</label>
                   <select value="{{ m.disp }}" onChange="{{ m.onDisp }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                     <option value="Disponible">Disponible</option>
                     <option value="Última unidad">Última unidad</option>
@@ -1217,7 +1221,7 @@
                   </select>
                 </div>
                 <div style="grid-column:1/-1;">
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Descripción</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Descripción</label>
                   <input value="{{ m.desc }}" onChange="{{ m.onDesc }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
               </div>
@@ -1250,26 +1254,26 @@
             <div style="display:grid; grid-template-columns:130px 1fr; gap:20px; align-items:start;">
               <div style="display:flex; flex-direction:column; gap:8px;">
                 <div onClick="{{ p.onPick }}" title="Click para subir la foto" style="position:relative; width:130px; aspect-ratio:4/3; border-radius:10px; overflow:hidden; border:2px dashed #D9BC77; background:#F7EFE2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
-                  <span style="font-size:11px; color:#A07F5E; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>foto</span>
+                  <span style="font-size:11px; color:#80654B; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>foto</span>
                   <sc-if value="{{ p.hasImg }}" hint-placeholder-val="{{ false }}"><div style="{{ p.imgStyle }}"></div></sc-if>
                 </div>
                 <sc-if value="{{ p.hasImg }}" hint-placeholder-val="{{ false }}"><span onClick="{{ p.onClearImg }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span></sc-if>
               </div>
               <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px;">
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Nombre</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Nombre</label>
                   <input value="{{ p.name }}" onChange="{{ p.onName }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Categoría</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Categoría</label>
                   <input value="{{ p.cat }}" onChange="{{ p.onCat }}" list="lm-cafecats" placeholder="Platos de temporada, Bebidas…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio ($)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Precio ($)</label>
                   <input value="{{ p.price }}" onChange="{{ p.onPrice }}" type="number" min="0" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Disponibilidad</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Disponibilidad</label>
                   <select value="{{ p.disp }}" onChange="{{ p.onDisp }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                     <option value="Disponible">Disponible</option>
                     <option value="Por encargo">Por encargo</option>
@@ -1277,7 +1281,7 @@
                   </select>
                 </div>
                 <div style="grid-column:1/-1;">
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Descripción</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Descripción</label>
                   <input value="{{ p.desc }}" onChange="{{ p.onDesc }}" placeholder="Ingredientes o detalle breve" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
               </div>
@@ -1310,34 +1314,34 @@
             <div style="display:grid; grid-template-columns:130px 1fr; gap:20px; align-items:start;">
               <div style="display:flex; flex-direction:column; gap:8px;">
                 <div onClick="{{ p.onPick }}" title="Click para subir la foto" style="position:relative; width:130px; aspect-ratio:4/3; border-radius:10px; overflow:hidden; border:2px dashed #D9BC77; background:#F7EFE2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
-                  <span style="font-size:11px; color:#A07F5E; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>foto</span>
+                  <span style="font-size:11px; color:#80654B; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>foto</span>
                   <sc-if value="{{ p.hasImg }}" hint-placeholder-val="{{ false }}"><div style="{{ p.imgStyle }}"></div></sc-if>
                 </div>
                 <sc-if value="{{ p.hasImg }}" hint-placeholder-val="{{ false }}"><span onClick="{{ p.onClearImg }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C; text-align:center;">Quitar foto</span></sc-if>
               </div>
               <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px;">
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Nombre</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Nombre</label>
                   <input value="{{ p.name }}" onChange="{{ p.onName }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Categoría</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Categoría</label>
                   <input value="{{ p.cat }}" onChange="{{ p.onCat }}" list="lm-espcats" placeholder="Café en grano, Ediciones especiales…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio ($)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Precio ($)</label>
                   <input value="{{ p.price }}" onChange="{{ p.onPrice }}" type="number" min="0" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio antes ($)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Precio antes ($)</label>
                   <input value="{{ p.priceOldVal }}" onChange="{{ p.onPriceOld }}" type="number" min="0" placeholder="Solo si hay oferta" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Stock (unidades)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Stock (unidades)</label>
                   <input value="{{ p.stockVal }}" onChange="{{ p.onStock }}" type="number" min="0" placeholder="Vacío = sin control" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Disponibilidad</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Disponibilidad</label>
                   <select value="{{ p.disp }}" onChange="{{ p.onDisp }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                     <option value="Disponible">Disponible</option>
                     <option value="Última unidad">Última unidad</option>
@@ -1346,7 +1350,7 @@
                   </select>
                 </div>
                 <div style="grid-column:1/-1;">
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Descripción</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Descripción</label>
                   <input value="{{ p.desc }}" onChange="{{ p.onDesc }}" placeholder="Origen, notas de sabor, detalle…" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
               </div>
@@ -1376,12 +1380,12 @@
           <sc-for list="{{ resAdminEventos }}" as="re" hint-placeholder-count="3">
             <div style="display:flex; flex-direction:column; gap:8px;">
               <div onClick="{{ re.onPick }}" title="Click para subir la imagen" style="position:relative; width:100%; aspect-ratio:16/10; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F7EFE2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
-                <span style="font-size:11px; color:#A07F5E; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>imagen</span>
+                <span style="font-size:11px; color:#80654B; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>imagen</span>
                 <sc-if value="{{ re.hasImg }}" hint-placeholder-val="{{ false }}"><div style="{{ re.imgStyle }}"></div></sc-if>
               </div>
               <div>
                 <div style="font-size:14px; font-weight:800; color:#34251A; line-height:1.25;">{{ re.name }}</div>
-                <div style="font-size:12px; color:#8A715A; margin-top:2px;">{{ re.sub }}</div>
+                <div style="font-size:12px; color:#7C6651; margin-top:2px;">{{ re.sub }}</div>
               </div>
               <sc-if value="{{ re.hasImg }}" hint-placeholder-val="{{ false }}"><span onClick="{{ re.onClearImg }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C;">Quitar imagen</span></sc-if>
             </div>
@@ -1402,7 +1406,7 @@
             <div style="display:grid; grid-template-columns:150px 1fr; gap:20px; align-items:start;">
               <div style="display:flex; flex-direction:column; gap:8px;">
                 <div onClick="{{ e.onPick }}" title="Click para subir la imagen" style="position:relative; width:150px; aspect-ratio:16/10; border-radius:10px; overflow:hidden; border:2px dashed #D9BC77; background:#F7EFE2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
-                  <span style="font-size:11px; color:#A07F5E; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>imagen</span>
+                  <span style="font-size:11px; color:#80654B; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>imagen</span>
                   <sc-if value="{{ e.hasImg }}" hint-placeholder-val="{{ false }}">
                     <div style="{{ e.imgStyle }}"></div>
                   </sc-if>
@@ -1413,31 +1417,31 @@
               </div>
               <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px;">
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Nombre del evento</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Nombre del evento</label>
                   <input value="{{ e.name }}" onChange="{{ e.onName }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Fecha (texto)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Fecha (texto)</label>
                   <input value="{{ e.date }}" onChange="{{ e.onDate }}" placeholder="Vie 27 jun" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Fecha real (se oculta al pasar)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Fecha real (se oculta al pasar)</label>
                   <input value="{{ e.fechaVal }}" onChange="{{ e.onFecha }}" type="date" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Hora</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Hora</label>
                   <input value="{{ e.time }}" onChange="{{ e.onTime }}" placeholder="19:30" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Precio (texto)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Precio (texto)</label>
                   <input value="{{ e.price }}" onChange="{{ e.onPrice }}" placeholder="$12 o Gratis con consumo" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Cupos (texto)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Cupos (texto)</label>
                   <input value="{{ e.cupos }}" onChange="{{ e.onCupos }}" placeholder="8 cupos" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div style="grid-column:1/-1;">
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Qué incluye</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Qué incluye</label>
                   <input value="{{ e.includes }}" onChange="{{ e.onIncludes }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
               </div>
@@ -1464,15 +1468,15 @@
               </div>
               <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px;">
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Nombre del evento</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Nombre del evento</label>
                   <input value="{{ e.name }}" onChange="{{ e.onName }}" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Fecha real (cámbiala para reactivar)</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Fecha real (cámbiala para reactivar)</label>
                   <input value="{{ e.fechaVal }}" onChange="{{ e.onFecha }}" type="date" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
                 <div>
-                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Hora</label>
+                  <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Hora</label>
                   <input value="{{ e.time }}" onChange="{{ e.onTime }}" placeholder="19:30" style="width:100%; padding:10px 12px; border:1px solid #E3D2B8; border-radius:8px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
                 </div>
               </div>
@@ -1498,7 +1502,7 @@
         </sc-for>
       </div>
       <sc-if value="{{ pedidosEmpty }}" hint-placeholder-val="{{ true }}">
-        <div style="background:#FFFDF8; border:1px dashed #D9C7AC; border-radius:16px; padding:44px 20px; text-align:center; color:#8A715A;">
+        <div style="background:#FFFDF8; border:1px dashed #D9C7AC; border-radius:16px; padding:44px 20px; text-align:center; color:#7C6651;">
           <div style="width:50px; height:50px; margin:0 auto; border-radius:14px; background:#EAF2F6; display:flex; align-items:center; justify-content:center; font-size:24px;">🧾</div>
           <div style="margin-top:14px; font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:20px; color:#5E4632;">Aún no hay pedidos.</div>
           <p style="margin:8px 0 0; font-size:14px;">Cuando un cliente envíe su carrito o deje sus datos, aparecerá aquí al instante.</p>
@@ -1511,7 +1515,7 @@
               <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                 <span style="{{ p.canalBadge }}">{{ p.canal }}</span>
                 <span style="font-weight:800; font-size:15px; color:#34251A;">{{ p.tipo }}</span>
-                <span style="font-size:12.5px; color:#8A715A;">{{ p.fecha }}</span>
+                <span style="font-size:12.5px; color:#7C6651;">{{ p.fecha }}</span>
               </div>
               <div style="display:flex; align-items:center; gap:10px;">
                 <select value="{{ p.estado }}" onChange="{{ p.onEstado }}" style="padding:8px 12px; border:1px solid #E3D2B8; border-radius:999px; font-size:13px; font-weight:700; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
@@ -1525,19 +1529,19 @@
             </div>
             <div style="margin-top:14px; display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; align-items:start;">
               <div>
-                <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:4px;">Cliente</div>
+                <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:4px;">Cliente</div>
                 <div style="font-size:14.5px; color:#34251A; font-weight:600;">{{ p.clienteLabel }}</div>
                 <sc-if value="{{ p.hasCel }}" hint-placeholder-val="{{ false }}"><a sc-camel-href="{{ p.waCliente }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:6px; margin-top:6px; text-decoration:none; font-size:13px; font-weight:700; color:#2E6B41;"><span style="width:6px; height:6px; border-radius:50%; background:#2E6B41;"></span>{{ p.celular }}</a></sc-if>
                 <sc-if value="{{ p.hasEntrega }}" hint-placeholder-val="{{ false }}"><div style="margin-top:5px; font-size:12.5px; font-weight:700; color:#5A6472;">{{ p.entrega }}</div></sc-if>
                 <sc-if value="{{ p.hasPago }}" hint-placeholder-val="{{ false }}"><div style="margin-top:3px; font-size:12.5px; font-weight:700; color:#2E6B41;">💳 {{ p.pago }}</div></sc-if>
               </div>
               <div style="grid-column:span 2;">
-                <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:4px;">Detalle</div>
+                <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:4px;">Detalle</div>
                 <div style="font-size:14px; color:#3A2C1F; line-height:1.5;">{{ p.itemsLabel }}</div>
-                <sc-if value="{{ p.hasNota }}" hint-placeholder-val="{{ false }}"><div style="margin-top:5px; font-size:13px; color:#8A715A;">Nota: {{ p.nota }}</div></sc-if>
+                <sc-if value="{{ p.hasNota }}" hint-placeholder-val="{{ false }}"><div style="margin-top:5px; font-size:13px; color:#7C6651;">Nota: {{ p.nota }}</div></sc-if>
               </div>
               <div style="text-align:right;">
-                <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:4px;">Total</div>
+                <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:4px;">Total</div>
                 <div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:22px; color:#5E1F33;">{{ p.totalLabel }}</div>
               </div>
             </div>
@@ -1560,12 +1564,12 @@
           <sc-for list="{{ brandSlots }}" as="b" hint-placeholder-count="5">
             <div style="display:flex; flex-direction:column; gap:8px;">
               <div onClick="{{ b.onPick }}" title="Click para subir la imagen" style="position:relative; width:100%; aspect-ratio:4/3; border-radius:12px; overflow:hidden; border:2px dashed #D9BC77; background:#F7EFE2; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="border-color:#C9A24B; background:#F1E6CF;">
-                <span style="font-size:11px; color:#A07F5E; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>imagen</span>
+                <span style="font-size:11px; color:#80654B; font-weight:800; text-align:center; padding:0 8px; line-height:1.4;">Subir<br>imagen</span>
                 <sc-if value="{{ b.has }}" hint-placeholder-val="{{ false }}"><div style="{{ b.imgStyle }}"></div></sc-if>
               </div>
               <div>
                 <div style="font-size:13.5px; font-weight:800; color:#34251A;">{{ b.label }}</div>
-                <div style="font-size:11.5px; color:#8A715A;">{{ b.desc }}</div>
+                <div style="font-size:11.5px; color:#7C6651;">{{ b.desc }}</div>
               </div>
               <sc-if value="{{ b.has }}" hint-placeholder-val="{{ false }}"><span onClick="{{ b.onClear }}" style="cursor:pointer; font-size:11.5px; font-weight:700; color:#9A4A3C;">Quitar imagen</span></sc-if>
             </div>
@@ -1575,9 +1579,9 @@
 
       <div style="background:#FFFDF8; border:1px solid #E3D2B8; border-radius:16px; padding:24px; box-shadow:0 6px 18px rgba(52,37,26,0.05); display:flex; flex-direction:column; gap:18px;">
         <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Correo para recibir pedidos</label>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Correo para recibir pedidos</label>
           <input value="{{ cfgEmail }}" onChange="{{ onCfgEmail }}" placeholder="tucorreo@ejemplo.com" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
-          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Cuando un cliente envía un pedido del carrito (o consulta un libro), además de abrirse tu WhatsApp, te llega un correo con el detalle. <strong>La primera vez</strong> pulsa "Enviar correo de prueba" y confirma la activación en tu bandeja (revisa spam).</p>
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#7C6651;">Cuando un cliente envía un pedido del carrito (o consulta un libro), además de abrirse tu WhatsApp, te llega un correo con el detalle. <strong>La primera vez</strong> pulsa "Enviar correo de prueba" y confirma la activación en tu bandeja (revisa spam).</p>
         </div>
         <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
           <span onClick="{{ onTestEmail }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#5A6472; color:#F4F6F8; font-weight:800; font-size:13.5px; padding:11px 20px; border-radius:999px;" style-hover="background:#49525e;">Enviar correo de prueba</span>
@@ -1585,76 +1589,76 @@
         </div>
         <div style="height:1px; background:#EADBC4;"></div>
         <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Número de WhatsApp de la tienda</label>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Número de WhatsApp de la tienda</label>
           <input value="{{ cfgWhatsapp }}" onChange="{{ onCfgWhatsapp }}" placeholder="593960186336 (con código de país, sin +)" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
         </div>
         <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Calificación de Google (sello de confianza)</label>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Calificación de Google (sello de confianza)</label>
           <input value="{{ cfgGRating }}" onChange="{{ onCfgGRating }}" placeholder="4.8" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
           <input value="{{ cfgGReviews }}" onChange="{{ onCfgGReviews }}" placeholder="Link a tus reseñas de Google (opcional; si no, usa tu link de Maps)" style="margin-top:8px; width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
-          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Escribe tu calificación (ej. <strong>4.8</strong>) y aparecerá el sello «★ 4.8 en Google» en el inicio de tu página, con link a tus reseñas. Déjalo vacío para ocultarlo. Actualízalo tú misma si cambia.</p>
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#7C6651;">Escribe tu calificación (ej. <strong>4.8</strong>) y aparecerá el sello «★ 4.8 en Google» en el inicio de tu página, con link a tus reseñas. Déjalo vacío para ocultarlo. Actualízalo tú misma si cambia.</p>
         </div>
         <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Clave de Google Books (portadas y sinopsis)</label>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Clave de Google Books (portadas y sinopsis)</label>
           <input value="{{ cfgBooksKey }}" onChange="{{ onCfgBooksKey }}" placeholder="AIza… (clave API de Google Books)" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
-          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Sin clave, las búsquedas usan una cuota <strong>compartida</strong> que a veces se agota (error 429). Con tu clave gratuita tienes <strong>1.000 búsquedas diarias propias</strong>. Cómo crearla: <strong>console.cloud.google.com</strong> → elige tu proyecto <strong>adminpagweb</strong> → busca «Books API» → Habilitar → Credenciales → Crear credencial → Clave de API → cópiala y pégala aquí. (Recomendado: en la clave, «Restringir clave» → sitios web → agrega <strong>lamadriguera.ec</strong>.)</p>
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#7C6651;">Sin clave, las búsquedas usan una cuota <strong>compartida</strong> que a veces se agota (error 429). Con tu clave gratuita tienes <strong>1.000 búsquedas diarias propias</strong>. Cómo crearla: <strong>console.cloud.google.com</strong> → elige tu proyecto <strong>adminpagweb</strong> → busca «Books API» → Habilitar → Credenciales → Crear credencial → Clave de API → cópiala y pégala aquí. (Recomendado: en la clave, «Restringir clave» → sitios web → agrega <strong>lamadriguera.ec</strong>.)</p>
         </div>
         <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Google Analytics (ID de medición)</label>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Google Analytics (ID de medición)</label>
           <input value="{{ cfgGaId }}" onChange="{{ onCfgGaId }}" placeholder="G-XXXXXXXXXX" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
-          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Crea una propiedad gratis en <strong>analytics.google.com</strong>, copia el «ID de medición» (empieza con G-) y pégalo aquí. Medirás visitas, libros más vistos, carritos y pedidos. Estado: <strong>{{ gaStatus }}</strong></p>
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#7C6651;">Crea una propiedad gratis en <strong>analytics.google.com</strong>, copia el «ID de medición» (empieza con G-) y pégalo aquí. Medirás visitas, libros más vistos, carritos y pedidos. Estado: <strong>{{ gaStatus }}</strong></p>
         </div>
         <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Texto de «Nuestra historia»</label>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Texto de «Nuestra historia»</label>
           <textarea value="{{ cfgHistoria }}" onChange="{{ onCfgHistoria }}" rows="5" placeholder="Déjalo vacío para usar el texto que ya escribimos por ti. Escribe aquí si quieres contar tu historia con tus propias palabras." style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none; resize:vertical;"></textarea>
-          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Se muestra en la página <strong>Nosotros</strong>. Las fotos del local se suben arriba, en «Imágenes de la página» (Foto Nosotros 1 y 2).</p>
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#7C6651;">Se muestra en la página <strong>Nosotros</strong>. Las fotos del local se suben arriba, en «Imágenes de la página» (Foto Nosotros 1 y 2).</p>
         </div>
         <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Política de envíos</label>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Política de envíos</label>
           <textarea value="{{ cfgPolEnvio }}" onChange="{{ onCfgPolEnvio }}" rows="4" placeholder="Déjalo vacío para usar la política estándar que ya escribimos (retiro gratis, Guayaquil 24–48 h, nacional 2–4 días)." style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none; resize:vertical;"></textarea>
         </div>
         <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Política de cambios y devoluciones</label>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Política de cambios y devoluciones</label>
           <textarea value="{{ cfgPolCambios }}" onChange="{{ onCfgPolCambios }}" rows="4" placeholder="Déjalo vacío para usar la política estándar (3 días para cambios con comprobante, usados según ficha)." style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none; resize:vertical;"></textarea>
-          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Ambas políticas se muestran en la página <strong>Cómo comprar</strong>.</p>
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#7C6651;">Ambas políticas se muestran en la página <strong>Cómo comprar</strong>.</p>
         </div>
         <div style="height:1px; background:#EADBC4;"></div>
         <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Link de pago con tarjeta</label>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Link de pago con tarjeta</label>
           <input value="{{ cfgPayLink }}" onChange="{{ onCfgPayLink }}" placeholder="https://ppls.me/… (Payphone, De Una, PlacetoPay…)" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
-          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Si tienes un link de cobro (Payphone, De Una, etc.), pégalo aquí: el carrito mostrará el botón <strong>«Pagar ahora»</strong> cuando el cliente elija pago con tarjeta. El cliente escribe el monto total que le muestra el carrito.</p>
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#7C6651;">Si tienes un link de cobro (Payphone, De Una, etc.), pégalo aquí: el carrito mostrará el botón <strong>«Pagar ahora»</strong> cuando el cliente elija pago con tarjeta. El cliente escribe el monto total que le muestra el carrito.</p>
         </div>
         <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Datos para transferencia</label>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Datos para transferencia</label>
           <textarea value="{{ cfgPayTransfer }}" onChange="{{ onCfgPayTransfer }}" rows="4" placeholder="Banco Pichincha&#10;Cta. de ahorros 22XXXXXXXX&#10;Titular: … · Cédula: …&#10;Correo: lamadriguera.guayaquil@gmail.com" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none; resize:vertical;"></textarea>
-          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Estos datos se muestran en el carrito (con botón de copiar) cuando el cliente elige transferencia. Sin intermediarios ni comisiones.</p>
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#7C6651;">Estos datos se muestran en el carrito (con botón de copiar) cuando el cliente elige transferencia. Sin intermediarios ni comisiones.</p>
         </div>
         <div style="height:1px; background:#EADBC4;"></div>
         <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Conexión con tu app de reservas</label>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Conexión con tu app de reservas</label>
           <input value="{{ cfgResKey }}" onChange="{{ onCfgResKey }}" placeholder="Pega aquí la clave API (AIza…) del proyecto la-madriguera-cb489" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
-          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Con esto la página muestra los eventos de tu app de reservas con <strong>cupos en vivo</strong> («Agotado» automático), y cada reserva web se anota en los <strong>Interesados</strong> de tu app. La clave está en Firebase → proyecto <strong>la-madriguera-cb489</strong> → Configuración del proyecto → Tus apps → apiKey. Estado: <strong>{{ resStatus }}</strong></p>
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#7C6651;">Con esto la página muestra los eventos de tu app de reservas con <strong>cupos en vivo</strong> («Agotado» automático), y cada reserva web se anota en los <strong>Interesados</strong> de tu app. La clave está en Firebase → proyecto <strong>la-madriguera-cb489</strong> → Configuración del proyecto → Tus apps → apiKey. Estado: <strong>{{ resStatus }}</strong></p>
         </div>
         <div style="height:1px; background:#EADBC4;"></div>
         <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Clave de administrador</label>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Clave de administrador</label>
           <input value="{{ cfgPass }}" onChange="{{ onCfgPass }}" placeholder="madriguera" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
-          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#8A715A;">Es la clave que te pide la app al pulsar «Administrar» en el pie de tu página. Cámbiala por una que solo tú sepas. (Por defecto: madriguera)</p>
+          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#7C6651;">Es la clave que te pide la app al pulsar «Administrar» en el pie de tu página. Cámbiala por una que solo tú sepas. (Por defecto: madriguera)</p>
         </div>
         <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Instagram (link completo)</label>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Instagram (link completo)</label>
           <input value="{{ cfgInstagram }}" onChange="{{ onCfgInstagram }}" placeholder="https://instagram.com/lamadriguera" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
         </div>
         <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">TikTok (link completo)</label>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">TikTok (link completo)</label>
           <input value="{{ cfgTiktok }}" onChange="{{ onCfgTiktok }}" placeholder="https://tiktok.com/@lamadriguera" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
         </div>
         <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Facebook (link completo)</label>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Facebook (link completo)</label>
           <input value="{{ cfgFacebook }}" onChange="{{ onCfgFacebook }}" placeholder="https://facebook.com/lamadrigueraecu" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
         </div>
         <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Link de Google Maps</label>
+          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Link de Google Maps</label>
           <input value="{{ cfgMaps }}" onChange="{{ onCfgMaps }}" placeholder="https://maps.google.com/?q=…" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
         </div>
       </div>
@@ -1723,15 +1727,15 @@ service cloud.firestore {
     <div style="flex-shrink:0; padding:20px clamp(16px,4vw,24px); border-bottom:1px solid #E3D2B8; display:flex; align-items:center; justify-content:space-between; gap:12px; background:#FFFDF8;">
       <div>
         <div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:21px; color:#5E1F33;">Tu carrito</div>
-        <div style="font-size:12.5px; color:#8A715A; margin-top:2px;">{{ cartCountLabel }}</div>
+        <div style="font-size:12.5px; color:#7C6651; margin-top:2px;">{{ cartCountLabel }}</div>
       </div>
-      <span onClick="{{ closeCart }}" style="cursor:pointer; font-size:20px; line-height:1; color:#A07F5E; padding:4px 8px;">✕</span>
+      <span onClick="{{ closeCart }}" style="cursor:pointer; font-size:20px; line-height:1; color:#80654B; padding:4px 8px;">✕</span>
     </div>
 
     <div data-noscroll="" style="flex:1 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:clamp(14px,3vw,20px);">
       <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ true }}">
-        <div style="text-align:center; padding:60px 20px; color:#8A715A;">
-          <div style="width:54px; height:54px; margin:0 auto; border-radius:16px; background:#EFE2CB; display:flex; align-items:center; justify-content:center; font-size:26px; color:#9A7A1E;">☕</div>
+        <div style="text-align:center; padding:60px 20px; color:#7C6651;">
+          <div style="width:54px; height:54px; margin:0 auto; border-radius:16px; background:#EFE2CB; display:flex; align-items:center; justify-content:center; font-size:26px; color:#816619;">☕</div>
           <div style="margin-top:16px; font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:19px; color:#5E4632;">Tu carrito está vacío</div>
           <p style="margin:8px 0 0; font-size:14px;">Agrega libros o merch y aparecerán aquí.</p>
           <span onClick="{{ goCatalogFromCart }}" style="cursor:pointer; display:inline-block; margin-top:18px; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:14px; padding:12px 22px; border-radius:999px;">Explorar catálogo</span>
@@ -1745,9 +1749,9 @@ service cloud.firestore {
                 <sc-if value="{{ it.hasImg }}" hint-placeholder-val="{{ false }}"><div style="{{ it.imgStyle }}"></div></sc-if>
               </div>
               <div style="min-width:0;">
-                <div style="font-size:10px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#A07F5E;">{{ it.kind }}</div>
+                <div style="font-size:10px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#80654B;">{{ it.kind }}</div>
                 <div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:15px; color:#34251A; line-height:1.2; margin-top:2px; word-break:break-word; overflow-wrap:anywhere;">{{ it.title }}</div>
-                <div style="font-size:12px; color:#8A715A; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ it.sub }}</div>
+                <div style="font-size:12px; color:#7C6651; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ it.sub }}</div>
                 <div style="margin-top:7px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                   <div style="display:inline-flex; align-items:center; gap:0; border:1px solid #D9BC77; border-radius:999px; overflow:hidden;">
                     <span onClick="{{ it.onDec }}" style="cursor:pointer; width:26px; height:26px; display:flex; align-items:center; justify-content:center; font-size:16px; color:#5E1F33; user-select:none;">−</span>
@@ -1759,7 +1763,7 @@ service cloud.firestore {
               </div>
               <div style="text-align:right; align-self:flex-start; flex-shrink:0;">
                 <div style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:17px; color:#7C2F3E; white-space:nowrap;">{{ it.lineLabel }}</div>
-                <div style="font-size:11px; color:#A07F5E; margin-top:2px; white-space:nowrap;">{{ it.priceLabel }} c/u</div>
+                <div style="font-size:11px; color:#80654B; margin-top:2px; white-space:nowrap;">{{ it.priceLabel }} c/u</div>
               </div>
             </div>
           </sc-for>
@@ -1778,13 +1782,13 @@ service cloud.firestore {
             <option value="Efectivo">💵 Efectivo al retirar o recibir</option>
           </select>
           <sc-if value="{{ payShowTransfer }}" hint-placeholder-val="{{ false }}">
-            <div style="font-size:12.5px; color:#8A715A; background:#F0E6D2; border-radius:10px; padding:10px 13px;">🏦 Al enviar tu pedido te mostraremos los datos para la transferencia.</div>
+            <div style="font-size:12.5px; color:#7C6651; background:#F0E6D2; border-radius:10px; padding:10px 13px;">🏦 Al enviar tu pedido te mostraremos los datos para la transferencia.</div>
           </sc-if>
           <sc-if value="{{ payShowLink }}" hint-placeholder-val="{{ false }}">
             <a sc-camel-href="{{ payLinkHref }}" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; background:#2E6B41; color:#F4F9F3; font-weight:800; font-size:14.5px; padding:13px; border-radius:11px; box-shadow:0 6px 16px rgba(46,107,65,0.3); transition:background .15s ease;" style-hover="background:#245434;">💳 Pagar ahora · {{ cartSubtotal }}</a>
           </sc-if>
           <sc-if value="{{ payLinkMissing }}" hint-placeholder-val="{{ false }}">
-            <div style="font-size:12.5px; color:#8A715A; background:#F0E6D2; border-radius:10px; padding:10px 13px;">Te enviaremos el link de pago por WhatsApp al confirmar tu pedido.</div>
+            <div style="font-size:12.5px; color:#7C6651; background:#F0E6D2; border-radius:10px; padding:10px 13px;">Te enviaremos el link de pago por WhatsApp al confirmar tu pedido.</div>
           </sc-if>
           <input value="{{ coNote }}" onInput="{{ onCoNote }}" placeholder="Nota: dirección, color, dedicatoria… (opcional)" style="width:100%; padding:12px 14px; border:1px solid #E3D2B8; border-radius:10px; font-family:'Outfit',sans-serif; font-size:14.5px; color:#34251A; background:#FFFDF8; outline:none;">
           <sc-if value="{{ coHasErr }}" hint-placeholder-val="{{ false }}">
@@ -1803,7 +1807,7 @@ service cloud.firestore {
       <span onClick="{{ checkout }}" style="cursor:pointer; display:flex; align-items:center; justify-content:center; gap:9px; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:15.5px; padding:15px; border-radius:13px; box-shadow:0 8px 20px rgba(94,31,51,0.28); transition:background .15s ease;" style-hover="background:#244031;"><span style="width:8px; height:8px; border-radius:50%; background:#9CD9A6;"></span>Enviar pedido por WhatsApp</span>
       <div style="display:flex; align-items:center; justify-content:space-between;">
         <span onClick="{{ clearCart }}" style="cursor:pointer; font-size:12.5px; font-weight:700; color:#9A4A3C;">Vaciar carrito</span>
-        <span style="font-size:12px; color:#A07F5E;">Confirmamos stock y pago por WhatsApp</span>
+        <span style="font-size:12px; color:#80654B;">Confirmamos stock y pago por WhatsApp</span>
       </div>
     </div>
     </sc-if>
@@ -1819,22 +1823,22 @@ service cloud.firestore {
       <span style="flex-shrink:0; width:40px; height:40px; border-radius:50%; background:#E3EDE3; display:flex; align-items:center; justify-content:center; font-size:20px;">✅</span>
       <div>
         <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:21px; color:#5E1F33;">¡Pedido enviado!</h3>
-        <p style="margin:2px 0 0; font-size:13px; color:#8A715A;">Total: <strong>{{ payDoneTotal }}</strong> · {{ payDoneMetodo }}</p>
+        <p style="margin:2px 0 0; font-size:13px; color:#7C6651;">Total: <strong>{{ payDoneTotal }}</strong> · {{ payDoneMetodo }}</p>
       </div>
     </div>
     <sc-if value="{{ payDoneTransfer }}" hint-placeholder-val="{{ false }}">
       <div style="margin-top:16px; background:#EFE2CB; border:1px solid #E3D2B8; border-radius:12px; padding:14px 16px;">
-        <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Datos para tu transferencia</div>
+        <div style="font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Datos para tu transferencia</div>
         <div style="font-size:14px; line-height:1.65; color:#3A2C1F; white-space:pre-line;">{{ payTransferText }}</div>
         <span onClick="{{ copyPayData }}" style="display:inline-block; margin-top:10px; cursor:pointer; font-size:12.5px; font-weight:800; color:#5E1F33; border:1.5px solid #B9C4B4; padding:8px 15px; border-radius:999px;" style-hover="background:#F2E3E2;">📋 Copiar datos</span>
       </div>
-      <p style="margin:12px 0 0; font-size:13px; line-height:1.5; color:#8A715A;">Haz la transferencia y envíanos el comprobante por el WhatsApp que se acaba de abrir.</p>
+      <p style="margin:12px 0 0; font-size:13px; line-height:1.5; color:#7C6651;">Haz la transferencia y envíanos el comprobante por el WhatsApp que se acaba de abrir.</p>
     </sc-if>
     <sc-if value="{{ payDoneLink }}" hint-placeholder-val="{{ false }}">
       <a sc-camel-href="{{ payLinkHref }}" target="_blank" rel="noopener" style="display:flex; margin-top:16px; align-items:center; justify-content:center; gap:8px; text-decoration:none; background:#2E6B41; color:#F4F9F3; font-weight:800; font-size:15px; padding:14px; border-radius:12px; box-shadow:0 6px 16px rgba(46,107,65,0.3); transition:background .15s ease;" style-hover="background:#245434;">💳 Pagar ahora · {{ payDoneTotal }}</a>
-      <p style="margin:12px 0 0; font-size:13px; line-height:1.5; color:#8A715A;">Paga con tu tarjeta y envíanos el comprobante por el WhatsApp que se acaba de abrir.</p>
+      <p style="margin:12px 0 0; font-size:13px; line-height:1.5; color:#7C6651;">Paga con tu tarjeta y envíanos el comprobante por el WhatsApp que se acaba de abrir.</p>
     </sc-if>
-    <span onClick="{{ closePayDone }}" style="display:flex; margin-top:16px; align-items:center; justify-content:center; cursor:pointer; font-size:13.5px; font-weight:700; color:#8A715A; padding:8px;">Cerrar</span>
+    <span onClick="{{ closePayDone }}" style="display:flex; margin-top:16px; align-items:center; justify-content:center; cursor:pointer; font-size:13.5px; font-weight:700; color:#7C6651; padding:8px;">Cerrar</span>
   </div>
 </div>
 </sc-if>
@@ -1846,24 +1850,24 @@ service cloud.firestore {
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:0;">
       <div style="position:relative; min-height:340px; background:repeating-linear-gradient(135deg,#F1E5D0,#F1E5D0 12px,#E9D9BE 12px,#E9D9BE 24px);">
         <sc-if value="{{ dHasImg }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ dImgUrl }}" alt="{{ dImgAlt }}" loading="lazy" decoding="async" style="{{ dImgTagStyle }}"></sc-if>
-        <sc-if value="{{ dHasOld }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; left:14px; top:14px; background:#9A7A1E; color:#FBF3E0; font-weight:800; font-size:12.5px; padding:5px 12px; border-radius:999px; box-shadow:0 4px 12px rgba(42,28,18,0.3);">{{ dOffLabel }}</span></sc-if>
+        <sc-if value="{{ dHasOld }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; left:14px; top:14px; background:#816619; color:#FBF3E0; font-weight:800; font-size:12.5px; padding:5px 12px; border-radius:999px; box-shadow:0 4px 12px rgba(42,28,18,0.3);">{{ dOffLabel }}</span></sc-if>
         <sc-if value="{{ dHasCode }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; left:14px; bottom:14px; font-family:ui-monospace,Menlo,monospace; font-size:11px; background:rgba(52,37,26,0.74); color:#F7EFE2; padding:4px 9px; border-radius:6px; letter-spacing:.04em;">{{ dCode }}</span></sc-if>
       </div>
       <div style="padding:clamp(20px,3.5vw,30px); display:flex; flex-direction:column; gap:10px;">
         <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
           <span style="font-size:11px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:#7C2F3E;">{{ dKindLabel }}</span>
-          <span onClick="{{ closeDetail }}" style="cursor:pointer; flex-shrink:0; font-size:20px; line-height:1; color:#A07F5E; padding:2px 6px;">✕</span>
+          <span onClick="{{ closeDetail }}" style="cursor:pointer; flex-shrink:0; font-size:20px; line-height:1; color:#80654B; padding:2px 6px;">✕</span>
         </div>
         <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(24px,3vw,30px); line-height:1.12; color:#34251A; text-wrap:balance;">{{ dTitle }}</h3>
-        <sc-if value="{{ dHasSub }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:16px; color:#8A715A;">{{ dSub }}</span></sc-if>
+        <sc-if value="{{ dHasSub }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:16px; color:#7C6651;">{{ dSub }}</span></sc-if>
         <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
           <sc-if value="{{ dHasBadge1 }}" hint-placeholder-val="{{ false }}"><span style="{{ dBadge1Style }}">{{ dBadge1 }}</span></sc-if>
           <sc-if value="{{ dHasBadge2 }}" hint-placeholder-val="{{ false }}"><span style="{{ dBadge2Style }}">{{ dBadge2 }}</span></sc-if>
         </div>
-        <sc-if value="{{ dHasMeta }}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px; font-weight:700; color:#A07F5E;">{{ dMeta }}</div></sc-if>
+        <sc-if value="{{ dHasMeta }}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px; font-weight:700; color:#80654B;">{{ dMeta }}</div></sc-if>
         <sc-if value="{{ dHasDesc }}" hint-placeholder-val="{{ false }}"><p style="margin:2px 0 0; font-size:14.5px; line-height:1.55; color:#5E4632;">{{ dDesc }}</p></sc-if>
         <div style="margin-top:4px; display:flex; align-items:baseline; gap:10px;">
-          <sc-if value="{{ dHasOld }}" hint-placeholder-val="{{ false }}"><span style="font-size:15px; font-weight:700; color:#A07F5E; text-decoration:line-through;">{{ dOldLabel }}</span></sc-if>
+          <sc-if value="{{ dHasOld }}" hint-placeholder-val="{{ false }}"><span style="font-size:15px; font-weight:700; color:#80654B; text-decoration:line-through;">{{ dOldLabel }}</span></sc-if>
           <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:30px; color:#7C2F3E;">{{ dPriceLabel }}</span>
         </div>
         <div style="margin-top:10px; display:flex; flex-direction:column; gap:9px;">
@@ -1886,18 +1890,18 @@ service cloud.firestore {
       <div>
         <div style="font-size:11px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:#7C2F3E;">{{ leadKind }}</div>
         <h3 style="margin:6px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:22px; color:#5E1F33; line-height:1.18; text-wrap:balance;">{{ leadTitle }}</h3>
-        <p style="margin:4px 0 0; font-size:13px; color:#8A715A;">{{ leadSub }}</p>
+        <p style="margin:4px 0 0; font-size:13px; color:#7C6651;">{{ leadSub }}</p>
       </div>
-      <span onClick="{{ closeLead }}" style="cursor:pointer; flex-shrink:0; font-size:20px; line-height:1; color:#A07F5E; padding:2px 6px;">✕</span>
+      <span onClick="{{ closeLead }}" style="cursor:pointer; flex-shrink:0; font-size:20px; line-height:1; color:#80654B; padding:2px 6px;">✕</span>
     </div>
     <p style="margin:16px 0 0; font-size:14.5px; line-height:1.5; color:#5E4632;">Déjanos tu celular y te contactamos para coordinar. Al enviar también se abrirá WhatsApp.</p>
     <div style="margin-top:16px; display:flex; flex-direction:column; gap:12px;">
       <div>
-        <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Tu nombre</label>
+        <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Tu nombre</label>
         <input value="{{ leadName }}" onInput="{{ onLeadName }}" placeholder="Nombre y apellido" style="width:100%; padding:13px 15px; border:1px solid #E3D2B8; border-radius:11px; font-family:'Outfit',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;">
       </div>
       <div>
-        <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#8A715A; margin-bottom:6px;">Tu celular *</label>
+        <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Tu celular *</label>
         <input value="{{ leadPhone }}" onInput="{{ onLeadPhone }}" type="tel" inputmode="tel" placeholder="Ej. 0991234567" style="width:100%; padding:13px 15px; border:1px solid #E3D2B8; border-radius:11px; font-family:'Outfit',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;">
       </div>
     </div>
@@ -1906,7 +1910,7 @@ service cloud.firestore {
     </sc-if>
     <div style="margin-top:18px; display:flex; flex-direction:column; gap:10px;">
       <span onClick="{{ submitLead }}" style="cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:15px; padding:14px; border-radius:12px; box-shadow:0 8px 20px rgba(94,31,51,0.28); transition:background .15s ease;" style-hover="background:#244031;"><span style="width:7px; height:7px; border-radius:50%; background:#9CD9A6;"></span>Enviar y abrir WhatsApp</span>
-      <span onClick="{{ closeLead }}" style="cursor:pointer; text-align:center; font-size:13.5px; font-weight:700; color:#8A715A; padding:6px;">Cancelar</span>
+      <span onClick="{{ closeLead }}" style="cursor:pointer; text-align:center; font-size:13.5px; font-weight:700; color:#7C6651; padding:6px;">Cancelar</span>
     </div>
   </div>
 </div>
@@ -1920,13 +1924,13 @@ service cloud.firestore {
       <div style="width:38px; height:38px; border-radius:11px; background:#5E1F33; display:flex; align-items:center; justify-content:center; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:20px; color:#F4E9D8;">M</div>
       <div>
         <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:20px; color:#5E1F33;">Acceso administrador</h3>
-        <p style="margin:2px 0 0; font-size:12.5px; color:#8A715A;">Solo para el equipo de La Madriguera</p>
+        <p style="margin:2px 0 0; font-size:12.5px; color:#7C6651;">Solo para el equipo de La Madriguera</p>
       </div>
     </div>
     <p style="margin:16px 0 0; font-size:14px; line-height:1.5; color:#5E4632;">Inicia sesión con tu correo y contraseña para editar el catálogo, subir fotos y configurar la tienda.</p>
     <input value="{{ pwEmail }}" onInput="{{ onPwEmail }}" type="email" inputmode="email" autocomplete="username" placeholder="Correo de administrador" style="margin-top:14px; width:100%; padding:13px 15px; border:1px solid #E3D2B8; border-radius:11px; font-family:'Outfit',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;">
     <input value="{{ pwInput }}" onInput="{{ onPwInput }}" onKeyDown="{{ onPwKey }}" type="password" autocomplete="current-password" placeholder="Contraseña" style="margin-top:10px; width:100%; padding:13px 15px; border:1px solid #E3D2B8; border-radius:11px; font-family:'Outfit',sans-serif; font-size:15px; color:#34251A; background:#FFFDF8; outline:none;">
-    <sc-if value="{{ pwConnecting }}" hint-placeholder-val="{{ false }}"><div style="margin-top:10px; font-size:12px; color:#8A715A; line-height:1.5;">Conectando con la nube… espera unos segundos antes de entrar.</div></sc-if>
+    <sc-if value="{{ pwConnecting }}" hint-placeholder-val="{{ false }}"><div style="margin-top:10px; font-size:12px; color:#7C6651; line-height:1.5;">Conectando con la nube… espera unos segundos antes de entrar.</div></sc-if>
     <sc-if value="{{ pwLocal }}" hint-placeholder-val="{{ false }}">
       <div style="margin-top:10px; background:#F6E3D5; border:1px solid #E0AE95; border-radius:10px; padding:11px 13px; font-size:12.5px; color:#8A4A3C; line-height:1.55;">
         <strong>Sin conexión con Firebase en este navegador.</strong> {{ fbReason }}
@@ -1938,7 +1942,7 @@ service cloud.firestore {
     </sc-if>
     <div style="margin-top:18px; display:flex; flex-direction:column; gap:10px;">
       <span onClick="{{ submitPw }}" style="cursor:pointer; display:flex; align-items:center; justify-content:center; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:15px; padding:14px; border-radius:12px; transition:background .15s ease;" style-hover="background:#244031;">Entrar al panel</span>
-      <span onClick="{{ closePw }}" style="cursor:pointer; text-align:center; font-size:13.5px; font-weight:700; color:#8A715A; padding:6px;">Cancelar</span>
+      <span onClick="{{ closePw }}" style="cursor:pointer; text-align:center; font-size:13.5px; font-weight:700; color:#7C6651; padding:6px;">Cancelar</span>
     </div>
   </div>
 </div>
@@ -1951,12 +1955,12 @@ service cloud.firestore {
     <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
       <div>
         <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:21px; color:#5E1F33;">Elige la portada</h3>
-        <p style="margin:4px 0 0; font-size:13.5px; color:#8A715A;">{{ coverTitle }} · {{ coverSub }}</p>
+        <p style="margin:4px 0 0; font-size:13.5px; color:#7C6651;">{{ coverTitle }} · {{ coverSub }}</p>
       </div>
-      <span onClick="{{ closeCover }}" style="cursor:pointer; flex-shrink:0; font-size:20px; line-height:1; color:#A07F5E; padding:2px 6px;">✕</span>
+      <span onClick="{{ closeCover }}" style="cursor:pointer; flex-shrink:0; font-size:20px; line-height:1; color:#80654B; padding:2px 6px;">✕</span>
     </div>
     <sc-if value="{{ coverLoading }}" hint-placeholder-val="{{ false }}">
-      <div style="padding:36px 0; text-align:center; font-size:14.5px; font-weight:700; color:#8A715A;">Buscando portadas…</div>
+      <div style="padding:36px 0; text-align:center; font-size:14.5px; font-weight:700; color:#7C6651;">Buscando portadas…</div>
     </sc-if>
     <sc-if value="{{ coverHasErr }}" hint-placeholder-val="{{ false }}">
       <div style="margin-top:14px; font-size:13.5px; font-weight:700; color:#9A4A3C; line-height:1.5;">{{ coverErr }}</div>
@@ -1972,7 +1976,7 @@ service cloud.firestore {
           </div>
         </sc-for>
       </div>
-      <p style="margin:14px 0 0; font-size:12px; color:#A07F5E;">Toca una portada para usarla. Si ninguna es tu edición, cierra y sube tu propia foto haciendo click en la portada del libro.</p>
+      <p style="margin:14px 0 0; font-size:12px; color:#80654B;">Toca una portada para usarla. Si ninguna es tu edición, cierra y sube tu propia foto haciendo click en la portada del libro.</p>
     </sc-if>
   </div>
 </div>
@@ -3278,12 +3282,12 @@ class Component extends DCLogic {
     const c = m[e] || ['#ECE5DA', '#7A6450']; return this.badge(c[0], c[1]);
   }
   dispStyle(d) {
-    const m = { 'Disponible': ['#E3EDE3', '#2E6B41'], 'Reservado': ['#ECE6DC', '#8A715A'], 'Vendido': ['#EFE0DC', '#9A4A3C'], 'Última unidad': ['#F3DEE3', '#93304A'], 'Oferta': ['#F4E9CC', '#9A7A1E'], 'Por encargo': ['#E7E9EC', '#5A6472'] };
+    const m = { 'Disponible': ['#E3EDE3', '#2E6B41'], 'Reservado': ['#ECE6DC', '#7C6651'], 'Vendido': ['#EFE0DC', '#9A4A3C'], 'Última unidad': ['#F3DEE3', '#93304A'], 'Oferta': ['#F4E9CC', '#816619'], 'Por encargo': ['#E7E9EC', '#5A6472'] };
     const c = m[d] || ['#E3EDE3', '#2E6B41']; return this.badge(c[0], c[1]);
   }
   consigBadge(e) {
-    const m = { 'Recibido': ['#ECE6DC', '#8A715A'], 'En venta': ['#E3EDE3', '#2E6B41'], 'Vendido': ['#EFE0DC', '#9A4A3C'], 'Pagado al dueño': ['#F4E9CC', '#9A7A1E'] };
-    const c = m[e] || ['#ECE6DC', '#8A715A']; return this.badge(c[0], c[1]);
+    const m = { 'Recibido': ['#ECE6DC', '#7C6651'], 'En venta': ['#E3EDE3', '#2E6B41'], 'Vendido': ['#EFE0DC', '#9A4A3C'], 'Pagado al dueño': ['#F4E9CC', '#816619'] };
+    const c = m[e] || ['#ECE6DC', '#7C6651']; return this.badge(c[0], c[1]);
   }
   cuposStyle() { return { display: 'inline-block', padding: '4px 11px', borderRadius: '999px', fontSize: '11px', fontWeight: 800, background: 'rgba(247,239,226,0.94)', color: '#2E6B41', whiteSpace: 'nowrap', fontFamily: "'Outfit',sans-serif" }; }
 
@@ -3721,7 +3725,7 @@ class Component extends DCLogic {
       recPillLabel: l.recomendado ? '★ Recomendado' : '☆ Recomendar',
       recPillStyle: {
         cursor: 'pointer', fontSize: '12.5px', fontWeight: 800, padding: '6px 12px', borderRadius: '999px',
-        background: l.recomendado ? '#C9A24B' : 'transparent', color: l.recomendado ? '#2A1C12' : '#9A7A1E',
+        background: l.recomendado ? '#C9A24B' : 'transparent', color: l.recomendado ? '#2A1C12' : '#816619',
         border: l.recomendado ? '1px solid #C9A24B' : '1px solid #D9BC77', whiteSpace: 'nowrap'
       },
       onToggleRec: () => {
@@ -3774,11 +3778,11 @@ class Component extends DCLogic {
         estado: lifeVal, condicion, pagado,
         condBadge: this.estadoStyle(condicion),
         estadoBadge: this.consigBadge(lifeVal),
-        pagoBadge: this.badge('#F4E9CC', '#9A7A1E'),
+        pagoBadge: this.badge('#F4E9CC', '#816619'),
         pagoPillLabel: pagado ? '✓ Pagado al dueño' : 'Marcar pago al dueño',
         pagoPillStyle: {
           cursor: 'pointer', display: 'inline-block', width: '100%', textAlign: 'center', fontSize: '13px', fontWeight: 800, padding: '10px 12px', borderRadius: '8px',
-          background: pagado ? '#F4E9CC' : 'transparent', color: pagado ? '#9A7A1E' : '#8A715A',
+          background: pagado ? '#F4E9CC' : 'transparent', color: pagado ? '#816619' : '#7C6651',
           border: pagado ? '1px solid #D9BC77' : '1px solid #E3D2B8', fontFamily: "'Outfit',sans-serif"
         },
         onCondicion: (e) => this.setField('consig', c.id, 'condicion', e.target.value),
@@ -3887,7 +3891,7 @@ class Component extends DCLogic {
     }));
     const ventasEntregadas = '$' + (C.pedidos || []).filter(p => p.estado === 'Entregado').reduce((s, p) => s + (+p.total || 0), 0);
 
-    const tabList = [['libros', 'Libros', '#5E1F33', '#F7EFE2'], ['consig', 'Consignación', '#9A7A1E', '#FBF3E0'], ['merch', 'Merch', '#7C2F3E', '#FFF7EC'], ['cafeteria', 'Cafetería', '#8A5A2B', '#F6ECE0'], ['especialidad', 'Café de especialidad', '#4A3B2A', '#F1EAE0'], ['eventos', 'Eventos', '#2A1C12', '#F4E9D8'], ['pedidos', 'Pedidos', '#3A5A6B', '#EAF2F6'], ['config', 'Configuración', '#5A6472', '#F4F6F8']];
+    const tabList = [['libros', 'Libros', '#5E1F33', '#F7EFE2'], ['consig', 'Consignación', '#816619', '#FBF3E0'], ['merch', 'Merch', '#7C2F3E', '#FFF7EC'], ['cafeteria', 'Cafetería', '#8A5A2B', '#F6ECE0'], ['especialidad', 'Café de especialidad', '#4A3B2A', '#F1EAE0'], ['eventos', 'Eventos', '#2A1C12', '#F4E9D8'], ['pedidos', 'Pedidos', '#3A5A6B', '#EAF2F6'], ['config', 'Configuración', '#5A6472', '#F4F6F8']];
     const adminTabs = tabList.map(([k, label, bg, fg]) => ({ label, onClick: () => this.setState({ adminTab: k }), style: this.tabStyle(adminTab === k, bg, fg) }));
 
     // ---- bulk preview ----
