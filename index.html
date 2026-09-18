@@ -2270,7 +2270,7 @@ class Component extends DCLogic {
         this.db = window.firebase.firestore();
         this.auth = window.firebase.auth();
         this._fbReason = '';
-        this.auth.onAuthStateChanged((u) => { this._authed = !!u; this.setState({ authed: !!u, adminEmail: u ? (u.email || '') : '' }); this.maybeSeed(); });
+        this.auth.onAuthStateChanged((u) => { this._authed = !!u; this.setState({ authed: !!u, adminEmail: u ? (u.email || '') : '' }); this.subscribePedidos(!!u); this.maybeSeed(); });
         this.subscribe();
         if (this._fbTimer) clearTimeout(this._fbTimer);
         // 18 s: en conexiones lentas la primera respuesta puede tardar
@@ -2395,13 +2395,14 @@ class Component extends DCLogic {
     this._live = this._live || this.defaultCMS();
     this._unsubs = this._unsubs || [];
     const ok = () => { if (this.state.fb !== 'online') this.setState({ fb: 'online' }); if (this._fbTimer) clearTimeout(this._fbTimer); };
-    ['libros', 'consig', 'merch', 'cafeteria', 'especialidad', 'eventos', 'eventosImg', 'pedidos'].forEach((coll) => {
+    // 'pedidos' NO se lee aquí: solo la administradora puede leerlos (ver subscribePedidos).
+    ['libros', 'consig', 'merch', 'cafeteria', 'especialidad', 'eventos', 'eventosImg'].forEach((coll) => {
       const u = this.db.collection(coll).onSnapshot((snap) => {
         const arr = [];
         snap.forEach((d) => arr.push(Object.assign({ id: d.id }, d.data())));
         arr.sort((a, b) => (b.order || 0) - (a.order || 0));
         this._live[coll] = arr; ok(); this.commitLive(); this.maybeSeed();
-      }, () => this.setState({ fb: 'offline' }));
+      }, (e) => { if (!(e && e.code === 'permission-denied')) this.setState({ fb: 'offline' }); });
       this._unsubs.push(u);
     });
     const uc = this.db.collection('config').doc('general').onSnapshot((d) => {
@@ -2413,6 +2414,18 @@ class Component extends DCLogic {
       this._live.brand = o; ok(); this.commitLive();
     }, () => {});
     this._unsubs.push(ub);
+  }
+  // Pedidos: solo con sesión de administradora. Se (re)suscribe al iniciar sesión y se corta al salir.
+  subscribePedidos(on) {
+    if (this._unsubPedidos) { try { this._unsubPedidos(); } catch (e) {} this._unsubPedidos = null; }
+    if (!on || !this.db) { if (this._live) { this._live.pedidos = []; this.commitLive(); } return; }
+    this._unsubPedidos = this.db.collection('pedidos').onSnapshot((snap) => {
+      const arr = [];
+      snap.forEach((d) => arr.push(Object.assign({ id: d.id }, d.data())));
+      arr.sort((a, b) => (b.order || 0) - (a.order || 0));
+      this._live = this._live || this.defaultCMS();
+      this._live.pedidos = arr; this.commitLive();
+    }, () => {});
   }
   commitLive() {
     // Agrupamos las muchas actualizaciones de Firebase en un solo re-dibujado.
@@ -3462,7 +3475,7 @@ class Component extends DCLogic {
     cms.pedidos = cms.pedidos || [];
     cms.pedidos.unshift(order);
     this.cacheCMS(cms);
-    if (this.online()) this.itemRef('pedidos', order.id).set(this.clean(order)).catch(() => {});
+    if (this.db) this.itemRef('pedidos', order.id).set(this.clean(order)).catch((e) => console.error('[LM] pedido no guardado', e));
   }
   canalBadge(c) { const m = { 'Carrito': ['#E3EDE3', '#2E6B41'], 'Consulta': ['#F3DEE3', '#93304A'] }; const x = m[c] || ['#E7E9EC', '#5A6472']; return this.badge(x[0], x[1]); }
   fmtDate(ts) { if (!ts) return ''; const d = new Date(ts); const p = n => String(n).padStart(2, '0'); return p(d.getDate()) + '/' + p(d.getMonth() + 1) + '/' + d.getFullYear() + ' · ' + p(d.getHours()) + ':' + p(d.getMinutes()); }
