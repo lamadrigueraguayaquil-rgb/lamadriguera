@@ -1656,12 +1656,7 @@
           <input value="{{ cfgResKey }}" onChange="{{ onCfgResKey }}" placeholder="Pega aquí la clave API (AIza…) del proyecto la-madriguera-cb489" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
           <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#7C6651;">Con esto la página muestra los eventos de tu app de reservas con <strong>cupos en vivo</strong> («Agotado» automático), y cada reserva web se anota en los <strong>Interesados</strong> de tu app. La clave está en Firebase → proyecto <strong>la-madriguera-cb489</strong> → Configuración del proyecto → Tus apps → apiKey. Estado: <strong>{{ resStatus }}</strong></p>
         </div>
-        <div style="height:1px; background:#EADBC4;"></div>
-        <div>
-          <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Clave de administrador</label>
-          <input value="{{ cfgPass }}" onChange="{{ onCfgPass }}" placeholder="madriguera" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
-          <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#7C6651;">Es la clave que te pide la app al pulsar «Administrar» en el pie de tu página. Cámbiala por una que solo tú sepas. (Por defecto: madriguera)</p>
-        </div>
+        
         <div>
           <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Instagram (link completo)</label>
           <input value="{{ cfgInstagram }}" onChange="{{ onCfgInstagram }}" placeholder="https://instagram.com/lamadriguera" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none;">
@@ -1709,13 +1704,27 @@
           <pre style="margin:12px 0 0; background:#1C2A20; border:1px solid rgba(247,239,226,0.14); border-radius:10px; padding:13px 15px; overflow-x:auto; font-family:ui-monospace,Menlo,monospace; font-size:11.5px; line-height:1.6; color:#CFE6CC; white-space:pre;">rules_version = '2';
 service cloud.firestore {
   match /databases/{db}/documents {
-    match /pedidos/{id} {
-      allow create: if true;
-      allow read, update, delete: if request.auth != null;
+    // Cambia TU_UID por el UID de tu usuario (Authentication → Users)
+    function esAdmin() {
+      return request.auth != null &amp;&amp; request.auth.uid == 'TU_UID';
     }
-    match /{doc=**} {
-      allow read: if true;
-      allow write: if request.auth != null;
+    function pedidoValido() {
+      let d = request.resource.data;
+      return d.estado == 'Nuevo'
+        &amp;&amp; d.keys().hasOnly(['id','tipo','canal','estado','cliente','celular',
+             'nota','total','items','ts','order','entrega','pago'])
+        &amp;&amp; d.celular is string &amp;&amp; d.celular.size() &lt;= 30
+        &amp;&amp; (!('cliente' in d) || (d.cliente is string &amp;&amp; d.cliente.size() &lt;= 120))
+        &amp;&amp; (!('nota' in d) || (d.nota is string &amp;&amp; d.nota.size() &lt;= 1500))
+        &amp;&amp; (!('items' in d) || (d.items is list &amp;&amp; d.items.size() &lt;= 40));
+    }
+    match /pedidos/{id} {
+      allow create: if pedidoValido() || esAdmin();
+      allow read, update, delete: if esAdmin();
+    }
+    match /{coll}/{id} {
+      allow read: if coll != 'pedidos';
+      allow write: if coll != 'pedidos' &amp;&amp; esAdmin();
     }
   }
 }</pre>
@@ -2101,6 +2110,9 @@ class Component extends DCLogic {
     window.addEventListener('hashchange', this.applyHash);
     this.syncChips();
     this.bootFirebase(0);
+    this._onHide = () => { if (document.visibilityState === 'hidden') this.flushWrites(); };
+    document.addEventListener('visibilitychange', this._onHide);
+    window.addEventListener('pagehide', () => this.flushWrites());
   }
   componentWillUnmount() {
     window.removeEventListener('storage', this._onStorage);
@@ -2441,7 +2453,12 @@ class Component extends DCLogic {
       const src = (typeof window !== 'undefined' && window.LM_DATA) || null;
       if (src && src.libros) cms = Object.assign(this.defaultCMS(), JSON.parse(JSON.stringify(src)), { config: cms.config || {}, pedidos: cms.pedidos || [], brand: cms.brand || {} });
     }
-    this.setState({ cms });
+    Object.keys(this._pw || {}).forEach((k) => {
+      const w = this._pw[k]; if (!w) return;
+      const it = (cms[w.coll] || []).find(x => x.id === w.id);
+      if (it) it[w.key] = w.val;
+    });
+    this._cmsNow = cms; this.setState({ cms });
     // No guardamos las fotos incrustadas (base64) en la memoria del navegador: pesan demasiado.
     try { localStorage.setItem('lm-content', JSON.stringify(this.slimCache(cms))); } catch (e) {}
   }
@@ -2639,27 +2656,64 @@ class Component extends DCLogic {
     const n = parseFloat(s);
     this.setField(coll, id, key, isNaN(n) ? null : n);
   }
+  // Busca el producto de una línea del pedido en la colección que corresponde.
+  findOrderItem(it) {
+    const C = this.currentCMS();
+    const colls = it.kind === 'Merch' ? ['merch'] : it.kind === 'Café de especialidad' ? ['especialidad'] : it.kind === 'Libro' ? ['libros', 'consig'] : [];
+    for (let i = 0; i < colls.length; i++) {
+      const item = (C[colls[i]] || []).find(x => x.id === it.id || (x.code && x.code === it.id));
+      if (item) return { coll: colls[i], item };
+    }
+    return null;
+  }
+  // Descuenta stock al entregar. Devuelve la lista de movimientos para poder revertirlos.
   discountStock(p) {
-    let n = 0;
+    const mov = [];
     (p.items || []).forEach(it => {
       if (!it.id) return;
-      const coll = it.kind === 'Merch' ? 'merch' : 'libros';
-      const C = this.currentCMS();
-      const item = (C[coll] || []).find(x => x.id === it.id);
-      if (item && this.hasStockNum(item)) {
-        const ns = Math.max(0, item.stock - (it.qty || 1));
+      const f = this.findOrderItem(it);
+      if (!f) return;
+      const { coll, item } = f;
+      if (coll === 'consig') {
+        if (item.estado === 'En venta') { this.setField('consig', item.id, 'estado', 'Vendido'); mov.push({ coll, id: item.id, prevEstado: 'En venta' }); }
+      } else if (this.hasStockNum(item)) {
+        const q = it.qty || 1;
+        const ns = Math.max(0, item.stock - q);
         this.setField(coll, item.id, 'stock', ns);
         if (ns === 0) this.setField(coll, item.id, 'disp', 'Vendido');
+        mov.push({ coll, id: item.id, qty: item.stock - ns, prevDisp: item.disp || '' });
+      }
+    });
+    if (mov.length) this.flash('Stock descontado automáticamente ✓');
+    return mov;
+  }
+  // Si un pedido entregado se cancela o se reabre, devuelve lo descontado.
+  restoreStock(p) {
+    const C = this.currentCMS();
+    let n = 0;
+    (p.stockMov || []).forEach(m => {
+      const item = (C[m.coll] || []).find(x => x.id === m.id);
+      if (!item) return;
+      if (m.coll === 'consig') {
+        if (item.estado === 'Vendido' && m.prevEstado) { this.setField('consig', item.id, 'estado', m.prevEstado); n++; }
+      } else if (this.hasStockNum(item) && m.qty) {
+        this.setField(m.coll, item.id, 'stock', item.stock + m.qty);
+        if (item.disp === 'Vendido') this.setField(m.coll, item.id, 'disp', m.prevDisp && m.prevDisp !== 'Vendido' ? m.prevDisp : 'Disponible');
         n++;
       }
     });
-    if (n) this.flash('Stock descontado automáticamente ✓');
+    if (n) this.flash('Stock devuelto ✓');
   }
   setPedidoEstado(p, val) {
     this.setField('pedidos', p.id, 'estado', val);
     if (val === 'Entregado' && !p.stockDescontado && (p.items || []).some(it => it.id)) {
-      this.discountStock(p);
+      const mov = this.discountStock(p);
       this.setField('pedidos', p.id, 'stockDescontado', true);
+      this.setField('pedidos', p.id, 'stockMov', mov);
+    } else if (val !== 'Entregado' && p.stockDescontado && Array.isArray(p.stockMov)) {
+      this.restoreStock(p);
+      this.setField('pedidos', p.id, 'stockDescontado', false);
+      this.setField('pedidos', p.id, 'stockMov', []);
     }
   }
 
@@ -2681,15 +2735,17 @@ class Component extends DCLogic {
     if (ls && !ls.libros) ls = null;
     const win = (typeof window !== 'undefined' && window.LM_DATA && window.LM_DATA.libros) ? window.LM_DATA : null;
     const cms = ls || win;
-    if (cms && cms.libros) this.setState({ cms });
+    if (cms && cms.libros) { this._cmsNow = cms; this.setState({ cms }); }
   }
 
   currentCMS() {
-    const c = this.state.cms || (typeof window !== 'undefined' && window.LM_DATA) || this.defaultCMS();
+    // _cmsNow se actualiza al instante; this.state.cms tarda un ciclo de React.
+    // Sin esto, dos cambios seguidos (p. ej. estado del pedido + stock) se pisaban entre sí.
+    const c = this._cmsNow || this.state.cms || (typeof window !== 'undefined' && window.LM_DATA) || this.defaultCMS();
     return Object.assign(this.defaultCMS(), JSON.parse(JSON.stringify(c)));
   }
   cacheCMS(cms) {
-    this.setState({ cms, savedAt: Date.now() });
+    this._cmsNow = cms; this.setState({ cms, savedAt: Date.now() });
     try { localStorage.setItem('lm-content', JSON.stringify(this.slimCache(cms))); }
     catch (e) { this.flash('Espacio local lleno. Usa fotos más livianas.'); }
   }
@@ -2724,13 +2780,33 @@ class Component extends DCLogic {
     if (!it) return;
     it[key] = val;
     this.cacheCMS(cms);
-    if (this.online()) this.itemRef(coll, id).set(this.clean(it), { merge: true }).catch((e) => this.flash(this.fbErr(e)));
+    if (this.online()) this.queueWrite(coll, id, key, val);
+  }
+  // Guarda en la nube SOLO el campo que cambió y espera 0,7 s a que termines de escribir.
+  // Antes cada tecla reescribía el documento entero con su foto.
+  queueWrite(coll, id, key, val) {
+    this._pw = this._pw || {};
+    const k = coll + '|' + id + '|' + key;
+    if (this._pw[k]) clearTimeout(this._pw[k].t);
+    const run = () => {
+      delete this._pw[k];
+      const data = {}; data[key] = (val === undefined ? null : val);
+      this.itemRef(coll, id).set(this.clean(data), { merge: true }).catch((e) => this.flash(this.fbErr(e)));
+    };
+    this._pw[k] = { coll, id, key, val, run, t: setTimeout(run, 700) };
+  }
+  flushWrites() {
+    const pw = this._pw || {};
+    Object.keys(pw).forEach((k) => { const w = pw[k]; if (w) { clearTimeout(w.t); w.run(); } });
   }
   setNum(coll, id, key, val) {
     const n = parseFloat(val); this.setField(coll, id, key, isNaN(n) ? 0 : n);
   }
   delItem(coll, id) {
     const cms = this.currentCMS();
+    const it = (cms[coll] || []).find(x => x.id === id) || {};
+    const nombre = coll === 'pedidos' ? ('el pedido de ' + (it.cliente || 'cliente sin nombre')) : ('«' + (it.title || it.name || 'este elemento') + '»');
+    if (typeof window !== 'undefined' && window.confirm && !window.confirm('¿Eliminar ' + nombre + '? Esta acción no se puede deshacer.')) return;
     cms[coll] = (cms[coll] || []).filter(x => x.id !== id);
     this.cacheCMS(cms);
     if (this.online()) this.itemRef(coll, id).delete().catch(() => this.flash('No se pudo eliminar en la nube.'));
@@ -4147,9 +4223,8 @@ class Component extends DCLogic {
   }
 
   enterLocal(pass) {
-    const localPass = (this.cfg().adminPass || 'madriguera');
-    if (pass === localPass) this.setState({ view: 'admin', pwOpen: false, pwInput: '', pwErr: '' });
-    else this.setState({ pwErr: 'No hay conexión con Firebase, por eso tu correo y contraseña no se pueden verificar aquí. ' + (this._fbReason || '') + ' Pulsa «Reintentar conexión»; si sigue igual, prueba con otro navegador, sin extensiones o con otra red (por ejemplo, datos del celular).' });
+    // Sin Firebase no se puede verificar a la administradora: ya no hay acceso local por contraseña.
+    this.setState({ pwErr: 'No hay conexión con Firebase, por eso tu correo y contraseña no se pueden verificar aquí. ' + (this._fbReason || '') + ' Pulsa «Reintentar conexión»; si sigue igual, prueba con otro navegador, sin extensiones o con otra red (por ejemplo, datos del celular).' });
   }
   submitPw = () => {
     const email = (this.state.pwEmail || '').trim();
@@ -4162,9 +4237,8 @@ class Component extends DCLogic {
           .then(() => this.setState({ view: 'admin', pwOpen: false, pwInput: '', pwErr: '' }))
           .catch((err) => {
             const setupCodes = ['auth/network-request-failed', 'auth/configuration-not-found', 'auth/operation-not-allowed', 'auth/internal-error', 'app-compat/no-app'];
-            if (err && setupCodes.indexOf(err.code) >= 0 && pass === (this.cfg().adminPass || 'madriguera')) {
-              this.setState({ view: 'admin', pwOpen: false, pwInput: '', pwErr: '' });
-            } else { this.setState({ pwErr: this.authErr(err) }); }
+            if (err && setupCodes.indexOf(err.code) >= 0) { this.enterLocal(pass); }
+            else { this.setState({ pwErr: this.authErr(err) }); }
           });
       } catch (e) { this.enterLocal(pass); }
     } else {
@@ -4191,6 +4265,7 @@ class Component extends DCLogic {
     return 'No se pudo guardar en la nube' + (c ? (' (' + c + ')') : '') + '.';
   }
   logout = () => {
+    this.flushWrites();
     if (this.auth) { try { this.auth.signOut(); } catch (e) {} }
     this.setState({ view: 'store', authed: false, adminEmail: '' });
     this.flash('Sesión cerrada.');
