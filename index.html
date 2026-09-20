@@ -376,6 +376,7 @@
           <sc-if value="{{ newsHasErr }}" hint-placeholder-val="{{ false }}">
             <div style="font-size:13px; font-weight:700; color:#F3C4B4;">{{ newsErr }}</div>
           </sc-if>
+          <div onClick="{{ toggleNewsOk }}" role="checkbox" style="cursor:pointer; display:flex; gap:9px; align-items:flex-start; font-size:13px; line-height:1.5; color:#E8D9C2; min-height:44px; padding-top:4px;"><span style="font-size:19px; line-height:1; color:#C9A24B;">{{ newsOkMark }}</span><span>Acepto recibir novedades, ofertas y eventos de La Madriguera por WhatsApp o correo. Puedo darme de baja cuando quiera. <a href="/privacidad/" style="color:#C9A24B; text-decoration:underline;">Privacidad</a></span></div>
           <span onClick="{{ submitNews }}" style="cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:15px; padding:14px; border-radius:12px; box-shadow:0 8px 20px rgba(201,162,75,0.3); transition:background .15s ease;" style-hover="background:#d9b25b;">✨ Avísame de novedades</span>
         </div>
       </div>
@@ -823,7 +824,7 @@
         </div>
       </div>
       <div style="margin-top:36px; padding-top:20px; border-top:1px solid rgba(232,217,194,0.16); display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;">
-        <span style="font-size:12.5px; color:#9C8E78;">© {{ year }} La Madriguera Specialty Coffee &amp; Books</span>
+        <span style="font-size:12.5px; color:#9C8E78;">© {{ year }} La Madriguera Specialty Coffee &amp; Books · <a href="/privacidad/" style="color:#9C8E78; text-decoration:underline;">Privacidad</a></span>
         <div style="display:flex; align-items:center; gap:16px;">
           <span style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:13.5px; color:#9C8E78;">Lleva contigo una pequeña magia de La Madriguera.</span>
           <span onClick="{{ openPw }}" style="cursor:pointer; font-size:12px; font-weight:700; color:#92846F; border:1px solid rgba(232,217,194,0.18); padding:5px 11px; border-radius:999px; transition:color .15s ease;" style-hover="color:#C9A24B;">Administrar</span>
@@ -860,6 +861,9 @@
     </div>
   </header>
 
+  <sc-if value="{{ adminWarn }}" hint-placeholder-val="{{ false }}">
+    <div role="alert" style="background:#9A4A3C; color:#FFFDF8; font-size:14px; font-weight:700; line-height:1.45; padding:12px clamp(16px,4vw,32px); display:flex; gap:12px; align-items:center; justify-content:center; flex-wrap:wrap; text-align:center;">⚠ {{ adminWarnMsg }}<span onClick="{{ retryFirebase }}" style="cursor:pointer; background:#FFFDF8; color:#5E1F33; font-size:13px; font-weight:800; padding:8px 14px; border-radius:999px; white-space:nowrap;">↻ Reintentar</span></div>
+  </sc-if>
   <div style="background:#FFFDF8; border-bottom:1px solid #E3D2B8; position:sticky; top:0; z-index:40;">
     <nav data-noscroll="" style="max-width:1100px; margin:0 auto; padding:10px clamp(16px,4vw,32px); display:flex; gap:8px; overflow-x:auto;">
       <sc-for list="{{ adminTabs }}" as="t" hint-placeholder-count="5">
@@ -1831,6 +1835,7 @@ service cloud.firestore {
         <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:26px; color:#5E1F33;">{{ cartSubtotal }}</span>
       </div>
       <span onClick="{{ checkout }}" style="cursor:pointer; display:flex; align-items:center; justify-content:center; gap:9px; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:15.5px; padding:15px; border-radius:13px; box-shadow:0 8px 20px rgba(94,31,51,0.28); transition:background .15s ease;" style-hover="background:#244031;"><span style="width:8px; height:8px; border-radius:50%; background:#9CD9A6;"></span>Enviar pedido por WhatsApp</span>
+      <p style="margin:0; font-size:12.5px; line-height:1.5; color:#7C6651; text-align:center;">Usaremos tu nombre y celular solo para atender tu pedido. <a href="/privacidad/" style="color:#5E1F33; text-decoration:underline;">Privacidad</a></p>
       <div style="display:flex; align-items:center; justify-content:space-between;">
         <span onClick="{{ clearCart }}" style="cursor:pointer; font-size:12.5px; font-weight:700; color:#9A4A3C;">Vaciar carrito</span>
         <span style="font-size:12px; color:#80654B;">Confirmamos stock y pago por WhatsApp</span>
@@ -1934,6 +1939,7 @@ service cloud.firestore {
     <sc-if value="{{ leadHasErr }}" hint-placeholder-val="{{ false }}">
       <div style="margin-top:10px; font-size:13px; font-weight:700; color:#9A4A3C;">{{ leadErr }}</div>
     </sc-if>
+    <p style="margin:12px 0 0; font-size:12.5px; line-height:1.5; color:#7C6651;">Usaremos tu nombre y celular solo para responderte. <a href="/privacidad/" style="color:#5E1F33; text-decoration:underline;">Privacidad</a></p>
     <div style="margin-top:18px; display:flex; flex-direction:column; gap:10px;">
       <span onClick="{{ submitLead }}" style="cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:15px; padding:14px; border-radius:12px; box-shadow:0 8px 20px rgba(94,31,51,0.28); transition:background .15s ease;" style-hover="background:#244031;"><span style="width:7px; height:7px; border-radius:50%; background:#9CD9A6;"></span>Enviar y abrir WhatsApp</span>
       <span onClick="{{ closeLead }}" style="cursor:pointer; text-align:center; font-size:13.5px; font-weight:700; color:#7C6651; padding:6px;">Cancelar</span>
@@ -2026,7 +2032,7 @@ class Component extends DCLogic {
     detail: null,
     cart: [], cartOpen: false, coName: '', coPhone: '', coEntrega: 'Retiro en local', coPago: 'Transferencia bancaria', coNote: '', coErr: '',
     lead: null, leadName: '', leadPhone: '', leadErr: '',
-    newsName: '', newsPhone: '', newsMail: '', newsErr: '',
+    newsName: '', newsPhone: '', newsMail: '', newsErr: '', newsOk: false,
     pwOpen: false, pwInput: '', pwEmail: '', pwErr: '',
     bulkOpen: false, bulkText: '', bulkErr: '',
     cover: null, coversBusy: false, coversDone: 0, coversTotal: 0, coversFound: 0,
@@ -2110,6 +2116,7 @@ class Component extends DCLogic {
     window.addEventListener('hashchange', this.applyHash);
     this.syncChips();
     this.bootFirebase(0);
+    this.bootFotosSW();
     this._onHide = () => { if (document.visibilityState === 'hidden') this.flushWrites(); };
     document.addEventListener('visibilitychange', this._onHide);
     window.addEventListener('pagehide', () => this.flushWrites());
@@ -2155,7 +2162,7 @@ class Component extends DCLogic {
       const base = window.location.origin + window.location.pathname + window.location.search;
       const negocio = 'https://lamadriguera.ec/#negocio';
       const fallbackImg = 'https://lamadriguera.ec/og-image.jpg';
-      const okImg = (u) => (u && (u + '').indexOf('data:') !== 0) ? u : '';
+      const okImg = (u) => (u && (u + '').indexOf('data:') !== 0 && (u + '').indexOf('fs:') !== 0) ? u : '';
       // Requisitos de Google para fichas de comerciante:
       const envio = {
         '@type': 'OfferShippingDetails',
@@ -2498,6 +2505,7 @@ class Component extends DCLogic {
   online() { return !!(this.db && this.state.fb === 'online'); }
   clean(o) { return JSON.parse(JSON.stringify(o)); }
   coverStyle(url, extra) {
+    url = this.pic(url);
     const s = { position: 'absolute', inset: 0, backgroundImage: 'url("' + (url || '') + '")', backgroundSize: 'cover', backgroundPosition: 'center' };
     return extra ? Object.assign(s, extra) : s;
   }
@@ -2511,6 +2519,96 @@ class Component extends DCLogic {
       background: fit === 'contain' ? '#FFFDF8' : 'transparent'
     };
   }
+  // ---------- fotos fuera del catálogo ----------
+  // Una foto subida desde el panel se guarda en la colección «fotos» y el producto solo
+  // lleva una referencia corta «fs:<id>:<versión>». pic() la convierte en una dirección
+  // /foto/... que atiende sw-fotos.js: el navegador baja solo las fotos que se ven.
+  pic(u) {
+    if (typeof u !== 'string' || u.indexOf('fs:') !== 0) return u || '';
+    const p = u.slice(3).split(':');
+    const id = p[0], v = p[1] || '0';
+    if (this._fotoLocal && this._fotoLocal[id]) return this._fotoLocal[id];
+    if (this._swReady) return '/foto/' + encodeURIComponent(id) + '?v=' + encodeURIComponent(v);
+    if (this._swFailed) this.fotoFallback(id);
+    return '';
+  }
+  picAll(o) {
+    const out = {};
+    Object.keys(o || {}).forEach((k) => { out[k] = this.pic(o[k]); });
+    return out;
+  }
+  // Navegadores sin service worker: se baja la foto directamente de Firestore.
+  fotoFallback(id) {
+    this._fotoAsk = this._fotoAsk || {};
+    if (this._fotoAsk[id] || !this.db) return;
+    this._fotoAsk[id] = true;
+    this.db.collection('fotos').doc(id).get().then((d) => {
+      const data = d.exists ? ((d.data() || {}).d || '') : '';
+      if (!data) return;
+      this._fotoLocal = this._fotoLocal || {};
+      this._fotoLocal[id] = data;
+      this.picTick();
+    }).catch(() => {});
+  }
+  picTick() {
+    if (this._picT) return;
+    this._picT = setTimeout(() => { this._picT = null; this.setState({ picV: Date.now() }); }, 120);
+  }
+  bootFotosSW() {
+    const nav = typeof navigator !== 'undefined' ? navigator : null;
+    const okProto = typeof location !== 'undefined' && (location.protocol === 'https:' || location.hostname === 'localhost');
+    if (!nav || !('serviceWorker' in nav) || !okProto) { this._swFailed = true; return; }
+    if (nav.serviceWorker.controller) this._swReady = true;
+    nav.serviceWorker.addEventListener('controllerchange', () => { this._swReady = true; this.picTick(); });
+    nav.serviceWorker.register('/sw-fotos.js').then(() => nav.serviceWorker.ready).then(() => {
+      if (nav.serviceWorker.controller) { this._swReady = true; this.picTick(); }
+    }).catch(() => { this._swFailed = true; this.picTick(); });
+    setTimeout(() => { if (!this._swReady) { this._swFailed = true; this.picTick(); } }, 4000);
+  }
+  // Guarda la foto en «fotos» y devuelve la referencia para el producto.
+  storeFoto(fid, data) {
+    if (!this.online()) return data;
+    const v = Date.now().toString(36);
+    this._fotoLocal = this._fotoLocal || {};
+    this._fotoLocal[fid] = data;
+    this.db.collection('fotos').doc(fid).set({ d: data, v }).catch((e) => this.flash(this.fbErr(e)));
+    return 'fs:' + fid + ':' + v;
+  }
+  applyFoto(tgt, data) {
+    const fid = tgt.brand ? ('brand__' + tgt.brand) : (tgt.coll + '__' + tgt.id);
+    const ref = this.storeFoto(fid, data);
+    if (tgt.brand) this.setBrand(tgt.brand, ref);
+    else if (tgt.coll === 'eventosImg') this.setEventoImg(tgt.id, ref);
+    else this.setField(tgt.coll, tgt.id, 'imagen', ref);
+  }
+  // Mueve a «fotos» las fotos que aún están incrustadas en los productos (una sola vez).
+  migrarFotos = async () => {
+    if (!this.online() || !this._authed) { this.flash('Inicia sesión para mover las fotos.'); return { error: 'sin sesión' }; }
+    const out = { movidas: 0, errores: 0 };
+    const mover = async (docRef, campo, fid, data) => {
+      const v = Date.now().toString(36);
+      try {
+        await this.db.collection('fotos').doc(fid).set({ d: data, v });
+        await docRef.set({ [campo]: 'fs:' + fid + ':' + v }, { merge: true });
+        out.movidas++;
+      } catch (e) { out.errores++; }
+    };
+    const colls = ['libros', 'consig', 'merch', 'cafeteria', 'especialidad', 'eventos', 'eventosImg'];
+    for (const coll of colls) {
+      const snap = await this.db.collection(coll).get();
+      for (const d of snap.docs) {
+        const im = (d.data() || {}).imagen;
+        if (typeof im === 'string' && im.indexOf('data:') === 0) await mover(d.ref, 'imagen', coll + '__' + d.id, im);
+      }
+    }
+    const bs = await this.db.collection('brand').get();
+    for (const d of bs.docs) {
+      const im = (d.data() || {}).data;
+      if (typeof im === 'string' && im.indexOf('data:') === 0) await mover(d.ref, 'data', 'brand__' + d.id, im);
+    }
+    this.flash('Fotos movidas: ' + out.movidas + (out.errores ? (' · errores: ' + out.errores) : ''), 8000);
+    return out;
+  };
   imgBits(url, alt, fit) {
     return { imgUrl: url || '', imgAlt: alt || '', imgTagStyle: this.imgTag(fit) };
   }
@@ -2518,6 +2616,7 @@ class Component extends DCLogic {
   // Portadas de libro: se ven COMPLETAS (sin recortar arriba y abajo),
   // porque las portadas de Google Books/OpenLibrary son más estrechas que el recuadro.
   bookCoverStyle(url, extra) {
+    url = this.pic(url);
     const s = {
       position: 'absolute', inset: 0,
       backgroundImage: 'url("' + (url || '') + '")',
@@ -2533,6 +2632,7 @@ class Component extends DCLogic {
     return extra ? Object.assign(s, extra) : s;
   }
   logoBox(url, size, extra) {
+    url = this.pic(url);
     const s = { width: size + 'px', height: size + 'px', borderRadius: '12px', overflow: 'hidden', background: '#FFFDF8', backgroundImage: 'url("' + (url || '') + '")', backgroundSize: 'cover', backgroundPosition: 'center' };
     return extra ? Object.assign(s, extra) : s;
   }
@@ -2924,15 +3024,11 @@ class Component extends DCLogic {
         let data;
         try { data = isLogo ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', tgt.brand ? 0.78 : 0.7); }
         catch (x) { data = ev.target.result; }
-        if (tgt.brand) this.setBrand(tgt.brand, data);
-        else if (tgt.coll === 'eventosImg') this.setEventoImg(tgt.id, data);
-        else this.setField(tgt.coll, tgt.id, 'imagen', data);
+        this.applyFoto(tgt, data);
         this.flash('Foto cargada ✓');
       };
       img.onerror = () => {
-        if (tgt.brand) this.setBrand(tgt.brand, ev.target.result);
-        else if (tgt.coll === 'eventosImg') this.setEventoImg(tgt.id, ev.target.result);
-        else this.setField(tgt.coll, tgt.id, 'imagen', ev.target.result);
+        this.applyFoto(tgt, ev.target.result);
       };
       img.src = ev.target.result;
     };
@@ -3458,6 +3554,7 @@ class Component extends DCLogic {
     const telefono = (this.state.newsPhone || '').trim();
     const correo = (this.state.newsMail || '').trim();
     if (!nombre) { this.setState({ newsErr: 'Escribe tu nombre.' }); return; }
+    if (!this.state.newsOk) { this.setState({ newsErr: 'Marca la casilla para aceptar recibir novedades.' }); return; }
     if (telefono.replace(/[^0-9]/g, '').length < 7 && correo.indexOf('@') < 0) {
       this.setState({ newsErr: 'Déjanos tu celular o un correo válido para poder avisarte.' });
       return;
@@ -3475,7 +3572,7 @@ class Component extends DCLogic {
     }
     this.notifyEmail('Nuevo lector interesado · web La Madriguera', { nombre_cliente: nombre, celular_cliente: telefono || '(no dejó)', correo_cliente: correo || '(no dejó)', mensaje: 'Se anotó en la web para recibir novedades y eventos.' });
     this.track('sign_up', { method: 'club_lectores' });
-    this.setState({ newsName: '', newsPhone: '', newsMail: '', newsErr: '' });
+    this.setState({ newsName: '', newsPhone: '', newsMail: '', newsErr: '', newsOk: false });
     this.flash('¡Listo, ' + nombre.split(' ')[0] + '! Te avisaremos de las novedades ✨');
   };
 
@@ -3605,6 +3702,7 @@ class Component extends DCLogic {
     };
   }
   decBook(b) {
+    b = Object.assign({}, b, { imagen: this.pic(b.imagen) });
     return Object.assign({}, b, this.offerBits(b), {
       priceLabel: '$' + b.price, estadoStyle: this.estadoStyle(b.estado), dispStyle: this.dispStyle(b.disp),
       waHref: this.waBook(b), hasImg: !!b.imagen, imgStyle: this.bookCoverStyle(b.imagen),
@@ -3615,6 +3713,7 @@ class Component extends DCLogic {
     });
   }
   decMerch(m) {
+    m = Object.assign({}, m, { imagen: this.pic(m.imagen) });
     return Object.assign({}, m, this.offerBits(m), {
       priceLabel: '$' + m.price, dispStyle: this.dispStyle(m.disp), waHref: this.waMerch(m), hasImg: !!m.imagen, imgStyle: this.coverStyle(m.imagen),
       imgUrl: m.imagen || '', imgTagStyle: this.coverImg(),
@@ -3629,6 +3728,7 @@ class Component extends DCLogic {
   waCafe(m) { return this.waText('Hola, quiero consultar por "' + m.name + '" del menú de la cafetería de La Madriguera. ¿Está disponible?'); }
   // Café de especialidad y ediciones especiales: tarjetas con carrito (como el merch)
   decEspecial(m) {
+    m = Object.assign({}, m, { imagen: this.pic(m.imagen) });
     return Object.assign({}, m, this.offerBits(m), {
       priceLabel: '$' + m.price, dispStyle: this.dispStyle(m.disp), waHref: this.waEspecial(m), hasImg: !!m.imagen, imgStyle: this.coverStyle(m.imagen),
       imgUrl: m.imagen || '', imgTagStyle: this.coverImg(),
@@ -3641,6 +3741,7 @@ class Component extends DCLogic {
   }
   // Menú de cafetería / platos de temporada: solo mostrar + WhatsApp (sin carrito)
   decCafe(m) {
+    m = Object.assign({}, m, { imagen: this.pic(m.imagen) });
     const hasPrice = (+m.price > 0);
     return Object.assign({}, m, {
       priceLabel: hasPrice ? ('$' + m.price) : '', hasPrice,
@@ -3653,6 +3754,7 @@ class Component extends DCLogic {
     });
   }
   decEvent(e) {
+    e = Object.assign({}, e, { imagen: this.pic(e.imagen) });
     const agotado = !!e.agotado;
     return Object.assign({}, e, {
       imgUrl: e.imagen || '', imgTagStyle: this.coverImg(),
@@ -3688,7 +3790,7 @@ class Component extends DCLogic {
     const { view, page, search, category, adminTab } = this.state;
     const q = (search || '').trim().toLowerCase();
     const cms = this.state.cms;
-    const brand = (cms && cms.brand) || {};
+    const brand = this.picAll((cms && cms.brand) || {});
     const brandDefs = [['logo', 'Logo', 'Cuadrado, fondo claro'], ['hero', 'Banner principal', 'Se ve en el inicio'], ['local', 'Foto del local', 'Sección Visítanos'], ['eventos', 'Imagen de Eventos', 'Encabezado de Eventos'], ['vender', 'Imagen de Vender', 'Encabezado de Vender'], ['historia1', 'Foto Nosotros 1', 'Página Nuestra historia'], ['historia2', 'Foto Nosotros 2', 'Página Nuestra historia']];
     const brandSlots = brandDefs.map(d => ({ key: d[0], label: d[1], desc: d[2], url: brand[d[0]] || '', has: !!brand[d[0]], imgStyle: this.coverStyle(brand[d[0]] || ''), onPick: () => this.pickBrand(d[0]), onClear: () => this.clearBrand(d[0]) }));
 
@@ -3854,7 +3956,7 @@ class Component extends DCLogic {
       onEstado: (e) => this.setField(coll, l.id, 'estado', e.target.value),
       onDisp: (e) => this.setField(coll, l.id, 'disp', e.target.value),
       onPick: () => this.pickImage(coll, l.id),
-      imgUrlVal: (l.imagen && (l.imagen + '').indexOf('data:') !== 0) ? (l.imagen + '') : '',
+      imgUrlVal: (l.imagen && (l.imagen + '').indexOf('data:') !== 0 && (l.imagen + '').indexOf('fs:') !== 0) ? (l.imagen + '') : '',
       onImgUrl: (e) => this.setField(coll, l.id, 'imagen', (e.target.value || '').trim()),
       onClearImg: () => this.setField(coll, l.id, 'imagen', ''),
       onDel: () => this.delItem(coll, l.id),
@@ -4194,6 +4296,12 @@ class Component extends DCLogic {
       newsMail: this.state.newsMail, onNewsMail: (e) => this.setState({ newsMail: e.target.value, newsErr: '' }),
       newsErr: this.state.newsErr, newsHasErr: !!this.state.newsErr,
       submitNews: this.submitNews,
+      newsOkMark: this.state.newsOk ? '☑' : '☐',
+      toggleNewsOk: () => this.setState({ newsOk: !this.state.newsOk, newsErr: '' }),
+      adminWarn: this.state.fb !== 'online' || !this.state.authed,
+      adminWarnMsg: this.state.fb !== 'online'
+        ? 'Sin conexión con la nube: lo que cambies ahora NO llega a tu web.'
+        : 'Tu sesión se cerró: lo que cambies ahora NO se guarda. Vuelve a iniciar sesión.',
 
       // lead
       leadOpen: !!this.state.lead, leadKind: this.state.lead ? this.state.lead.kind : '', leadTitle: this.state.lead ? this.state.lead.title : '', leadSub: this.state.lead ? this.state.lead.sub : '',
