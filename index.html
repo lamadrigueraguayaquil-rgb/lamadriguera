@@ -1076,8 +1076,12 @@
           <h2 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:30px; color:#816619;">Libros en consignación</h2>
           <p style="margin:6px 0 0; font-size:14px; color:#6E5946;">{{ consigCount }} registros · libros de segunda mano que te dejan para vender.</p>
         </div>
-        <span onClick="{{ addConsig }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#816619; color:#FBF3E0; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(154,122,30,0.3);" style-hover="background:#866916;">+ Registrar libro recibido</span>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <span onClick="{{ sincronizarSV }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#244031; color:#F7EFE2; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(36,64,49,0.3);" style-hover="background:#2f5240;">{{ svBtnLabel }}</span>
+          <span onClick="{{ addConsig }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#816619; color:#FBF3E0; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(154,122,30,0.3);" style-hover="background:#866916;">+ Registrar libro recibido</span>
+        </div>
       </div>
+      <div style="margin-bottom:12px; background:#E2EAE6; border:1px solid #B9CDC1; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#244031; line-height:1.5;"><strong>Los libros en consignación se ingresan en la app Segunda Vida</strong> y se cobran en el POS. Esta lista se actualiza sola: publica lo que Segunda Vida tiene a la venta y retira lo que se vende en caja. Puedes mejorar aquí el título o subir la portada; eso no se pierde al sincronizar.<br><span style="font-size:12.5px;">{{ svStatus }}</span></div>
       <div style="margin-bottom:22px; background:#FBF3E0; border:1px solid #E3D2B8; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#6E5946; line-height:1.5;">Cuando alguien te deja libros en el local, regístralos aquí con los datos del dueño. El <strong>Estado</strong> es la condición del libro (Nuevo, Usado…) y es lo que ve el cliente. La <strong>Situación de venta</strong> controla la publicación: solo los que marques <strong>En venta</strong> aparecen en la página, en <strong>Segunda historia</strong>; cuando se venda, cámbialo a <strong>Vendido</strong>. El <strong>Pago al dueño</strong> se lleva aparte, con su propio botón, cuando le entregues su parte.</div>
       <datalist id="lm-bookcats-consig"><sc-for list="{{ bookCatOptions }}" as="o" hint-placeholder-count="6"><option value="{{ o.v }}"></option></sc-for></datalist>
 
@@ -1745,6 +1749,30 @@ service cloud.firestore {
 
   </main>
 
+  <sc-if value="{{ svLoginOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; inset:0; z-index:200; background:rgba(42,28,18,0.55); display:flex; align-items:center; justify-content:center; padding:16px;">
+      <div role="dialog" aria-label="Conectar con Segunda Vida" style="background:#FFFDF8; border-radius:18px; padding:22px; width:100%; max-width:420px; box-shadow:0 20px 50px rgba(0,0,0,0.3);">
+        <h3 style="margin:0 0 6px; font-family:'Bricolage Grotesque',sans-serif; font-size:22px; color:#244031;">Conectar con Segunda Vida</h3>
+        <p style="margin:0 0 14px; font-size:13.5px; line-height:1.5; color:#7C6651;">Entra con el <strong>mismo correo y contraseña del POS</strong>. Solo se hace una vez en este navegador. Los datos de los consignantes no pasan a la web.</p>
+        <input value="{{ svEmail }}" onInput="{{ onSvEmail }}" type="email" placeholder="Correo del POS" autocomplete="username" style="width:100%; box-sizing:border-box; padding:12px 14px; border:1px solid #E3D2B8; border-radius:10px; font-size:15px; margin-bottom:10px; font-family:'Outfit',sans-serif;">
+        <input value="{{ svPass }}" onInput="{{ onSvPass }}" type="password" placeholder="Contraseña del POS" autocomplete="current-password" style="width:100%; box-sizing:border-box; padding:12px 14px; border:1px solid #E3D2B8; border-radius:10px; font-size:15px; font-family:'Outfit',sans-serif;">
+        <sc-if value="{{ svHasErr }}" hint-placeholder-val="{{ false }}"><div style="margin-top:10px; font-size:13px; font-weight:700; color:#9A4A3C;">{{ svErr }}</div></sc-if>
+        <div style="display:flex; gap:10px; margin-top:16px;">
+          <span onClick="{{ svCloseLogin }}" style="cursor:pointer; flex:1; text-align:center; padding:12px; border-radius:12px; border:1px solid #E3D2B8; font-weight:700; color:#5E4632;">Cancelar</span>
+          <span onClick="{{ svLogin }}" style="cursor:pointer; flex:2; text-align:center; padding:12px; border-radius:12px; background:#244031; color:#F7EFE2; font-weight:800;">Conectar y sincronizar</span>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ svResOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; inset:0; z-index:200; background:rgba(42,28,18,0.55); display:flex; align-items:center; justify-content:center; padding:16px;">
+      <div role="dialog" aria-label="Resultado de la sincronización" style="background:#FFFDF8; border-radius:18px; padding:22px; width:100%; max-width:520px; max-height:80vh; overflow:auto; box-shadow:0 20px 50px rgba(0,0,0,0.3);">
+        <h3 style="margin:0 0 10px; font-family:'Bricolage Grotesque',sans-serif; font-size:22px; color:#244031;">Sincronización con Segunda Vida ✓</h3>
+        <div style="white-space:pre-line; font-size:14px; line-height:1.55; color:#34251A;">{{ svResText }}</div>
+        <span onClick="{{ svCloseRes }}" style="cursor:pointer; display:block; text-align:center; margin-top:16px; padding:12px; border-radius:12px; background:#244031; color:#F7EFE2; font-weight:800;">Listo</span>
+      </div>
+    </div>
+  </sc-if>
   <input id="lm-admin-file" type="file" accept="image/*" style="display:none;" onChange="{{ onFile }}">
   <input id="lm-bulk-file" type="file" accept=".csv,text/csv,text/plain" style="display:none;" onChange="{{ onBulkFile }}">
 </div>
@@ -2117,6 +2145,7 @@ class Component extends DCLogic {
     this.syncChips();
     this.bootFirebase(0);
     this.bootFotosSW();
+    this._svIv = setInterval(() => this.svAutoTick(), 60 * 1000);
     this._onHide = () => { if (document.visibilityState === 'hidden') this.flushWrites(); };
     document.addEventListener('visibilitychange', this._onHide);
     window.addEventListener('pagehide', () => this.flushWrites());
@@ -2126,10 +2155,11 @@ class Component extends DCLogic {
     window.removeEventListener('focus', this._onStorage);
     window.removeEventListener('hashchange', this.applyHash);
     (this._unsubs || []).forEach(fn => { try { fn(); } catch (e) {} });
+    if (this._svIv) clearInterval(this._svIv);
     if (this._fbTimer) clearTimeout(this._fbTimer);
     if (this._toastT) clearTimeout(this._toastT);
   }
-  componentDidUpdate() { this.syncChips(); this.bootReservas(); this.bootAnalytics(); this.seoSync(); this.seoTitle(); }
+  componentDidUpdate() { this.syncChips(); this.bootReservas(); this.bootAnalytics(); this.seoSync(); this.seoTitle(); this.svAutoTick(); }
 
   // ---------- Google Analytics 4 ----------
   bootAnalytics() {
@@ -2326,6 +2356,111 @@ class Component extends DCLogic {
     this.flash('Reintentando conexión…');
     this.bootFirebase(0);
   };
+  // ---------- sincronización con Segunda Vida (proyecto la-madriguera-cb489) ----------
+  // Fuente de verdad: la app Segunda Vida (lm_consig_libros) + el módulo de consignación
+  // del POS (madu/consigna), que es donde se cobra. La web solo REFLEJA: publica lo que
+  // Segunda Vida tiene «publicado» y retira lo que se vendió o se devolvió.
+  // Se lee con la sesión de la administradora; ningún dato del consignante pasa a la web.
+  svApp() {
+    this.bootReservas();
+    try { return window.firebase.app('reservas'); } catch (e) { return null; }
+  }
+  svUser() { const a = this.svApp(); try { return a ? a.auth().currentUser : null; } catch (e) { return null; } }
+  svCap(t) { t = ((t || '') + '').trim(); return t ? t.charAt(0).toUpperCase() + t.slice(1) : ''; }
+  svCondicion(f) {
+    f = ((f || '') + '').toLowerCase();
+    if (['como_nuevo', 'excelente', 'muy_bueno', 'nuevo'].indexOf(f) >= 0) return 'Usado excelente';
+    if (f === 'bueno') return 'Usado bueno';
+    return f ? 'Con detalles visibles' : 'Usado bueno';
+  }
+  svPlan(svList, posList, webConsig) {
+    const plan = { crear: [], actualizar: [], vender: [], quitar: [], soloPOS: 0, publicados: 0 };
+    const vistos = {};
+    svList.forEach((l) => {
+      const cod = l.codigo || l.id;
+      vistos[cod] = true;
+      const pl = posList.find(p => (l.posLibroId && p.id === l.posLibroId) || (p.code && p.code === cod));
+      const vendido = ['vendido', 'pagado'].indexOf(l.estado) >= 0 || !!(pl && pl.estado === 'vendido');
+      const fuera = ['vencido', 'retirado', 'rechazado', 'devuelto'].indexOf(l.estado) >= 0 || !!(pl && ['devuelto', 'cedido'].indexOf(pl.estado) >= 0);
+      const visible = l.estado === 'publicado' && l.aceptado !== false && !vendido && !fuera;
+      const w = webConsig.find(c => c.sv === cod);
+      const precio = Number(l.precioFinal != null ? l.precioFinal : (pl ? pl.precio : 0)) || 0;
+      if (visible) plan.publicados++;
+      if (fuera) { if (w) plan.quitar.push({ id: w.id, title: w.title }); return; }
+      if (vendido) { if (w && w.estado !== 'Vendido') plan.vender.push({ id: w.id, title: w.title }); return; }
+      if (!visible) return;
+      if (!w) {
+        plan.crear.push({
+          id: 'sv_' + cod, code: cod, sv: cod, posId: (pl && pl.id) || l.posLibroId || '',
+          title: this.svCap(l.titulo), author: l.autor || '', genre: l.categoria || '', cat: '',
+          sinopsis: l.descripcion || '', isbn: l.isbn || '', editorial: l.editorial || '',
+          price: precio, condicion: this.svCondicion(l.estadoFisico), estado: 'En venta',
+          imagen: l.portadaUrl || '', origen: 'Segunda Vida', order: Date.now()
+        });
+        return;
+      }
+      const c = {};
+      if (w.estado === 'Vendido' && w.svVendido) { c.estado = 'En venta'; c.svVendido = false; }
+      else if (w.estado !== 'Vendido' && w.estado !== 'En venta') c.estado = 'En venta';
+      if (precio && Number(w.price) !== precio) c.price = precio;
+      if (!w.imagen && l.portadaUrl) c.imagen = l.portadaUrl;
+      if (Object.keys(c).length) plan.actualizar.push({ id: w.id, title: w.title, cambios: c });
+    });
+    webConsig.forEach((w) => { if (w.sv && !vistos[w.sv]) plan.quitar.push({ id: w.id, title: w.title }); });
+    plan.soloPOS = posList.filter(p => p.estado === 'disponible' && !svList.some(l => (l.posLibroId && l.posLibroId === p.id) || (p.code && l.codigo === p.code))).length;
+    return plan;
+  }
+  sincronizarSV = async (auto) => {
+    if (this._svBusy) return;
+    if (!this.online() || !this._authed) { if (!auto) this.flash('Inicia sesión en el panel para sincronizar.'); return; }
+    const app = this.svApp();
+    if (!app || !this.resDb) { if (!auto) this.flash('Falta la conexión con la app de reservas (Configuración → clave de reservas).', 8000); return; }
+    if (!this.svUser()) { if (!auto) this.setState({ svLoginOpen: true, svErr: '' }); else this.setState({ svNeedLogin: true }); return; }
+    this._svBusy = true; this.setState({ svBusy: true });
+    try {
+      const [svSnap, posDoc] = await Promise.all([
+        this.resDb.collection('lm_consig_libros').get(),
+        this.resDb.collection('madu').doc('consigna').get()
+      ]);
+      const svList = []; svSnap.forEach((d) => svList.push(Object.assign({ id: d.id }, d.data())));
+      const posList = ((posDoc.exists && posDoc.data().v) || {}).libros || [];
+      const web = (this.currentCMS().consig || []);
+      const plan = this.svPlan(svList, posList, web);
+      const ref = (id) => this.db.collection('consig').doc(id);
+      const ops = [];
+      plan.crear.forEach((it) => ops.push(ref(it.id).set(this.clean(it))));
+      plan.actualizar.forEach((u) => ops.push(ref(u.id).set(this.clean(u.cambios), { merge: true })));
+      plan.vender.forEach((u) => ops.push(ref(u.id).set({ estado: 'Vendido', svVendido: true }, { merge: true })));
+      plan.quitar.forEach((u) => ops.push(ref(u.id).delete()));
+      await Promise.all(ops);
+      const res = { fecha: Date.now(), crear: plan.crear.length, actualizar: plan.actualizar.length, vender: plan.vender.length, quitar: plan.quitar.length, publicados: plan.publicados, soloPOS: plan.soloPOS,
+        detalle: { crear: plan.crear.map(x => x.title), vender: plan.vender.map(x => x.title), quitar: plan.quitar.map(x => x.title), actualizar: plan.actualizar.map(x => x.title) } };
+      this._svLast = res;
+      this.setState({ svBusy: false, svNeedLogin: false, svResult: auto ? this.state.svResult : res });
+      const n = res.crear + res.actualizar + res.vender + res.quitar;
+      if (!auto || n) this.flash('Segunda Vida: ' + (n ? (res.crear + ' publicados · ' + res.vender + ' vendidos retirados · ' + res.quitar + ' quitados · ' + res.actualizar + ' actualizados') : 'todo al día ✓'), 7000);
+      return res;
+    } catch (e) {
+      console.error('[LM] Segunda Vida', e);
+      this.setState({ svBusy: false });
+      const c = (e && e.code) || '';
+      this.flash(c.indexOf('permission') >= 0 ? 'Tu usuario del POS no tiene permiso para leer Segunda Vida (necesita rol admin o consig).' : 'No se pudo sincronizar con Segunda Vida: ' + (c || (e && e.message) || e), 10000);
+    } finally { this._svBusy = false; }
+  };
+  svLogin = () => {
+    const app = this.svApp();
+    const email = (this.state.svEmail || '').trim(), pass = this.state.svPass || '';
+    if (!app) { this.setState({ svErr: 'Falta la conexión con la app de reservas.' }); return; }
+    if (!email || !pass) { this.setState({ svErr: 'Escribe el correo y la contraseña con los que entras al POS.' }); return; }
+    app.auth().signInWithEmailAndPassword(email, pass)
+      .then(() => { this.setState({ svLoginOpen: false, svPass: '', svErr: '', svNeedLogin: false }); this.sincronizarSV(false); })
+      .catch((err) => this.setState({ svErr: this.authErr(err) }));
+  };
+  svAutoTick() {
+    if (this.state.view === 'admin' && this.state.authed && this.state.fb === 'online') {
+      if (!this._svAutoAt || Date.now() - this._svAutoAt > 5 * 60 * 1000) { this._svAutoAt = Date.now(); this.sincronizarSV(true); }
+    }
+  }
   // ---------- conexión con la app de reservas (la-madriguera-cb489) ----------
   RES_PROJECT = { authDomain: 'la-madriguera-cb489.firebaseapp.com', projectId: 'la-madriguera-cb489' };
   bootReservas() {
@@ -4198,6 +4333,17 @@ class Component extends DCLogic {
       pedidosCount: pedidosAll.length, pedidosNuevos: pedidosAll.filter(p => p.estado === 'Nuevo').length, pedidosEmpty: pedidosAll.length === 0,
       pedidoChips, ventasEntregadas,
       aSearch: this.state.aSearch, onASearch: (e) => this.setState({ aSearch: e.target.value }),
+      sincronizarSV: () => this.sincronizarSV(false), svBusy: !!this.state.svBusy, svNeedLogin: !!this.state.svNeedLogin,
+      svBtnLabel: this.state.svBusy ? 'Sincronizando…' : '🔄 Sincronizar con Segunda Vida',
+      svStatus: this._svLast ? ('Última sincronización: ' + new Date(this._svLast.fecha).toLocaleTimeString('es-EC', { hour: '2-digit', minute: '2-digit' }) + ' · ' + this._svLast.publicados + ' libros de Segunda Vida a la venta en la web' + (this._svLast.soloPOS ? (' · ⚠ ' + this._svLast.soloPOS + ' libros están solo en el POS: impórtalos en Segunda Vida («Importar los que faltan»)') : '')) : (this.svUser() ? 'Se sincroniza sola al abrir el panel y cada 5 minutos.' : 'Conecta tu usuario del POS para que la web se actualice sola.'),
+      svLoginOpen: !!this.state.svLoginOpen, svEmail: this.state.svEmail || '', svPass: this.state.svPass || '', svErr: this.state.svErr || '', svHasErr: !!this.state.svErr,
+      onSvEmail: (e) => this.setState({ svEmail: e.target.value, svErr: '' }), onSvPass: (e) => this.setState({ svPass: e.target.value, svErr: '' }),
+      svLogin: this.svLogin, svCloseLogin: () => this.setState({ svLoginOpen: false, svPass: '', svErr: '' }),
+      svResOpen: !!this.state.svResult, svCloseRes: () => this.setState({ svResult: null }),
+      svResText: this.state.svResult ? (function (r) {
+        const l = (t, a) => a.length ? ('\n\n' + t + ' (' + a.length + '):\n• ' + a.slice(0, 40).join('\n• ')) : '';
+        return 'Libros de Segunda Vida a la venta en la web: ' + r.publicados + l('Publicados ahora', r.detalle.crear) + l('Vendidos en el POS, retirados de la web', r.detalle.vender) + l('Devueltos o vencidos, quitados', r.detalle.quitar) + l('Precio o estado actualizado', r.detalle.actualizar) + (r.soloPOS ? ('\n\n⚠ ' + r.soloPOS + ' libros están solo en el POS y no en Segunda Vida. Ábrelos en Segunda Vida → «Importar los que faltan» para que también salgan en la web.') : '');
+      })(this.state.svResult) : '',
       addLibro: this.addLibro, addConsig: this.addConsig, addMerch: this.addMerch, addEvento: this.addEvento,
       exitAdmin: () => this.setState({ view: 'store' }),
       logout: this.logout, adminEmail: this.state.adminEmail,
