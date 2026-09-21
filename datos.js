@@ -284,7 +284,7 @@ window.LM_DATA = {
   ],
   "config": {
     "email": "lamadriguera.guayaquil@gmail.com",
-    "whatsapp": "593960186336",
+    "whatsapp": "593991371775",
     "instagram": "https://www.instagram.com/lamadrigueraec/",
     "tiktok": "https://www.tiktok.com/@lamadrigueraec",
     "maps": "https://www.google.com/maps/search/?api=1&query=Circunvalaci%C3%B3n%20Sur%20632%20y%20Ficus%2C%20Urdesa%2C%20Guayaquil"
