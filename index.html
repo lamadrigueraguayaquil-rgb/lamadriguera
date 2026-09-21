@@ -3849,6 +3849,9 @@ class Component extends DCLogic {
   waText(t) { return 'https://wa.me/' + this.waNum() + '?text=' + encodeURIComponent(t); }
   waBook(b) { return this.waText('Hola, vi en el catálogo de La Madriguera el libro ' + b.title + ', código ' + b.code + '. ¿Sigue disponible?'); }
   waMerch(m) { return this.waText('Hola, vi en la web de La Madriguera el producto ' + m.name + '. ¿Sigue disponible?'); }
+  /* Compra en línea de cupos (app de reservas en entradas.lamadriguera.ec).
+     Solo aplica a eventos que vienen de la app (resLive) y que tienen cupo. */
+  buyUrl(e) { return (e && e.resLive && e.rawId && !e.agotado) ? ('https://entradas.lamadriguera.ec/?comprar=' + encodeURIComponent(e.rawId)) : ''; }
   waEvent(e) { return this.waText('Hola, quiero reservar para el evento "' + e.name + '" del ' + e.date + '. ¿Hay cupos disponibles?'); }
 
   // ---------- club de lectores (novedades) ----------
@@ -4063,13 +4066,15 @@ class Component extends DCLogic {
       imgUrl: e.imagen || '', imgTagStyle: this.coverImg(),
       imgAlt: (e.name || 'Evento') + ' — evento literario en La Madriguera, Guayaquil',
       dispStyle: agotado ? this.badge('#F3D9D0', '#9A4A3C') : this.cuposStyle(),
-      waHref: agotado
+      waHref: this.buyUrl(e) || (agotado
         ? this.waText('Hola, el evento "' + e.name + '" del ' + e.date + ' aparece agotado. ¿Me pueden anotar en la lista de espera?')
-        : this.waEvent(e),
+        : this.waEvent(e)),
       hasImg: !!e.imagen, imgStyle: this.coverStyle(e.imagen),
       imgUrl: e.imagen || '', imgAlt: (e.name || 'Evento') + ' en La Madriguera' + (e.date ? (' · ' + e.date) : ''), imgTagStyle: this.imgTag('cover'),
       onOpen: () => this.openDetail('evento', e.id || e.name),
-      onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Evento', subject: 'Reserva web · Evento: ' + e.name, title: e.name, sub: [e.date, e.time].filter(Boolean).join(' · '), waHref: this.waEvent(e), fields: { tipo: 'Evento', evento: e.name, fecha: (e.date || '') + ' ' + (e.time || ''), precio: e.price || '' } }); }
+      buyUrl: this.buyUrl(e),
+      ctaLabel: this.buyUrl(e) ? 'Comprar entrada' : (agotado ? 'Lista de espera por WhatsApp' : 'Reservar por WhatsApp'),
+      onBuy: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); const bu = this.buyUrl(e); if (bu) { this.track('begin_checkout', { item_name: e.name }); if (typeof window !== 'undefined') window.location.href = bu; return; } this.openLead({ kind: 'Evento', subject: 'Reserva web · Evento: ' + e.name, title: e.name, sub: [e.date, e.time].filter(Boolean).join(' · '), waHref: this.waEvent(e), fields: { tipo: 'Evento', evento: e.name, fecha: (e.date || '') + ' ' + (e.time || ''), precio: e.price || '' } }); }
     });
   }
 
@@ -4214,7 +4219,7 @@ class Component extends DCLogic {
         const f = this.resEventos().concat(cms.eventos || []).find(x => x.id === det.id || x.name === det.id);
         if (f) {
           const d = this.decEvent(f);
-          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Evento', dTitle: d.name, dSub: [d.date, d.time].filter(Boolean).join(' · '), dHasSub: !!(d.date || d.time), dDesc: d.includes || '', dHasDesc: !!d.includes, dPriceLabel: (d.price || '') + '', dHasBadge1: !!d.cupos, dBadge1: d.cupos, dBadge1Style: d.agotado ? this.badge('#F3D9D0', '#9A4A3C') : this.badge('#E3EDE3', '#2E6B41'), dCanCart: false, dWaHref: d.waHref, dWaLabel: d.agotado ? 'Anotarme en lista de espera' : 'Reservar por WhatsApp', dHasImg: d.hasImg, dImgStyle: d.imgStyle });
+          dv = Object.assign(dv, { detailOpen: true, dKindLabel: 'Evento', dTitle: d.name, dSub: [d.date, d.time].filter(Boolean).join(' · '), dHasSub: !!(d.date || d.time), dDesc: d.includes || '', dHasDesc: !!d.includes, dPriceLabel: (d.price || '') + '', dHasBadge1: !!d.cupos, dBadge1: d.cupos, dBadge1Style: d.agotado ? this.badge('#F3D9D0', '#9A4A3C') : this.badge('#E3EDE3', '#2E6B41'), dCanCart: false, dWaHref: d.buyUrl || d.waHref, dWaLabel: d.buyUrl ? 'Comprar entrada' : (d.agotado ? 'Anotarme en lista de espera' : 'Reservar por WhatsApp'), dHasImg: d.hasImg, dImgStyle: d.imgStyle });
         }
       }
     }
