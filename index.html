@@ -906,6 +906,7 @@
           <span onClick="{{ bulkCovers }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#7C2F3E; color:#FFF7EC; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(124,47,62,0.3);" style-hover="background:#672836;">{{ coversBtnLabel }}</span>
           <span onClick="{{ limpiarSinopsis }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(94,31,51,0.25);" style-hover="background:#244031;">🌐 Limpiar sinopsis en otro idioma</span>
           <span onClick="{{ openBulk }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(201,162,75,0.3);" style-hover="background:#d9b25b;">⬆ Carga masiva</span>
+          <span onClick="{{ abrirPOS }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#244031; color:#F7EFE2; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(36,64,49,0.3);" style-hover="background:#2f5240;">{{ posBtnLabel }}</span>
           <span onClick="{{ addLibro }}" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#5E1F33; color:#F7EFE2; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(94,31,51,0.25);" style-hover="background:#244031;">+ Añadir libro</span>
         </div>
       </div>
@@ -915,6 +916,31 @@
         <span style="position:absolute; left:16px; top:50%; transform:translateY(-50%); width:13px; height:13px; border:2px solid #80654B; border-radius:50%;"></span>
         <input value="{{ aSearch }}" onInput="{{ onASearch }}" placeholder="Buscar por título, autor o código…" style="width:100%; padding:12px 16px 12px 42px; font-family:'Outfit',sans-serif; font-size:14.5px; color:#34251A; background:#FFFDF8; border:1px solid #E3D2B8; border-radius:999px; outline:none;">
       </div>
+
+      <sc-if value="{{ posOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-bottom:22px; background:#FFFDF8; border:1px solid #244031; border-radius:16px; padding:clamp(16px,3vw,24px); box-shadow:0 10px 28px rgba(36,64,49,0.1);">
+        <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:21px; color:#244031;">Libros del POS</h3>
+        <p style="margin:6px 0 12px; font-size:13.5px; line-height:1.5; color:#6E5946;">Marca los libros que quieres mostrar en la web y pulsa <strong>Publicar</strong>. Se publican con el precio y el stock del POS, y la web busca sola la portada y la sinopsis. Desde entonces el <strong>precio y el stock se copian solos</strong> del POS: cuando se agote en caja, deja de mostrarse. {{ posCountLabel }}</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px;">
+          <input value="{{ posQ }}" onInput="{{ onPosQ }}" placeholder="Buscar título, autor, ISBN…" style="flex:2; min-width:200px; padding:11px 14px; border:1px solid #E3D2B8; border-radius:10px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A;">
+          <select value="{{ posEd }}" onChange="{{ onPosEd }}" style="flex:1; min-width:180px; padding:11px 14px; border:1px solid #E3D2B8; border-radius:10px; font-size:14px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A;"><sc-for list="{{ posEdOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o.v }}">{{ o.l }}</option></sc-for></select>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+          <span onClick="{{ posMarcarVisibles }}" style="cursor:pointer; font-size:13px; font-weight:700; padding:9px 14px; border-radius:999px; border:1px solid #B9CDC1; color:#244031;">Marcar los de la lista</span>
+          <span onClick="{{ posLimpiar }}" style="cursor:pointer; font-size:13px; font-weight:700; padding:9px 14px; border-radius:999px; border:1px solid #E3D2B8; color:#5E4632;">Desmarcar todo</span>
+        </div>
+        <div style="max-height:420px; overflow:auto; border:1px solid #EADBC4; border-radius:12px; background:#FFFDF8;">
+          <sc-for list="{{ posRows }}" as="r" hint-placeholder-count="6">
+            <div onClick="{{ r.onToggle }}" role="checkbox" style="{{ r.rowStyle }}">
+              <span style="font-size:20px; color:#244031; line-height:1;">{{ r.mark }}</span>
+              <div style="flex:1; min-width:0;"><div style="font-weight:700; font-size:14px; color:#34251A;">{{ r.title }}</div><div style="font-size:12.5px; color:#7C6651;">{{ r.sub }}</div></div>
+              <div style="text-align:right; white-space:nowrap;"><div style="font-weight:800; color:#5E1F33;">{{ r.price }}</div><div style="font-size:12px; color:#7C6651;">{{ r.stock }}</div></div>
+            </div>
+          </sc-for>
+        </div>
+        <span onClick="{{ publicarPOS }}" style="cursor:pointer; display:block; text-align:center; margin-top:14px; padding:13px; border-radius:12px; background:#244031; color:#F7EFE2; font-weight:800; font-size:15px;">{{ posPubLabel }}</span>
+      </div>
+      </sc-if>
 
       <sc-if value="{{ bulkOpen }}" hint-placeholder-val="{{ false }}">
       <div style="margin-bottom:22px; background:#FFFDF8; border:1px solid #C9A24B; border-radius:16px; padding:clamp(18px,3vw,26px); box-shadow:0 10px 28px rgba(52,37,26,0.08);">
@@ -2433,12 +2459,14 @@ class Component extends DCLogic {
       plan.vender.forEach((u) => ops.push(ref(u.id).set({ estado: 'Vendido', svVendido: true }, { merge: true })));
       plan.quitar.forEach((u) => ops.push(ref(u.id).delete()));
       await Promise.all(ops);
-      const res = { fecha: Date.now(), crear: plan.crear.length, actualizar: plan.actualizar.length, vender: plan.vender.length, quitar: plan.quitar.length, publicados: plan.publicados, soloPOS: plan.soloPOS,
+      let posRes = { revisados: 0, cambios: 0, agotados: [] };
+      try { posRes = await this.syncStockPOS(); } catch (e) { console.error('[LM] stock POS', e); }
+      const res = { posRes, fecha: Date.now(), crear: plan.crear.length, actualizar: plan.actualizar.length, vender: plan.vender.length, quitar: plan.quitar.length, publicados: plan.publicados, soloPOS: plan.soloPOS,
         detalle: { crear: plan.crear.map(x => x.title), vender: plan.vender.map(x => x.title), quitar: plan.quitar.map(x => x.title), actualizar: plan.actualizar.map(x => x.title) } };
       this._svLast = res;
       this.setState({ svBusy: false, svNeedLogin: false, svResult: auto ? this.state.svResult : res });
-      const n = res.crear + res.actualizar + res.vender + res.quitar;
-      if (!auto || n) this.flash('Segunda Vida: ' + (n ? (res.crear + ' publicados · ' + res.vender + ' vendidos retirados · ' + res.quitar + ' quitados · ' + res.actualizar + ' actualizados') : 'todo al día ✓'), 7000);
+      const n = res.crear + res.actualizar + res.vender + res.quitar + posRes.cambios;
+      if (!auto || n) this.flash('Segunda Vida: ' + (n ? (res.crear + ' publicados · ' + res.vender + ' vendidos retirados · ' + res.quitar + ' quitados · ' + res.actualizar + ' actualizados · ' + posRes.cambios + ' libros del POS con precio/stock nuevo') : 'todo al día ✓'), 7000);
       return res;
     } catch (e) {
       console.error('[LM] Segunda Vida', e);
@@ -2453,12 +2481,128 @@ class Component extends DCLogic {
     if (!app) { this.setState({ svErr: 'Falta la conexión con la app de reservas.' }); return; }
     if (!email || !pass) { this.setState({ svErr: 'Escribe el correo y la contraseña con los que entras al POS.' }); return; }
     app.auth().signInWithEmailAndPassword(email, pass)
-      .then(() => { this.setState({ svLoginOpen: false, svPass: '', svErr: '', svNeedLogin: false }); this.sincronizarSV(false); })
+      .then(() => { const after = this.state.svAfter; this.setState({ svLoginOpen: false, svPass: '', svErr: '', svNeedLogin: false, svAfter: '' }); if (after === 'pos') this.abrirPOS(); else this.sincronizarSV(false); })
       .catch((err) => this.setState({ svErr: this.authErr(err) }));
+  };
+  // ---------- libros nuevos desde el POS ----------
+  // El POS es la fuente del inventario. Tú eliges qué libros del POS se publican;
+  // una vez publicados, la web copia sola su precio y su stock (stock 0 = deja de mostrarse).
+  posTitulo(t) {
+    t = ((t || '') + '').trim();
+    if (!t) return '';
+    if (t !== t.toUpperCase()) return t;
+    const menores = ['de', 'del', 'la', 'las', 'el', 'los', 'y', 'e', 'o', 'u', 'a', 'en', 'con', 'por', 'para', 'un', 'una', 'al', 'lo', 'sin', 'sobre'];
+    return t.toLowerCase().split(/(\s+)/).map((w, i) => (/^\s+$/.test(w) || (i > 0 && menores.indexOf(w) >= 0)) ? w : (w.charAt(0).toUpperCase() + w.slice(1))).join('')
+      .replace(/\b(Ii|Iii|Iv|Vi|Vii|Viii|Ix|Xi|Xii)\b/g, (m) => m.toUpperCase());
+  }
+  posIsbn(c) { const d = ((c || '') + '').replace(/[^0-9Xx]/g, ''); return (d.length === 10 || d.length === 13) ? d.toUpperCase() : ''; }
+  abrirPOS = async () => {
+    if (this.state.posOpen) { this.setState({ posOpen: false }); return; }
+    if (!this.online() || !this._authed) { this.flash('Inicia sesión en el panel.'); return; }
+    if (!this.svApp() || !this.resDb) { this.flash('Falta la conexión con la app de reservas (Configuración → clave de reservas).', 8000); return; }
+    if (!this.svUser()) { this.setState({ svLoginOpen: true, svErr: '', svAfter: 'pos' }); return; }
+    this.setState({ posOpen: true, posBusy: true, posSel: {}, posQ: '', posEd: '' });
+    try {
+      const snap = await this.resDb.collection('productos').where('category', '==', 'Libros').get();
+      const arr = [];
+      snap.forEach((d) => { const p = d.data() || {}; p._doc = d.id; if (p.active !== false) arr.push(p); });
+      this._posBooks = arr;
+      this.setState({ posBusy: false });
+    } catch (e) {
+      this.setState({ posBusy: false, posOpen: false });
+      this.flash('No se pudo leer el POS: ' + ((e && e.code) || (e && e.message) || e), 9000);
+    }
+  };
+  posDisponibles() {
+    const web = this.currentCMS().libros || [];
+    const ids = {}, isbns = {};
+    web.forEach((w) => { if (w.posId) ids[w.posId] = true; const i = this.posIsbn(w.isbn); if (i) isbns[i] = true; });
+    return (this._posBooks || []).filter((p) => {
+      const conStock = p.stockControl === 'sin_control' || !(typeof p.stock === 'number') || p.stock > 0;
+      const i = this.posIsbn(p.code);
+      return conStock && !ids[p._doc] && !(i && isbns[i]);
+    });
+  }
+  publicarPOS = async () => {
+    const sel = this.state.posSel || {};
+    const elegidos = (this._posBooks || []).filter(p => sel[p._doc]);
+    if (!elegidos.length) { this.flash('Marca al menos un libro.'); return; }
+    this.setState({ posBusy: true });
+    const cms = this.currentCMS();
+    let n = this.nextCodeNum('LM-N-');
+    const nuevos = elegidos.map((p) => ({
+      id: 'pos_' + p._doc, code: 'LM-N-' + this.pad(n++), posId: p._doc, isbn: this.posIsbn(p.code) || ((p.code || '') + ''),
+      title: this.posTitulo(p.name), author: this.posTitulo(p.author || ''), genre: '', cat: '', sinopsis: '', recomendado: false,
+      editorial: this.posTitulo(((p.subcategory || '') + '').replace(/^Libros$/i, '')), estado: 'Nuevo', disp: 'Disponible',
+      price: +p.price || 0, stock: (typeof p.stock === 'number' && p.stockControl !== 'sin_control') ? p.stock : null, imagen: '', order: Date.now()
+    }));
+    try {
+      await Promise.all(nuevos.map(it => this.db.collection('libros').doc(it.id).set(this.clean(it))));
+      cms.libros = nuevos.concat(cms.libros || []);
+      this.cacheCMS(cms);
+      this.setState({ posBusy: false, posSel: {} });
+      this.flash(nuevos.length + ' libro(s) publicados ✓ Buscando portadas y sinopsis…', 6000);
+      this.enriquecerPOS(nuevos.map(x => x.id));
+    } catch (e) {
+      this.setState({ posBusy: false });
+      this.flash(this.fbErr(e), 9000);
+    }
+  };
+  // Completa portada, sinopsis y género por ISBN, de a uno y con pausa, sin pisar lo que ya tenga el libro.
+  enriquecerPOS = async (ids) => {
+    let ok = 0;
+    for (const id of ids) {
+      const it = (this.currentCMS().libros || []).find(x => x.id === id);
+      const clean = it && this.isbnOk(it.isbn);
+      if (!clean) continue;
+      try {
+        const d = await this.lookupIsbnData(clean);
+        if (d) {
+          const ahora = (this.currentCMS().libros || []).find(x => x.id === id) || {};
+          const vacio = (v) => !(((v || '') + '').trim());
+          const cambios = {};
+          if (vacio(ahora.imagen) && d.imagen) cambios.imagen = d.imagen;
+          if (vacio(ahora.sinopsis) && d.sinopsis) cambios.sinopsis = d.sinopsis;
+          if (vacio(ahora.genre) && d.genre) cambios.genre = d.genre;
+          if (vacio(ahora.author) && d.author) cambios.author = d.author;
+          if (d.title && ahora.title && ahora.title.toLowerCase() === d.title.toLowerCase()) cambios.title = d.title;
+          Object.keys(cambios).forEach(k => this.setField('libros', id, k, cambios[k]));
+          if (Object.keys(cambios).length) ok++;
+        }
+      } catch (e) {}
+      await new Promise(r => setTimeout(r, 700));
+    }
+    this.flash('Portadas y sinopsis: ' + ok + ' de ' + ids.length + ' libros completados.', 7000);
+  };
+  // Copia precio y stock del POS a los libros ya publicados. Lee solo esos libros, no todo el POS.
+  syncStockPOS = async () => {
+    const web = (this.currentCMS().libros || []).filter(w => w.posId);
+    if (!web.length || !this.resDb) return { revisados: 0, cambios: 0, agotados: [] };
+    const res = { revisados: web.length, cambios: 0, agotados: [] };
+    for (let i = 0; i < web.length; i += 10) {
+      const lote = web.slice(i, i + 10);
+      const snap = await this.resDb.collection('productos').where(window.firebase.firestore.FieldPath.documentId(), 'in', lote.map(w => w.posId)).get();
+      const m = {}; snap.forEach(d => { m[d.id] = d.data() || {}; });
+      lote.forEach((w) => {
+        const p = m[w.posId];
+        if (!p) return;
+        const stock = (typeof p.stock === 'number' && p.stockControl !== 'sin_control') ? p.stock : null;
+        const c = {};
+        if ((+p.price || 0) && Number(w.price) !== (+p.price || 0)) c.price = +p.price;
+        if (stock !== (typeof w.stock === 'number' ? w.stock : null)) c.stock = stock;
+        if (p.active === false && w.disp !== 'Vendido') c.disp = 'Vendido';
+        if (Object.keys(c).length) {
+          res.cambios++;
+          if (c.stock === 0) res.agotados.push(w.title);
+          this.db.collection('libros').doc(w.id).set(c, { merge: true }).catch(() => {});
+        }
+      });
+    }
+    return res;
   };
   svAutoTick() {
     if (this.state.view === 'admin' && this.state.authed && this.state.fb === 'online') {
-      if (!this._svAutoAt || Date.now() - this._svAutoAt > 5 * 60 * 1000) { this._svAutoAt = Date.now(); this.sincronizarSV(true); }
+      if (!this._svAutoAt || Date.now() - this._svAutoAt > 15 * 60 * 1000) { this._svAutoAt = Date.now(); this.sincronizarSV(true); }
     }
   }
   // ---------- conexión con la app de reservas (la-madriguera-cb489) ----------
@@ -3193,17 +3337,32 @@ class Component extends DCLogic {
     }).filter(Boolean);
   }
   verifyCovers(opts) {
-    // Solo mostramos portadas que realmente cargan (evita opciones "en blanco")
+    // Solo mostramos portadas que realmente cargan (evita opciones "en blanco").
+    // IMPORTANTE: tambien comprobamos la version grande, que es la que se guarda.
+    // Antes solo se verificaba la miniatura y se guardaba la grande sin mirar:
+    // si esa no existia, la ficha quedaba con el "imagen no disponible" de Google.
     if (typeof Image === 'undefined') return Promise.resolve(opts.slice(0, 6));
-    return Promise.all(opts.slice(0, 10).map(o => new Promise(res => {
+    const carga = (src) => new Promise(res => {
       let done = false;
       const fin = (v) => { if (!done) { done = true; res(v); } };
-      const t = setTimeout(() => fin(null), 6000);
+      const t = setTimeout(() => fin(0), 6000);
       const im = new Image();
-      im.onload = () => { clearTimeout(t); fin(((im.naturalWidth || 100) > 20) ? o : null); };
-      im.onerror = () => { clearTimeout(t); fin(null); };
-      im.src = o.thumb;
-    }))).then(r => r.filter(Boolean).slice(0, 6));
+      im.onload = () => { clearTimeout(t); fin(im.naturalWidth || 0); };
+      im.onerror = () => { clearTimeout(t); fin(0); };
+      im.src = src;
+    });
+    return Promise.all(opts.slice(0, 10).map(o =>
+      carga(o.thumb).then(anchoMini => {
+        if (anchoMini <= 20) return null;               // ni la miniatura carga: fuera
+        if (!o.url || o.url === o.thumb) return o;      // no hay version grande aparte
+        return carga(o.url).then(anchoGrande =>
+          // La grande debe ser DE VERDAD mas grande. Si no carga, o mide igual o menos,
+          // es el relleno de "imagen no disponible": nos quedamos con la miniatura,
+          // que ya comprobamos que funciona.
+          (anchoGrande > anchoMini) ? o : Object.assign({}, o, { url: o.thumb })
+        );
+      })
+    )).then(r => r.filter(Boolean).slice(0, 6));
   }
   // country=EC evita el error de "ubicación no soportada" de Google Books fuera de EE.UU.
   // Con tu propia clave (Configuración) usas tu cuota diaria y no la compartida (error 429).
@@ -4335,15 +4494,40 @@ class Component extends DCLogic {
       aSearch: this.state.aSearch, onASearch: (e) => this.setState({ aSearch: e.target.value }),
       sincronizarSV: () => this.sincronizarSV(false), svBusy: !!this.state.svBusy, svNeedLogin: !!this.state.svNeedLogin,
       svBtnLabel: this.state.svBusy ? 'Sincronizando…' : '🔄 Sincronizar con Segunda Vida',
-      svStatus: this._svLast ? ('Última sincronización: ' + new Date(this._svLast.fecha).toLocaleTimeString('es-EC', { hour: '2-digit', minute: '2-digit' }) + ' · ' + this._svLast.publicados + ' libros de Segunda Vida a la venta en la web' + (this._svLast.soloPOS ? (' · ⚠ ' + this._svLast.soloPOS + ' libros están solo en el POS: impórtalos en Segunda Vida («Importar los que faltan»)') : '')) : (this.svUser() ? 'Se sincroniza sola al abrir el panel y cada 5 minutos.' : 'Conecta tu usuario del POS para que la web se actualice sola.'),
+      svStatus: this._svLast ? ('Última sincronización: ' + new Date(this._svLast.fecha).toLocaleTimeString('es-EC', { hour: '2-digit', minute: '2-digit' }) + ' · ' + this._svLast.publicados + ' libros de Segunda Vida a la venta en la web' + (this._svLast.soloPOS ? (' · ⚠ ' + this._svLast.soloPOS + ' libros están solo en el POS: impórtalos en Segunda Vida («Importar los que faltan»)') : '')) : (this.svUser() ? 'Se sincroniza sola al abrir el panel y cada 15 minutos.' : 'Conecta tu usuario del POS para que la web se actualice sola.'),
       svLoginOpen: !!this.state.svLoginOpen, svEmail: this.state.svEmail || '', svPass: this.state.svPass || '', svErr: this.state.svErr || '', svHasErr: !!this.state.svErr,
       onSvEmail: (e) => this.setState({ svEmail: e.target.value, svErr: '' }), onSvPass: (e) => this.setState({ svPass: e.target.value, svErr: '' }),
       svLogin: this.svLogin, svCloseLogin: () => this.setState({ svLoginOpen: false, svPass: '', svErr: '' }),
       svResOpen: !!this.state.svResult, svCloseRes: () => this.setState({ svResult: null }),
       svResText: this.state.svResult ? (function (r) {
         const l = (t, a) => a.length ? ('\n\n' + t + ' (' + a.length + '):\n• ' + a.slice(0, 40).join('\n• ')) : '';
-        return 'Libros de Segunda Vida a la venta en la web: ' + r.publicados + l('Publicados ahora', r.detalle.crear) + l('Vendidos en el POS, retirados de la web', r.detalle.vender) + l('Devueltos o vencidos, quitados', r.detalle.quitar) + l('Precio o estado actualizado', r.detalle.actualizar) + (r.soloPOS ? ('\n\n⚠ ' + r.soloPOS + ' libros están solo en el POS y no en Segunda Vida. Ábrelos en Segunda Vida → «Importar los que faltan» para que también salgan en la web.') : '');
+        return (r.posRes && r.posRes.revisados ? ('Libros del POS en la web: ' + r.posRes.revisados + ' revisados, ' + r.posRes.cambios + ' con precio o stock actualizado' + (r.posRes.agotados.length ? (' (agotados: ' + r.posRes.agotados.slice(0, 15).join(', ') + ')') : '') + '.\n\n') : '') + 'Libros de Segunda Vida a la venta en la web: ' + r.publicados + l('Publicados ahora', r.detalle.crear) + l('Vendidos en el POS, retirados de la web', r.detalle.vender) + l('Devueltos o vencidos, quitados', r.detalle.quitar) + l('Precio o estado actualizado', r.detalle.actualizar) + (r.soloPOS ? ('\n\n⚠ ' + r.soloPOS + ' libros están solo en el POS y no en Segunda Vida. Ábrelos en Segunda Vida → «Importar los que faltan» para que también salgan en la web.') : '');
       })(this.state.svResult) : '',
+      abrirPOS: this.abrirPOS, posOpen: !!this.state.posOpen, posBusy: !!this.state.posBusy,
+      posBtnLabel: this.state.posOpen ? '✕ Cerrar libros del POS' : '📥 Traer libros del POS',
+      posQ: this.state.posQ || '', onPosQ: (e) => this.setState({ posQ: e.target.value }),
+      posEd: this.state.posEd || '', onPosEd: (e) => this.setState({ posEd: e.target.value }),
+      posEdOptions: (() => { const m = {}; (this.posDisponibles()).forEach(p => { const e = ((p.subcategory || '') + '').trim() || 'Sin editorial'; m[e] = (m[e] || 0) + 1; }); return [{ v: '', l: 'Todas las editoriales' }].concat(Object.keys(m).sort().map(k => ({ v: k, l: k + ' (' + m[k] + ')' }))); })(),
+      posRows: (() => {
+        if (!this.state.posOpen) return [];
+        const q = ((this.state.posQ || '') + '').trim().toLowerCase(), ed = this.state.posEd || '', sel = this.state.posSel || {};
+        return this.posDisponibles().filter(p => {
+          if (ed && ((((p.subcategory || '') + '').trim() || 'Sin editorial') !== ed)) return false;
+          if (!q) return true;
+          return [p.name, p.author, p.code, p.subcategory].join(' ').toLowerCase().indexOf(q) >= 0;
+        }).slice(0, 80).map(p => ({
+          key: p._doc, title: this.posTitulo(p.name), sub: [this.posTitulo(p.author || ''), this.posTitulo(p.subcategory || ''), p.code].filter(Boolean).join(' · '),
+          price: '$' + (+p.price || 0).toFixed(2), stock: (typeof p.stock === 'number' && p.stockControl !== 'sin_control') ? ('Stock ' + p.stock) : 'Sin control',
+          mark: sel[p._doc] ? '☑' : '☐', rowStyle: { display: 'flex', gap: '10px', alignItems: 'center', padding: '9px 12px', borderBottom: '1px solid #EADBC4', cursor: 'pointer', background: sel[p._doc] ? '#F1E6CF' : 'transparent' },
+          onToggle: () => { const s = Object.assign({}, this.state.posSel || {}); if (s[p._doc]) delete s[p._doc]; else s[p._doc] = true; this.setState({ posSel: s }); }
+        }));
+      })(),
+      posCountLabel: (() => { if (!this.state.posOpen) return ''; const n = this.posDisponibles().length; return this.state.posBusy ? 'Cargando el inventario del POS…' : (n + ' libros del POS con stock que aún no están en la web. Se muestran hasta 80: usa el buscador o el filtro de editorial.'); })(),
+      posSelCount: Object.keys(this.state.posSel || {}).length,
+      posPubLabel: this.state.posBusy ? 'Publicando…' : ('Publicar ' + Object.keys(this.state.posSel || {}).length + ' seleccionado(s)'),
+      posMarcarVisibles: () => { const s = Object.assign({}, this.state.posSel || {}); const q = ((this.state.posQ || '') + '').trim().toLowerCase(), ed = this.state.posEd || ''; this.posDisponibles().filter(p => (!ed || ((((p.subcategory || '') + '').trim() || 'Sin editorial') === ed)) && (!q || [p.name, p.author, p.code, p.subcategory].join(' ').toLowerCase().indexOf(q) >= 0)).slice(0, 80).forEach(p => { s[p._doc] = true; }); this.setState({ posSel: s }); },
+      posLimpiar: () => this.setState({ posSel: {} }),
+      publicarPOS: this.publicarPOS,
       addLibro: this.addLibro, addConsig: this.addConsig, addMerch: this.addMerch, addEvento: this.addEvento,
       exitAdmin: () => this.setState({ view: 'store' }),
       logout: this.logout, adminEmail: this.state.adminEmail,
