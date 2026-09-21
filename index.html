@@ -3337,29 +3337,38 @@ class Component extends DCLogic {
     }).filter(Boolean);
   }
   verifyCovers(opts) {
-    // Solo mostramos portadas que realmente cargan (evita opciones "en blanco").
-    // IMPORTANTE: tambien comprobamos la version grande, que es la que se guarda.
-    // Antes solo se verificaba la miniatura y se guardaba la grande sin mirar:
-    // si esa no existia, la ficha quedaba con el "imagen no disponible" de Google.
+    // Solo ofrecemos portadas que existen de verdad.
+    //
+    // Google Books, cuando no tiene la portada, NO da error: responde con su
+    // imagen de relleno "image not available". Medidas exactas de ese relleno
+    // (comprobadas el 21-09-2026): 128x170 en zoom=1, 575x750 en zoom=2 y
+    // 57x80 en zoom=5. Como el relleno de zoom=2 es MAS GRANDE que una
+    // miniatura real, no basta con comparar tamanos: hay que reconocerlo.
     if (typeof Image === 'undefined') return Promise.resolve(opts.slice(0, 6));
+    const esRelleno = (w, h) =>
+      (w === 128 && h === 170) || (w === 575 && h === 750) || (w === 57 && h === 80);
     const carga = (src) => new Promise(res => {
       let done = false;
       const fin = (v) => { if (!done) { done = true; res(v); } };
-      const t = setTimeout(() => fin(0), 6000);
+      const t = setTimeout(() => fin(null), 6000);
       const im = new Image();
-      im.onload = () => { clearTimeout(t); fin(im.naturalWidth || 0); };
-      im.onerror = () => { clearTimeout(t); fin(0); };
+      im.onload = () => {
+        clearTimeout(t);
+        const w = im.naturalWidth || 0, h = im.naturalHeight || 0;
+        fin((w > 20 && !esRelleno(w, h)) ? w : null);
+      };
+      im.onerror = () => { clearTimeout(t); fin(null); };
       im.src = src;
     });
     return Promise.all(opts.slice(0, 10).map(o =>
       carga(o.thumb).then(anchoMini => {
-        if (anchoMini <= 20) return null;               // ni la miniatura carga: fuera
-        if (!o.url || o.url === o.thumb) return o;      // no hay version grande aparte
+        if (!anchoMini) return null;                   // sin portada real: fuera del selector
+        if (!o.url || o.url === o.thumb) return o;
+        // La version grande es la que se guarda: hay que comprobarla aparte.
         return carga(o.url).then(anchoGrande =>
-          // La grande debe ser DE VERDAD mas grande. Si no carga, o mide igual o menos,
-          // es el relleno de "imagen no disponible": nos quedamos con la miniatura,
-          // que ya comprobamos que funciona.
-          (anchoGrande > anchoMini) ? o : Object.assign({}, o, { url: o.thumb })
+          (anchoGrande && anchoGrande >= anchoMini)
+            ? o
+            : Object.assign({}, o, { url: o.thumb })   // nos quedamos con la que sabemos buena
         );
       })
     )).then(r => r.filter(Boolean).slice(0, 6));
