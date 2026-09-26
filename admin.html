@@ -1196,10 +1196,14 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){var cs=[].s
         </div>
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
           <span onClick="{{ sincronizarSV }}" role="button" tabindex="0" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#244031; color:#F7EFE2; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(36,64,49,0.3);" style-hover="background:#2f5240;">{{ svBtnLabel }}</span>
+          <span onClick="{{ generarPaginasSV }}" role="button" tabindex="0" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#C9A24B; color:#2A1C12; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(201,162,75,0.3);">{{ genLabel }}</span>
           <span onClick="{{ addConsig }}" role="button" tabindex="0" style="display:inline-block; white-space:nowrap; cursor:pointer; background:#816619; color:#FBF3E0; font-weight:800; font-size:14px; padding:12px 22px; border-radius:999px; box-shadow:0 6px 16px rgba(154,122,30,0.3);" style-hover="background:#866916;">+ Registrar libro recibido</span>
         </div>
       </div>
       <div style="margin-bottom:22px; background:#E2EAE6; border:1px solid #B9CDC1; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#244031; line-height:1.5;"><strong>Los libros en consignación se ingresan en la app Segunda Vida</strong> y se cobran en el POS. Esta lista se actualiza sola: publica lo que Segunda Vida tiene a la venta y retira lo que se vende en caja. Puedes mejorar aquí el título o subir la portada; eso no se pierde al sincronizar.<br><span style="font-size:12.5px;">{{ svStatus }}</span></div>
+      <sc-if value="{{ svHasSinPagina }}" hint-placeholder-val="{{ false }}">
+      <div role="status" style="margin:-8px 0 22px; background:#F1E6CF; border:1px solid #D9BC77; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#5E4632; line-height:1.55;"><strong>{{ svSinPagina }} libros de Segunda Vida todavía no tienen su página para Google.</strong> Pulsa «Generar páginas para Google», copia el contenido del ZIP dentro de tu carpeta «publicar» y súbela a GitHub como siempre.</div>
+      </sc-if>
       <sc-if value="{{ consigHasPriv }}" hint-placeholder-val="{{ false }}">
       <div role="alert" style="margin:-8px 0 22px; background:#FBEAE4; border:1px solid #E0AE95; border-radius:12px; padding:14px 16px; font-size:13.5px; color:#6B2E22; line-height:1.55;">
         <strong>{{ consigPrivN }} registros tienen datos privados de consignantes guardados en la web</strong> (nombre, contacto, pago al dueño). La lista de consignación de la web es pública, así que cualquiera con conocimientos técnicos podría leerlos. Esos datos ya viven en Segunda Vida: pulsa el botón y primero se descargará un respaldo a tu computadora; después se borrarán de la web.
@@ -3311,6 +3315,180 @@ class Component extends DCLogic {
   addLibro = () => {
     this.addItem('libros', { id: 'b' + Date.now(), code: 'LM-N-' + this.pad(this.nextCodeNum('LM-N-')), title: 'Nuevo libro', author: '', genre: '', cat: '', sinopsis: '', recomendado: false, isbn: '', editorial: '', estado: 'Nuevo', disp: 'Disponible', price: 0, imagen: '', order: Date.now() }, 'Libro añadido — edítalo abajo.');
   };
+  // ---------- páginas propias de los libros de Segunda Vida (etapa 3) ----------
+  // El panel arma un ZIP con la misma estructura de la carpeta «publicar»:
+  //   libros-usados/<slug>/index.html  (una página por libro, con datos para Google)
+  //   libros-usados/index.html         (la página de usados con la lista «Disponibles ahora»)
+  //   sitemap.xml                      (con las páginas de cada libro)
+  // Mafer lo descomprime dentro de «publicar» y sube la carpeta como siempre.
+  // La plantilla (estilos, cabecera, pie) se toma de la página /libros-usados/ publicada.
+  SITE = 'https://lamadriguera.ec';
+  esSV(c) { return !!(c && (c.sv || c.origen === 'Segunda Vida')); }
+  slugify(t) {
+    return ((t || '') + '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+  slugLibro(c) {
+    const base = this.slugify(((c.title || '') + ' ' + (c.author || '')).trim()).slice(0, 70).replace(/-+$/, '') || 'libro';
+    return base + '-' + (this.slugify(c.code || c.id) || this.slugify(c.id));
+  }
+  urlLibro(slug) { return this.SITE + '/libros-usados/' + slug + '/'; }
+  esc(t) { return ((t == null ? '' : t) + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  imgPublica(u) { u = ((u || '') + '').trim(); return /^https?:\/\//i.test(u) ? u : ''; }
+  svPendientesWeb() {
+    const C = this.currentCMS();
+    return (C.consig || []).filter(c => this.esSV(c) && c.estado === 'En venta' && !c.webSlug).length;
+  }
+  // ZIP sin compresión (formato «store»), sin librerías externas
+  zipStore(files) {
+    const enc = new TextEncoder();
+    const T = this._crcT || (this._crcT = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1); t[n] = c >>> 0; } return t; })());
+    const crc = (b) => { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = T[(c ^ b[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+    const d = new Date();
+    const dosT = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1);
+    const dosD = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+    const parts = [], central = []; let off = 0;
+    files.forEach((f) => {
+      const name = enc.encode(f.name); const data = typeof f.data === 'string' ? enc.encode(f.data) : f.data; const c = crc(data);
+      const h = new DataView(new ArrayBuffer(30));
+      h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true); h.setUint16(8, 0, true);
+      h.setUint16(10, dosT, true); h.setUint16(12, dosD, true); h.setUint32(14, c, true); h.setUint32(18, data.length, true); h.setUint32(22, data.length, true);
+      h.setUint16(26, name.length, true); h.setUint16(28, 0, true);
+      parts.push(new Uint8Array(h.buffer), name, data);
+      const e = new DataView(new ArrayBuffer(46));
+      e.setUint32(0, 0x02014b50, true); e.setUint16(4, 20, true); e.setUint16(6, 20, true); e.setUint16(8, 0x0800, true); e.setUint16(10, 0, true);
+      e.setUint16(12, dosT, true); e.setUint16(14, dosD, true); e.setUint32(16, c, true); e.setUint32(20, data.length, true); e.setUint32(24, data.length, true);
+      e.setUint16(28, name.length, true); e.setUint16(30, 0, true); e.setUint16(32, 0, true); e.setUint16(34, 0, true); e.setUint16(36, 0, true);
+      e.setUint32(38, f.name.endsWith('/') ? 0x10 : 0, true); e.setUint32(42, off, true);
+      central.push(new Uint8Array(e.buffer), name);
+      off += 30 + name.length + data.length;
+    });
+    const cdSize = central.reduce((s, p) => s + p.length, 0);
+    const end = new DataView(new ArrayBuffer(22));
+    end.setUint32(0, 0x06054b50, true); end.setUint16(8, files.length, true); end.setUint16(10, files.length, true);
+    end.setUint32(12, cdSize, true); end.setUint32(16, off, true);
+    return new Blob(parts.concat(central, [new Uint8Array(end.buffer)]), { type: 'application/zip' });
+  }
+  paginaLibro(tpl, c, estado, otros) {
+    const E = (t) => this.esc(t);
+    const slug = c.webSlug; const url = this.urlLibro(slug);
+    const title = ((c.title || '') + '').trim() || 'Libro usado';
+    const author = ((c.author || '') + '').trim();
+    const cond = ((c.condicion || '') + '').trim() || 'Usado bueno';
+    const price = +c.price || 0;
+    const syn = ((c.sinopsis || '') + '').replace(/\s+/g, ' ').trim();
+    const img = this.imgPublica(c.imagen);
+    const vendido = estado !== 'disponible';
+    const tit = title + (author ? ' de ' + author : '') + ' · Libro usado en Guayaquil | La Madriguera';
+    const desc = (vendido ? 'Este libro usado ya encontró nuevo lector. ' : ('Libro usado (' + cond.toLowerCase() + ')' + (price ? ' a $' + price : '') + ' en La Madriguera, Urdesa, Guayaquil. ')) + (syn ? syn.slice(0, 120).replace(/\s\S*$/, '') + '…' : 'Ejemplar único, revisado a mano.');
+    const wa = 'https://wa.me/' + this.waNum() + '?text=' + encodeURIComponent('Hola La Madriguera, me interesa el libro usado «' + title + '»' + (author ? ' de ' + author : '') + ' (código ' + (c.code || c.id) + '). ¿Sigue disponible?');
+    const ld = { '@context': 'https://schema.org', '@graph': [
+      Object.assign({ '@type': 'Book', '@id': url + '#libro', name: title, url, inLanguage: 'es' }, author ? { author: { '@type': 'Person', name: author } } : {}, c.isbn ? { isbn: (c.isbn + '').replace(/[^0-9Xx]/g, '') } : {}, c.editorial ? { publisher: { '@type': 'Organization', name: c.editorial } } : {}, img ? { image: img } : {}, syn ? { description: syn.slice(0, 500) } : {}),
+      // Sin precio no se declara como producto (Google marca error con precio 0)
+      ...(price > 0 ? [Object.assign({ '@type': 'Product', '@id': url + '#producto', name: title + (author ? ' — ' + author : ''), sku: (c.code || c.id) + '', url, description: syn ? syn.slice(0, 500) : ('Libro usado en ' + cond.toLowerCase() + '.'),
+        offers: { '@type': 'Offer', url, priceCurrency: 'USD', price: price.toFixed(2), itemCondition: 'https://schema.org/UsedCondition', availability: vendido ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock', seller: { '@type': 'Organization', '@id': this.SITE + '/#negocio', name: 'La Madriguera' } } }, img ? { image: img } : {})] : []),
+      { '@type': 'BreadcrumbList', itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Inicio', item: this.SITE + '/' },
+        { '@type': 'ListItem', position: 2, name: 'Libros usados', item: this.SITE + '/libros-usados/' },
+        { '@type': 'ListItem', position: 3, name: title, item: url }] }] };
+    let head = tpl.head
+      .replace(/<title>[\s\S]*?<\/title>/, '<title>' + E(tit) + '</title>')
+      .replace(/<meta name="description" content="[^"]*">/, '<meta name="description" content="' + E(desc) + '">')
+      .replace(/<meta name="keywords" content="[^"]*">\n?/, '')
+      .replace(/<link rel="canonical" href="[^"]*">/, '<link rel="canonical" href="' + url + '">')
+      .replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="' + (vendido ? 'noindex, follow' : 'index, follow, max-image-preview:large') + '">')
+      .replace(/<meta property="og:type" content="[^"]*">/, '<meta property="og:type" content="product">')
+      .replace(/<meta property="og:title" content="[^"]*">/, '<meta property="og:title" content="' + E(title + (author ? ' — ' + author : '')) + '">')
+      .replace(/<meta property="og:description" content="[^"]*">/, '<meta property="og:description" content="' + E(desc) + '">')
+      .replace(/<meta property="og:url" content="[^"]*">/, '<meta property="og:url" content="' + url + '">')
+      .replace(/<meta name="twitter:title" content="[^"]*">/, '<meta name="twitter:title" content="' + E(title) + '">')
+      .replace(/<meta name="twitter:description" content="[^"]*"\s*\/?>/, '<meta name="twitter:description" content="' + E(desc) + '">')
+      .replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, '<script type="application/ld+json">' + JSON.stringify(ld).replace(/</g, '\\u003c') + '<\/script>');
+    if (img) head = head.replace(/<meta property="og:image" content="[^"]*">\n?<meta property="og:image:width" content="[^"]*">\n?<meta property="og:image:height" content="[^"]*">/, '<meta property="og:image" content="' + E(img) + '">')
+      .replace(/<meta name="twitter:image" content="[^"]*">/, '<meta name="twitter:image" content="' + E(img) + '">');
+    head = head.replace('</style>', '.libro{display:grid;grid-template-columns:minmax(0,220px) 1fr;gap:30px;align-items:start;margin:18px 0 10px}\n.libro img{width:100%;height:auto;border-radius:12px;border:1px solid var(--line);background:var(--cream)}\n.libro h1{margin-top:0}\n.aviso{background:#F3E2D6;border:1px solid #E0AE95;color:#6B2E22;border-radius:14px;padding:14px 18px;margin:18px 0}\n@media (max-width:640px){.libro{grid-template-columns:1fr}.libro img{max-width:240px}}\n</style>');
+    const fila = (k, v) => v ? '<li><b>' + k + '</b><span>' + v + '</span></li>' : '';
+    const aviso = '<div class="aviso" id="lm-aviso" role="status"' + (vendido ? '' : ' hidden') + '><strong>Este libro ya encontró a su siguiente lector.</strong> Mira los <a href="/libros-usados/">otros libros usados disponibles</a> o escríbenos y te avisamos si llega otro ejemplar.</div>';
+    const rel = (otros || []).map(o => '<li><a href="/libros-usados/' + o.webSlug + '/">' + E(o.title) + '<small>' + E([o.author, o.condicion || 'Usado bueno', o.price ? '$' + o.price : ''].filter(Boolean).join(' · ')) + '</small></a></li>').join('');
+    const main = '<main class="wrap">\n  <p class="crumbs"><a href="/">Inicio</a> › <a href="/libros-usados/">Libros usados</a> › ' + E(title) + '</p>\n  ' + aviso + '\n  <div class="libro">\n    '
+      + (img ? '<img src="' + E(img) + '" alt="Portada de ' + E(title) + '" loading="eager" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'">' : '<div class="card" style="margin:0;text-align:center">Libro usado<br><small>foto al escribirnos</small></div>')
+      + '\n    <div>\n      <h1>' + E(title) + '</h1>\n      ' + (author ? '<p class="tagline">' + E(author) + '</p>' : '')
+      + '\n      <ul class="facts">' + fila('Estado', E(cond)) + fila('Precio', '<span id="lm-precio">' + (price ? '$' + price : 'Consultar') + '</span>') + fila('Editorial', E(c.editorial)) + fila('ISBN', E(c.isbn)) + fila('Código', E(c.code || c.id)) + '</ul>'
+      + '\n      <p id="lm-acciones"' + (vendido ? ' hidden' : '') + '><a class="cta" href="' + E(wa) + '" rel="noopener">Lo quiero · WhatsApp</a><a class="cta ghost" href="/#libro/' + encodeURIComponent(c.id) + '">Agregar al carrito</a></p>'
+      + '\n      <p style="font-size:15px;color:var(--muted)">Ejemplar único de segunda mano. Puedes verlo en el local antes de comprarlo. <a href="/libros-usados/#estado">Así describimos el estado</a>.</p>\n    </div>\n  </div>'
+      + (syn ? '\n  <h2>Sinopsis</h2>\n  <p>' + E(syn) + '</p>' : '')
+      + '\n  ' + tpl.visita
+      + (rel ? '\n  <h2>Más libros con segunda historia</h2>\n  <ul class="related">' + rel + '</ul>' : '')
+      + '\n  <p><a class="cta ghost" href="/libros-usados/">Ver todos los libros usados</a></p>\n</main>';
+    // Estado en vivo: si el libro se vendió o se retiró después de generar la página, se avisa al visitante.
+    const vivo = vendido ? '' : '\n<script>(function(){var u="https://firestore.googleapis.com/v1/projects/adminpagweb/databases/(default)/documents/consig/' + encodeURIComponent(c.id) + '";'
+      + 'fetch(u).then(function(r){if(r.status===404)return{gone:1};if(!r.ok)throw 0;return r.json();}).then(function(d){var f=(d&&d.fields)||{};var st=d.gone?"":((f.estado||{}).stringValue||"");'
+      + 'if(d.gone||st!=="En venta"){document.getElementById("lm-aviso").hidden=false;document.getElementById("lm-acciones").hidden=true;return;}'
+      + 'var p=f.price||{};var v=Number(p.integerValue||p.doubleValue||0);if(v>0)document.getElementById("lm-precio").textContent="$"+v;}).catch(function(){});})();<\/script>';
+    return '<!DOCTYPE html>\n' + head + '\n<body>\n\n' + tpl.header + '\n\n' + main + '\n\n' + tpl.footer + vivo + '\n\n</body>\n</html>\n';
+  }
+  generarPaginasSV = async () => {
+    if (this._genBusy) return;
+    if (!this.online() || !this._authed) { this.flash('Inicia sesión en el panel para generar las páginas.'); return; }
+    this._genBusy = true; this.setState({ genBusy: true });
+    try {
+      const nc = '?nc=' + Date.now();
+      const [landing, sitemap] = await Promise.all([
+        fetch('/libros-usados/index.html' + nc, { cache: 'no-store' }).then(r => { if (!r.ok) throw new Error('No pude leer /libros-usados/'); return r.text(); }),
+        fetch('/sitemap.xml' + nc, { cache: 'no-store' }).then(r => { if (!r.ok) throw new Error('No pude leer sitemap.xml'); return r.text(); })
+      ]);
+      const m = (re, what) => { const x = re.exec(landing); if (!x) throw new Error('La página /libros-usados/ no tiene ' + what + '.'); return x[0]; };
+      const tpl = { head: m(/<html[\s\S]*?<\/head>/, 'cabecera'), header: m(/<header class="top">[\s\S]*?<\/header>/, 'menú'), footer: m(/<footer>[\s\S]*?<\/footer>/, 'pie de página'),
+        visita: m(/<div class="card">\s*<h2[^>]*>Visítanos[\s\S]*?<\/ul>\s*<\/div>/, 'el recuadro «Visítanos»') };
+      if (landing.indexOf('<' + '!-- LM-LISTA-INICIO -->') < 0 || landing.indexOf('<' + '!-- LM-LISTA-FIN -->') < 0) throw new Error('La página /libros-usados/ publicada todavía no tiene las marcas de la lista. Sube primero la carpeta publicar.');
+      const C = this.currentCMS();
+      const sv = (C.consig || []).filter(c => this.esSV(c));
+      // 1) slug fijo por libro: se guarda la primera vez y no cambia aunque se corrija el título
+      sv.filter(c => c.estado === 'En venta' && !c.webSlug).forEach(c => { c.webSlug = this.slugLibro(c); this.setField('consig', c.id, 'webSlug', c.webSlug); });
+      const disp = sv.filter(c => c.estado === 'En venta' && c.webSlug).sort((a, b) => ((a.title || '') + '').localeCompare((b.title || '') + '', 'es'));
+      const vend = sv.filter(c => c.estado !== 'En venta' && c.webSlug);
+      const prev = Array.isArray(this.cfg().svPaginas) ? this.cfg().svPaginas : [];
+      const vivos = {}; sv.forEach(c => { if (c.webSlug) vivos[c.webSlug] = 1; });
+      const bajas = prev.filter(p => p && p.slug && !vivos[p.slug]);
+      const files = [];
+      const dir = 'publicar/libros-usados/';
+      disp.forEach((c, i) => {
+        const otros = disp.filter(o => o.id !== c.id).sort((a, b) => ((a.cat || a.genre || '') === (c.cat || c.genre || '') ? -1 : 0) - ((b.cat || b.genre || '') === (c.cat || c.genre || '') ? -1 : 0)).slice(0, 4);
+        files.push({ name: dir + c.webSlug + '/index.html', data: this.paginaLibro(tpl, c, 'disponible', otros) });
+      });
+      vend.forEach(c => files.push({ name: dir + c.webSlug + '/index.html', data: this.paginaLibro(tpl, c, 'vendido', disp.slice(0, 4)) }));
+      bajas.forEach(p => files.push({ name: dir + p.slug + '/index.html', data: this.paginaLibro(tpl, { id: p.id || p.slug, webSlug: p.slug, title: p.title || 'Libro usado', author: p.author || '', code: p.code || '' }, 'vendido', disp.slice(0, 4)) }));
+      // 2) página de usados con la lista «Disponibles ahora»
+      const E = (t) => this.esc(t);
+      const lista = '<' + '!-- LM-LISTA-INICIO -->\n' + (disp.length ? ('  <h2 id="disponibles">Disponibles ahora (' + disp.length + ')</h2>\n  <ul class="related">' + disp.map(c => '<li><a href="/libros-usados/' + c.webSlug + '/">' + E(c.title) + '<small>' + E([c.author, c.condicion || 'Usado bueno', c.price ? '$' + c.price : ''].filter(Boolean).join(' · ')) + '</small></a></li>').join('') + '</ul>\n') : '') + '  <' + '!-- LM-LISTA-FIN -->';
+      const hoy = new Date().toISOString().slice(0, 10);
+      const land2 = landing.replace(/<\!-- LM-LISTA-INICIO -->[\s\S]*?<\!-- LM-LISTA-FIN -->/, lista);
+      files.push({ name: dir + 'index.html', data: land2 });
+      // 3) sitemap: se reemplazan las entradas de libros y se agregan las disponibles
+      let sm = sitemap.replace(/\s*<url>\s*<loc>https:\/\/lamadriguera\.ec\/libros-usados\/[^<]+\/<\/loc>[\s\S]*?<\/url>/g, '');
+      sm = sm.replace(/(<loc>https:\/\/lamadriguera\.ec\/libros-usados\/<\/loc>\s*<lastmod>)[^<]*/, '$1' + hoy);
+      sm = sm.replace('</urlset>', disp.map(c => '  <url>\n    <loc>' + this.urlLibro(c.webSlug) + '</loc>\n    <lastmod>' + hoy + '</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>\n  </url>\n').join('') + '</urlset>');
+      files.push({ name: 'publicar/sitemap.xml', data: sm });
+      const leeme = ['PÁGINAS DE LIBROS DE SEGUNDA VIDA · generado el ' + new Date().toLocaleString('es-EC'), '',
+        'Libros disponibles con página: ' + disp.length, 'Páginas marcadas como vendidas o retiradas: ' + (vend.length + bajas.length), '',
+        'CÓMO SUBIRLO', '1. Abre la carpeta «publicar» de este ZIP.',
+        '2. Copia su contenido DENTRO de tu carpeta «Continua Interface/publicar» y acepta REEMPLAZAR.',
+        '   (Solo toca libros-usados/ y sitemap.xml; no borra nada tuyo.)',
+        '3. Sube la carpeta «publicar» completa a GitHub, como siempre.',
+        '4. (Opcional) En Google Search Console → Sitemaps, vuelve a enviar sitemap.xml.'].join('\n');
+      files.push({ name: 'LEEME.txt', data: leeme });
+      const zip = this.zipStore(files);
+      const url = URL.createObjectURL(zip);
+      const a = document.createElement('a'); a.href = url; a.download = 'paginas-segunda-vida-' + hoy + '.zip';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(() => URL.revokeObjectURL(url), 5000);
+      this.setConfig('svPaginas', sv.filter(c => c.webSlug).map(c => ({ slug: c.webSlug, id: c.id, title: c.title || '', author: c.author || '', code: c.code || '' })).concat(bajas));
+      this.flash('ZIP listo: ' + disp.length + ' páginas de libros disponibles. Cópialo dentro de «publicar» y súbelo a GitHub.', 10000);
+    } catch (e) {
+      console.error('[LM] páginas SV', e);
+      this.flash('No se pudieron generar las páginas: ' + ((e && e.message) || e), 10000);
+    }
+    this._genBusy = false; this.setState({ genBusy: false });
+  };
   // Datos del consignante que NO deben estar en la web: la colección «consig» es de lectura pública.
   // Viven en Segunda Vida (proyecto de reservas, con reglas por rol).
   CONSIG_PRIV = ['owner', 'contact', 'payout', 'pagado'];
@@ -4644,6 +4822,8 @@ class Component extends DCLogic {
       navItems, navGroups, subNavItems, hasSubNav: subNavItems.length > 0,
       search, onSearch: (e) => this.setState({ search: e.target.value, catVer: 24 }), category, catChips,
       ...this.revisionCatalogo(C),
+      generarPaginasSV: this.generarPaginasSV, genLabel: this.state.genBusy ? 'Generando páginas…' : 'Generar páginas para Google',
+      svSinPagina: this.svPendientesWeb(), svHasSinPagina: this.svPendientesWeb() > 0,
       consigHasPriv: consigPrivN > 0, consigPrivN, limpiarPrivConsig: this.limpiarPrivConsig,
       catalogBooks, catalogCount: catalogTotal, hasResults: catalogTotal > 0, noResults: catalogTotal === 0,
       catHasMore: catRestan > 0, catMoreLabel: 'Ver ' + Math.min(24, catRestan) + ' libros más (quedan ' + catRestan + ')', onCatMore: () => this.setState({ catVer: catVer + 24 }),
