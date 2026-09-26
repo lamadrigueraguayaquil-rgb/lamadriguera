@@ -26,6 +26,7 @@
       <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:19px; color:#7C2F3E;">{{ event.price }}</span>
     </div>
     <a sc-camel-href="{{ event.waHref }}" onClick="{{ event.onBuy }}" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; background:#7C2F3E; color:#FFF7EC; font-weight:700; font-size:13.5px; padding:11px 12px; border-radius:11px; transition:background .15s ease;" style-hover="background:#672836;">{{ event.ctaLabel }}</a>
+    <sc-if value="{{ event.canCallback }}" hint-placeholder-val="{{ false }}"><a href="#contactame" onClick="{{ event.onCallback }}" style="display:block; text-align:center; text-decoration:underline; text-underline-offset:3px; font-size:12.5px; font-weight:700; color:#6E5946; padding:2px 4px;">{{ event.callbackLabel }}</a></sc-if>
   </div>
 </div>
 </x-dc>
