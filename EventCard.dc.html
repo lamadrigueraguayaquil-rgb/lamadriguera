@@ -8,7 +8,7 @@
 <body>
 <x-dc>
 <div style="display:flex; flex-direction:column; background:#FFFDF8; border:1px solid #EADBC4; border-radius:18px; overflow:hidden; box-shadow:0 10px 26px rgba(52,37,26,0.08); font-family:'Outfit',sans-serif; height:100%;">
-  <div onClick="{{ event.onOpen }}" title="Ver detalles del evento" style="position:relative; aspect-ratio:16/9; background:repeating-linear-gradient(135deg,#5E1F33,#5E1F33 12px,#742A3D 12px,#742A3D 24px); display:flex; align-items:flex-end; justify-content:flex-start; cursor:pointer;">
+  <div onClick="{{ event.onOpen }}" role="button" tabindex="0" title="Ver detalles del evento" style="position:relative; aspect-ratio:16/9; background:repeating-linear-gradient(135deg,#5E1F33,#5E1F33 12px,#742A3D 12px,#742A3D 24px); display:flex; align-items:flex-end; justify-content:flex-start; cursor:pointer;">
     <div style="position:absolute; inset:0; background:radial-gradient(120% 120% at 80% 0%, rgba(201,162,75,0.4), rgba(94,31,51,0) 60%);"></div>
     <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.08em; color:rgba(247,239,226,0.72); margin:12px; text-transform:lowercase;">imagen del evento</span>
     <sc-if value="{{ event.hasImg }}" hint-placeholder-val="{{ false }}"><div style="{{ event.imgStyle }}"></div></sc-if><sc-if value="{{ event.hasImg }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ event.imgUrl }}" alt="{{ event.imgAlt }}" loading="lazy" decoding="async" style="{{ event.imgTagStyle }}"></sc-if>
