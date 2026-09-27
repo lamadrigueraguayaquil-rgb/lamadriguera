@@ -24,7 +24,7 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){var cs=[].s
 <title>La Madriguera · Librería y café de especialidad en Guayaquil</title>
 <meta name="description" content="Librería, café de especialidad y bubble tea en Urdesa, Guayaquil. Libros nuevos y usados, merch para lectores y eventos literarios. Mié–Sáb 12:00–20:00, Dom 10:00–18:00.">
 <link rel="canonical" href="https://lamadriguera.ec/">
-<!-- COPIA DE PRUEBA (rama fix/operacion-validada cf605a5). Borrar despues de verificar. -->
+<!-- COPIA DE PRUEBA v2 (rama fix/operacion-validada). Borrar despues de verificar. -->
 <link rel="icon" type="image/png" href="./favicon.png">
 <link rel="apple-touch-icon" href="./favicon.png">
 <meta name="theme-color" content="#5E1F33">
@@ -1515,7 +1515,8 @@ class Component extends DCLogic {
           this._fbReason = 'La librería de Firebase no se cargó en este navegador.';
           this.setState({ fb: 'offline' }); return;
         }
-        if (!window.firebase.apps.length) window.firebase.initializeApp(this.FB_CFG);
+        // La app principal se busca por nombre: la de reservas ('reservas') puede haberse creado antes.
+        let appPpal = null; try { appPpal = window.firebase.app(); } catch (e) { appPpal = window.firebase.initializeApp(this.FB_CFG); }
         this.db = window.firebase.firestore();
         this.auth = window.firebase.auth();
         this._fbReason = '';
@@ -1786,6 +1787,7 @@ class Component extends DCLogic {
     const key = ((this.cfg().reservasKey || '') + '').trim();
     if (!key) return;
     if (!(typeof window !== 'undefined' && window.firebase && window.firebase.firestore)) return;
+    if (!this.db) return;   // primero la base principal (adminpagweb); si no, la de reservas ocuparía su lugar
     try {
       this._resBooted = true;
       let app;
