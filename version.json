@@ -1,0 +1,219 @@
+{
+  "version": "lm-20260928-2042-94d8d66e",
+  "generado": "2026-09-28T20:42:38",
+  "fuente": {
+    "archivo": "La Madriguera.dc.html",
+    "sha256": "94d8d66e594e4a3e065ef4e2eba8a556af00f4b27140fb73827620a79bce4743"
+  },
+  "diferencias_intencionales": [
+    {
+      "archivo": "support.js",
+      "se_usa": "publicar/support.js",
+      "se_ignora": "raíz/support.js",
+      "motivo": "support.js publicado carga React local con respaldo remoto y SRI; datos.js publicado es la versión sin imagen incrustada. Los de la raíz son exportaciones antiguas."
+    },
+    {
+      "archivo": "datos.js",
+      "se_usa": "publicar/datos.js",
+      "se_ignora": "raíz/datos.js",
+      "motivo": "support.js publicado carga React local con respaldo remoto y SRI; datos.js publicado es la versión sin imagen incrustada. Los de la raíz son exportaciones antiguas."
+    }
+  ],
+  "omitidos_por_ser_basura": [],
+  "total_archivos": 32,
+  "total_bytes": 1534920,
+  "archivos": [
+    {
+      "ruta": "404.html",
+      "bytes": 5585,
+      "sha256": "fc1f4e4c65342a2319a4ecffe6c9b18d08bc12099c4156978da63b51b80fbb27",
+      "origen": "runtime publicado: publicar/404.html"
+    },
+    {
+      "ruta": "BookCard.dc.html",
+      "bytes": 5645,
+      "sha256": "073a2cf63bd6a14575fa6b359cf1dd671a98293aae603ad9e207e161009db8e6",
+      "origen": "copia: raíz/BookCard.dc.html"
+    },
+    {
+      "ruta": "CNAME",
+      "bytes": 16,
+      "sha256": "5346130cac2b1b6e598d2d8561a4d5dea037331037d9d6714c6e9cbfa17fbb93",
+      "origen": "runtime publicado: publicar/CNAME"
+    },
+    {
+      "ruta": "EventCard.dc.html",
+      "bytes": 4295,
+      "sha256": "d109b70702d70354cde41dbe30c963d46143b45a37a1a49e304af6398d92822e",
+      "origen": "copia: raíz/EventCard.dc.html"
+    },
+    {
+      "ruta": "MerchCard.dc.html",
+      "bytes": 4942,
+      "sha256": "2dba46569d813730d1698afb48a89ff20e5e1da34b41d2e435ce62d770803488",
+      "origen": "copia: raíz/MerchCard.dc.html"
+    },
+    {
+      "ruta": "admin.html",
+      "bytes": 514051,
+      "sha256": "743c0ec638778bc2726137c99849bdd966ec38d3f7276debf438e821935eb6e6",
+      "origen": "generado: La Madriguera.dc.html (panel, noindex)"
+    },
+    {
+      "ruta": "blog/cafes-para-leer-guayaquil/index.html",
+      "bytes": 26472,
+      "sha256": "d994d69fe1889c57e6ff2c68c1861510f9326311f30dabb63b14f57b662b6a98",
+      "origen": "runtime publicado: publicar/blog/cafes-para-leer-guayaquil/index.html"
+    },
+    {
+      "ruta": "blog/index.html",
+      "bytes": 8483,
+      "sha256": "a9496677464a09f3a15d67a76f90fc10817e92f985d822a156cd5b2f1fdacb58",
+      "origen": "runtime publicado: publicar/blog/index.html"
+    },
+    {
+      "ruta": "blog/vender-libros-usados-guayaquil/index.html",
+      "bytes": 26538,
+      "sha256": "9e91c41a82d8517544c4cd386230360862e2ff5184c0036f18831b2d78a08b6d",
+      "origen": "runtime publicado: publicar/blog/vender-libros-usados-guayaquil/index.html"
+    },
+    {
+      "ruta": "cafeteria/index.html",
+      "bytes": 13454,
+      "sha256": "b077f1c7695621436dc6a56da4b2ccdb40ec46d1ae79b1db7a11c6ca59edc5bc",
+      "origen": "runtime publicado: publicar/cafeteria/index.html"
+    },
+    {
+      "ruta": "catalogo/index.html",
+      "bytes": 13257,
+      "sha256": "fbf44f2c8025de73eb733484627439c6a16ae81c05dec6bd82e970725642eb5b",
+      "origen": "runtime publicado: publicar/catalogo/index.html"
+    },
+    {
+      "ruta": "datos.js",
+      "bytes": 7396,
+      "sha256": "d137d1a5ccd43051a1af2f685cf7e6ef5694f60fb2f950b8833b80c2a36c0a77",
+      "origen": "runtime publicado: publicar/datos.js"
+    },
+    {
+      "ruta": "eventos/index.html",
+      "bytes": 13620,
+      "sha256": "d0a99aba03147ba9be77aefc3d9e2d584498bded70a051a6a3ee66abf932bdd0",
+      "origen": "runtime publicado: publicar/eventos/index.html"
+    },
+    {
+      "ruta": "favicon-32.png",
+      "bytes": 6852,
+      "sha256": "3a0b86c39e94854a69ac100cd6243cf980a659dae6cd94f691e02ca7203079d2",
+      "origen": "runtime publicado: publicar/favicon-32.png"
+    },
+    {
+      "ruta": "favicon.png",
+      "bytes": 12996,
+      "sha256": "e677d571b0aa5c5d81b8c092e345c0dc7ab1bbf3c04eb1cb64f7e92bf0c70083",
+      "origen": "runtime publicado: publicar/favicon.png"
+    },
+    {
+      "ruta": "index.html",
+      "bytes": 380994,
+      "sha256": "a8042ad8e990ca577dddd2317dac3a0522859ba360ed7b42af7afc4a9a5affb3",
+      "origen": "generado: La Madriguera.dc.html (sin panel)"
+    },
+    {
+      "ruta": "libros-usados/index.html",
+      "bytes": 12891,
+      "sha256": "d6b9487d88316da8ccb0909cd9bb127699d803bfdece908530b188a7593a5d33",
+      "origen": "runtime publicado: publicar/libros-usados/index.html"
+    },
+    {
+      "ruta": "logo-cabecera.png",
+      "bytes": 16684,
+      "sha256": "9850fb33b8dcbefd7cac0305ffdf92758a73609853205d29811200014b9ca530",
+      "origen": "runtime publicado: publicar/logo-cabecera.png"
+    },
+    {
+      "ruta": "logo-la-madriguera.png",
+      "bytes": 33309,
+      "sha256": "579a329261954abb9defb60ad2c9574b693fa5d77b6cf1774d85bba364126d22",
+      "origen": "runtime publicado: publicar/logo-la-madriguera.png"
+    },
+    {
+      "ruta": "logo-negativo.png",
+      "bytes": 21394,
+      "sha256": "ef69f9de358559177bc18d65c6245a6cbeb55fd35a48adae4fd92bfdb617c32a",
+      "origen": "runtime publicado: publicar/logo-negativo.png"
+    },
+    {
+      "ruta": "logo.png",
+      "bytes": 40165,
+      "sha256": "216066812db97afbe3284ce36fc09c6c20a8fa52ab5ab27c89c4e3f3afa3a3dd",
+      "origen": "runtime publicado: publicar/logo.png"
+    },
+    {
+      "ruta": "merch/index.html",
+      "bytes": 13017,
+      "sha256": "f09b224255fa1ddad9e819d502b968fcb2c11fc79ca871649e83b2c620017e14",
+      "origen": "runtime publicado: publicar/merch/index.html"
+    },
+    {
+      "ruta": "og-image.jpg",
+      "bytes": 127929,
+      "sha256": "bde84a15771ae1e74c2845299a4ffa27786a586a5a998268748d76b5208052ee",
+      "origen": "runtime publicado: publicar/og-image.jpg"
+    },
+    {
+      "ruta": "portadas/LEEME.txt",
+      "bytes": 948,
+      "sha256": "bd1da6b2df8105dc3dc52e65063d50ccba45f84c9bd29d98987e68fff5c412c6",
+      "origen": "runtime publicado: publicar/portadas/LEEME.txt"
+    },
+    {
+      "ruta": "privacidad/index.html",
+      "bytes": 11917,
+      "sha256": "7f2db04caf6c2b0273dd44bd1ff01ab4c08425facba4d09c36873a45a45fa96a",
+      "origen": "runtime publicado: publicar/privacidad/index.html"
+    },
+    {
+      "ruta": "react-dom.js",
+      "bytes": 131835,
+      "sha256": "35f4f974f4b2bcd44da73963347f8952e341f83909e4498227d4e26b98f66f0d",
+      "origen": "runtime publicado: publicar/react-dom.js"
+    },
+    {
+      "ruta": "react.js",
+      "bytes": 10751,
+      "sha256": "d949f1c3687aedadcedac85261865f29b17cd273997e7f6b2bfc53b2f9d4c4dd",
+      "origen": "runtime publicado: publicar/react.js"
+    },
+    {
+      "ruta": "robots.txt",
+      "bytes": 69,
+      "sha256": "1332cf6e0c7f37494251a55898125763273d1a42da8590cde7bfc356bc65984b",
+      "origen": "runtime publicado: publicar/robots.txt"
+    },
+    {
+      "ruta": "sitemap.xml",
+      "bytes": 1972,
+      "sha256": "7181a175617003d916ef50e8b33632d71089178c360f6c865ed5c4fad9cbb200",
+      "origen": "runtime publicado: publicar/sitemap.xml"
+    },
+    {
+      "ruta": "support.js",
+      "bytes": 52217,
+      "sha256": "0bd695a4358238e4c828cae200f2ed3b5d976823ab5d1a83571007e28285abca",
+      "origen": "runtime publicado: publicar/support.js"
+    },
+    {
+      "ruta": "sw-fotos.js",
+      "bytes": 2188,
+      "sha256": "ec8bcc5e7914ce193c0003daef71182a0fa766d2b208db8ba2a945fdf9fe5005",
+      "origen": "runtime publicado: publicar/sw-fotos.js"
+    },
+    {
+      "ruta": "vender-libros/index.html",
+      "bytes": 13038,
+      "sha256": "3f125ff0b387f2355df3fe34ec371c4a264eb671abe036956562a4e7b48764c5",
+      "origen": "runtime publicado: publicar/vender-libros/index.html"
+    }
+  ]
+}

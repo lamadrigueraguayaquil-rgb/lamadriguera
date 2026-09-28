@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
+<meta name="lm-version" content="lm-20260928-2042-94d8d66e">
 <meta name="robots" content="noindex, nofollow">
 <script>/* Limpia de la barra de direcciones el sello de verificación ?v=… (se usa solo para ver una copia fresca
    al comprobar una publicación). Así la dirección queda siempre como lamadriguera.ec/#seccion. */
@@ -491,6 +492,9 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){var cs=[].s
       <sc-if value="{{ catAvisoCache }}" hint-placeholder-val="{{ false }}">
         <div role="status" style="border-radius:14px; padding:14px 18px; font-size:14px; line-height:1.55; margin-bottom:18px; background:#F1E6CF; border:1px solid #D4B560; color:#5E4632;">Sin conexión con el catálogo en línea: mostramos la última copia guardada en este dispositivo. Precios y disponibilidad se confirman al hacer el pedido. <span onClick="{{ retryDatos }}" role="button" tabindex="0" style="cursor:pointer; font-weight:800; color:#AF3249; text-decoration:underline;">Reintentar</span></div>
       </sc-if>
+      <sc-if value="{{ catParcial }}" hint-placeholder-val="{{ false }}">
+        <div role="status" style="border-radius:14px; padding:14px 18px; font-size:14px; line-height:1.55; margin-bottom:18px; background:#F1E6CF; border:1px solid #D4B560; color:#5E4632;">{{ catParcialMsg }} <span onClick="{{ retryDatos }}" role="button" tabindex="0" style="cursor:pointer; font-weight:800; color:#AF3249; text-decoration:underline;">Reintentar</span></div>
+      </sc-if>
       <sc-if value="{{ catCargando }}" hint-placeholder-val="{{ false }}">
         <div role="status" aria-live="polite" style="text-align:center; padding:60px 20px; color:#6E5946; font-size:15px;">Cargando libros…</div>
       </sc-if>
@@ -567,6 +571,9 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){var cs=[].s
       </div>
       <sc-if value="{{ sgAvisoCache }}" hint-placeholder-val="{{ false }}">
         <div role="status" style="border-radius:14px; padding:14px 18px; font-size:14px; line-height:1.55; margin-bottom:18px; background:#F1E6CF; border:1px solid #D4B560; color:#5E4632;">Sin conexión con el catálogo en línea: mostramos la última copia guardada en este dispositivo. Precios y disponibilidad se confirman al hacer el pedido. <span onClick="{{ retryDatos }}" role="button" tabindex="0" style="cursor:pointer; font-weight:800; color:#AF3249; text-decoration:underline;">Reintentar</span></div>
+      </sc-if>
+      <sc-if value="{{ sgParcial }}" hint-placeholder-val="{{ false }}">
+        <div role="status" style="border-radius:14px; padding:14px 18px; font-size:14px; line-height:1.55; margin-bottom:18px; background:#F1E6CF; border:1px solid #D4B560; color:#5E4632;">{{ sgParcialMsg }} <span onClick="{{ retryDatos }}" role="button" tabindex="0" style="cursor:pointer; font-weight:800; color:#AF3249; text-decoration:underline;">Reintentar</span></div>
       </sc-if>
       <sc-if value="{{ sgCargando }}" hint-placeholder-val="{{ false }}">
         <div role="status" aria-live="polite" style="text-align:center; padding:60px 20px; color:#6E5946; font-size:15px;">Cargando libros…</div>
@@ -814,7 +821,7 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){var cs=[].s
     <section style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px);">
       
       <h2 style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#AF3249; line-height:1.05;">Cómo comprar en La Madriguera Online</h2>
-      <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:42em;">Agrega al carrito lo que quieras, revisa tu pedido y envíalo por WhatsApp con un toque. Nosotros confirmamos disponibilidad, pago y entrega.</p>
+      <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:42em;">Agrega al carrito lo que quieras, revisa y registra tu pedido; después lo confirmas por WhatsApp. Registrarlo no es un pago ni aparta los productos: nosotros confirmamos disponibilidad, pago y entrega.</p>
       <div style="margin-top:34px; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:clamp(16px,2vw,22px);">
         <sc-for list="{{ compraPasos }}" as="p" hint-placeholder-count="5">
           <div style="background:#FFFDF8; border:1px solid #EADBC4; border-radius:18px; padding:22px; box-shadow:0 8px 22px rgba(52,37,26,0.06);">
@@ -2154,7 +2161,7 @@ service cloud.firestore {
           <input id="co-note" value="{{ coNote }}" onInput="{{ onCoNote }}" placeholder="Dirección, color, talla, dedicatoria…" style="width:100%; padding:12px 14px; border:1px solid #E3D2B8; border-radius:10px; font-family:'Outfit',sans-serif; font-size:14.5px; color:#34251A; background:#FFFDF8; outline:none;">
           <sc-if value="{{ coHasErr }}" hint-placeholder-val="{{ false }}">
             <div id="co-err" role="alert" style="font-size:13px; font-weight:700; color:#9A4A3C; line-height:1.5;">{{ coErr }}</div>
-            <sc-if value="{{ coHasWaSinRegistro }}" hint-placeholder-val="{{ false }}"><a sc-camel-href="{{ coWaSinRegistro }}" target="_blank" rel="noopener" style="font-size:13px; font-weight:800; color:#AF3249; text-decoration:underline;">Enviar solo por WhatsApp (sin registro en la web)</a></sc-if>
+            <sc-if value="{{ coHasWaSinRegistro }}" hint-placeholder-val="{{ false }}"><a sc-camel-href="{{ coWaSinRegistro }}" onClick="{{ waSinRegistro }}" target="_blank" rel="noopener" style="font-size:13px; font-weight:800; color:#AF3249; text-decoration:underline;">Enviar solo por WhatsApp (sin registro en la web)</a></sc-if>
           </sc-if>
         </div>
       </sc-if>
@@ -2167,6 +2174,7 @@ service cloud.firestore {
         <span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:26px; color:#AF3249;">{{ cartSubtotal }}</span>
       </div>
       <sc-if value="{{ cartEnvioPendiente }}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px; color:#6E5946; margin-top:-6px;">Envío: por cotizar. Te confirmamos el valor por WhatsApp antes de cobrar.</div></sc-if>
+      <p id="co-aviso-flujo" style="margin:0; font-size:13px; line-height:1.5; color:#5E4632; background:#F1E6CF; border:1px solid #D4B560; border-radius:10px; padding:9px 12px;"><strong>Registraremos tu solicitud y después la confirmarás por WhatsApp.</strong> Registrarla no es un pago ni aparta los productos: disponibilidad, pago y entrega se confirman por WhatsApp.</p>
       <span onClick="{{ checkout }}" role="button" tabindex="0" aria-disabled="{{ coSending }}" style="cursor:pointer; display:flex; align-items:center; justify-content:center; gap:9px; background:#AF3249; color:#F7EFE2; font-weight:800; font-size:15.5px; padding:15px; border-radius:13px; box-shadow:0 8px 20px rgba(175,50,73,0.28); transition:background .15s ease;" style-hover="background:#434C39;"><span style="width:8px; height:8px; border-radius:50%; background:#9CD9A6;"></span>{{ coBtnLabel }}</span>
       <p style="margin:0; font-size:12.5px; line-height:1.5; color:#7C6651; text-align:center;">Usaremos tu nombre y celular solo para atender tu pedido. <a href="/privacidad/" style="color:#AF3249; text-decoration:underline;">Privacidad</a></p>
       <div style="display:flex; align-items:center; justify-content:space-between;">
@@ -2451,7 +2459,7 @@ class Component extends DCLogic {
   compraPasos = [
     { n: '1', text: 'Explora el catálogo de libros y merch.' },
     { n: '2', text: 'Agrega al carrito tus libros o productos favoritos.' },
-    { n: '3', text: 'Envía tu pedido por WhatsApp con un toque.' },
+    { n: '3', text: 'Registra tu pedido en la web y confírmalo por WhatsApp.' },
     { n: '4', text: 'Confirmamos disponibilidad y el pago de forma segura.' },
     { n: '5', text: 'Retira en La Madriguera o coordina tu envío.' }
   ];
@@ -2480,11 +2488,13 @@ class Component extends DCLogic {
     window.removeEventListener('hashchange', this.applyHash);
     window.removeEventListener('popstate', this.onPopState);
     (this._unsubs || []).forEach(fn => { try { fn(); } catch (e) {} });
+    Object.keys(this._colUnsub || {}).forEach((k) => { try { this._colUnsub[k](); } catch (e) {} });
+    if (this._authUnsub) { try { this._authUnsub(); } catch (e) {} }
     if (this._svIv) clearInterval(this._svIv);
     if (this._fbTimer) clearTimeout(this._fbTimer);
     if (this._toastT) clearTimeout(this._toastT);
   }
-  componentDidUpdate() { this.syncChips(); this.bootReservas(); this.bootAnalytics(); this.seoSync(); this.seoTitle(); this.svAutoTick(); }
+  componentDidUpdate() { this.syncChips(); this.ensureSecciones(); this.bootReservas(); this.bootAnalytics(); this.seoSync(); this.seoTitle(); this.svAutoTick(); }
 
   // ---------- Google Analytics 4 ----------
   bootAnalytics() {
@@ -2645,7 +2655,7 @@ class Component extends DCLogic {
         this.db = window.firebase.firestore();
         this.auth = window.firebase.auth();
         this._fbReason = '';
-        this.auth.onAuthStateChanged((u) => { this._authed = !!u; if (u && this.esPaginaAdmin() && this.state.view !== 'admin') this.setState({ view: 'admin', pwOpen: false }); this.setState({ authed: !!u, adminEmail: u ? (u.email || '') : '' }); this.subscribePedidos(!!u); this.maybeSeed(); });
+        if (!this._authUnsub) this._authUnsub = this.auth.onAuthStateChanged((u) => { this._authed = !!u; if (u && this.esPaginaAdmin() && this.state.view !== 'admin') this.setState({ view: 'admin', pwOpen: false }); this.setState({ authed: !!u, adminEmail: u ? (u.email || '') : '' }); this.subscribePedidos(!!u); this.maybeSeed(); });
         this.subscribe();
         if (this._fbTimer) clearTimeout(this._fbTimer);
         // 18 s: en conexiones lentas la primera respuesta puede tardar
@@ -3004,31 +3014,90 @@ class Component extends DCLogic {
     if (this.online()) this.itemRef('eventosImg', id).set({ id, imagen: val }, { merge: true }).catch((e) => this.flash(this.fbErr(e)));
   }
 
+  // Colecciones que la web necesita desde el inicio; cafetería y especialidad se piden al abrir su sección
+  // (o si el carrito/panel las necesita). Cada colección tiene su propio estado: sin-pedir · pendiente · ok · error.
+  COLS_INICIO = ['libros', 'consig', 'merch', 'eventos', 'eventosImg'];
+  COLS_SECCION = ['cafeteria', 'especialidad'];
+  estadoCol(coll) { return (this._colEstado || {})[coll] || 'sin-pedir'; }
+  colLista(coll) { return this.estadoCol(coll) === 'ok'; }
+  colResuelta(coll) { const e = this.estadoCol(coll); return e === 'ok' || e === 'error'; }
+  colsSeccionNecesarias() {
+    const st = this.state || {};
+    if (st.view === 'admin' || this._authed || this.esPaginaAdmin()) return this.COLS_SECCION.slice();
+    const out = [];
+    if (st.page === 'cafeteria') out.push('cafeteria');
+    const det = st.detail;
+    if (st.page === 'especialidad' || (det && det.kind === 'especial') || (st.cart || []).some(x => x && x.kind === 'Café de especialidad')) out.push('especialidad');
+    return out;
+  }
+  // Se llama en cada actualización: abre solo las escuchas que faltan. Una colección en error NO se reintenta sola
+  // (evita bucles); se reintenta con el botón «Reintentar».
+  ensureSecciones() {
+    if (!this.db) return;
+    this.colsSeccionNecesarias().forEach((c) => { if (!(this._colUnsub || {})[c] && this.estadoCol(c) !== 'error') this.escucharCol(c); });
+  }
   subscribe() {
     if (!this.db) return;
     this._live = this._live || this.defaultCMS();
-    this._unsubs = this._unsubs || [];
-    const ok = () => { if (this.state.fb !== 'online') this.setState({ fb: 'online' }); if (this._fbTimer) clearTimeout(this._fbTimer); };
+    this._colEstado = this._colEstado || {};
+    // Reintento sin duplicar: se cierran las escuchas anteriores antes de abrir las nuevas.
+    Object.keys(this._colUnsub || {}).forEach((k) => { try { this._colUnsub[k](); } catch (e) {} });
+    this._colUnsub = {};
+    const pedidasAntes = Object.keys(this._colEstado).filter(c => this.COLS_SECCION.indexOf(c) >= 0 && this._colEstado[c] !== 'sin-pedir');
     // 'pedidos' NO se lee aquí: solo la administradora puede leerlos (ver subscribePedidos).
-    ['libros', 'consig', 'merch', 'cafeteria', 'especialidad', 'eventos', 'eventosImg'].forEach((coll) => {
-      const u = this.db.collection(coll).onSnapshot((snap) => {
+    this.COLS_INICIO.concat(['config', 'brand'], this.colsSeccionNecesarias(), pedidasAntes).forEach((c) => this.escucharCol(c));
+  }
+  escucharCol(coll) {
+    if (!this.db) return;
+    this._colUnsub = this._colUnsub || {}; this._colEstado = this._colEstado || {};
+    if (this._colUnsub[coll]) return;
+    if (this._colEstado[coll] !== 'ok') this._colEstado[coll] = 'pendiente';
+    const err = (e) => this.colError(coll, e);
+    let u;
+    if (coll === 'config') {
+      u = this.db.collection('config').doc('general').onSnapshot((d) => { this._live.config = d.exists ? d.data() : {}; this.colOk(coll); this.maybeSeed(); }, err);
+    } else if (coll === 'brand') {
+      u = this.db.collection('brand').onSnapshot((snap) => { const o = {}; snap.forEach((d) => { o[d.id] = (d.data() || {}).data || ''; }); this._live.brand = o; this.colOk(coll); }, err);
+    } else {
+      u = this.db.collection(coll).onSnapshot((snap) => {
         const arr = [];
         snap.forEach((d) => arr.push(Object.assign({ id: d.id }, d.data())));
         arr.sort((a, b) => (b.order || 0) - (a.order || 0));
-        this._live[coll] = arr; this._cargado = this._cargado || {}; this._cargado[coll] = true; ok(); this.commitLive(); this.maybeSeed();
-      }, (e) => { if (!(e && e.code === 'permission-denied')) this.setState({ fb: 'offline' }); });
-      this._unsubs.push(u);
-    });
-    const uc = this.db.collection('config').doc('general').onSnapshot((d) => {
-      this._live.config = d.exists ? d.data() : {}; ok(); this.commitLive(); this.maybeSeed();
-    }, () => {});
-    this._unsubs.push(uc);
-    const ub = this.db.collection('brand').onSnapshot((snap) => {
-      const o = {}; snap.forEach((d) => { o[d.id] = (d.data() || {}).data || ''; });
-      this._live.brand = o; ok(); this.commitLive();
-    }, () => {});
-    this._unsubs.push(ub);
+        this._live[coll] = arr; this.colOk(coll); this.maybeSeed();
+      }, err);
+    }
+    this._colUnsub[coll] = u;
   }
+  colOk(coll) {
+    this._colEstado[coll] = 'ok';
+    if (this._colErr) delete this._colErr[coll];
+    if (this.state.fb !== 'online') this.setState({ fb: 'online' });
+    if (this._fbTimer) clearTimeout(this._fbTimer);
+    this.commitLive();
+  }
+  colError(coll, e) {
+    const code = (e && e.code) || 'desconocido';
+    console.warn('[LM] no se pudo leer «' + coll + '»:', code);
+    this._colEstado = this._colEstado || {}; this._colErr = this._colErr || {};
+    this._colEstado[coll] = 'error'; this._colErr[coll] = code;
+    // Firestore cierra la escucha tras un error: se descarta para poder reintentar sin duplicar.
+    if (this._colUnsub && this._colUnsub[coll]) { try { this._colUnsub[coll](); } catch (x) {} delete this._colUnsub[coll]; }
+    // Si todas las colecciones del inicio fallaron y ninguna respondió, la conexión se da por caída.
+    if (this.state.fb !== 'online' && this.COLS_INICIO.every(c => this.estadoCol(c) === 'error')) {
+      if (this._fbTimer) clearTimeout(this._fbTimer);
+      this._fbReason = this._fbReason || ('La base de datos rechazó la lectura del catálogo (' + code + ').');
+      this.setState({ fb: 'offline' }); return;
+    }
+    this.setState({ savedAt: Date.now() });
+  }
+  // «Reintentar» del catálogo: si Firebase ya está conectado solo se reabren las escuchas; si no, se reconecta.
+  retryDatos = () => {
+    if (this.db && this.state.fb === 'online') {
+      Object.keys(this._colEstado || {}).forEach((c) => { if (this._colEstado[c] === 'error') this._colEstado[c] = 'pendiente'; });
+      this.flash('Reintentando…'); this.subscribe(); this.setState({ savedAt: Date.now() }); return;
+    }
+    this.retryFirebase();
+  };
   // Pedidos: solo con sesión de administradora. Se (re)suscribe al iniciar sesión y se corta al salir.
   subscribePedidos(on) {
     if (this._unsubPedidos) { try { this._unsubPedidos(); } catch (e) {} this._unsubPedidos = null; }
@@ -3615,7 +3684,24 @@ class Component extends DCLogic {
     const base = this.slugify(((c.title || '') + ' ' + (c.author || '')).trim()).slice(0, 70).replace(/-+$/, '') || 'libro';
     return base + '-' + (this.slugify(c.code || c.id) || this.slugify(c.id));
   }
-  urlLibro(slug) { return this.SITE + '/libros-usados/' + slug + '/'; }
+  urlLibro(slug, dir) { return this.SITE + '/' + (dir || 'libros-usados') + '/' + slug + '/'; }
+  // Perfiles de página: mismo generador para Segunda Vida (consignación) y libros nuevos (colección «libros»).
+  K_SV = { dir: 'libros-usados', coll: 'consig', seccion: 'Libros usados', seccionUrl: '/libros-usados/', sinTitulo: 'Libro usado', sufijo: ' · Libro usado en Guayaquil | La Madriguera',
+    descVendido: 'Este libro usado ya encontró nuevo lector. ', condicion: 'https://schema.org/UsedCondition', sinFoto: 'Libro usado<br><small>foto al escribirnos</small>',
+    aviso: '<strong>Este libro ya encontró a su siguiente lector.</strong> Mira los <a href="/libros-usados/">otros libros usados disponibles</a> o escríbenos y te avisamos si llega otro ejemplar.',
+    nota: 'Ejemplar único de segunda mano. Puedes verlo en el local antes de comprarlo. <a href="/libros-usados/#estado">Así describimos el estado</a>.',
+    relTitulo: 'Más libros de Segunda Vida', verTodos: 'Ver todos los libros usados' };
+  K_NUEVO = { dir: 'libros', coll: 'libros', seccion: 'Catálogo de libros', seccionUrl: '/catalogo/', sinTitulo: 'Libro', sufijo: ' · Libro nuevo en Guayaquil | La Madriguera',
+    descVendido: 'Este libro está agotado por ahora en La Madriguera. ', condicion: 'https://schema.org/NewCondition', sinFoto: 'Libro nuevo<br><small>portada al escribirnos</small>',
+    aviso: '<strong>Este libro está agotado por ahora.</strong> Mira los <a href="/catalogo/">otros libros del catálogo</a> o escríbenos y te avisamos cuando vuelva.',
+    nota: 'Precio y disponibilidad se confirman al registrar tu pedido y por WhatsApp. También puedes pedirlo en el local de Urdesa.',
+    relTitulo: 'Más libros del catálogo', verTodos: 'Ver el catálogo de libros' };
+  // Disponibilidad declarada a Google según el estado del panel. Si el estado no es inequívoco, no se declara.
+  dispSchema(disp) {
+    if (disp === 'Disponible' || disp === 'Última unidad' || disp === 'Oferta') return 'https://schema.org/InStock';
+    if (disp === 'Vendido') return 'https://schema.org/SoldOut';
+    return '';
+  }
   esc(t) { return ((t == null ? '' : t) + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
   imgPublica(u) { u = ((u || '') + '').trim(); return /^https?:\/\//i.test(u) ? u : ''; }
   svPendientesWeb() {
@@ -3652,27 +3738,33 @@ class Component extends DCLogic {
     end.setUint32(12, cdSize, true); end.setUint32(16, off, true);
     return new Blob(parts.concat(central, [new Uint8Array(end.buffer)]), { type: 'application/zip' });
   }
-  paginaLibro(tpl, c, estado, otros) {
+  paginaLibro(tpl, c, estado, otros, K) {
+    K = K || this.K_SV;
+    const nuevo = K === this.K_NUEVO;
     const E = (t) => this.esc(t);
-    const slug = c.webSlug; const url = this.urlLibro(slug);
-    const title = ((c.title || '') + '').trim() || 'Libro usado';
+    const slug = c.webSlug; const url = this.urlLibro(slug, K.dir);
+    const title = ((c.title || '') + '').trim() || K.sinTitulo;
     const author = ((c.author || '') + '').trim();
-    const cond = ((c.condicion || '') + '').trim() || 'Usado bueno';
+    const cond = nuevo ? 'Nuevo' : (((c.condicion || '') + '').trim() || 'Usado bueno');
+    const dispTxt = nuevo ? (this.effDisp(c) || '') : '';
     const price = +c.price || 0;
     const syn = ((c.sinopsis || '') + '').replace(/\s+/g, ' ').trim();
     const img = this.imgPublica(this.gbResuelta(c.imagen));
     const vendido = estado !== 'disponible';
-    const tit = title + (author ? ' de ' + author : '') + ' · Libro usado en Guayaquil | La Madriguera';
-    const desc = (vendido ? 'Este libro usado ya encontró nuevo lector. ' : ('Libro usado (' + cond.toLowerCase() + ')' + (price ? ' a $' + price : '') + ' en La Madriguera, Urdesa, Guayaquil. ')) + (syn ? syn.slice(0, 120).replace(/\s\S*$/, '') + '…' : 'Ejemplar único, revisado a mano.');
-    const wa = 'https://wa.me/' + this.waNum() + '?text=' + encodeURIComponent('Hola La Madriguera, me interesa el libro usado «' + title + '»' + (author ? ' de ' + author : '') + ' (código ' + (c.code || c.id) + '). ¿Sigue disponible?');
+    const tit = title + (author ? ' de ' + author : '') + K.sufijo;
+    const desc = nuevo
+      ? (vendido ? K.descVendido : ('Libro nuevo' + (price ? ' a $' + price : '') + ' en La Madriguera, Urdesa, Guayaquil. ')) + (syn ? syn.slice(0, 120).replace(/\s\S*$/, '') + '…' : 'Pídelo en línea o visítanos en Urdesa.')
+      : (vendido ? K.descVendido : ('Libro usado (' + cond.toLowerCase() + ')' + (price ? ' a $' + price : '') + ' en La Madriguera, Urdesa, Guayaquil. ')) + (syn ? syn.slice(0, 120).replace(/\s\S*$/, '') + '…' : 'Ejemplar único, revisado a mano.');
+    const wa = 'https://wa.me/' + this.waNum() + '?text=' + encodeURIComponent('Hola La Madriguera, me interesa el libro ' + (nuevo ? '' : 'usado ') + '«' + title + '»' + (author ? ' de ' + author : '') + ' (código ' + (c.code || c.id) + '). ¿Sigue disponible?');
+    const avail = nuevo ? (vendido ? 'https://schema.org/SoldOut' : this.dispSchema(dispTxt)) : (vendido ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock');
     const ld = { '@context': 'https://schema.org', '@graph': [
       Object.assign({ '@type': 'Book', '@id': url + '#libro', name: title, url, inLanguage: 'es' }, author ? { author: { '@type': 'Person', name: author } } : {}, c.isbn ? { isbn: (c.isbn + '').replace(/[^0-9Xx]/g, '') } : {}, c.editorial ? { publisher: { '@type': 'Organization', name: c.editorial } } : {}, img ? { image: img } : {}, syn ? { description: syn.slice(0, 500) } : {}),
       // Sin precio no se declara como producto (Google marca error con precio 0)
-      ...(price > 0 ? [Object.assign({ '@type': 'Product', '@id': url + '#producto', name: title + (author ? ' — ' + author : ''), sku: (c.code || c.id) + '', url, description: syn ? syn.slice(0, 500) : ('Libro usado en ' + cond.toLowerCase() + '.'),
-        offers: { '@type': 'Offer', url, priceCurrency: 'USD', price: price.toFixed(2), itemCondition: 'https://schema.org/UsedCondition', availability: vendido ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock', seller: { '@type': 'Organization', '@id': this.SITE + '/#negocio', name: 'La Madriguera' } } }, img ? { image: img } : {})] : []),
+      ...(price > 0 ? [Object.assign({ '@type': 'Product', '@id': url + '#producto', name: title + (author ? ' — ' + author : ''), sku: (c.code || c.id) + '', url, description: syn ? syn.slice(0, 500) : (nuevo ? 'Libro nuevo.' : ('Libro usado en ' + cond.toLowerCase() + '.')),
+        offers: Object.assign({ '@type': 'Offer', url, priceCurrency: 'USD', price: price.toFixed(2), itemCondition: K.condicion }, avail ? { availability: avail } : {}, { seller: { '@type': 'Organization', '@id': this.SITE + '/#negocio', name: 'La Madriguera' } }) }, img ? { image: img } : {})] : []),
       { '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Inicio', item: this.SITE + '/' },
-        { '@type': 'ListItem', position: 2, name: 'Libros usados', item: this.SITE + '/libros-usados/' },
+        { '@type': 'ListItem', position: 2, name: K.seccion, item: this.SITE + K.seccionUrl },
         { '@type': 'ListItem', position: 3, name: title, item: url }] }] };
     let head = tpl.head
       .replace(/<title>[\s\S]*?<\/title>/, '<title>' + E(tit) + '</title>')
@@ -3691,22 +3783,25 @@ class Component extends DCLogic {
       .replace(/<meta name="twitter:image" content="[^"]*">/, '<meta name="twitter:image" content="' + E(img) + '">');
     head = head.replace('</style>', '.libro{display:grid;grid-template-columns:minmax(0,220px) 1fr;gap:30px;align-items:start;margin:18px 0 10px}\n.libro img{width:100%;height:auto;border-radius:12px;border:1px solid var(--line);background:var(--cream)}\n.libro h1{margin-top:0}\n.aviso{background:#F3E2D6;border:1px solid #E0AE95;color:#6B2E22;border-radius:14px;padding:14px 18px;margin:18px 0}\n@media (max-width:640px){.libro{grid-template-columns:1fr}.libro img{max-width:240px}}\n</style>');
     const fila = (k, v) => v ? '<li><b>' + k + '</b><span>' + v + '</span></li>' : '';
-    const aviso = '<div class="aviso" id="lm-aviso" role="status"' + (vendido ? '' : ' hidden') + '><strong>Este libro ya encontró a su siguiente lector.</strong> Mira los <a href="/libros-usados/">otros libros usados disponibles</a> o escríbenos y te avisamos si llega otro ejemplar.</div>';
-    const rel = (otros || []).map(o => '<li><a href="/libros-usados/' + o.webSlug + '/">' + E(o.title) + '<small>' + E([o.author, o.condicion || 'Usado bueno', o.price ? '$' + o.price : ''].filter(Boolean).join(' · ')) + '</small></a></li>').join('');
-    const main = '<main class="wrap">\n  <p class="crumbs"><a href="/">Inicio</a> › <a href="/libros-usados/">Libros usados</a> › ' + E(title) + '</p>\n  ' + aviso + '\n  <div class="libro">\n    '
-      + (img ? '<img src="' + E(img) + '" alt="Portada de ' + E(title) + '" loading="eager" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'">' : '<div class="card" style="margin:0;text-align:center">Libro usado<br><small>foto al escribirnos</small></div>')
+    const aviso = '<div class="aviso" id="lm-aviso" role="status"' + (vendido ? '' : ' hidden') + '>' + K.aviso + '</div>';
+    const rel = (otros || []).map(o => '<li><a href="/' + K.dir + '/' + o.webSlug + '/">' + E(o.title) + '<small>' + E([o.author, nuevo ? '' : (o.condicion || 'Usado bueno'), o.price ? '$' + o.price : ''].filter(Boolean).join(' · ')) + '</small></a></li>').join('');
+    const main = '<main class="wrap">\n  <p class="crumbs"><a href="/">Inicio</a> › <a href="' + K.seccionUrl + '">' + K.seccion + '</a> › ' + E(title) + '</p>\n  ' + aviso + '\n  <div class="libro">\n    '
+      + (img ? '<img src="' + E(img) + '" alt="Portada de ' + E(title) + '" loading="eager" referrerpolicy="no-referrer" onerror="this.style.display=\'none\'">' : '<div class="card" style="margin:0;text-align:center">' + K.sinFoto + '</div>')
       + '\n    <div>\n      <h1>' + E(title) + '</h1>\n      ' + (author ? '<p class="tagline">' + E(author) + '</p>' : '')
-      + '\n      <ul class="facts">' + fila('Estado', E(cond)) + fila('Precio', '<span id="lm-precio">' + (price ? '$' + price : 'Consultar') + '</span>') + fila('Editorial', E(c.editorial)) + fila('ISBN', E(c.isbn)) + fila('Código', E(c.code || c.id)) + '</ul>'
+      + '\n      <ul class="facts">' + fila('Estado', E(cond)) + (nuevo && dispTxt && !vendido ? fila('Disponibilidad', '<span id="lm-disp">' + E(dispTxt) + '</span>') : '') + fila('Precio', '<span id="lm-precio">' + (price ? '$' + price : 'Consultar') + '</span>') + fila('Editorial', E(c.editorial)) + fila('ISBN', E(c.isbn)) + fila('Código', E(c.code || c.id)) + '</ul>'
       + '\n      <p id="lm-acciones"' + (vendido ? ' hidden' : '') + '><a class="cta" href="' + E(wa) + '" rel="noopener">Lo quiero · WhatsApp</a><a class="cta ghost" href="/#libro/' + encodeURIComponent(c.id) + '">Agregar al carrito</a></p>'
-      + '\n      <p style="font-size:15px;color:var(--muted)">Ejemplar único de segunda mano. Puedes verlo en el local antes de comprarlo. <a href="/libros-usados/#estado">Así describimos el estado</a>.</p>\n    </div>\n  </div>'
+      + '\n      <p style="font-size:15px;color:var(--muted)">' + K.nota + '</p>\n    </div>\n  </div>'
       + (syn ? '\n  <h2>Sinopsis</h2>\n  <p>' + E(syn) + '</p>' : '')
       + '\n  ' + tpl.visita
-      + (rel ? '\n  <h2>Más libros de Segunda Vida</h2>\n  <ul class="related">' + rel + '</ul>' : '')
-      + '\n  <p><a class="cta ghost" href="/libros-usados/">Ver todos los libros usados</a></p>\n</main>';
+      + (rel ? '\n  <h2>' + K.relTitulo + '</h2>\n  <ul class="related">' + rel + '</ul>' : '')
+      + '\n  <p><a class="cta ghost" href="' + K.seccionUrl + '">' + K.verTodos + '</a></p>\n</main>';
     // Estado en vivo: si el libro se vendió o se retiró después de generar la página, se avisa al visitante.
-    const vivo = vendido ? '' : '\n<script>(function(){var u="https://firestore.googleapis.com/v1/projects/adminpagweb/databases/(default)/documents/consig/' + encodeURIComponent(c.id) + '";'
-      + 'fetch(u).then(function(r){if(r.status===404)return{gone:1};if(!r.ok)throw 0;return r.json();}).then(function(d){var f=(d&&d.fields)||{};var st=d.gone?"":((f.estado||{}).stringValue||"");'
-      + 'if(d.gone||st!=="En venta"){document.getElementById("lm-aviso").hidden=false;document.getElementById("lm-acciones").hidden=true;return;}'
+    // Libros nuevos: agotado si ya no existe, si está «Vendido» o si su stock numérico llegó a 0.
+    const cond_ = nuevo ? 'var sd=(f.disp||{}).stringValue||"";var sk=f.stock||{};var nk=("integerValue" in sk||"doubleValue" in sk)?Number(sk.integerValue||sk.doubleValue||0):null;var agot=sd==="Vendido"||(nk!==null&&nk<=0);'
+      : 'var st=d.gone?"":((f.estado||{}).stringValue||"");var agot=st!=="En venta";';
+    const vivo = vendido ? '' : '\n<script>(function(){var u="https://firestore.googleapis.com/v1/projects/adminpagweb/databases/(default)/documents/' + K.coll + '/' + encodeURIComponent(c.id) + '";'
+      + 'fetch(u).then(function(r){if(r.status===404)return{gone:1};if(!r.ok)throw 0;return r.json();}).then(function(d){var f=(d&&d.fields)||{};' + cond_
+      + 'if(d.gone||agot){document.getElementById("lm-aviso").hidden=false;document.getElementById("lm-acciones").hidden=true;return;}'
       + 'var p=f.price||{};var v=Number(p.integerValue||p.doubleValue||0);if(v>0)document.getElementById("lm-precio").textContent="$"+v;}).catch(function(){});})();<\/script>';
     return '<!DOCTYPE html>\n' + head + '\n<body>\n\n' + tpl.header + '\n\n' + main + '\n\n' + tpl.footer + vivo + '\n\n</body>\n</html>\n';
   }
@@ -3716,9 +3811,11 @@ class Component extends DCLogic {
     this._genBusy = true; this.setState({ genBusy: true });
     try {
       const nc = '?nc=' + Date.now();
-      const [landing, sitemap] = await Promise.all([
+      const [landing, sitemap, catLanding] = await Promise.all([
         fetch('/libros-usados/index.html' + nc, { cache: 'no-store' }).then(r => { if (!r.ok) throw new Error('No pude leer /libros-usados/'); return r.text(); }),
-        fetch('/sitemap.xml' + nc, { cache: 'no-store' }).then(r => { if (!r.ok) throw new Error('No pude leer sitemap.xml'); return r.text(); })
+        fetch('/sitemap.xml' + nc, { cache: 'no-store' }).then(r => { if (!r.ok) throw new Error('No pude leer sitemap.xml'); return r.text(); }),
+        // Libros nuevos: plantilla de /catalogo/. Si falta o no tiene las marcas, se omiten (Segunda Vida sigue igual).
+        fetch('/catalogo/index.html' + nc, { cache: 'no-store' }).then(r => r.ok ? r.text() : '').catch(() => '')
       ]);
       const m = (re, what) => { const x = re.exec(landing); if (!x) throw new Error('La página /libros-usados/ no tiene ' + what + '.'); return x[0]; };
       const tpl = { head: m(/<html[\s\S]*?<\/head>/, 'cabecera'), header: m(/<header class="top">[\s\S]*?<\/header>/, 'menú'), footer: m(/<footer>[\s\S]*?<\/footer>/, 'pie de página'),
@@ -3751,12 +3848,47 @@ class Component extends DCLogic {
       let sm = sitemap.replace(/\s*<url>\s*<loc>https:\/\/lamadriguera\.ec\/libros-usados\/[^<]+\/<\/loc>[\s\S]*?<\/url>/g, '');
       sm = sm.replace(/(<loc>https:\/\/lamadriguera\.ec\/libros-usados\/<\/loc>\s*<lastmod>)[^<]*/, '$1' + hoy);
       sm = sm.replace('</urlset>', disp.map(c => '  <url>\n    <loc>' + this.urlLibro(c.webSlug) + '</loc>\n    <lastmod>' + hoy + '</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>\n  </url>\n').join('') + '</urlset>');
+      // 4) libros nuevos (colección «libros», estado «Nuevo»): misma plantilla, en /libros/<slug>/, listados en /catalogo/
+      const MI = '<' + '!-- LM-LISTA-INICIO -->', MF = '<' + '!-- LM-LISTA-FIN -->';
+      let nvDisp = [], nvBajas = [], nvVend = [], nvSinTitulo = 0, nvNota = '';
+      const tplCat = (() => {
+        if (!catLanding || catLanding.indexOf(MI) < 0 || catLanding.indexOf(MF) < 0) return null;
+        const g = (re) => { const x = re.exec(catLanding); return x ? x[0] : null; };
+        const t = { head: g(/<html[\s\S]*?<\/head>/), header: g(/<header class="top">[\s\S]*?<\/header>/), footer: g(/<footer>[\s\S]*?<\/footer>/), visita: g(/<div class="card">\s*<h2[^>]*>Visítanos[\s\S]*?<\/ul>\s*<\/div>/) };
+        return (t.head && t.header && t.footer && t.visita) ? t : null;
+      })();
+      if (!tplCat) nvNota = 'Libros nuevos: NO se generaron (la página /catalogo/ publicada todavía no tiene las marcas de la lista; sube primero la carpeta publicar).';
+      else {
+        const K = this.K_NUEVO;
+        const nuevos = (C.libros || []).filter(l => (l.estado || '') === 'Nuevo');
+        nvSinTitulo = nuevos.filter(l => !((l.title || '') + '').trim()).length;
+        const conTit = nuevos.filter(l => ((l.title || '') + '').trim());
+        conTit.filter(l => this.effDisp(l) !== 'Vendido' && !l.webSlug).forEach(l => { l.webSlug = this.slugLibro(l); this.setField('libros', l.id, 'webSlug', l.webSlug); });
+        nvDisp = conTit.filter(l => this.effDisp(l) !== 'Vendido' && l.webSlug).sort((a, b) => ((a.title || '') + '').localeCompare((b.title || '') + '', 'es'));
+        nvVend = conTit.filter(l => this.effDisp(l) === 'Vendido' && l.webSlug);
+        const nvPrev = Array.isArray(this.cfg().nvPaginas) ? this.cfg().nvPaginas : [];
+        const nvVivos = {}; conTit.forEach(l => { if (l.webSlug) nvVivos[l.webSlug] = 1; });
+        nvBajas = nvPrev.filter(p => p && p.slug && !nvVivos[p.slug]);
+        const nd = 'publicar/' + K.dir + '/';
+        nvDisp.forEach((l) => {
+          const otros = nvDisp.filter(o => o.id !== l.id).sort((a, b) => ((a.cat || a.genre || '') === (l.cat || l.genre || '') ? -1 : 0) - ((b.cat || b.genre || '') === (l.cat || l.genre || '') ? -1 : 0)).slice(0, 4);
+          files.push({ name: nd + l.webSlug + '/index.html', data: this.paginaLibro(tplCat, l, 'disponible', otros, K) });
+        });
+        nvVend.forEach(l => files.push({ name: nd + l.webSlug + '/index.html', data: this.paginaLibro(tplCat, l, 'vendido', nvDisp.slice(0, 4), K) }));
+        nvBajas.forEach(p => files.push({ name: nd + p.slug + '/index.html', data: this.paginaLibro(tplCat, { id: p.id || p.slug, webSlug: p.slug, title: p.title || '', author: p.author || '', code: p.code || '', estado: 'Nuevo' }, 'vendido', nvDisp.slice(0, 4), K) }));
+        const listaNv = MI + '\n' + (nvDisp.length ? ('  <h2 id="disponibles">Libros nuevos en el catálogo (' + nvDisp.length + ')</h2>\n  <p>La disponibilidad cambia a diario: se confirma al registrar tu pedido.</p>\n  <ul class="related">' + nvDisp.map(l => '<li><a href="/' + K.dir + '/' + l.webSlug + '/">' + E(l.title) + '<small>' + E([l.author, l.price ? '$' + l.price : ''].filter(Boolean).join(' · ')) + '</small></a></li>').join('') + '</ul>\n  ') : '  ') + MF;
+        files.push({ name: 'publicar/catalogo/index.html', data: catLanding.replace(/<\!-- LM-LISTA-INICIO -->[\s\S]*?<\!-- LM-LISTA-FIN -->/, listaNv) });
+        sm = sm.replace(/\s*<url>\s*<loc>https:\/\/lamadriguera\.ec\/libros\/[^<]+\/<\/loc>[\s\S]*?<\/url>/g, '');
+        sm = sm.replace(/(<loc>https:\/\/lamadriguera\.ec\/catalogo\/<\/loc>\s*<lastmod>)[^<]*/, '$1' + hoy);
+        sm = sm.replace('</urlset>', nvDisp.map(l => '  <url>\n    <loc>' + this.urlLibro(l.webSlug, K.dir) + '</loc>\n    <lastmod>' + hoy + '</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.6</priority>\n  </url>\n').join('') + '</urlset>');
+        nvNota = 'Libros nuevos con página: ' + nvDisp.length + ' · marcadas como agotadas: ' + (nvVend.length + nvBajas.length) + (nvSinTitulo ? ' · sin título (sin página, complétalos en el panel): ' + nvSinTitulo : '');
+      }
       files.push({ name: 'publicar/sitemap.xml', data: sm });
-      const leeme = ['PÁGINAS DE LIBROS DE SEGUNDA VIDA · generado el ' + new Date().toLocaleString('es-EC'), '',
-        'Libros disponibles con página: ' + disp.length, 'Páginas marcadas como vendidas o retiradas: ' + (vend.length + bajas.length), '',
+      const leeme = ['PÁGINAS DE LIBROS (SEGUNDA VIDA Y NUEVOS) · generado el ' + new Date().toLocaleString('es-EC'), '',
+        'Libros disponibles con página: ' + disp.length, 'Páginas marcadas como vendidas o retiradas: ' + (vend.length + bajas.length), nvNota, '',
         'CÓMO SUBIRLO', '1. Abre la carpeta «publicar» de este ZIP.',
         '2. Copia su contenido DENTRO de tu carpeta «Continua Interface/publicar» y acepta REEMPLAZAR.',
-        '   (Solo toca libros-usados/ y sitemap.xml; no borra nada tuyo.)',
+        '   (Solo toca libros-usados/, libros/, catalogo/index.html y sitemap.xml; no borra nada tuyo.)',
         '3. Sube la carpeta «publicar» completa a GitHub, como siempre.',
         '4. (Opcional) En Google Search Console → Sitemaps, vuelve a enviar sitemap.xml.'].join('\n');
       files.push({ name: 'LEEME.txt', data: leeme });
@@ -3765,7 +3897,8 @@ class Component extends DCLogic {
       const a = document.createElement('a'); a.href = url; a.download = 'paginas-segunda-vida-' + hoy + '.zip';
       document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(() => URL.revokeObjectURL(url), 5000);
       this.setConfig('svPaginas', sv.filter(c => c.webSlug).map(c => ({ slug: c.webSlug, id: c.id, title: c.title || '', author: c.author || '', code: c.code || '' })).concat(bajas));
-      this.flash('ZIP listo: ' + disp.length + ' páginas de libros disponibles. Cópialo dentro de «publicar» y súbelo a GitHub.', 10000);
+      if (tplCat) this.setConfig('nvPaginas', (C.libros || []).filter(l => (l.estado || '') === 'Nuevo' && l.webSlug).map(l => ({ slug: l.webSlug, id: l.id, title: l.title || '', author: l.author || '', code: l.code || '' })).concat(nvBajas));
+      this.flash('ZIP listo: ' + disp.length + ' páginas de Segunda Vida' + (tplCat ? ' y ' + nvDisp.length + ' de libros nuevos' : ' (libros nuevos omitidos: falta subir /catalogo/ con sus marcas)') + '. Cópialo dentro de «publicar» y súbelo a GitHub.', 10000);
     } catch (e) {
       console.error('[LM] páginas SV', e);
       this.flash('No se pudieron generar las páginas: ' + ((e && e.message) || e), 10000);
@@ -4577,6 +4710,17 @@ class Component extends DCLogic {
     return Object.assign({}, l, { code: l.code || l.id, cats, disp, cat: this.effCat(l) });
   }
   toMerch(m) { return Object.assign({}, m, { disp: this.effDisp(m) }); }
+  // Orden «Recomendado»: primero los marcados en el panel según recOrder (sin recOrder cuenta como 0, igual que
+  // las flechas del panel); después todos los demás en su orden habitual. Desempate estable por posición original.
+  ordenRecomendado(lista) {
+    const ro = (b) => (typeof b.recOrder === 'number' && isFinite(b.recOrder)) ? b.recOrder : 0;
+    return (lista || []).map((b, i) => [b, i]).sort((x, y) => {
+      const ax = x[0].recomendado ? 0 : 1, ay = y[0].recomendado ? 0 : 1;
+      if (ax !== ay) return ax - ay;
+      if (ax === 0) { const a = ro(x[0]), b = ro(y[0]); if (a !== b) return a < b ? -1 : 1; }
+      return x[1] - y[1];
+    }).map(x => x[0]);
+  }
 
   // ---------- WhatsApp ----------
   waNum() { return (((this.cfg().whatsapp || '') + '').replace(/[^0-9]/g, '')) || this.WA; }
@@ -4861,7 +5005,15 @@ class Component extends DCLogic {
       this.setState({ coSending: false, cartOpen: true, coErr: 'No pudimos registrar tu pedido (' + ((e && e.message) || 'error de conexión') + '). Tu carrito sigue aquí: pulsa «Reintentar registro». Si prefieres, puedes enviarlo solo por WhatsApp.' });
     });
   }
-  abrirWaPedido = () => { this.setState({ waAbierto: true }); };
+  // Mide solo el paso «pedido registrado → abrir WhatsApp». No es una venta ni prueba que el mensaje se envió:
+  // no lleva importe, nombre, celular ni productos. Se cuenta una vez por pedido.
+  abrirWaPedido = () => {
+    const v = this.state.pedidoVista;
+    let ya = ''; try { ya = localStorage.getItem('lm-wa-medido') || ''; } catch (e) {}
+    if (v && v.id && ya !== v.id) { try { localStorage.setItem('lm-wa-medido', v.id); } catch (e) {} this.track('pedido_whatsapp', { method: 'whatsapp', lead_source: 'carrito', registrado: 'si' }); }
+    this.setState({ waAbierto: true });
+  };
+  waSinRegistro = () => { this.track('pedido_whatsapp', { method: 'whatsapp', lead_source: 'carrito', registrado: 'no' }); };
   copiarPedido = () => {
     const v = this.state.pedidoVista; if (!v) return;
     const nav = (typeof navigator !== 'undefined') ? navigator : null;
@@ -4882,7 +5034,13 @@ class Component extends DCLogic {
   cents(p) { const n = Number(p); return isFinite(n) ? Math.round(n * 100) : 0; }
   money(c) { c = Math.round(c || 0); const neg = c < 0; c = Math.abs(c); const s2 = Math.floor(c / 100) + (c % 100 ? '.' + String(c % 100).padStart(2, '0') : ''); return (neg ? '-$' : '$') + s2; }
   // ¿De dónde salen los datos que se ven? live = Firebase · cache = copia guardada en este navegador · demo = ejemplos de datos.js
-  datosVivos() { return this.state.fb === 'online'; }
+  datosVivos() {
+    if (this.state.fb !== 'online') return false;
+    // Solo se valida contra colecciones que respondieron: una colección caída no debe «quitar» productos del carrito.
+    const need = {};
+    (this.state.cart || []).forEach((x) => { if (x.kind === 'Libro') { need.libros = 1; need.consig = 1; } else if (x.kind === 'Merch') need.merch = 1; else if (x.kind === 'Café de especialidad') need.especialidad = 1; });
+    return Object.keys(need).every(c => this.colLista(c));
+  }
   offerBits(x) {
     const has = this.hasOffer(x);
     return {
@@ -5051,14 +5209,20 @@ class Component extends DCLogic {
       const pr = (b) => this.cents(b.price);
       if (f.orden === 'precio-asc') r = r.slice().sort((a, b2) => (pr(a) > 0 ? pr(a) : 1e12) - (pr(b2) > 0 ? pr(b2) : 1e12));
       else if (f.orden === 'precio-desc') r = r.slice().sort((a, b2) => pr(b2) - pr(a));
+      else if (f.orden === 'relevancia') r = this.ordenRecomendado(r);
       else if (f.orden === 'titulo') r = r.slice().sort((a, b2) => ((a.title || '') + '').localeCompare((b2.title || '') + '', 'es', { sensitivity: 'base' }));
       return r;
     };
     const fuenteDatos = this._cmsSrc || 'demo';
     // «Cargando» mientras Firebase no haya respondido por libros y consignación (cada colección llega por separado).
-    const cargadas = this._cargado || {};
-    const datosCargando = fuenteDatos !== 'cache' && this.state.fb !== 'offline' && !(cargadas.libros && cargadas.consig);
-    const datosError = this.state.fb === 'offline' && fuenteDatos !== 'cache' && fuenteDatos !== 'live';
+    // Cada colección se evalúa por separado: un error (p. ej. permission-denied) deja de contar como «cargando».
+    const enVivo = fuenteDatos !== 'cache' && this.state.fb !== 'offline';
+    const resuelta = (c) => this.colResuelta(c);
+    const errLibros = this.estadoCol('libros') === 'error', errConsig = this.estadoCol('consig') === 'error';
+    const datosCargando = enVivo && !(resuelta('libros') && resuelta('consig'));
+    const datosError = (this.state.fb === 'offline' && fuenteDatos !== 'cache' && fuenteDatos !== 'live') || (enVivo && errLibros && errConsig);
+    const datosParcial = !datosError && enVivo && (errLibros || errConsig);
+    const datosParcialMsg = errLibros ? 'No pudimos cargar parte del catálogo (libros de la librería); mostramos los demás.' : 'No pudimos cargar los libros de Segunda Vida (consignación); mostramos los demás.';
     const datosAvisoCache = this.state.fb !== 'online' && fuenteDatos === 'cache';
     const panelFiltros = (p, base, conCat, conTipo) => {
       const st = this.state;
@@ -5087,7 +5251,7 @@ class Component extends DCLogic {
         [p + 'CountLabel']: datosCargando ? 'Cargando…' : ((n === 1 ? '1 libro' : n + ' libros') + (n > ver ? ' · mostrando ' + ver : '')),
         [p + 'HasResults']: n > 0, [p + 'NoResults']: !datosCargando && !datosError && n === 0 && base.length > 0,
         [p + 'Vacio']: !datosCargando && !datosError && base.length === 0,
-        [p + 'Cargando']: datosCargando && n === 0, [p + 'Error']: datosError, [p + 'AvisoCache']: datosAvisoCache,
+        [p + 'Cargando']: datosCargando && n === 0, [p + 'Error']: datosError, [p + 'AvisoCache']: datosAvisoCache, [p + 'Parcial']: datosParcial, [p + 'ParcialMsg']: datosParcialMsg,
         [p + 'HasMore']: restan > 0, [p + 'MoreLabel']: 'Ver ' + Math.min(24, restan) + ' libros más (quedan ' + restan + ')', [p + 'OnMore']: () => this.setState({ [K('Ver')]: ver + 24 })
       };
     };
@@ -5099,8 +5263,10 @@ class Component extends DCLogic {
     const usados = segundaBase.map(b => this.decBook(b));
     const novedades = baseBooks.filter(b => (b.cats || []).includes('novedades'));
     // Recomendados: los marcados en el panel, en el orden definido con las flechas
-    const recMarked = baseBooks.filter(b => b.recomendado).sort((a, b2) => (a.recOrder || 0) - (b2.recOrder || 0));
-    const recs = recMarked.length ? recMarked : [7, 3, 1].map(i => baseBooks[i]).filter(Boolean);
+    const recMarked = this.ordenRecomendado(baseBooks.filter(b => b.recomendado));
+    // Sin libros marcados en el panel, criterio editorial explícito: los libros nuevos disponibles agregados
+    // más recientemente (campo «order»), sin los reservados. Antes se tomaban posiciones fijas [7, 3, 1].
+    const recs = recMarked.length ? recMarked : baseBooks.filter(b => (b.estado || '') === 'Nuevo' && b.disp !== 'Reservado').map((b, i) => [b, i]).sort((x, y) => ((y[0].order || 0) - (x[0].order || 0)) || (x[1] - y[1])).map(x => x[0]);
 
     // Filtros de categoría del catálogo: "Todos" + categorías que tienen libros
     const usedBookCats = [];
@@ -5446,7 +5612,7 @@ class Component extends DCLogic {
       generarPaginasSV: this.generarPaginasSV, genLabel: this.state.genBusy ? 'Generando páginas…' : 'Generar páginas para Google',
       svSinPagina: this.svPendientesWeb(), svHasSinPagina: this.svPendientesWeb() > 0,
       consigHasPriv: consigPrivN > 0, consigPrivN, limpiarPrivConsig: this.limpiarPrivConsig,
-      ...filtrosCat, ...filtrosSeg, catTipoChips, retryDatos: this.retryFirebase,
+      ...filtrosCat, ...filtrosSeg, catTipoChips, retryDatos: this.retryDatos,
       homeNovedades: novedades.slice(0, 3).map(b => this.decBook(b)),
       homeSegunda: usados.slice(0, 3),
       homeMerch: baseMerch.slice(0, 3).map(m => this.decMerch(m)),
@@ -5462,9 +5628,9 @@ class Component extends DCLogic {
       bookCatOptions: this.bookCatList().map(c => ({ v: c })), merchCatOptions: this.merchCatList().map(c => ({ v: c })),
       cafeCatOptions: this.cafeCatList().map(c => ({ v: c })), espCatOptions: this.espCatList().map(c => ({ v: c })),
       // Cafetería (menú)
-      cafeChips, cafeItems, cafeShownCount: cafeItems.length, cafeHasResults: cafeItems.length > 0, cafeNoResults: cafeItems.length === 0 && !(fuenteDatos !== 'cache' && this.state.fb !== 'offline' && !cargadas.cafeteria) && !datosError, cafeCargando: cafeItems.length === 0 && fuenteDatos !== 'cache' && this.state.fb !== 'offline' && !cargadas.cafeteria, cafeError: cafeItems.length === 0 && datosError,
+      cafeChips, cafeItems, cafeShownCount: cafeItems.length, cafeHasResults: cafeItems.length > 0, cafeNoResults: cafeItems.length === 0 && !(enVivo && !resuelta('cafeteria')) && !datosError && this.estadoCol('cafeteria') !== 'error', cafeCargando: cafeItems.length === 0 && enVivo && !resuelta('cafeteria'), cafeError: cafeItems.length === 0 && (datosError || this.estadoCol('cafeteria') === 'error'),
       // Café de especialidad
-      espChips, espItems, espShownCount: espItems.length, espHasResults: espItems.length > 0, espNoResults: espItems.length === 0 && !(fuenteDatos !== 'cache' && this.state.fb !== 'offline' && !cargadas.especialidad) && !datosError, espCargando: espItems.length === 0 && fuenteDatos !== 'cache' && this.state.fb !== 'offline' && !cargadas.especialidad, espError: espItems.length === 0 && datosError,
+      espChips, espItems, espShownCount: espItems.length, espHasResults: espItems.length > 0, espNoResults: espItems.length === 0 && !(enVivo && !resuelta('especialidad')) && !datosError && this.estadoCol('especialidad') !== 'error', espCargando: espItems.length === 0 && enVivo && !resuelta('especialidad'), espError: espItems.length === 0 && (datosError || this.estadoCol('especialidad') === 'error'),
       eventsAll: agendaEventos.map(e => this.decEvent(e)),
       agendaHay: agendaEventos.length > 0, agendaCargando, agendaError: agendaError, retryReservas: this.retryReservas,
       agendaVacia: !agendaCargando && !agendaError && agendaEventos.length === 0,
@@ -5639,7 +5805,7 @@ class Component extends DCLogic {
       pvMsg: this.state.pedidoVista ? this.state.pedidoVista.msg : '', pvWaHref: this.state.pedidoVista ? this.waText(this.state.pedidoVista.msg) : '#',
       pvWaNum: '+' + this.waNum(), pvWaAbierto: !!this.state.waAbierto,
       pvTransfer: !!(this.state.pedidoVista && this.state.pedidoVista.transfer), pvLink: !!(this.state.pedidoVista && this.state.pedidoVista.link),
-      abrirWaPedido: this.abrirWaPedido, copiarPedido: this.copiarPedido, cerrarPedido: this.cerrarPedido, olvidarPedido: this.olvidarPedido,
+      abrirWaPedido: this.abrirWaPedido, waSinRegistro: this.waSinRegistro, copiarPedido: this.copiarPedido, cerrarPedido: this.cerrarPedido, olvidarPedido: this.olvidarPedido,
       coName: this.state.coName, coNote: this.state.coNote,
       onCoName: (e) => this.setState({ coName: e.target.value }), onCoNote: (e) => this.setState({ coNote: e.target.value }),
       coPhone: this.state.coPhone, onCoPhone: (e) => this.setState({ coPhone: e.target.value, coErr: '' }),
