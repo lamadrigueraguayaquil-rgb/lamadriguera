@@ -193,6 +193,8 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){var cs=[].s
 
   /* Menú principal: en pantallas estrechas pasa a dos líneas en vez de cortarse. */
   @media (max-width: 560px) { nav[aria-label="Menú principal"], nav[aria-label="Subsecciones"] { flex-wrap: wrap !important; overflow-x: visible !important; row-gap: 4px; } }
+  /* Con 7 pestañas, en móvil se compactan para que el menú ocupe 2 líneas. */
+  @media (max-width: 560px) { nav[aria-label="Menú principal"] { column-gap: 2px !important; row-gap: 2px !important; } nav[aria-label="Menú principal"] a { padding-left: 9px !important; padding-right: 9px !important; font-size: 13.5px !important; } }
   /* El encabezado fijo no tapa el elemento enfocado ni los anclajes. */
   html { scroll-padding-top: 150px; }
   /* Preferencia de movimiento reducido: sin transiciones ni animaciones largas. */
@@ -349,10 +351,10 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){var cs=[].s
       <div style="max-width:1180px; margin:0 auto; padding:clamp(44px,6vw,72px) clamp(16px,4vw,32px); display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:clamp(28px,4vw,48px); align-items:center;">
         <div>
           <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#816619;">Usados &amp; consignación</span>
-          <h2 style="margin:8px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(28px,3.4vw,40px); color:#5E1F33; text-wrap:balance;">Libros con segunda historia</h2>
+          <h2 style="margin:8px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(28px,3.4vw,40px); color:#5E1F33; text-wrap:balance;">Libros de Segunda Vida</h2>
           <p style="margin:18px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:30em;">Algunos libros no terminan cuando alguien los cierra. <br>En La Madriguera les damos la oportunidad de encontrar un nuevo lector.</p>
           <div style="margin-top:26px; display:flex; flex-wrap:wrap; gap:12px;">
-            <span onClick="{{ nav.segunda }}" role="button" tabindex="0" style="cursor:pointer; background:#816619; color:#FBF3E0; font-weight:700; font-size:14.5px; padding:13px 22px; border-radius:999px; transition:background .15s ease;" style-hover="background:#866916;">Comprar segunda historia</span>
+            <span onClick="{{ nav.segunda }}" role="button" tabindex="0" style="cursor:pointer; background:#816619; color:#FBF3E0; font-weight:700; font-size:14.5px; padding:13px 22px; border-radius:999px; transition:background .15s ease;" style-hover="background:#866916;">Ver libros de Segunda Vida</span>
             <span onClick="{{ nav.vender }}" role="button" tabindex="0" style="cursor:pointer; background:transparent; color:#5E1F33; font-weight:700; font-size:14.5px; padding:12px 21px; border-radius:999px; border:1.5px solid #B9C4B4; transition:background .15s ease;" style-hover="background:#F2E3E2;">Quiero vender mis libros</span>
           </div>
         </div>
@@ -449,7 +451,7 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){var cs=[].s
     <section style="max-width:1180px; margin:0 auto; padding:clamp(36px,5vw,56px) clamp(16px,4vw,32px) 8px;">
       <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7C2F3E;"></span>
       <h2 style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#5E1F33; line-height:1.05; text-wrap:balance;">Tu próxima historia empieza aquí</h2>
-      <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:46em;">Explora libros nuevos, libros con segunda historia y recomendaciones especiales para lectores curiosos.</p>
+      <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:46em;">Explora libros nuevos, libros de Segunda Vida y recomendaciones especiales para lectores curiosos.</p>
       <form role="search" onSubmit="{{ noSubmit }}" style="margin-top:24px; max-width:720px;">
         <label for="cat-q" style="display:block; font-size:12.5px; font-weight:800; color:#5E4632; margin-bottom:6px;">Buscar</label>
         <div style="position:relative;">
@@ -527,13 +529,13 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){var cs=[].s
   </div>
   </sc-if>
 
-  <!-- SEGUNDA HISTORIA -->
+  <!-- SEGUNDA VIDA -->
   <sc-if value="{{ isSegunda }}" hint-placeholder-val="{{ false }}">
-  <div data-screen-label="Segunda historia">
+  <div data-screen-label="Segunda Vida">
     <section style="background:linear-gradient(180deg,#EFE2CB,#F4E9D8);">
       <div style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px);">
         <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#816619;">Usados &amp; consignación</span>
-        <h2 style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#5E1F33; line-height:1.05; text-wrap:balance;">Libros con segunda historia</h2>
+        <h2 style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#5E1F33; line-height:1.05; text-wrap:balance;">Libros de Segunda Vida</h2>
         <p style="margin:16px 0 0; font-size:17px; line-height:1.6; color:#5E4632; max-width:42em;">Algunos libros no terminan cuando alguien los cierra. En La Madriguera les damos la oportunidad de encontrar un nuevo lector.</p>
         <div style="margin-top:24px; display:flex; flex-wrap:wrap; gap:12px;">
           <span onClick="{{ nav.vender }}" role="button" tabindex="0" style="cursor:pointer; background:#816619; color:#FBF3E0; font-weight:700; font-size:14.5px; padding:13px 22px; border-radius:999px; transition:background .15s ease;" style-hover="background:#866916;">Quiero vender mis libros</span>
@@ -627,7 +629,7 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){var cs=[].s
         </sc-for>
       </div>
       <div style="margin-top:34px; display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center; background:linear-gradient(150deg,#EFE2CB,#F4E9D8); border:1px solid #E3D2B8; border-radius:22px; padding:clamp(30px,4vw,48px);">
-        <div style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:clamp(19px,2.2vw,26px); color:#5E1F33; max-width:22em;">Libros con segunda historia, esperando a su próximo lector.</div>
+        <div style="font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:clamp(19px,2.2vw,26px); color:#5E1F33; max-width:22em;">Libros de Segunda Vida, esperando a su próximo lector.</div>
         <a sc-camel-href="{{ waVender }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:9px; text-decoration:none; background:#5E1F33; color:#F7EFE2; font-weight:700; font-size:15.5px; padding:15px 28px; border-radius:999px; box-shadow:0 10px 24px rgba(94,31,51,0.3); transition:background .15s ease;" style-hover="background:#244031;"><span style="width:7px; height:7px; border-radius:50%; background:#9CD9A6;"></span>Escribir por WhatsApp para registrar mis libros</a>
         <span style="font-size:13px; color:#7C6651;">Te respondemos por WhatsApp y coordinamos la revisión.</span>
       </div>
@@ -858,7 +860,7 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){var cs=[].s
   <div data-screen-label="Nuestra historia">
     <section style="background:linear-gradient(180deg,#EFE2CB,#F4E9D8);">
       <div style="max-width:1180px; margin:0 auto; padding:clamp(40px,5vw,68px) clamp(16px,4vw,32px);">
-        <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7C2F3E;">Nosotros</span>
+        <span style="font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#7C2F3E;">Quiénes somos</span>
         <h2 style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(32px,4.5vw,48px); color:#5E1F33; line-height:1.05; text-wrap:balance;">Nuestra historia</h2>
         <p style="margin:14px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-style:italic; font-size:clamp(17px,2vw,21px); color:#816619;">Una casa para quienes viven entre páginas.</p>
       </div>
@@ -1476,7 +1478,7 @@ class Component extends DCLogic {
   }
   seoTitle() {
     if (typeof document === 'undefined') return;
-    const names = { catalogo: 'Catálogo de libros', segunda: 'Libros con segunda historia', merch: 'Merch para lectores', cafeteria: 'Menú de la cafetería', especialidad: 'Café de especialidad', eventos: 'Eventos literarios', vender: 'Vende tus libros', comprar: 'Cómo comprar', historia: 'Nuestra historia', visitanos: 'Visítanos' };
+    const names = { catalogo: 'Catálogo de libros', segunda: 'Libros de Segunda Vida', merch: 'Merch para lectores', cafeteria: 'Menú de la cafetería', especialidad: 'Café de especialidad', eventos: 'Eventos literarios', vender: 'Vende tus libros', comprar: 'Cómo comprar', historia: 'Quiénes somos', visitanos: 'Visítanos' };
     const base = 'La Madriguera · Librería y café de especialidad en Guayaquil';
     let t = base;
     if (this.state.view === 'admin') t = 'Panel · La Madriguera';
@@ -2574,7 +2576,7 @@ class Component extends DCLogic {
       + '\n      <p style="font-size:15px;color:var(--muted)">Ejemplar único de segunda mano. Puedes verlo en el local antes de comprarlo. <a href="/libros-usados/#estado">Así describimos el estado</a>.</p>\n    </div>\n  </div>'
       + (syn ? '\n  <h2>Sinopsis</h2>\n  <p>' + E(syn) + '</p>' : '')
       + '\n  ' + tpl.visita
-      + (rel ? '\n  <h2>Más libros con segunda historia</h2>\n  <ul class="related">' + rel + '</ul>' : '')
+      + (rel ? '\n  <h2>Más libros de Segunda Vida</h2>\n  <ul class="related">' + rel + '</ul>' : '')
       + '\n  <p><a class="cta ghost" href="/libros-usados/">Ver todos los libros usados</a></p>\n</main>';
     // Estado en vivo: si el libro se vendió o se retiró después de generar la página, se avisa al visitante.
     const vivo = vendido ? '' : '\n<script>(function(){var u="https://firestore.googleapis.com/v1/projects/adminpagweb/databases/(default)/documents/consig/' + encodeURIComponent(c.id) + '";'
@@ -3896,7 +3898,7 @@ class Component extends DCLogic {
     const estRes = this.estadoReservas();
     const agendaCargando = (estRes === 'cargando' || this.state.fb === 'connecting') && agendaEventos.length === 0;
     const agendaError = estRes === 'error';
-    // Catálogo y Segunda historia: búsqueda tolerante (tildes, mayúsculas, espacios, ISBN) y filtros combinables.
+    // Catálogo y Segunda Vida: búsqueda tolerante (tildes, mayúsculas, espacios, ISBN) y filtros combinables.
     // No se modifica ningún dato: solo se filtra y ordena una copia.
     const CONDS = ['Nuevo', 'Usado excelente', 'Usado bueno', 'Con detalles visibles'];
     const PRECIOS = [['todos', 'Cualquier precio'], ['0-10', 'Hasta $10'], ['10-20', 'Más de $10 hasta $20'], ['20-30', 'Más de $20 hasta $30'], ['30-', 'Más de $30']];
@@ -3985,16 +3987,18 @@ class Component extends DCLogic {
       style: this.chipStyle((category || 'todos') === c.key)
     }));
 
-    const navList = [['inicio', 'Inicio'], ['catalogo', 'Catálogo'], ['segunda', 'Segunda historia'], ['merch', 'Merch'], ['cafeteria', 'Cafetería'], ['especialidad', 'Café de especialidad'], ['eventos', 'Eventos'], ['vender', 'Vender'], ['comprar', 'Cómo comprar'], ['historia', 'Nosotros'], ['visitanos', 'Visítanos']];
+    const navList = [['inicio', 'Inicio'], ['catalogo', 'Catálogo'], ['segunda', 'Segunda Vida'], ['merch', 'Merch'], ['cafeteria', 'Cafetería'], ['especialidad', 'Café de especialidad'], ['eventos', 'Eventos'], ['vender', 'Vender'], ['comprar', 'Cómo comprar'], ['historia', 'Quiénes somos'], ['visitanos', 'Visítanos']];
     const navItems = navList.map(([k, label]) => ({ label, onClick: () => this.go(k), style: this.navStyle(k === page) }));
-    // Menú principal en 5 grupos; las opciones secundarias aparecen en una segunda fila al entrar al grupo.
+    // Menú principal en 7 grupos; las opciones secundarias aparecen en una segunda fila al entrar al grupo.
     // (El pie de página conserva la lista completa de secciones.)
     const NAV_GROUPS = [
-      ['catalogo', 'Libros', [['catalogo', 'Catálogo'], ['merch', 'Merch para lectores']]],
-      ['segunda', 'Segunda historia', [['segunda', 'Libros usados'], ['vender', 'Vende tus libros']]],
+      ['catalogo', 'Libros', []],
+      ['segunda', 'Segunda Vida', [['segunda', 'Catálogo'], ['vender', 'Vende tus libros']]],
+      ['merch', 'Merch', []],
       ['eventos', 'Experiencias', []],
       ['cafeteria', 'Cafetería', [['cafeteria', 'Menú'], ['especialidad', 'Café de especialidad']]],
-      ['visitanos', 'Visítanos', [['visitanos', 'Cómo llegar'], ['comprar', 'Cómo comprar'], ['historia', 'Nosotros']]]
+      ['historia', 'Quiénes somos', []],
+      ['visitanos', 'Visítanos', [['visitanos', 'Cómo llegar'], ['comprar', 'Cómo comprar']]]
     ];
     const navLink = (k) => (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.go(k); };
     const grpActual = NAV_GROUPS.find(g => g[0] === page || g[2].some(x => x[0] === page));
