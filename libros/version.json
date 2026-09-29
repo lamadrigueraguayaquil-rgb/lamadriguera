@@ -1,0 +1,884 @@
+{
+  "version": "lm-20260928-2159-c2e970e6",
+  "generado": "2026-09-28T21:59:37",
+  "fuente": {
+    "archivo": "La Madriguera.dc.html",
+    "sha256": "c2e970e677cf5ca11c60fc0323fa97c2aae303cb99032987d3fa04054dd0944e"
+  },
+  "diferencias_intencionales": [],
+  "omitidos_por_ser_basura": [],
+  "total_archivos": 145,
+  "total_bytes": 3194289,
+  "archivos": [
+    {
+      "ruta": "404.html",
+      "bytes": 5585,
+      "sha256": "fc1f4e4c65342a2319a4ecffe6c9b18d08bc12099c4156978da63b51b80fbb27",
+      "origen": "runtime publicado: publicar/404.html"
+    },
+    {
+      "ruta": "BookCard.dc.html",
+      "bytes": 5645,
+      "sha256": "073a2cf63bd6a14575fa6b359cf1dd671a98293aae603ad9e207e161009db8e6",
+      "origen": "copia: raíz/BookCard.dc.html"
+    },
+    {
+      "ruta": "CNAME",
+      "bytes": 16,
+      "sha256": "5346130cac2b1b6e598d2d8561a4d5dea037331037d9d6714c6e9cbfa17fbb93",
+      "origen": "runtime publicado: publicar/CNAME"
+    },
+    {
+      "ruta": "EventCard.dc.html",
+      "bytes": 4295,
+      "sha256": "d109b70702d70354cde41dbe30c963d46143b45a37a1a49e304af6398d92822e",
+      "origen": "copia: raíz/EventCard.dc.html"
+    },
+    {
+      "ruta": "MerchCard.dc.html",
+      "bytes": 4942,
+      "sha256": "2dba46569d813730d1698afb48a89ff20e5e1da34b41d2e435ce62d770803488",
+      "origen": "copia: raíz/MerchCard.dc.html"
+    },
+    {
+      "ruta": "admin.html",
+      "bytes": 563803,
+      "sha256": "42f028a71a1acb7afdb03c6f5d07c58f9753cd827af5716ce847b4b5e404d085",
+      "origen": "generado: La Madriguera.dc.html (panel, noindex)"
+    },
+    {
+      "ruta": "blog/cafes-para-leer-guayaquil/index.html",
+      "bytes": 26472,
+      "sha256": "d994d69fe1889c57e6ff2c68c1861510f9326311f30dabb63b14f57b662b6a98",
+      "origen": "runtime publicado: publicar/blog/cafes-para-leer-guayaquil/index.html"
+    },
+    {
+      "ruta": "blog/index.html",
+      "bytes": 8483,
+      "sha256": "a9496677464a09f3a15d67a76f90fc10817e92f985d822a156cd5b2f1fdacb58",
+      "origen": "runtime publicado: publicar/blog/index.html"
+    },
+    {
+      "ruta": "blog/vender-libros-usados-guayaquil/index.html",
+      "bytes": 26538,
+      "sha256": "9e91c41a82d8517544c4cd386230360862e2ff5184c0036f18831b2d78a08b6d",
+      "origen": "runtime publicado: publicar/blog/vender-libros-usados-guayaquil/index.html"
+    },
+    {
+      "ruta": "cafeteria/index.html",
+      "bytes": 13454,
+      "sha256": "b077f1c7695621436dc6a56da4b2ccdb40ec46d1ae79b1db7a11c6ca59edc5bc",
+      "origen": "runtime publicado: publicar/cafeteria/index.html"
+    },
+    {
+      "ruta": "catalogo/index.html",
+      "bytes": 19042,
+      "sha256": "369b69f8895f86cb4470ab3e5a89f1b6b470fd4ac39d758b2894e10f1fc43188",
+      "origen": "runtime publicado: publicar/catalogo/index.html"
+    },
+    {
+      "ruta": "datos.js",
+      "bytes": 7396,
+      "sha256": "d137d1a5ccd43051a1af2f685cf7e6ef5694f60fb2f950b8833b80c2a36c0a77",
+      "origen": "runtime publicado: publicar/datos.js"
+    },
+    {
+      "ruta": "eventos/index.html",
+      "bytes": 13620,
+      "sha256": "d0a99aba03147ba9be77aefc3d9e2d584498bded70a051a6a3ee66abf932bdd0",
+      "origen": "runtime publicado: publicar/eventos/index.html"
+    },
+    {
+      "ruta": "favicon-32.png",
+      "bytes": 6852,
+      "sha256": "3a0b86c39e94854a69ac100cd6243cf980a659dae6cd94f691e02ca7203079d2",
+      "origen": "runtime publicado: publicar/favicon-32.png"
+    },
+    {
+      "ruta": "favicon.png",
+      "bytes": 12996,
+      "sha256": "e677d571b0aa5c5d81b8c092e345c0dc7ab1bbf3c04eb1cb64f7e92bf0c70083",
+      "origen": "runtime publicado: publicar/favicon.png"
+    },
+    {
+      "ruta": "index.html",
+      "bytes": 430746,
+      "sha256": "67fef8fb3d371129d7930a6a2f49943335769b65ef82343000693ff7507e49b7",
+      "origen": "generado: La Madriguera.dc.html (sin panel)"
+    },
+    {
+      "ruta": "libros-usados/a-2-metros-de-ti-rachael-nippincott-cg40739385/index.html",
+      "bytes": 13633,
+      "sha256": "2f6c16f39f09c9dd9673b1a3d3d76d32c2ec8c4b21365bdabf1d68b55e94094f",
+      "origen": "runtime publicado: publicar/libros-usados/a-2-metros-de-ti-rachael-nippincott-cg40739385/index.html"
+    },
+    {
+      "ruta": "libros-usados/a-traves-de-ti-ariana-godoy-9789585155244/index.html",
+      "bytes": 13567,
+      "sha256": "d036832abf8c824a47e6b0be9c5cbbf6a8b166b91cb311f7e7dac36a0968962d",
+      "origen": "runtime publicado: publicar/libros-usados/a-traves-de-ti-ariana-godoy-9789585155244/index.html"
+    },
+    {
+      "ruta": "libros-usados/a-very-merry-bromance-lyssa-kay-adams-9780593332795/index.html",
+      "bytes": 13704,
+      "sha256": "65f07ee667bd81ab272a1e240084dc07b5b604d8bcddfc5eb67f211918e04463",
+      "origen": "runtime publicado: publicar/libros-usados/a-very-merry-bromance-lyssa-kay-adams-9780593332795/index.html"
+    },
+    {
+      "ruta": "libros-usados/armadura-de-un-angel-guardian-gaston-galderon-9789942369413/index.html",
+      "bytes": 13384,
+      "sha256": "a0787c09d02f659f924cb2fc197175d39aa8fb4fcd493c52355fde2a7686692f",
+      "origen": "runtime publicado: publicar/libros-usados/armadura-de-un-angel-guardian-gaston-galderon-9789942369413/index.html"
+    },
+    {
+      "ruta": "libros-usados/asesino-de-brujas-shelby-mahurin-9788419252883/index.html",
+      "bytes": 13624,
+      "sha256": "2eb1c0f250d1ebda71edd48712eaaac0af9cd1aa6c88b00b36d7e3862e4c6af3",
+      "origen": "runtime publicado: publicar/libros-usados/asesino-de-brujas-shelby-mahurin-9788419252883/index.html"
+    },
+    {
+      "ruta": "libros-usados/box-dune-frank-herbert-9788466361897/index.html",
+      "bytes": 13133,
+      "sha256": "b75f67a8f9605010b2440e51803633ac77e1b831c3ddbf3310d4135859b2d2e0",
+      "origen": "runtime publicado: publicar/libros-usados/box-dune-frank-herbert-9788466361897/index.html"
+    },
+    {
+      "ruta": "libros-usados/bratva-gleen-black-9786287544079/index.html",
+      "bytes": 13380,
+      "sha256": "8fec91fad97c431649f0e0e706b21d6a35d561b8c9b9912490cd5dada9b6f7d2",
+      "origen": "runtime publicado: publicar/libros-usados/bratva-gleen-black-9786287544079/index.html"
+    },
+    {
+      "ruta": "libros-usados/cazadores-de-sombras-la-ciudad-de-hueso-cassandra-clare-9789584250674/index.html",
+      "bytes": 14054,
+      "sha256": "a4fc2994882fbce39cbf10f3e5f594af7fa393ee5b37587a2c924a8afb58cfa1",
+      "origen": "runtime publicado: publicar/libros-usados/cazadores-de-sombras-la-ciudad-de-hueso-cassandra-clare-9789584250674/index.html"
+    },
+    {
+      "ruta": "libros-usados/confess-colleen-hoover-9781476791456/index.html",
+      "bytes": 13440,
+      "sha256": "854d821226480fc6edaf0eeb93e32210067c8b196bf0883b744574ab28b4de48",
+      "origen": "runtime publicado: publicar/libros-usados/confess-colleen-hoover-9781476791456/index.html"
+    },
+    {
+      "ruta": "libros-usados/cuento-de-buenas-noches-para-ninas-rebeldes-elena-favilli-9786070739798/index.html",
+      "bytes": 13787,
+      "sha256": "1b8cc7c4489f8742ed16b57cc349badaec1308c41fb1538f23d1ff1721028cea",
+      "origen": "runtime publicado: publicar/libros-usados/cuento-de-buenas-noches-para-ninas-rebeldes-elena-favilli-9786070739798/index.html"
+    },
+    {
+      "ruta": "libros-usados/cuentos-oscar-wilde-9789583003400/index.html",
+      "bytes": 12971,
+      "sha256": "5fd8e2308a53f76557d37c52d971f0b35e4e8e66c6840ffd7bb7c073557a7b0e",
+      "origen": "runtime publicado: publicar/libros-usados/cuentos-oscar-wilde-9789583003400/index.html"
+    },
+    {
+      "ruta": "libros-usados/divergente-veronica-roth-9786074009842/index.html",
+      "bytes": 13480,
+      "sha256": "9a043ee506d8e76cbf645cbbb5d5f2bd37a013f1d4f3c80727a19020b898082a",
+      "origen": "runtime publicado: publicar/libros-usados/divergente-veronica-roth-9786074009842/index.html"
+    },
+    {
+      "ruta": "libros-usados/ebano-mercedes-ron-cg55160882/index.html",
+      "bytes": 13029,
+      "sha256": "f17027ccb5f452ddd37d0ba2830f3e1314ab0a2cde0cca537fe0ef4083fe37c6",
+      "origen": "runtime publicado: publicar/libros-usados/ebano-mercedes-ron-cg55160882/index.html"
+    },
+    {
+      "ruta": "libros-usados/el-ascenso-del-9-pittacus-lore-9788427204201/index.html",
+      "bytes": 13594,
+      "sha256": "956ae2e3f87086ad53df1bc522a45b4ed3fe7c1812045ffcb1874e179247ae45",
+      "origen": "runtime publicado: publicar/libros-usados/el-ascenso-del-9-pittacus-lore-9788427204201/index.html"
+    },
+    {
+      "ruta": "libros-usados/el-fuego-inmortal-anne-ursu-9788444145280/index.html",
+      "bytes": 13246,
+      "sha256": "2c8db9a7b468c6fe0fdb081fe0c77503d4b1d0825e83663227e2a432e11b331f",
+      "origen": "runtime publicado: publicar/libros-usados/el-fuego-inmortal-anne-ursu-9788444145280/index.html"
+    },
+    {
+      "ruta": "libros-usados/el-fuego-secreto-carina-rozanfeld-9789877471427/index.html",
+      "bytes": 13634,
+      "sha256": "6bac112f3c9fd5450830f7c4b70e1dca592f933d6586930dfe9a47f6e1850754",
+      "origen": "runtime publicado: publicar/libros-usados/el-fuego-secreto-carina-rozanfeld-9789877471427/index.html"
+    },
+    {
+      "ruta": "libros-usados/el-piso-mil-katharine-mcgee-9788427210325/index.html",
+      "bytes": 13530,
+      "sha256": "183efae170547bebc14af4d5cc82af575fa204617544290f4d3f95c3f64a5e2c",
+      "origen": "runtime publicado: publicar/libros-usados/el-piso-mil-katharine-mcgee-9788427210325/index.html"
+    },
+    {
+      "ruta": "libros-usados/el-poder-de-6-pittacus-lore-9788427201095/index.html",
+      "bytes": 13540,
+      "sha256": "d4d671275a12dfe890dcb5759b281ff0857ab34a11aae27603cbdad361594137",
+      "origen": "runtime publicado: publicar/libros-usados/el-poder-de-6-pittacus-lore-9788427201095/index.html"
+    },
+    {
+      "ruta": "libros-usados/el-sonador-desconocido-laini-taylor-9789585428386/index.html",
+      "bytes": 13700,
+      "sha256": "23185135e91771d0123dfd9cb1f4a632acd61df2e66edca624972e285612efa7",
+      "origen": "runtime publicado: publicar/libros-usados/el-sonador-desconocido-laini-taylor-9789585428386/index.html"
+    },
+    {
+      "ruta": "libros-usados/el-sueno-americano-adriana-herrera-9789582812959/index.html",
+      "bytes": 13231,
+      "sha256": "f85606df7f3eedbf3f14b3efbecb6d92c291abb961d6bc2ae80f192e78aaa704",
+      "origen": "runtime publicado: publicar/libros-usados/el-sueno-americano-adriana-herrera-9789582812959/index.html"
+    },
+    {
+      "ruta": "libros-usados/el-vende-dor-mas-grande-del-mundo-el-vendedor-mas-grande-del-mundo-9789681343217/index.html",
+      "bytes": 14175,
+      "sha256": "922d55b0ba684949579c734164c773864c8c28f9e672890b0f1f3aff49a70851",
+      "origen": "runtime publicado: publicar/libros-usados/el-vende-dor-mas-grande-del-mundo-el-vendedor-mas-grande-del-mundo-9789681343217/index.html"
+    },
+    {
+      "ruta": "libros-usados/el-verano-en-que-me-enamore-jenny-han-9789584285317/index.html",
+      "bytes": 13740,
+      "sha256": "ac39956ffabb430c7285655206751210a485db43001feb1705dd43b2e34c02aa",
+      "origen": "runtime publicado: publicar/libros-usados/el-verano-en-que-me-enamore-jenny-han-9789584285317/index.html"
+    },
+    {
+      "ruta": "libros-usados/eleanor-y-park-rainbow-rewell-9788420415703/index.html",
+      "bytes": 13570,
+      "sha256": "5743078685a2058de71e04491caf249f469567dfd506c71ce05b63943cbb1b45",
+      "origen": "runtime publicado: publicar/libros-usados/eleanor-y-park-rainbow-rewell-9788420415703/index.html"
+    },
+    {
+      "ruta": "libros-usados/haz-el-papel-de-chica-carina-chocano-9788494598890/index.html",
+      "bytes": 13695,
+      "sha256": "e1e4063e76ba6132ef998421248f7a41615afea40b8c854a86e39cef992d50f8",
+      "origen": "runtime publicado: publicar/libros-usados/haz-el-papel-de-chica-carina-chocano-9788494598890/index.html"
+    },
+    {
+      "ruta": "libros-usados/haz-que-el-viento-te-devuelva-la-sonrisa-alexandra-roma-9788417002534/index.html",
+      "bytes": 14043,
+      "sha256": "01e20aad9d0b49765842bb399b71c313ca05ac3ae6fa604200bcc35c6c32be71",
+      "origen": "runtime publicado: publicar/libros-usados/haz-que-el-viento-te-devuelva-la-sonrisa-alexandra-roma-9788417002534/index.html"
+    },
+    {
+      "ruta": "libros-usados/haz-que-todo-hombre-te-quiera-marie-forleo-9788495973962/index.html",
+      "bytes": 13510,
+      "sha256": "c8b586a552ec553c3897f4c76b44aa3c129f45016307e650745829a6efeda6df",
+      "origen": "runtime publicado: publicar/libros-usados/haz-que-todo-hombre-te-quiera-marie-forleo-9788495973962/index.html"
+    },
+    {
+      "ruta": "libros-usados/index.html",
+      "bytes": 21013,
+      "sha256": "4c17626de60dd9290339bddd928a81bcb111f5debcb9cdd5b85f5f07db75bcfd",
+      "origen": "runtime publicado: publicar/libros-usados/index.html"
+    },
+    {
+      "ruta": "libros-usados/insurgente-veronica-roth-9786074009835/index.html",
+      "bytes": 13480,
+      "sha256": "1f985562bef3272a0e78f637faec0d2c0347efd4bd193c2b92157b62d196575e",
+      "origen": "runtime publicado: publicar/libros-usados/insurgente-veronica-roth-9786074009835/index.html"
+    },
+    {
+      "ruta": "libros-usados/intersect-elle-o-roark-9781956800012/index.html",
+      "bytes": 13450,
+      "sha256": "34605bba1271d297c212839821bbc84ee33f8589162285fbdcff42ff3bc7dbf3",
+      "origen": "runtime publicado: publicar/libros-usados/intersect-elle-o-roark-9781956800012/index.html"
+    },
+    {
+      "ruta": "libros-usados/la-ciguena-fauna-en-peligro-9788498255027/index.html",
+      "bytes": 13554,
+      "sha256": "14cdd7805bcc1b8425da82d0bb1fe8ff8d4608136ca292fe56b46adcd209c9db",
+      "origen": "runtime publicado: publicar/libros-usados/la-ciguena-fauna-en-peligro-9788498255027/index.html"
+    },
+    {
+      "ruta": "libros-usados/la-la-quinta-ola-rick-yancey-9788427204225/index.html",
+      "bytes": 13566,
+      "sha256": "48a1c7881b61d4b1b32dfeff43091e6760ec784288958c8c00eaf5a9c3784cbd",
+      "origen": "runtime publicado: publicar/libros-usados/la-la-quinta-ola-rick-yancey-9788427204225/index.html"
+    },
+    {
+      "ruta": "libros-usados/la-metamorfosis-franz-kafka-9788417430085/index.html",
+      "bytes": 13236,
+      "sha256": "c3c15379ce9a0301501af2cea1c5311beb2049b957bbdd4d3c08e1536911b513",
+      "origen": "runtime publicado: publicar/libros-usados/la-metamorfosis-franz-kafka-9788417430085/index.html"
+    },
+    {
+      "ruta": "libros-usados/la-seleccion-kiera-cass-9789588763101/index.html",
+      "bytes": 13490,
+      "sha256": "854b3d678a382208cc860cb1d1e98f2b1349e614b20e944262c5002cf2dd2808",
+      "origen": "runtime publicado: publicar/libros-usados/la-seleccion-kiera-cass-9789588763101/index.html"
+    },
+    {
+      "ruta": "libros-usados/lives-too-short-abby-jimenez-9781538715666/index.html",
+      "bytes": 13560,
+      "sha256": "089c7d4da034546c4f3f32d4b35710e0941d53186be0296b10c9d467b7cf2a3b",
+      "origen": "runtime publicado: publicar/libros-usados/lives-too-short-abby-jimenez-9781538715666/index.html"
+    },
+    {
+      "ruta": "libros-usados/marfil-mercedes-ron-cg55132178/index.html",
+      "bytes": 13355,
+      "sha256": "dbcf4e3ce58a6e55b44d3cb0b808f5233dba9ca65ecac852185f46f3e0980d92",
+      "origen": "runtime publicado: publicar/libros-usados/marfil-mercedes-ron-cg55132178/index.html"
+    },
+    {
+      "ruta": "libros-usados/miles-de-secretos-utiles-para-el-hogar-adriana-herrera-9789582808594/index.html",
+      "bytes": 13566,
+      "sha256": "1708ce8bfa2e64b157aee0aa2170d827baa4281615017dd83f7969f6f8ebabcd",
+      "origen": "runtime publicado: publicar/libros-usados/miles-de-secretos-utiles-para-el-hogar-adriana-herrera-9789582808594/index.html"
+    },
+    {
+      "ruta": "libros-usados/no-hay-verano-sin-ti-jenny-han-9789584286161/index.html",
+      "bytes": 13304,
+      "sha256": "348ef3f1c9ac72fd82863b104308b616bef21179d227686337a8a7e82e1c26cb",
+      "origen": "runtime publicado: publicar/libros-usados/no-hay-verano-sin-ti-jenny-han-9789584286161/index.html"
+    },
+    {
+      "ruta": "libros-usados/otra-vez-tu-alice-kellen-9788408244769/index.html",
+      "bytes": 13180,
+      "sha256": "afedb8b80a9e68c1683dbab25274987a1dd0bc05696b8c4627dc90c6bea66e2f",
+      "origen": "runtime publicado: publicar/libros-usados/otra-vez-tu-alice-kellen-9788408244769/index.html"
+    },
+    {
+      "ruta": "libros-usados/parallel-elle-o-roark-9798800039528/index.html",
+      "bytes": 13432,
+      "sha256": "f352467cc0db9aaf5abd464a710c7033ee4cfa3bf091d6689944f62895ca474c",
+      "origen": "runtime publicado: publicar/libros-usados/parallel-elle-o-roark-9798800039528/index.html"
+    },
+    {
+      "ruta": "libros-usados/part-of-your-world-abby-jimenez-cg54133203/index.html",
+      "bytes": 13577,
+      "sha256": "429234c816c60151175ae8b16cd67e1fd013b3a33ff2c7704125fd37b5d14d12",
+      "origen": "runtime publicado: publicar/libros-usados/part-of-your-world-abby-jimenez-cg54133203/index.html"
+    },
+    {
+      "ruta": "libros-usados/perversa-seduccion-jasmin-martinez-9798726644288/index.html",
+      "bytes": 13654,
+      "sha256": "adcc916cc9b778bd70b8c7ae6f011a4d0d718c01d6cf16f2e1db178a29f7103d",
+      "origen": "runtime publicado: publicar/libros-usados/perversa-seduccion-jasmin-martinez-9798726644288/index.html"
+    },
+    {
+      "ruta": "libros-usados/pideme-lo-que-quieras-ahora-y-siempre-megan-maxwell-9789584240880/index.html",
+      "bytes": 13660,
+      "sha256": "3f7a01152a303e25b5a737b03bb0b5d6b582c9b7e0c41281f9ab5437200193e6",
+      "origen": "runtime publicado: publicar/libros-usados/pideme-lo-que-quieras-ahora-y-siempre-megan-maxwell-9789584240880/index.html"
+    },
+    {
+      "ruta": "libros-usados/pideme-lo-que-quieras-megan-maxwell-9789584240866/index.html",
+      "bytes": 13371,
+      "sha256": "2e9a24873c51bbfaac8db17cc78344571dd265c995a2f0360bf85af95670ff85",
+      "origen": "runtime publicado: publicar/libros-usados/pideme-lo-que-quieras-megan-maxwell-9789584240866/index.html"
+    },
+    {
+      "ruta": "libros-usados/siempre-nos-quedara-el-verano-jenny-han-9789584286864/index.html",
+      "bytes": 13466,
+      "sha256": "4f9949f19c1d0391432d8ff4440bf4be9c580ebc42fc3092593a7ba5b7e4e035",
+      "origen": "runtime publicado: publicar/libros-usados/siempre-nos-quedara-el-verano-jenny-han-9789584286864/index.html"
+    },
+    {
+      "ruta": "libros-usados/silber-kerstin-gier-9788416075935/index.html",
+      "bytes": 13394,
+      "sha256": "2fbbf9463e5f9a339360dd841a1c05f54844d6a7c04053b47e6ad09dc532bd47",
+      "origen": "runtime publicado: publicar/libros-usados/silber-kerstin-gier-9788416075935/index.html"
+    },
+    {
+      "ruta": "libros-usados/simone-well-stephen-plant-9788425420047/index.html",
+      "bytes": 13495,
+      "sha256": "032d6048f04b9314f9b3a68cddf45d4f693166e93932d552b7270830ff08aa24",
+      "origen": "runtime publicado: publicar/libros-usados/simone-well-stephen-plant-9788425420047/index.html"
+    },
+    {
+      "ruta": "libros-usados/soy-el-numero-4-pittacus-lore-9788427200708/index.html",
+      "bytes": 12838,
+      "sha256": "28ac80eaa7ee3e4c8ebd53ab3c436f78b4c4f60e9ab6b0efadbda6698ed92ba5",
+      "origen": "runtime publicado: publicar/libros-usados/soy-el-numero-4-pittacus-lore-9788427200708/index.html"
+    },
+    {
+      "ruta": "libros-usados/stranger-alex-mirez-cg55273027/index.html",
+      "bytes": 14208,
+      "sha256": "8d1e0ed9bab1028d67319bdd35d61abb58959fc78589ff0b8fb653aa41c31729",
+      "origen": "runtime publicado: publicar/libros-usados/stranger-alex-mirez-cg55273027/index.html"
+    },
+    {
+      "ruta": "libros-usados/tal-vez-tu-alice-kellen-9788408245261/index.html",
+      "bytes": 13162,
+      "sha256": "927ca5b83a3f010c61f8c39cff69caf9acd20ee7fce61e17a5a146a19e15c544",
+      "origen": "runtime publicado: publicar/libros-usados/tal-vez-tu-alice-kellen-9788408245261/index.html"
+    },
+    {
+      "ruta": "libros-usados/todo-este-tiempo-mikki-daughtry-cg55199202/index.html",
+      "bytes": 13259,
+      "sha256": "bbd59df4f7304946d734eb1b46ebc52ee6278b18aa9e36e4f401e74a86044949",
+      "origen": "runtime publicado: publicar/libros-usados/todo-este-tiempo-mikki-daughtry-cg55199202/index.html"
+    },
+    {
+      "ruta": "libros-usados/todo-lo-que-somos-juntos-alice-kellen-9788408205388/index.html",
+      "bytes": 13726,
+      "sha256": "392c680498b975535af14d9755183423e91b60859eaf91aa4865c3f639e46d10",
+      "origen": "runtime publicado: publicar/libros-usados/todo-lo-que-somos-juntos-alice-kellen-9788408205388/index.html"
+    },
+    {
+      "ruta": "libros-usados/twisted-love-2-ana-huang-9786287575226/index.html",
+      "bytes": 13500,
+      "sha256": "0f81acdc209d3937c215de432d0dda9b647a877bd52438381e65ad059ff01369",
+      "origen": "runtime publicado: publicar/libros-usados/twisted-love-2-ana-huang-9786287575226/index.html"
+    },
+    {
+      "ruta": "libros-usados/twisted-love-9786287575165/index.html",
+      "bytes": 14517,
+      "sha256": "7c8e90c8855eb7c0e7c8aa91153adb7593bc041a25cea30c5c2bc11fad45e750",
+      "origen": "runtime publicado: publicar/libros-usados/twisted-love-9786287575165/index.html"
+    },
+    {
+      "ruta": "libros-usados/ugly-love-colleen-hoover-9781476753188/index.html",
+      "bytes": 13478,
+      "sha256": "f43c793d19212653f01ae437bdce2cd9e47ae24d59a6a7d278f85232d11f556a",
+      "origen": "runtime publicado: publicar/libros-usados/ugly-love-colleen-hoover-9781476753188/index.html"
+    },
+    {
+      "ruta": "libros-usados/un-amigo-gratis-inma-rubiales-cg55077242/index.html",
+      "bytes": 13535,
+      "sha256": "fd95081a3395350e8603bb9c92e1fc36440d38684db6021810c3f5b451d00cf6",
+      "origen": "runtime publicado: publicar/libros-usados/un-amigo-gratis-inma-rubiales-cg55077242/index.html"
+    },
+    {
+      "ruta": "libros/akuma-no-riddle-4-lm-n-0209/index.html",
+      "bytes": 13175,
+      "sha256": "1bb421a780eedfb79b8a80c298afde3b448924c3205a06691882690e70aecda5",
+      "origen": "runtime publicado: publicar/libros/akuma-no-riddle-4-lm-n-0209/index.html"
+    },
+    {
+      "ruta": "libros/akuma-no-riddle-5-lm-n-0210/index.html",
+      "bytes": 13012,
+      "sha256": "8f7605aaba5d6f271eae7c7f0dde9bfdafeb763c5a29b5aea23ccc7ef1762e11",
+      "origen": "runtime publicado: publicar/libros/akuma-no-riddle-5-lm-n-0210/index.html"
+    },
+    {
+      "ruta": "libros/animales-de-la-granja-pop-up-sorpresa-lm-n-0080/index.html",
+      "bytes": 13125,
+      "sha256": "638ec05880bddff694937550ad56b0e5554d9f3692b8294b6f29da16cc884e5c",
+      "origen": "runtime publicado: publicar/libros/animales-de-la-granja-pop-up-sorpresa-lm-n-0080/index.html"
+    },
+    {
+      "ruta": "libros/animales-de-la-tierra-crea-y-juega-libsa-lm-n-0091/index.html",
+      "bytes": 13248,
+      "sha256": "903828bb8e93307b90eb260b690e4bbe7463d9edfcc1d4dc0beb5d736c8373be",
+      "origen": "runtime publicado: publicar/libros/animales-de-la-tierra-crea-y-juega-libsa-lm-n-0091/index.html"
+    },
+    {
+      "ruta": "libros/animales-kit-de-construccion-lm-n-0079/index.html",
+      "bytes": 12984,
+      "sha256": "aeebb3ffa8ef096731bd364c47bcae296bb91ca018360ed7803994c30fb3c42e",
+      "origen": "runtime publicado: publicar/libros/animales-kit-de-construccion-lm-n-0079/index.html"
+    },
+    {
+      "ruta": "libros/assassination-classroom-21-lm-n-0211/index.html",
+      "bytes": 13009,
+      "sha256": "0819226e51344a7cea9b5e626d1e09626b5e123b376d3085baa794fbfccf1112",
+      "origen": "runtime publicado: publicar/libros/assassination-classroom-21-lm-n-0211/index.html"
+    },
+    {
+      "ruta": "libros/banana-fish-7-lm-n-0212/index.html",
+      "bytes": 12791,
+      "sha256": "52c71d86950c2e89d2cbc489214b320defd263a0e83fc22ae53bb99fdf1ed1a9",
+      "origen": "runtime publicado: publicar/libros/banana-fish-7-lm-n-0212/index.html"
+    },
+    {
+      "ruta": "libros/banana-fish-8-akimi-yoshida-lm-n-0213/index.html",
+      "bytes": 13761,
+      "sha256": "d67cd67760302968ecd2ad0cb2a2cfdf7d855c4077d5e37dcade0a02c2501cc5",
+      "origen": "runtime publicado: publicar/libros/banana-fish-8-akimi-yoshida-lm-n-0213/index.html"
+    },
+    {
+      "ruta": "libros/banana-fish-9-lm-n-0214/index.html",
+      "bytes": 12760,
+      "sha256": "21edded4664da773984db975c4189fee1a83fd212e34b74340371f514a48676c",
+      "origen": "runtime publicado: publicar/libros/banana-fish-9-lm-n-0214/index.html"
+    },
+    {
+      "ruta": "libros/boruto-09-lm-n-0216/index.html",
+      "bytes": 13973,
+      "sha256": "17fb2e056a4b8cac7c73a23d497150f5fbec2a9a42732873b3863bb8a8598f91",
+      "origen": "runtime publicado: publicar/libros/boruto-09-lm-n-0216/index.html"
+    },
+    {
+      "ruta": "libros/boruto-10-lm-n-0217/index.html",
+      "bytes": 13829,
+      "sha256": "b31c3f42911f5ac4946fa9dfdb9c740b1c6a8e44ba40ece13fb4843717346283",
+      "origen": "runtime publicado: publicar/libros/boruto-10-lm-n-0217/index.html"
+    },
+    {
+      "ruta": "libros/boruto-11-lm-n-0218/index.html",
+      "bytes": 13901,
+      "sha256": "f4571b0dd1b1dbc40f024d3ad2e94fc94477dd4c395e7c550d7faa8f54ecdf3d",
+      "origen": "runtime publicado: publicar/libros/boruto-11-lm-n-0218/index.html"
+    },
+    {
+      "ruta": "libros/boruto-12-lm-n-0219/index.html",
+      "bytes": 13817,
+      "sha256": "57777a3112ddaac4f932c4fe7c2233ecf3695f3aa005733a2808b713e943d0a5",
+      "origen": "runtime publicado: publicar/libros/boruto-12-lm-n-0219/index.html"
+    },
+    {
+      "ruta": "libros/boruto-2-lm-n-0220/index.html",
+      "bytes": 13860,
+      "sha256": "c61946f078e1fb1a387963e67f0a6e09b16db5fa97b912d9d2b195a8c5020f5a",
+      "origen": "runtime publicado: publicar/libros/boruto-2-lm-n-0220/index.html"
+    },
+    {
+      "ruta": "libros/boruto-3-lm-n-0221/index.html",
+      "bytes": 13860,
+      "sha256": "02d62d71c8ebfcd98dd7b0cea0b99613af97efd42dd9b1d43d08e56f793f0302",
+      "origen": "runtime publicado: publicar/libros/boruto-3-lm-n-0221/index.html"
+    },
+    {
+      "ruta": "libros/boruto-4-lm-n-0222/index.html",
+      "bytes": 13860,
+      "sha256": "a400d2d639ffef11d9a5e44fb45029aabd9c9771b9987e4a5f6eebe3f4a5885a",
+      "origen": "runtime publicado: publicar/libros/boruto-4-lm-n-0222/index.html"
+    },
+    {
+      "ruta": "libros/boruto-5-lm-n-0223/index.html",
+      "bytes": 13860,
+      "sha256": "77ba5c45c5d3700a5265eddf8a79419d0a0530a8aafd9173e50073d1cac4d306",
+      "origen": "runtime publicado: publicar/libros/boruto-5-lm-n-0223/index.html"
+    },
+    {
+      "ruta": "libros/boruto-7-lm-n-0224/index.html",
+      "bytes": 13855,
+      "sha256": "172cc8e7cf655d5511a177d39f2a47ae37ba0bf4bb20e132aceb207db2f84f3d",
+      "origen": "runtime publicado: publicar/libros/boruto-7-lm-n-0224/index.html"
+    },
+    {
+      "ruta": "libros/boruto-naruto-next-generations-6-lm-n-0215/index.html",
+      "bytes": 14298,
+      "sha256": "e3cea4830c4b9c79a3d9d7bb4248ded07a55359acd1a9b0553813191c1c28c8f",
+      "origen": "runtime publicado: publicar/libros/boruto-naruto-next-generations-6-lm-n-0215/index.html"
+    },
+    {
+      "ruta": "libros/catalogo-de-fantasmas-y-deidades-de-la-antigua-china-lm-n-0104/index.html",
+      "bytes": 14309,
+      "sha256": "ca65adca38bb4af965cd7e535bc26a067adb405e6376fb5bad06da4507064d5b",
+      "origen": "runtime publicado: publicar/libros/catalogo-de-fantasmas-y-deidades-de-la-antigua-china-lm-n-0104/index.html"
+    },
+    {
+      "ruta": "libros/chainsaw-man-15-lm-n-0086/index.html",
+      "bytes": 13508,
+      "sha256": "5caf146723eb211d9fd6a3d436c1ca58aeb6a218b304e89c93d89e45b5c76a2b",
+      "origen": "runtime publicado: publicar/libros/chainsaw-man-15-lm-n-0086/index.html"
+    },
+    {
+      "ruta": "libros/death-note-11-lm-n-0225/index.html",
+      "bytes": 13365,
+      "sha256": "5aa8dde153199d882a781c497536242ee32b3a6ccd0b1998b8f588e214223b06",
+      "origen": "runtime publicado: publicar/libros/death-note-11-lm-n-0225/index.html"
+    },
+    {
+      "ruta": "libros/descubre-los-transportes-ida-y-vuelta-lm-n-0208/index.html",
+      "bytes": 14470,
+      "sha256": "454f78ac95c93d1aa566054b2cf2a67438157fd0f51d1b98375f2458becd5fee",
+      "origen": "runtime publicado: publicar/libros/descubre-los-transportes-ida-y-vuelta-lm-n-0208/index.html"
+    },
+    {
+      "ruta": "libros/my-hero-academia-17-lm-n-0226/index.html",
+      "bytes": 14047,
+      "sha256": "51f21a0994bdfa5858a800014d52ea4762337caedb7770da08bc6c31a79fe2a5",
+      "origen": "runtime publicado: publicar/libros/my-hero-academia-17-lm-n-0226/index.html"
+    },
+    {
+      "ruta": "libros/my-hero-academia-18-lm-n-0227/index.html",
+      "bytes": 13801,
+      "sha256": "305f870b44cce85ad40248813b485fd5439a2558aba72aadb5809080cb3ecbe6",
+      "origen": "runtime publicado: publicar/libros/my-hero-academia-18-lm-n-0227/index.html"
+    },
+    {
+      "ruta": "libros/naruto-13-lm-n-0228/index.html",
+      "bytes": 13756,
+      "sha256": "df935d426edc3e8f2c5c79c345ca64a179d4fee94a584f12e6d230d0dd455c38",
+      "origen": "runtime publicado: publicar/libros/naruto-13-lm-n-0228/index.html"
+    },
+    {
+      "ruta": "libros/naruto-14-lm-n-0229/index.html",
+      "bytes": 14112,
+      "sha256": "d78e58ca891e97d21200ceed3413132be98f73cad4efcf7d111e935032804174",
+      "origen": "runtime publicado: publicar/libros/naruto-14-lm-n-0229/index.html"
+    },
+    {
+      "ruta": "libros/naruto-15-lm-n-0230/index.html",
+      "bytes": 13851,
+      "sha256": "4c0a256cd0f3b9785710c4a7ec0e840013fd45e2444632197f908b8954c9fe0b",
+      "origen": "runtime publicado: publicar/libros/naruto-15-lm-n-0230/index.html"
+    },
+    {
+      "ruta": "libros/naruto-18-lm-n-0231/index.html",
+      "bytes": 13710,
+      "sha256": "1e20f307f902e1a48ea717d569c5ed0786e4228d50f5896249da97661902d8d8",
+      "origen": "runtime publicado: publicar/libros/naruto-18-lm-n-0231/index.html"
+    },
+    {
+      "ruta": "libros/naruto-19-lm-n-0232/index.html",
+      "bytes": 13694,
+      "sha256": "73938fa7b74c4a445661e1048567d2412a25b4b669e7dd5e5a910772984b4fb2",
+      "origen": "runtime publicado: publicar/libros/naruto-19-lm-n-0232/index.html"
+    },
+    {
+      "ruta": "libros/naruto-35-lm-n-0233/index.html",
+      "bytes": 14281,
+      "sha256": "0fea6a58063847f1900cf796787e6be3fd9bf4b6f4946a8abecbccaf75bc58de",
+      "origen": "runtime publicado: publicar/libros/naruto-35-lm-n-0233/index.html"
+    },
+    {
+      "ruta": "libros/pandora-hearts-13-lm-n-0234/index.html",
+      "bytes": 12842,
+      "sha256": "2f6b573820349626079063c5a6d345061db63e75a4fa3fc42a76b76a5fe7ae5d",
+      "origen": "runtime publicado: publicar/libros/pandora-hearts-13-lm-n-0234/index.html"
+    },
+    {
+      "ruta": "libros/pandora-hearts-18-lm-n-0235/index.html",
+      "bytes": 12842,
+      "sha256": "179c7c52abaf275701438e7381396bf5bf94d78bd4ff33cf3255d73f91286af2",
+      "origen": "runtime publicado: publicar/libros/pandora-hearts-18-lm-n-0235/index.html"
+    },
+    {
+      "ruta": "libros/pandora-hearts-19-lm-n-0236/index.html",
+      "bytes": 12842,
+      "sha256": "08b9deb232047e848e1643b36b153ec8398ea3deaf943877002d8f41393bfaf5",
+      "origen": "runtime publicado: publicar/libros/pandora-hearts-19-lm-n-0236/index.html"
+    },
+    {
+      "ruta": "libros/pandora-hearts-21-lm-n-0237/index.html",
+      "bytes": 12842,
+      "sha256": "1625ce0413945ea68b10785b459b9a65e3b9332c6726598b1f24322e59e8efdb",
+      "origen": "runtime publicado: publicar/libros/pandora-hearts-21-lm-n-0237/index.html"
+    },
+    {
+      "ruta": "libros/plantas-y-arboles-increibles-pop-up-interactivo-con-flaps-lm-n-0185/index.html",
+      "bytes": 15607,
+      "sha256": "83f44dbfb8eea0c1ab6ef4f57844f4ab1c3377da01aeb07869ddfde4d64e1b17",
+      "origen": "runtime publicado: publicar/libros/plantas-y-arboles-increibles-pop-up-interactivo-con-flaps-lm-n-0185/index.html"
+    },
+    {
+      "ruta": "libros/rent-a-girlfriend-10-lm-n-0238/index.html",
+      "bytes": 13206,
+      "sha256": "56caa16dd7db8e14cf56700b81ca1ce3e3b5941ff0779282db0c62bc20bfa297",
+      "origen": "runtime publicado: publicar/libros/rent-a-girlfriend-10-lm-n-0238/index.html"
+    },
+    {
+      "ruta": "libros/rent-a-girlfriend-12-lm-n-0242/index.html",
+      "bytes": 13202,
+      "sha256": "391f465badd9cdeb9061b4a16b1e8a38098ccb3f3608ecacf4cc1431e0de6354",
+      "origen": "runtime publicado: publicar/libros/rent-a-girlfriend-12-lm-n-0242/index.html"
+    },
+    {
+      "ruta": "libros/rent-a-girlfriend-7-lm-n-0239/index.html",
+      "bytes": 13188,
+      "sha256": "8ffc6afba850334f9eaee2906ade456e9e725f1c5b981edbbd59133b1b378a62",
+      "origen": "runtime publicado: publicar/libros/rent-a-girlfriend-7-lm-n-0239/index.html"
+    },
+    {
+      "ruta": "libros/rent-a-girlfriend-8-lm-n-0240/index.html",
+      "bytes": 13188,
+      "sha256": "851b64d3bcceae6980ab041131eb40f2978157c21e04295bf042f41d4ee53ab8",
+      "origen": "runtime publicado: publicar/libros/rent-a-girlfriend-8-lm-n-0240/index.html"
+    },
+    {
+      "ruta": "libros/rent-a-girlfriend-9-lm-n-0241/index.html",
+      "bytes": 12880,
+      "sha256": "b64d52ef90b2cc4ee18f2d83fc7a63fd4fbf5068d6f560fac903942e54046ff3",
+      "origen": "runtime publicado: publicar/libros/rent-a-girlfriend-9-lm-n-0241/index.html"
+    },
+    {
+      "ruta": "libros/sailor-moon-short-stories-2-lm-n-0243/index.html",
+      "bytes": 12895,
+      "sha256": "e2d9cd4613f710f742d14f05d9ff0c35b10646328290862d872b01feccc9da92",
+      "origen": "runtime publicado: publicar/libros/sailor-moon-short-stories-2-lm-n-0243/index.html"
+    },
+    {
+      "ruta": "libros/sangre-fria-claudio-cedran-lm-n-0258/index.html",
+      "bytes": 14897,
+      "sha256": "dcc8a99c1b1ef84bba2ca5c27e9374f780c237be69a9094aecc3830e49db7378",
+      "origen": "runtime publicado: publicar/libros/sangre-fria-claudio-cedran-lm-n-0258/index.html"
+    },
+    {
+      "ruta": "libros/seven-deadly-sins-26-lm-n-0244/index.html",
+      "bytes": 14201,
+      "sha256": "0cfded45ac2303c67ecf0449d0ce20bf6513bb10d1fc3a75e401ea6809cf40e2",
+      "origen": "runtime publicado: publicar/libros/seven-deadly-sins-26-lm-n-0244/index.html"
+    },
+    {
+      "ruta": "libros/seven-deadly-sins-30-lm-n-0245/index.html",
+      "bytes": 12893,
+      "sha256": "7b1cf5a238031144cc80f3141ea04c228b1903ccfde51e3f3aa82c83568b3e88",
+      "origen": "runtime publicado: publicar/libros/seven-deadly-sins-30-lm-n-0245/index.html"
+    },
+    {
+      "ruta": "libros/shin-mazinger-zero-9-lm-n-0246/index.html",
+      "bytes": 12898,
+      "sha256": "2b474769182ce537a6b14ea586c14f57adb3bc5a6b89cd6fa13d893005b135fe",
+      "origen": "runtime publicado: publicar/libros/shin-mazinger-zero-9-lm-n-0246/index.html"
+    },
+    {
+      "ruta": "libros/slam-dunk-10-lm-n-0247/index.html",
+      "bytes": 13947,
+      "sha256": "7f6cd7b24c3c2adcf2b46232dd68c50c4e5cf304be156c108fd06b17290e2c41",
+      "origen": "runtime publicado: publicar/libros/slam-dunk-10-lm-n-0247/index.html"
+    },
+    {
+      "ruta": "libros/slam-dunk-11-lm-n-0248/index.html",
+      "bytes": 13947,
+      "sha256": "988f8d39b7b1076967bf68a606360e77ad38e498a7e0df07047593dcf8b4876e",
+      "origen": "runtime publicado: publicar/libros/slam-dunk-11-lm-n-0248/index.html"
+    },
+    {
+      "ruta": "libros/slam-dunk-12-lm-n-0249/index.html",
+      "bytes": 13298,
+      "sha256": "058ddd39fc11dc751246f33e6657d914a9739d414addecfeeeca1a4a694d7d3e",
+      "origen": "runtime publicado: publicar/libros/slam-dunk-12-lm-n-0249/index.html"
+    },
+    {
+      "ruta": "libros/slam-dunk-13-lm-n-0250/index.html",
+      "bytes": 13409,
+      "sha256": "52ec714def9fdce6a9563cdbf72f7a42aa196c29a93a9176a5621a1b136e20a5",
+      "origen": "runtime publicado: publicar/libros/slam-dunk-13-lm-n-0250/index.html"
+    },
+    {
+      "ruta": "libros/slam-dunk-14-lm-n-0251/index.html",
+      "bytes": 13409,
+      "sha256": "a507ba9e0d00544d6846a438354559e9fe68b54e021eb7bb970b6dbcb5d6f836",
+      "origen": "runtime publicado: publicar/libros/slam-dunk-14-lm-n-0251/index.html"
+    },
+    {
+      "ruta": "libros/slam-dunk-3-lm-n-0252/index.html",
+      "bytes": 13391,
+      "sha256": "df14935cb55751e4877bb06acb1c9d4720a8c8479e985a8cf8c6cbf533082799",
+      "origen": "runtime publicado: publicar/libros/slam-dunk-3-lm-n-0252/index.html"
+    },
+    {
+      "ruta": "libros/slam-dunk-4-lm-n-0253/index.html",
+      "bytes": 13391,
+      "sha256": "2f2c94fd2da9f61c75a7bde262897d06b4b7847aa2407714b917e0aa1e67e6a5",
+      "origen": "runtime publicado: publicar/libros/slam-dunk-4-lm-n-0253/index.html"
+    },
+    {
+      "ruta": "libros/slam-dunk-7-lm-n-0254/index.html",
+      "bytes": 13391,
+      "sha256": "9039717696b38873dba01dc8c356cea92f03e266b774ca335dc99336a7fcc74d",
+      "origen": "runtime publicado: publicar/libros/slam-dunk-7-lm-n-0254/index.html"
+    },
+    {
+      "ruta": "libros/tokyo-ghoul-re-03-lm-n-0255/index.html",
+      "bytes": 13327,
+      "sha256": "e17879f5e316348ac9cce81d1fa4c7ce468d59c8556839c372b7bb3946a4ee89",
+      "origen": "runtime publicado: publicar/libros/tokyo-ghoul-re-03-lm-n-0255/index.html"
+    },
+    {
+      "ruta": "libros/we-never-learn-11-lm-n-0083/index.html",
+      "bytes": 12846,
+      "sha256": "d4fd416735b056c4f95914df971bb3be496fbbe66d62dfe0eefb29e74d0780ab",
+      "origen": "runtime publicado: publicar/libros/we-never-learn-11-lm-n-0083/index.html"
+    },
+    {
+      "ruta": "libros/we-never-learn-12-lm-n-0084/index.html",
+      "bytes": 12842,
+      "sha256": "69ff34e0efc995c020e18cbcb2bb9eb4533ad586d1419d7893c5b7298bde02bb",
+      "origen": "runtime publicado: publicar/libros/we-never-learn-12-lm-n-0084/index.html"
+    },
+    {
+      "ruta": "libros/we-never-learn-13-lm-n-0085/index.html",
+      "bytes": 13645,
+      "sha256": "9c43b13f423e1776422572c9cb1f7c62406067777ffb1245636e64d48eab296c",
+      "origen": "runtime publicado: publicar/libros/we-never-learn-13-lm-n-0085/index.html"
+    },
+    {
+      "ruta": "logo-cabecera.png",
+      "bytes": 16684,
+      "sha256": "9850fb33b8dcbefd7cac0305ffdf92758a73609853205d29811200014b9ca530",
+      "origen": "runtime publicado: publicar/logo-cabecera.png"
+    },
+    {
+      "ruta": "logo-la-madriguera.png",
+      "bytes": 33309,
+      "sha256": "579a329261954abb9defb60ad2c9574b693fa5d77b6cf1774d85bba364126d22",
+      "origen": "runtime publicado: publicar/logo-la-madriguera.png"
+    },
+    {
+      "ruta": "logo-negativo.png",
+      "bytes": 21394,
+      "sha256": "ef69f9de358559177bc18d65c6245a6cbeb55fd35a48adae4fd92bfdb617c32a",
+      "origen": "runtime publicado: publicar/logo-negativo.png"
+    },
+    {
+      "ruta": "logo.png",
+      "bytes": 40165,
+      "sha256": "216066812db97afbe3284ce36fc09c6c20a8fa52ab5ab27c89c4e3f3afa3a3dd",
+      "origen": "runtime publicado: publicar/logo.png"
+    },
+    {
+      "ruta": "merch/index.html",
+      "bytes": 13017,
+      "sha256": "f09b224255fa1ddad9e819d502b968fcb2c11fc79ca871649e83b2c620017e14",
+      "origen": "runtime publicado: publicar/merch/index.html"
+    },
+    {
+      "ruta": "og-image.jpg",
+      "bytes": 127929,
+      "sha256": "bde84a15771ae1e74c2845299a4ffa27786a586a5a998268748d76b5208052ee",
+      "origen": "runtime publicado: publicar/og-image.jpg"
+    },
+    {
+      "ruta": "portadas/LEEME.txt",
+      "bytes": 948,
+      "sha256": "bd1da6b2df8105dc3dc52e65063d50ccba45f84c9bd29d98987e68fff5c412c6",
+      "origen": "runtime publicado: publicar/portadas/LEEME.txt"
+    },
+    {
+      "ruta": "privacidad/index.html",
+      "bytes": 11917,
+      "sha256": "7f2db04caf6c2b0273dd44bd1ff01ab4c08425facba4d09c36873a45a45fa96a",
+      "origen": "runtime publicado: publicar/privacidad/index.html"
+    },
+    {
+      "ruta": "react-dom.js",
+      "bytes": 131835,
+      "sha256": "35f4f974f4b2bcd44da73963347f8952e341f83909e4498227d4e26b98f66f0d",
+      "origen": "runtime publicado: publicar/react-dom.js"
+    },
+    {
+      "ruta": "react.js",
+      "bytes": 10751,
+      "sha256": "d949f1c3687aedadcedac85261865f29b17cd273997e7f6b2bfc53b2f9d4c4dd",
+      "origen": "runtime publicado: publicar/react.js"
+    },
+    {
+      "ruta": "robots.txt",
+      "bytes": 69,
+      "sha256": "1332cf6e0c7f37494251a55898125763273d1a42da8590cde7bfc356bc65984b",
+      "origen": "runtime publicado: publicar/robots.txt"
+    },
+    {
+      "ruta": "sitemap.xml",
+      "bytes": 24528,
+      "sha256": "3eb30f9a4c305ebd0b78960e9e944bdc7ec7a15838bb118db0167b05fba91da2",
+      "origen": "runtime publicado: publicar/sitemap.xml"
+    },
+    {
+      "ruta": "support.js",
+      "bytes": 52217,
+      "sha256": "0bd695a4358238e4c828cae200f2ed3b5d976823ab5d1a83571007e28285abca",
+      "origen": "runtime publicado: publicar/support.js"
+    },
+    {
+      "ruta": "sw-fotos.js",
+      "bytes": 2188,
+      "sha256": "ec8bcc5e7914ce193c0003daef71182a0fa766d2b208db8ba2a945fdf9fe5005",
+      "origen": "runtime publicado: publicar/sw-fotos.js"
+    },
+    {
+      "ruta": "vender-libros/index.html",
+      "bytes": 13038,
+      "sha256": "3f125ff0b387f2355df3fe34ec371c4a264eb671abe036956562a4e7b48764c5",
+      "origen": "runtime publicado: publicar/vender-libros/index.html"
+    },
+    {
+      "ruta": "version.json",
+      "bytes": 7847,
+      "sha256": "36a937668f2f338deeaa014d5381c2b98f4cd196275f519512bbe204806e37c1",
+      "origen": "runtime publicado: publicar/version.json"
+    }
+  ]
+}
