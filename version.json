@@ -1,14 +1,29 @@
 {
-  "version": "lm-20260928-2159-c2e970e6",
-  "generado": "2026-09-28T21:59:37",
+  "version": "lm-20261009-0253-d223fac1",
+  "generado": "2026-10-09T02:53:36",
   "fuente": {
     "archivo": "La Madriguera.dc.html",
-    "sha256": "c2e970e677cf5ca11c60fc0323fa97c2aae303cb99032987d3fa04054dd0944e"
+    "sha256": "d223fac1a233f4cca3088ae4bbdc4d788eda5799ebe3c84305a95c5f7bb520e8"
   },
-  "diferencias_intencionales": [],
-  "omitidos_por_ser_basura": [],
-  "total_archivos": 145,
-  "total_bytes": 3194289,
+  "diferencias_intencionales": [
+    {
+      "archivo": "support.js",
+      "se_usa": "publicar/support.js",
+      "se_ignora": "raíz/support.js",
+      "motivo": "support.js publicado carga React local con respaldo remoto y SRI; datos.js publicado es la versión sin imagen incrustada. Los de la raíz son exportaciones antiguas."
+    },
+    {
+      "archivo": "datos.js",
+      "se_usa": "publicar/datos.js",
+      "se_ignora": "raíz/datos.js",
+      "motivo": "support.js publicado carga React local con respaldo remoto y SRI; datos.js publicado es la versión sin imagen incrustada. Los de la raíz son exportaciones antiguas."
+    }
+  ],
+  "omitidos_por_ser_basura": [
+    ".DS_Store"
+  ],
+  "total_archivos": 146,
+  "total_bytes": 3248437,
   "archivos": [
     {
       "ruta": "404.html",
@@ -42,9 +57,15 @@
     },
     {
       "ruta": "admin.html",
-      "bytes": 563803,
-      "sha256": "42f028a71a1acb7afdb03c6f5d07c58f9753cd827af5716ce847b4b5e404d085",
+      "bytes": 575030,
+      "sha256": "a4b5d50f15ce265b415d9bdd498e9112629b73f6ca22943d4474c66489df9bf2",
       "origen": "generado: La Madriguera.dc.html (panel, noindex)"
+    },
+    {
+      "ruta": "aviso.js",
+      "bytes": 3163,
+      "sha256": "4f8cfbef9cdb08684712b7342d206ec1b712948dbd5550d1d42c8e4f4478b5c4",
+      "origen": "runtime publicado: publicar/aviso.js"
     },
     {
       "ruta": "blog/cafes-para-leer-guayaquil/index.html",
@@ -54,8 +75,8 @@
     },
     {
       "ruta": "blog/index.html",
-      "bytes": 8483,
-      "sha256": "a9496677464a09f3a15d67a76f90fc10817e92f985d822a156cd5b2f1fdacb58",
+      "bytes": 8523,
+      "sha256": "dd0a91701d018037bcac1dd59309534338de01f4a1173a09dd6c4d081a6dbffe",
       "origen": "runtime publicado: publicar/blog/index.html"
     },
     {
@@ -66,14 +87,14 @@
     },
     {
       "ruta": "cafeteria/index.html",
-      "bytes": 13454,
-      "sha256": "b077f1c7695621436dc6a56da4b2ccdb40ec46d1ae79b1db7a11c6ca59edc5bc",
+      "bytes": 13494,
+      "sha256": "f8d3a90b619e1b877dc6b710f76420583c1321d804c451f39cdb174ca4cb65ea",
       "origen": "runtime publicado: publicar/cafeteria/index.html"
     },
     {
       "ruta": "catalogo/index.html",
-      "bytes": 19042,
-      "sha256": "369b69f8895f86cb4470ab3e5a89f1b6b470fd4ac39d758b2894e10f1fc43188",
+      "bytes": 19082,
+      "sha256": "0179abf39616f8138b92dc24752bacf262062598d000e41d2c5909c7446db8b1",
       "origen": "runtime publicado: publicar/catalogo/index.html"
     },
     {
@@ -84,8 +105,8 @@
     },
     {
       "ruta": "eventos/index.html",
-      "bytes": 13620,
-      "sha256": "d0a99aba03147ba9be77aefc3d9e2d584498bded70a051a6a3ee66abf932bdd0",
+      "bytes": 13660,
+      "sha256": "2a3cb02fdbed69fb2e19c3bf50a4c9cf74c5a769a285bb2d3f77103c4d5eaf45",
       "origen": "runtime publicado: publicar/eventos/index.html"
     },
     {
@@ -102,8 +123,8 @@
     },
     {
       "ruta": "index.html",
-      "bytes": 430746,
-      "sha256": "67fef8fb3d371129d7930a6a2f49943335769b65ef82343000693ff7507e49b7",
+      "bytes": 437181,
+      "sha256": "a3aa66e491d9a78510167de06ccf88c2961bf91cff9dcd4989492e705e6790a1",
       "origen": "generado: La Madriguera.dc.html (sin panel)"
     },
     {
@@ -264,8 +285,8 @@
     },
     {
       "ruta": "libros-usados/index.html",
-      "bytes": 21013,
-      "sha256": "4c17626de60dd9290339bddd928a81bcb111f5debcb9cdd5b85f5f07db75bcfd",
+      "bytes": 21053,
+      "sha256": "2dc34aaf443590a9de71856a2dc1e82d92e441175e6c9a5726442711a3b480d3",
       "origen": "runtime publicado: publicar/libros-usados/index.html"
     },
     {
@@ -810,8 +831,8 @@
     },
     {
       "ruta": "merch/index.html",
-      "bytes": 13017,
-      "sha256": "f09b224255fa1ddad9e819d502b968fcb2c11fc79ca871649e83b2c620017e14",
+      "bytes": 13057,
+      "sha256": "b55b5ac51bc74df418c17c65b4643f3e4977d2501672ced87b7f8004974247b6",
       "origen": "runtime publicado: publicar/merch/index.html"
     },
     {
@@ -870,14 +891,14 @@
     },
     {
       "ruta": "vender-libros/index.html",
-      "bytes": 13038,
-      "sha256": "3f125ff0b387f2355df3fe34ec371c4a264eb671abe036956562a4e7b48764c5",
+      "bytes": 13078,
+      "sha256": "5ad3b30759dbfb73da10c5ee8bb25898cae42916f7ef57aff55dd4336013da2c",
       "origen": "runtime publicado: publicar/vender-libros/index.html"
     },
     {
       "ruta": "version.json",
-      "bytes": 7847,
-      "sha256": "36a937668f2f338deeaa014d5381c2b98f4cd196275f519512bbe204806e37c1",
+      "bytes": 40890,
+      "sha256": "18aafa070bdc4057de6a2d23c956bf317632b4fd4a6fecda153b0613bef21280",
       "origen": "runtime publicado: publicar/version.json"
     }
   ]
