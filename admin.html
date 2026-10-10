@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="lm-version" content="lm-20261009-0253-d223fac1">
 <meta name="robots" content="noindex, nofollow">
 <script>/* Limpia de la barra de direcciones el sello de verificación ?v=… (se usa solo para ver una copia fresca
    al comprobar una publicación). Así la dirección queda siempre como lamadriguera.ec/#seccion. */
@@ -2379,7 +2378,7 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){var cs=[].s
           <div>
             <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Texto del aviso</label>
             <textarea value="{{ cfgAvisoTexto }}" onChange="{{ onCfgAvisoTexto }}" rows="2" placeholder="Ej.: Del 13 al 18 de octubre no abriremos: ¡nos vemos en Budokan!" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none; box-sizing:border-box; resize:vertical;"></textarea>
-            <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#7C6651;">Máximo 180 caracteres. Escribe dentro del texto las fechas del cierre y cuándo vuelves a abrir.</p>
+            <p style="margin:8px 0 0; font-size:12.5px; line-height:1.5; color:#7C6651;">Mejor corto, de una o dos líneas. Escribe dentro del texto las fechas del cierre y cuándo vuelves a abrir.</p>
           </div>
           <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px;">
             <div>
@@ -2392,7 +2391,7 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){var cs=[].s
             </div>
             <div>
               <label style="display:block; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#7C6651; margin-bottom:6px;">Tipo</label>
-              <select value="{{ cfgAvisoTipo }}" onChange="{{ onCfgAvisoTipo }}" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none; box-sizing:border-box;"><option value="cierre">Cierre u horario especial</option><option value="novedad">Novedad</option></select>
+              <select value="{{ cfgAvisoTipo }}" onChange="{{ onCfgAvisoTipo }}" style="width:100%; padding:11px 13px; border:1px solid #E3D2B8; border-radius:8px; font-size:14.5px; font-family:'Outfit',sans-serif; background:#FFFDF8; color:#34251A; outline:none; box-sizing:border-box;"><option value="cierre">Cierre u horario</option><option value="novedad">Novedad</option></select>
             </div>
           </div>
           <p style="margin:0; font-size:12.5px; line-height:1.5; color:#7C6651;">Sin fecha «desde», se muestra desde hoy; sin fecha «hasta», hasta que lo borres. Consejo: empieza a mostrarlo unos días antes del cierre y termínalo el último día cerrado.</p>
@@ -5562,6 +5561,31 @@ class Component extends DCLogic {
     const name = (this.state.leadName || '').trim();
     const prev = this.state.leadPending;
     const primera = !prev;
+    /* EVENTOS: las entradas se venden SOLO por el enlace de venta (entradas.lamadriguera.ec).
+       Los datos que deja un cliente para un evento (agotado o sin enlace) van a la lista de
+       interesados de la app de reservas y NO se registran como pedido del carrito. */
+    if (info.kind === 'Evento') {
+      if (!this.resDb) { this.setState({ leadErr: 'Ahora no podemos anotarte. Escríbenos por WhatsApp y te ayudamos.' }); return; }
+      this.setState({ leadSending: true, leadErr: '' });
+      this.resDb.collection('lm_interesados').add({
+        nombre: name || 'Cliente web',
+        telefono: phone,
+        correo: '',
+        interes: ((info.title || '') + (info.sub ? (' · ' + info.sub) : '') + ' — lista de espera desde la web'),
+        avisadoEl: null,
+        origen: 'web-madriguera',
+        createdAt: (window.firebase && window.firebase.firestore && window.firebase.firestore.FieldValue) ? window.firebase.firestore.FieldValue.serverTimestamp() : new Date()
+      }).then(() => {
+        this.notifyEmail(info.subject || 'Lista de espera web · La Madriguera', Object.assign({}, info.fields || {}, { nombre_cliente: name || '(no indicado)', celular_cliente: phone, mensaje: 'El cliente se anotó en la web para que le avises de cupos o nuevas funciones. Las entradas se venden solo por el enlace de venta.' }));
+        this.track('generate_lead', { lead_source: 'lista_espera_evento', content_type: 'Evento' });
+        this.flash('¡Listo! Te avisaremos cuando haya cupos o una nueva función.');
+        this.setState({ lead: null, leadName: '', leadPhone: '', leadErr: '', leadSending: false, leadPending: null, leadDudoso: false });
+      }).catch((e) => {
+        console.error('[LM] lista de espera no guardada', e);
+        this.setState({ leadSending: false, leadErr: 'No pudimos anotarte. Revisa tu conexión y pulsa «Reintentar», o escríbenos por WhatsApp.' });
+      });
+      return;
+    }
     if (primera) this.notifyEmail(info.subject || 'Pedido web · La Madriguera', Object.assign({}, info.fields || {}, { nombre_cliente: name || '(no indicado)', celular_cliente: phone, mensaje: 'El cliente dejó sus datos en la web para que lo contactes.' }));
     if (primera) this.track('generate_lead', { lead_source: 'que_me_contacten', content_type: info.kind || '' });
     if (primera && this.resDb && info.kind === 'Evento') {
@@ -5914,7 +5938,7 @@ class Component extends DCLogic {
       onOpen: () => this.openDetail('evento', e.id || e.name),
       buyUrl: this.buyUrl(e),
       ctaLabel: this.buyUrl(e) ? 'Comprar entrada' : (agotado ? 'Lista de espera por WhatsApp' : 'Reservar por WhatsApp'),
-      onBuy: (ev) => { const bu = this.buyUrl(e); if (bu) { if (ev && ev.preventDefault) ev.preventDefault(); this.track('begin_checkout', { item_name: e.name }); if (typeof window !== 'undefined') window.location.href = bu; return; } this.track('contact', { method: 'whatsapp', content_type: 'evento', item_id: (e.name || '') + '' }); }, canCallback: !this.buyUrl(e), callbackLabel: agotado ? 'Dejar mis datos para la lista de espera' : '¿Prefieres que te contactemos?', onCallback: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Evento', subject: 'Reserva web · Evento: ' + e.name, title: e.name, sub: [e.date, e.time].filter(Boolean).join(' · '), waHref: this.waEvent(e), fields: { tipo: 'Evento', evento: e.name, fecha: (e.date || '') + ' ' + (e.time || ''), precio: e.price || '' } }); }
+      onBuy: (ev) => { const bu = this.buyUrl(e); if (bu) { if (ev && ev.preventDefault) ev.preventDefault(); this.track('begin_checkout', { item_name: e.name }); if (typeof window !== 'undefined') window.location.href = bu; return; } this.track('contact', { method: 'whatsapp', content_type: 'evento', item_id: (e.name || '') + '' }); }, canCallback: !this.buyUrl(e), callbackLabel: agotado ? 'Dejar mis datos para la lista de espera' : 'Avísame cuando abran la venta', onCallback: (ev) => { if (ev && ev.preventDefault) ev.preventDefault(); this.openLead({ kind: 'Evento', subject: 'Lista de espera web · Evento: ' + e.name, title: e.name, sub: [e.date, e.time].filter(Boolean).join(' · '), waHref: this.waEvent(e), fields: { tipo: 'Evento', evento: e.name, fecha: (e.date || '') + ' ' + (e.time || ''), precio: e.price || '' } }); }
     });
   }
 
