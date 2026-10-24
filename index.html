@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'sha256-UIq1D5iKaz9+Jjj/azLew+I9fhEUMnfY9A8BDfgkU5U=' https://www.gstatic.com https://cdn.jsdelivr.net https://unpkg.com https://*.googletagmanager.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://formsubmit.co https://openlibrary.org https://covers.openlibrary.org https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.doubleclick.net https://www.google.com; frame-src https://www.google.com https://maps.google.com https://adminpagweb.firebaseapp.com https://la-madriguera-cb489.firebaseapp.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
 <meta name="lm-publica" content="1">
 <script>/* Limpia de la barra de direcciones el sello de verificación ?v=… (se usa solo para ver una copia fresca
    al comprobar una publicación). Así la dirección queda siempre como lamadriguera.ec/#seccion. */
@@ -745,6 +746,9 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){var cs=[].s
             </sc-for>
           </div>
           <p class="lmh-exp-note" data-rv="">Consulta los cupos disponibles al reservar.</p>
+        </sc-if>
+        <sc-if value="{{ hmEvCargando }}" hint-placeholder-val="{{ false }}">
+          <div class="lmh-exp-loading" role="status" aria-live="polite" style="text-align:center; padding:48px 20px; font-size:16px; font-weight:600;">Cargando funciones…</div>
         </sc-if>
         <sc-if value="{{ hmNoEventos }}" hint-placeholder-val="{{ false }}">
           <div class="lmh-exp-empty" data-rv="">
@@ -1771,7 +1775,7 @@ class Component extends DCLogic {
   realUrl(u) {
     const s = ((u || '') + '').trim();
     if (!s) return '';
-    try { const p = new URL(s); if (!p.pathname || p.pathname === '/') return ''; } catch (e) { return ''; }
+    try { const p = new URL(s); if (p.protocol !== 'https:' && p.protocol !== 'http:') return ''; if (!p.pathname || p.pathname === '/') return ''; } catch (e) { return ''; }
     return s;
   }
 
@@ -1891,7 +1895,7 @@ class Component extends DCLogic {
       hmHeroSrc: heroSrc, hmHeroHasImg: !!heroSrc,
       hmLocalSrc: localSrc, hmLocalHasImg: !!localSrc,
       hmCafeSrc: cafeSrc, hmCafeHasImg: !!cafeSrc,
-      hmEventos: eventos, hmNoEventos: eventos.length === 0,
+      hmEventos: eventos, hmEvCargando: eventos.length === 0 && this.agendaCargando(), hmNoEventos: eventos.length === 0 && !this.agendaCargando(),
       hmSeleccion: seleccion, hmHasBooks: seleccion.length > 0, hmNoBooks: seleccion.length === 0,
       hmFan: fan, hmHasFan: fan.length > 0,
       hmSegunda: segunda, hmHasSegunda: segunda.length > 0,
@@ -2199,7 +2203,7 @@ class Component extends DCLogic {
   }
 
   // ---------- Firebase ----------
-  loadFbScript(src) {
+  loadFbScript(src, sri) {
     return new Promise((resolve, reject) => {
       const ex = document.querySelector('script[data-lmfb="' + src + '"]');
       if (ex) {
@@ -2210,13 +2214,21 @@ class Component extends DCLogic {
       }
       const s = document.createElement('script');
       s.src = src; s.async = false; s.setAttribute('data-lmfb', src);
+      if (sri) { s.integrity = sri; s.crossOrigin = 'anonymous'; }
       s.addEventListener('load', () => { s.setAttribute('data-loaded', '1'); resolve(); });
       s.addEventListener('error', () => reject(new Error('load ' + src)));
       document.head.appendChild(s);
     });
   }
-  // Dos orígenes: si una red o extensión bloquea gstatic.com, se intenta el segundo.
-  FB_CDNS = ['https://www.gstatic.com/firebasejs/10.12.5/', 'https://cdn.jsdelivr.net/npm/firebase@10.12.5/'];
+  // Tres orígenes: primero la copia en tu propio dominio (con firma SRI); si falla, gstatic.com y luego jsdelivr.
+  FB_CDNS = ['/vendor/firebase/10.12.5/', 'https://www.gstatic.com/firebasejs/10.12.5/', 'https://cdn.jsdelivr.net/npm/firebase@10.12.5/'];
+  // Firma de los archivos de npm firebase@10.12.5. La copia local y jsdelivr son esos mismos bytes; gstatic se carga sin firma.
+  FB_SRI = {
+    'firebase-app-compat.js': 'sha384-mLD+wdwynYnAhgHAkdPP5hroWJXJTNy5C2OhPKM55zuiV2vjzFD1LtBohaHq2Ex8',
+    'firebase-firestore-compat.js': 'sha384-/SBCyt0JELVRyyrOp+QG5CdnpVoAry+uw9hdherLgyZxxePtHjOvQmJU5CHymUhT',
+    'firebase-auth-compat.js': 'sha384-NiuRnBs5Z0OgJ12kYJLSeWxANeJN369zH3+Zn0TGVPaCH/TKmbPFqfOmmLtrj+wg'
+  };
+  fbSri(base, f) { return base.indexOf('gstatic.com') >= 0 ? '' : (this.FB_SRI[f] || ''); }
   bootFirebase(intento) {
     const idx = intento || 0;
     const base = this.FB_CDNS[idx] || this.FB_CDNS[0];
@@ -2231,7 +2243,7 @@ class Component extends DCLogic {
         this.db = window.firebase.firestore();
         this.auth = window.firebase.auth();
         this._fbReason = '';
-        if (!this._authUnsub) this._authUnsub = this.auth.onAuthStateChanged((u) => { this._authed = !!u; if (u && this.esPaginaAdmin() && this.state.view !== 'admin') this.setState({ view: 'admin', pwOpen: false }); this.setState({ authed: !!u, adminEmail: u ? (u.email || '') : '' }); this.subscribePedidos(!!u); this.maybeSeed(); });
+        if (!this._authUnsub) this._authUnsub = this.auth.onAuthStateChanged((u) => { this._authed = !!u; if (u && this.esPaginaAdmin() && this.state.view !== 'admin') this.setState({ view: 'admin', pwOpen: false }); this.setState({ authed: !!u, adminEmail: u ? (u.email || '') : '' }); this.subscribePedidos(!!u); this.subscribePrivado(!!u); this.maybeSeed(); });
         this.subscribe();
         if (this._fbTimer) clearTimeout(this._fbTimer);
         // 18 s: en conexiones lentas la primera respuesta puede tardar
@@ -2249,9 +2261,9 @@ class Component extends DCLogic {
     };
     if (window.firebase && window.firebase.firestore && window.firebase.auth) { start(); return; }
     this.setState({ fb: 'connecting' });
-    this.loadFbScript(base + 'firebase-app-compat.js')
-      .then(() => this.loadFbScript(base + 'firebase-firestore-compat.js'))
-      .then(() => this.loadFbScript(base + 'firebase-auth-compat.js'))
+    this.loadFbScript(base + 'firebase-app-compat.js', this.fbSri(base, 'firebase-app-compat.js'))
+      .then(() => this.loadFbScript(base + 'firebase-firestore-compat.js', this.fbSri(base, 'firebase-firestore-compat.js')))
+      .then(() => this.loadFbScript(base + 'firebase-auth-compat.js', this.fbSri(base, 'firebase-auth-compat.js')))
       .then(start)
       .catch((e) => {
         console.error('[LM] Firebase load', e);
@@ -2516,6 +2528,18 @@ class Component extends DCLogic {
       this._unsubs.push(u);
     } catch (e) { console.error('[LM] reservas init', e); this._resBooted = false; }
   }
+  // Portada: ¿la agenda todavía se está conectando? (máximo 20 s; después se muestra «Próximamente»)
+  agendaCargando() {
+    if (!this._agT0) { this._agT0 = Date.now(); this._agTimer = setTimeout(() => this.setState({ savedAt: Date.now() }), 20500); }
+    if (Date.now() - this._agT0 > 20000) return false;
+    const st = this.state || {};
+    if (st.fb === 'connecting') return true;
+    const e = this.estadoReservas();
+    if (e === 'cargando') return true;
+    // Sin la clave de reservas todavía: o la configuración no llegó, o llegó vacía desde la copia local del navegador.
+    if (e === 'sin-config' && (!this.colResuelta('config') || Object.keys(this.cfg()).length === 0)) return true;
+    return false;
+  }
   // Estado de la agenda de la app de reservas: cargando · error · lista
   estadoReservas() {
     const key = ((this.cfg().reservasKey || '') + '').trim();
@@ -2631,7 +2655,7 @@ class Component extends DCLogic {
     const err = (e) => this.colError(coll, e);
     let u;
     if (coll === 'config') {
-      u = this.db.collection('config').doc('general').onSnapshot((d) => { this._live.config = d.exists ? d.data() : {}; this.colOk(coll); this.maybeSeed(); }, err);
+      u = this.db.collection('config').doc('general').onSnapshot((d) => { this._live.config = d.exists ? d.data() : {}; this.colOk(coll); this.maybeSeed(); this.moverBooksKey(); }, err);
     } else if (coll === 'brand') {
       u = this.db.collection('brand').onSnapshot((snap) => { const o = {}; snap.forEach((d) => { o[d.id] = (d.data() || {}).data || ''; }); this._live.brand = o; this.colOk(coll); }, err);
     } else {
@@ -2851,12 +2875,22 @@ class Component extends DCLogic {
     this.db.collection('fotos').doc(fid).set({ d: data, v }).catch((e) => this.flash(this.fbErr(e)));
     return 'fs:' + fid + ':' + v;
   }
+  // Guarda la foto en «fotos» y, SOLO cuando Firestore confirma, la asigna al producto.
+  // (Antes se asignaba primero: si la subida fallaba, el producto quedaba apuntando a una foto inexistente.)
   applyFoto(tgt, data) {
     const fid = tgt.brand ? ('brand__' + tgt.brand) : (tgt.coll + '__' + tgt.id);
-    const ref = this.storeFoto(fid, data);
-    if (tgt.brand) this.setBrand(tgt.brand, ref);
-    else if (tgt.coll === 'eventosImg') this.setEventoImg(tgt.id, ref);
-    else this.setField(tgt.coll, tgt.id, 'imagen', ref);
+    const v = Date.now().toString(36);
+    const escritura = this.db.collection('fotos').doc(fid).set({ d: data, v });
+    const tope = new Promise((_, rej) => setTimeout(() => rej(new Error('lento')), 45000));
+    return Promise.race([escritura, tope]).then(() => {
+      this._fotoLocal = this._fotoLocal || {};
+      this._fotoLocal[fid] = data;
+      const ref = 'fs:' + fid + ':' + v;
+      if (tgt.brand) this.setBrand(tgt.brand, ref);
+      else if (tgt.coll === 'eventosImg') this.setEventoImg(tgt.id, ref);
+      else this.setField(tgt.coll, tgt.id, 'imagen', ref);
+      return ref;
+    });
   }
   // Mueve a «fotos» las fotos que aún están incrustadas en los productos (una sola vez).
   migrarFotos = async () => {
@@ -3058,12 +3092,18 @@ class Component extends DCLogic {
 
   // ---------- stock ----------
   hasStockNum(x) { return !!x && typeof x.stock === 'number' && isFinite(x.stock); }
+  // Un libro usado es un ejemplar único aunque no tenga número de stock.
+  esUsado(l) {
+    if (!l) return false;
+    const est = ((l.estado || '') + '').trim();
+    return /^usado/i.test(est) || /con detalles/i.test(est) || /^LM-C-/i.test((l.code || '') + '') || !!l.sv || !!l.consigna;
+  }
   stockOf(kind, id) {
     if (!id) return null;
     const C = this.currentCMS();
     if (kind === 'Libro') {
       const l = (C.libros || []).find(x => x.id === id || x.code === id);
-      if (l) return this.hasStockNum(l) ? l.stock : null;
+      if (l) { const n = this.hasStockNum(l) ? l.stock : null; return this.esUsado(l) ? (n == null ? 1 : Math.min(n, 1)) : n; }
       const c = (C.consig || []).find(x => x.id === id || x.code === id);
       if (c) return 1;
       return null;
@@ -3569,6 +3609,34 @@ class Component extends DCLogic {
     this.setState({ showPastEvents: false });
     this.flash(pasados.length + ' evento(s) pasado(s) eliminado(s) ✓');
   };
+  // Clave de Google Books: solo la usa el panel, así que vive en privado/claves (legible solo con tu sesión).
+  // Si queda una copia vieja en config/general (pública), se usa de respaldo y se traslada sola al iniciar sesión.
+  booksKeyVal() { return ((((this._priv || {}).booksKey) || this.cfg().booksKey || '') + '').trim(); }
+  subscribePrivado(on) {
+    if (this._unsubPriv) { try { this._unsubPriv(); } catch (e) {} this._unsubPriv = null; }
+    if (!on || !this.db) { this._priv = null; return; }
+    this._unsubPriv = this.db.collection('privado').doc('claves').onSnapshot((d) => {
+      this._priv = d.exists ? (d.data() || {}) : {};
+      this.moverBooksKey();
+      this.setState({ savedAt: Date.now() });
+    }, () => {});
+  }
+  moverBooksKey() {
+    const vieja = ((this.cfg().booksKey || '') + '').trim();
+    if (!vieja || this._movBK || !this._priv || !this._authed || !this.online()) return;
+    this._movBK = true;
+    const ref = this.db.collection('privado').doc('claves');
+    const paso = this._priv.booksKey ? Promise.resolve() : ref.set({ booksKey: vieja }, { merge: true });
+    paso.then(() => this.db.collection('config').doc('general').update({ booksKey: window.firebase.firestore.FieldValue.delete() }))
+      .catch((e) => { console.error('[LM] mover clave Books', e); this._movBK = false; });
+  }
+  setBooksKey(val) {
+    this._priv = Object.assign({}, this._priv || {}, { booksKey: val });
+    this.setState({ savedAt: Date.now() });
+    if (this.online() && this._authed) this.db.collection('privado').doc('claves').set({ booksKey: val }, { merge: true })
+      .then(() => { this._movBK = false; this.moverBooksKey(); })
+      .catch((e) => this.flash(this.fbErr(e)));
+  }
   setConfig(key, val) {
     const cms = this.currentCMS();
     cms.config = cms.config || {};
@@ -3602,35 +3670,97 @@ class Component extends DCLogic {
     this.cacheCMS(cms);
     if (this.online()) this.itemRef('brand', key).delete().catch(() => {});
   }
+  // ---------- subir fotos desde el panel ----------
+  // 1) Lee la foto, también las HEIC del iPhone y las que vienen giradas.
+  // 2) La reduce (productos 500 px, banners 1100 px, logo 320 px) y la comprime en WebP
+  //    (o JPEG si el navegador no sabe), bajando la calidad hasta quedar bajo el tope de peso.
+  // 3) La sube a Firestore y solo entonces la asigna al producto. Nunca guarda el archivo original.
+  FOTO_TOPE_KB = 180;
+  BANNER_TOPE_KB = 350;
+  HEIC_URL = '/vendor/heic2any/0.0.4/heic2any.min.js';
+  HEIC_SRI = 'sha384-OTofQ0MEeiSgh62havBcemCIK0gqj809wX6UA0uPISNMRnR6NZyCdGzX3SbLrgwL';
   onFile = (e) => {
     const file = e.target.files && e.target.files[0];
     const tgt = this._pick;
+    try { e.target.value = ''; } catch (x) {}
     if (!file || !tgt) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const img = new Image();
-      img.onload = () => {
-        const isLogo = tgt.brand === 'logo';
-        const max = isLogo ? 320 : (tgt.brand ? 1100 : 500);
-        let w = img.width, h = img.height;
-        if (w > max || h > max) { const r = Math.min(max / w, max / h); w = Math.round(w * r); h = Math.round(h * r); }
-        const c = document.createElement('canvas'); c.width = w; c.height = h;
-        const ctx = c.getContext('2d');
-        if (!isLogo) { ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, w, h); }
-        ctx.drawImage(img, 0, 0, w, h);
-        let data;
-        try { data = isLogo ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', tgt.brand ? 0.78 : 0.7); }
-        catch (x) { data = ev.target.result; }
-        this.applyFoto(tgt, data);
-        this.flash('Foto cargada ✓');
-      };
-      img.onerror = () => {
-        this.applyFoto(tgt, ev.target.result);
-      };
-      img.src = ev.target.result;
-    };
-    reader.readAsDataURL(file);
+    this.subirFoto(file, tgt);
   };
+  esHeic(file) { return /image\/hei[cf]/i.test((file && file.type) || '') || /\.hei[cf]$/i.test((file && file.name) || ''); }
+  imgDesdeArchivo(blob) {
+    return new Promise((res, rej) => {
+      const u = URL.createObjectURL(blob);
+      const im = new Image();
+      im.onload = () => { res(im); setTimeout(() => URL.revokeObjectURL(u), 2000); };
+      im.onerror = () => { URL.revokeObjectURL(u); rej(new Error('formato')); };
+      im.src = u;
+    });
+  }
+  async decodificarFoto(file) {
+    if (typeof createImageBitmap === 'function') {
+      try { return await createImageBitmap(file, { imageOrientation: 'from-image' }); } catch (x) {}
+    }
+    try { return await this.imgDesdeArchivo(file); } catch (x) {}
+    if (this.esHeic(file)) {
+      // Chrome y Firefox no saben leer HEIC: se convierte aquí mismo (el convertidor se descarga solo la primera vez).
+      this.flash('Convirtiendo foto del iPhone (HEIC)…', 90000);
+      if (!window.heic2any) await this.loadFbScript(this.HEIC_URL, this.HEIC_SRI);
+      const r = await window.heic2any({ blob: file, toType: 'image/jpeg', quality: 0.92 });
+      return await this.imgDesdeArchivo(Array.isArray(r) ? r[0] : r);
+    }
+    throw new Error('formato');
+  }
+  comprimirFoto(src, max, logo, topeKB) {
+    let w = src.naturalWidth || src.width, h = src.naturalHeight || src.height;
+    if (!w || !h) throw new Error('formato');
+    const r = Math.min(1, max / w, max / h);
+    w = Math.max(1, Math.round(w * r)); h = Math.max(1, Math.round(h * r));
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const ctx = c.getContext('2d');
+    if (!logo) { ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, w, h); }
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(src, 0, 0, w, h);
+    try { if (src.close) src.close(); } catch (x) {}
+    if (logo) return c.toDataURL('image/png');
+    const limite = topeKB * 1024 * 4 / 3;   // largo máximo del texto base64
+    let data = '';
+    for (const q of [0.8, 0.7, 0.6, 0.5, 0.4]) {
+      let d = c.toDataURL('image/webp', q);
+      if (d.indexOf('data:image/webp') !== 0) d = c.toDataURL('image/jpeg', q);   // Safari antiguo: sin WebP
+      data = d;
+      if (d.length <= limite) break;
+    }
+    return data;
+  }
+  async subirFoto(file, tgt) {
+    if (!this.online() || !this._authed) { this.flash('Para subir fotos necesitas internet y haber iniciado sesión en el panel.', 10000); return; }
+    if (file.type && !/^image\//i.test(file.type) && !this.esHeic(file)) { this.flash('Ese archivo no es una foto. Elige una imagen JPG, PNG, WebP o HEIC.', 10000); return; }
+    if (file.size > 60 * 1024 * 1024) { this.flash('La foto pesa más de 60 MB. Envíatela por WhatsApp (la reduce) y súbela de nuevo.', 12000); return; }
+    const isLogo = tgt.brand === 'logo';
+    const max = isLogo ? 320 : (tgt.brand ? 1100 : 500);
+    try {
+      this.flash('Preparando foto…', 90000);
+      const src = await this.decodificarFoto(file);
+      const data = this.comprimirFoto(src, max, isLogo, tgt.brand ? this.BANNER_TOPE_KB : this.FOTO_TOPE_KB);
+      if (data.length > 900000) throw new Error('grande');
+      this.flash('Subiendo foto…', 90000);
+      await this.applyFoto(tgt, data);
+      this.flash('Foto cargada ✓ (' + Math.max(1, Math.round(data.length * 3 / 4 / 1024)) + ' KB)', 4000);
+    } catch (err) {
+      console.error('[LM] subir foto', err);
+      this.flash(this.fotoErr(err, file), 15000);
+    }
+  }
+  fotoErr(err, file) {
+    const m = ((err && (err.code || err.message)) || '') + '';
+    if (m === 'formato') return this.esHeic(file)
+      ? 'No pude convertir esta foto HEIC del iPhone. Envíatela por WhatsApp y súbela de nuevo, o en el iPhone: Ajustes → Cámara → Formatos → «Más compatible».'
+      : 'No pude leer esta foto (formato no compatible). Usa JPG, PNG o WebP.';
+    if (m === 'grande') return 'La foto sigue pesando demasiado después de comprimirla. Recórtala o súbela como captura de pantalla.';
+    if (m === 'lento') return 'La subida está tardando demasiado. Revisa tu internet; si la foto no aparece en un minuto, vuelve a subirla.';
+    if (m.indexOf('heic2any') >= 0) return 'No se pudo descargar el convertidor de fotos HEIC. Recarga la página e inténtalo de nuevo.';
+    return this.fbErr(err);
+  }
 
   // ---------- portadas automáticas (OpenLibrary) ----------
   olPick(docs) {
@@ -3694,7 +3824,7 @@ class Component extends DCLogic {
   // country=EC evita el error de "ubicación no soportada" de Google Books fuera de EE.UU.
   // Con tu propia clave (Configuración) usas tu cuota diaria y no la compartida (error 429).
   gbUrl(q, soloEs) {
-    const k = ((this.cfg().booksKey || '') + '').trim();
+    const k = this.booksKeyVal();
     return 'https://www.googleapis.com/books/v1/volumes?country=EC&maxResults=8'
       + (soloEs ? '&langRestrict=es' : '')
       + (k ? ('&key=' + encodeURIComponent(k)) : '')
@@ -5292,7 +5422,7 @@ class Component extends DCLogic {
       ventaPasos: this.ventaPasos, compraPasos: this.compraPasos,
       waVender: this.waText('Hola, quiero registrar mis libros para venderlos en consignación en La Madriguera. ¿Cómo empiezo?'),
       waGeneral: 'https://wa.me/' + this.waNum(),
-      igHref: this.realUrl(cfg.instagram) || this.igHref, ttHref: this.realUrl(cfg.tiktok) || this.ttHref, fbHref: this.realUrl(cfg.facebook) || this.fbHref, mapsHref: cfg.maps || this.mapsHref,
+      igHref: this.realUrl(cfg.instagram) || this.igHref, ttHref: this.realUrl(cfg.tiktok) || this.ttHref, fbHref: this.realUrl(cfg.facebook) || this.fbHref, mapsHref: this.realUrl(cfg.maps) || this.mapsHref,
       hasLogo: !!brand.logo, noLogo: !brand.logo, logoUrl: brand.logo || '',
       logoHeaderStyle: this.logoBox(brand.logo, 44, { border: '1px solid #E3D2B8', boxShadow: '0 4px 12px rgba(175,50,73,0.18)' }),
       logoFooterStyle: this.logoBox(brand.logo, 42),
@@ -5407,8 +5537,8 @@ class Component extends DCLogic {
       cfgGReviews: cfg.gReviews || '', onCfgGReviews: (e) => this.setConfig('gReviews', (e.target.value || '').trim()),
       hasGoogleRating: !!(((cfg.gRating || '') + '').trim()),
       gRatingLabel: (((cfg.gRating || '') + '').trim()),
-      gReviewsHref: this.realUrl(cfg.gReviews) || (cfg.maps || this.mapsHref),
-      cfgBooksKey: cfg.booksKey || '', onCfgBooksKey: (e) => this.setConfig('booksKey', (e.target.value || '').trim()),
+      gReviewsHref: this.realUrl(cfg.gReviews) || (this.realUrl(cfg.maps) || this.mapsHref),
+      cfgBooksKey: this.booksKeyVal(), onCfgBooksKey: (e) => this.setBooksKey((e.target.value || '').trim()),
       cfgGaId: cfg.gaId || '', onCfgGaId: (e) => { this.setConfig('gaId', (e.target.value || '').trim()); this._gaBooted = false; this.bootAnalytics(); },
       gaStatus: this._gaBooted ? 'Activo ✓' : ((((cfg.gaId || '') + '').trim()) ? 'Guardado — se activa al recargar' : 'Sin configurar'),
       cfgHistoria: cfg.historia || '', onCfgHistoria: (e) => this.setConfig('historia', e.target.value),
