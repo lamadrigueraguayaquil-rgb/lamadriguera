@@ -840,6 +840,41 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){var cs=[].s
       </div>
     </section>
 
+    <!-- D2 · DE TEMPORADA (carta en vivo: productos que el POS marca «de temporada» y están vigentes) -->
+    <sc-if value="{{ hmHasTemp }}" hint-placeholder-val="{{ false }}">
+    <section aria-labelledby="lmh-temp-t" style="background:#F7EFE2; padding:clamp(40px,6vw,76px) clamp(16px,4vw,32px);">
+      <div style="max-width:1180px; margin:0 auto;">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:24px;">
+          <div>
+            <p style="margin:0; font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:#8A5A2B;">Solo por esta temporada</p>
+            <h2 id="lmh-temp-t" style="margin:10px 0 0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:clamp(30px,4.4vw,46px); line-height:1.05; color:#AF3249;">De temporada</h2>
+            <p style="margin:12px 0 0; font-size:16px; line-height:1.55; color:#5E4632; max-width:36em;">Sabores que llegan por unas semanas y se van. Pídelos en tu próxima visita.</p>
+          </div>
+          <a href="#cafeteria" onClick="{{ hmNav.cafeteria }}" style="display:inline-flex; align-items:center; gap:8px; text-decoration:none; font-weight:800; font-size:14.5px; color:#8E2439; border-bottom:2px solid #D4B560; padding-bottom:3px;">Ver toda la carta →</a>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:clamp(14px,2vw,22px);">
+          <sc-for list="{{ hmTemp }}" as="m" hint-placeholder-count="3">
+            <div style="display:flex; flex-direction:column; background:#FFFDF8; border:1px solid #EADBC4; border-radius:16px; overflow:hidden; box-shadow:0 8px 22px rgba(52,37,26,0.07); height:100%;">
+              <div style="position:relative; aspect-ratio:4/3; background:repeating-linear-gradient(135deg,#F1E5D0,#F1E5D0 11px,#E9D9BE 11px,#E9D9BE 22px); display:flex; align-items:center; justify-content:center;">
+                <span style="font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.06em; color:#6F5E43; text-transform:lowercase; text-align:center; padding:0 10px;">{{ m.cat }}</span>
+                <sc-if value="{{ m.hasImg }}" hint-placeholder-val="{{ false }}"><img sc-camel-src="{{ m.imgUrl }}" alt="{{ m.imgAlt }}" loading="lazy" decoding="async" style="{{ m.imgTagStyle }}"></sc-if>
+                <sc-if value="{{ m.hasHasta }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; left:10px; top:10px; display:inline-block; padding:4px 11px; border-radius:999px; font-size:11px; font-weight:800; background:#F4E9CC; color:#6B5210; white-space:nowrap;">{{ m.hastaLabel }}</span></sc-if>
+              </div>
+              <div style="padding:14px 14px 16px; display:flex; flex-direction:column; gap:7px; flex:1;">
+                <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:18px; line-height:1.15; color:#34251A; text-wrap:pretty;">{{ m.name }}</h3>
+                <sc-if value="{{ m.hasDesc }}" hint-placeholder-val="{{ false }}"><p style="margin:0; font-size:13px; line-height:1.45; color:#6E5946;">{{ m.desc }}</p></sc-if>
+                <div style="margin-top:auto; display:flex; align-items:center; justify-content:space-between; gap:8px; padding-top:6px;">
+                  <sc-if value="{{ m.hasPrice }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:21px; color:#8E2439;">{{ m.priceLabel }}</span></sc-if>
+                  <a sc-camel-href="{{ m.waHref }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:7px; text-decoration:none; background:transparent; color:#AF3249; border:1.5px solid #C4C7B6; font-weight:700; font-size:12.5px; padding:9px 14px; border-radius:11px;">Consultar</a>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+    </sc-if>
+
     <!-- E · CAFETERÍA -->
     <section class="lmh-coffee" aria-labelledby="lmh-cafe-t">
       <div class="lmh-coffee-photo">
@@ -1199,6 +1234,7 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape"){var cs=[].s
                 <sc-if value="{{ m.hasCat }}" hint-placeholder-val="{{ false }}"><span style="font-size:10.5px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#80654B;">{{ m.cat }}</span></sc-if>
                 <h3 style="margin:0; font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:18px; line-height:1.15; color:#34251A; text-wrap:pretty;">{{ m.name }}</h3>
                 <sc-if value="{{ m.hasDesc }}" hint-placeholder-val="{{ false }}"><p style="margin:0; font-size:13px; line-height:1.45; color:#7C6651;">{{ m.desc }}</p></sc-if>
+                <sc-if value="{{ m.hasHasta }}" hint-placeholder-val="{{ false }}"><p style="margin:0; font-size:12px; font-weight:700; color:#6B5210;">{{ m.hastaLabel }}</p></sc-if>
                 <div style="margin-top:auto; display:flex; align-items:center; justify-content:space-between; gap:8px; padding-top:6px;">
                   <sc-if value="{{ m.hasPrice }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:21px; color:#8E2439;">{{ m.priceLabel }}</span></sc-if>
                   <a sc-camel-href="{{ m.waHref }}" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:7px; text-decoration:none; background:transparent; color:#AF3249; border:1.5px solid #C4C7B6; font-weight:700; font-size:12.5px; padding:9px 14px; border-radius:11px; transition:background .15s ease;" style-hover="background:#F2E3E2;"><span style="width:7px; height:7px; border-radius:50%; background:#4F5E3D;"></span>Consultar</a>
@@ -3031,7 +3067,7 @@ class Component extends DCLogic {
     if (this._toastT) clearTimeout(this._toastT);
     this.lmhStop();
   }
-  componentDidUpdate() { this.syncChips(); this.ensureSecciones(); this.bootReservas(); this.bootAnalytics(); this.seoSync(); this.seoTitle(); this.svAutoTick(); this.lmhSync(); }
+  componentDidUpdate() { this.syncChips(); this.ensureSecciones(); this.bootReservas(); this.cargarFotosCarta(); this.bootAnalytics(); this.seoSync(); this.seoTitle(); this.svAutoTick(); this.lmhSync(); }
   // ---------- Portada editorial: datos (solo presentación; reutiliza decBook/decEvent/decMerch/decCafe) ----------
   lmhVals(x) {
     const uniq = (arr) => { const seen = {}; return arr.filter(b => { const k = (b && (b.id || b.code || b.title)) + ''; if (!b || seen[k]) return false; seen[k] = 1; return true; }); };
@@ -3061,7 +3097,10 @@ class Component extends DCLogic {
       });
     });
     const segunda = x.usados.slice(0, 3);
-    const cafe = (x.baseCafe || []).filter(m => ((m.name || '') + '').trim()).slice(0, 3).map(m => this.decCafe(m));
+    const cafeTodo = (x.baseCafe || []).filter(m => ((m.name || '') + '').trim());
+    const temporada = cafeTodo.filter(m => m.temporada && m.disp !== 'Agotado').slice(0, 4).map(m => this.decCafe(m));
+    const cafeFijo = cafeTodo.filter(m => !m.temporada);
+    const cafe = (cafeFijo.length ? cafeFijo : cafeTodo).slice(0, 3).map(m => this.decCafe(m));
     // Foto principal: la del panel (Marca → Banner principal). Solo si nunca se configuró se usa la foto del local ya publicada.
     const heroSrc = rawBrand.hero ? (brand.hero || '') : './og-image.jpg';
     const localSrc = rawBrand.local ? (brand.local || '') : heroSrc;
@@ -3078,6 +3117,7 @@ class Component extends DCLogic {
       hmFan: fan, hmHasFan: fan.length > 0,
       hmSegunda: segunda, hmHasSegunda: segunda.length > 0,
       hmCafe: cafe, hmHasCafe: cafe.length > 0,
+      hmTemp: temporada, hmHasTemp: temporada.length > 0,
       hmHasMerch: (x.baseMerch || []).length > 0,
       hmNewsOk: !!this.state.newsOk,
       hmCheckKey: (ev) => { if (ev && (ev.key === ' ' || ev.key === 'Enter')) { ev.preventDefault(); this.setState({ newsOk: !this.state.newsOk, newsErr: '' }); } },
@@ -3704,7 +3744,77 @@ class Component extends DCLogic {
       }, (e) => { console.error('[LM] reservas', e); this._resErr = true; this.setState({ savedAt: Date.now() }); });
       this._resUnsub = u;
       this._unsubs.push(u);
+      this.escucharCarta();
     } catch (e) { console.error('[LM] reservas init', e); this._resBooted = false; }
+  }
+  // ---------- carta en vivo del POS (lm_carta, proyecto la-madriguera-cb489) ----------
+  // El POS publica aquí los productos de cafetería marcados «web» y los «de temporada» (con fechas).
+  // La web solo LEE: nombre, descripción, sección, precio, disponibilidad y vigencia. Las fotos van aparte (lm_carta_fotos).
+  escucharCarta() {
+    if (this._cartaUnsub || !this.resDb) return;
+    try {
+      this._cartaUnsub = this.resDb.collection('lm_carta').onSnapshot((snap) => {
+        const arr = [];
+        snap.forEach((d) => arr.push(Object.assign({}, d.data(), { id: d.id })));
+        this._carta = arr;
+        this.setState({ savedAt: Date.now() });
+      }, (e) => { console.error('[LM] carta', e); this._cartaUnsub = null; if (!this._carta) this._carta = []; this.setState({ savedAt: Date.now() }); });
+      this._unsubs = this._unsubs || [];
+      this._unsubs.push(() => { if (this._cartaUnsub) this._cartaUnsub(); });
+    } catch (e) { console.error('[LM] carta init', e); }
+  }
+  hoyISO() { const d = new Date(); const z = n => String(n).padStart(2, '0'); return d.getFullYear() + '-' + z(d.getMonth() + 1) + '-' + z(d.getDate()); }
+  cartaVigente(c, hoy) {
+    if (!c || c.publicado === false || !(((c.nombre || '') + '').trim())) return false;
+    if (!c.temporada) return true;
+    return (!c.desde || hoy >= c.desde) && (!c.hasta || hoy <= c.hasta);
+  }
+  // Productos de la carta con forma de «plato de cafetería» (los mismos campos que usa decCafe).
+  cartaItems() {
+    const hoy = this.hoyISO(), fotos = this._cartaFotos || {};
+    const MESL = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    return (this._carta || []).filter(c => this.cartaVigente(c, hoy)).map(c => {
+      const temp = !!c.temporada, f = fotos[c.id];
+      let hasta = '';
+      if (temp && c.hasta) { const q = (c.hasta + '').split('-'); if (q.length === 3 && MESL[+q[1] - 1]) hasta = 'Hasta el ' + (+q[2]) + ' de ' + MESL[+q[1] - 1]; }
+      return { id: 'carta_' + c.id, name: ((c.nombre || '') + '').trim(), cat: ((c.seccion || '') + '').trim(), desc: ((c.descripcion || '') + '').trim(), price: +c.precio || 0,
+        disp: c.disponible === false ? 'Agotado' : (temp ? 'De temporada' : 'Disponible'), imagen: (f && f.data) || '', temporada: temp, hastaLabel: hasta, hasHasta: !!hasta, orden: +c.orden || 0, carta: true };
+    }).sort((a, b) => (a.temporada === b.temporada ? 0 : (a.temporada ? -1 : 1)) || (a.orden - b.orden) || a.name.localeCompare(b.name));
+  }
+  // Fotos de la carta: se piden una a una y solo las que se van a ver (en la portada, solo las de temporada).
+  cargarFotosCarta() {
+    if (!this.resDb || !this._carta || !this._carta.length) return;
+    this._cartaFotos = this._cartaFotos || {}; this._cartaFotoPend = this._cartaFotoPend || {};
+    const hoy = this.hoyISO(), enCafe = (this.state || {}).page === 'cafeteria';
+    this._carta.forEach((c) => {
+      const v = +c.foto || 0;
+      if (!v) { if (this._cartaFotos[c.id]) delete this._cartaFotos[c.id]; return; }
+      if (!this.cartaVigente(c, hoy) || (!c.temporada && !enCafe)) return;
+      const act = this._cartaFotos[c.id];
+      if ((act && act.v === v) || this._cartaFotoPend[c.id] === v) return;
+      this._cartaFotoPend[c.id] = v;
+      this.resDb.collection('lm_carta_fotos').doc(c.id).get().then((d) => {
+        const data = d.exists ? (((d.data() || {}).data || '') + '') : '';
+        this._cartaFotos[c.id] = { v, data: /^data:image\/(webp|jpeg|png);base64,/.test(data) ? data : '' };
+        delete this._cartaFotoPend[c.id];
+        this.setState({ savedAt: Date.now() });
+      }).catch(() => { this._cartaFotos[c.id] = { v, data: '' }; delete this._cartaFotoPend[c.id]; });
+    });
+  }
+  // Copia del pedido del carrito para la caja (bandeja «Pedidos web» del POS). Es un aviso operativo:
+  // si falla, el pedido igual quedó registrado en el panel, por correo y por WhatsApp.
+  copiarPedidoPOS(pedido) {
+    try {
+      if (!this.resDb || !pedido || !pedido.id) return;
+      const S = (v, n) => ((v == null ? '' : v) + '').slice(0, n);
+      const items = (pedido.items || []).slice(0, 40).map((it) => {
+        let src = null; try { const f = this.findOrderItem(it); src = f && f.item; } catch (e) {}
+        return { titulo: S(it.title, 160), cant: Math.max(1, Math.min(99, parseInt(it.qty, 10) || 1)), precio: +it.price || 0, tipo: S(it.kind, 40), webId: S(it.id, 80), cod: S(src && src.code, 40), isbn: S(src && src.isbn, 20), posId: S(src && src.posId, 80) };
+      });
+      this.resDb.collection('lm_pedidos_web').doc(pedido.id).set({ ref: S(this.refPedido(pedido.id), 40), cliente: S(pedido.cliente, 80), celular: S(pedido.celular, 24), entrega: S(pedido.entrega, 60), pago: S(pedido.pago, 60), nota: S(pedido.nota, 400),
+        total: +pedido.total || 0, items, estado: 'nuevo', abierto: true, origen: 'web', ts: Date.now(), creado: window.firebase.firestore.FieldValue.serverTimestamp() })
+        .catch((e) => { console.warn('[LM] copia del pedido para caja', e); });
+    } catch (e) { console.warn('[LM] copia del pedido para caja', e); }
   }
   // Portada: ¿la agenda todavía se está conectando? (máximo 20 s; después se muestra «Próximamente»)
   agendaCargando() {
@@ -5575,7 +5685,7 @@ class Component extends DCLogic {
     const c = m[e] || ['#ECE5DA', '#796350']; return this.badge(c[0], c[1]);
   }
   dispStyle(d) {
-    const m = { 'Disponible': ['#E3EDE3', '#4F5E3D'], 'Reservado': ['#ECE6DC', '#79644F'], 'Vendido': ['#EFE0DC', '#9A4A3C'], 'Última unidad': ['#F3DEE3', '#93304A'], 'Oferta': ['#F4E9CC', '#7A5F12'], 'Por encargo': ['#E7E9EC', '#5A6472'] };
+    const m = { 'Disponible': ['#E3EDE3', '#4F5E3D'], 'Reservado': ['#ECE6DC', '#79644F'], 'Vendido': ['#EFE0DC', '#9A4A3C'], 'Última unidad': ['#F3DEE3', '#93304A'], 'Oferta': ['#F4E9CC', '#7A5F12'], 'Por encargo': ['#E7E9EC', '#5A6472'], 'Agotado': ['#EFE0DC', '#9A4A3C'], 'De temporada': ['#F4E9CC', '#7A5F12'] };
     const c = m[d] || ['#E3EDE3', '#4F5E3D']; return this.badge(c[0], c[1]);
   }
   consigBadge(e) {
@@ -5939,6 +6049,7 @@ class Component extends DCLogic {
       this.guardarIntento(null);
       try { localStorage.setItem('lm-pedido-listo', JSON.stringify(info)); } catch (e) {}
       this.notifyEmail('Pedido web · Carrito La Madriguera', info.campos);
+      this.copiarPedidoPOS(pedido);
       // Solicitud registrada: NO es una venta. «purchase» no se envía desde la web porque aquí no hay confirmación de pago.
       this.track('generate_lead', { currency: 'USD', value: pedido.total, lead_source: 'carrito', transaction_id: pedido.id });
       this.saveCart([]);
@@ -6044,8 +6155,8 @@ class Component extends DCLogic {
   decCafe(m) {
     m = Object.assign({}, m, { imagen: this.pic(m.imagen) });
     const hasPrice = (+m.price > 0);
-    return Object.assign({}, m, {
-      priceLabel: hasPrice ? ('$' + m.price) : '', hasPrice,
+    return Object.assign({ hastaLabel: '', hasHasta: false }, m, {
+      priceLabel: hasPrice ? (m.carta ? this.money(this.cents(m.price)) : ('$' + m.price)) : '', hasPrice,
       dispStyle: this.dispStyle(m.disp), hasImg: !!m.imagen, imgStyle: this.coverStyle(m.imagen),
       imgUrl: m.imagen || '', imgTagStyle: this.coverImg(),
       imgAlt: (m.name || 'Plato') + (m.cat ? ' · ' + m.cat : '') + ' — carta de La Madriguera, cafetería literaria en Urdesa',
@@ -6267,13 +6378,18 @@ class Component extends DCLogic {
     const merchChips = merchNav;
 
     // ---- Cafetería (menú / platos de temporada) ----
-    const baseCafe = cms ? (cms.cafeteria || []).map(m => this.toMerch(m)).filter(m => m.disp !== 'Vendido') : [];
+    // Carta en vivo del POS primero (temporada arriba); después lo cargado a mano en el panel.
+    const CAFE_TEMP = 'De temporada';
+    const baseCafe = this.cartaItems().concat(cms ? (cms.cafeteria || []).map(m => this.toMerch(m)).filter(m => m.disp !== 'Vendido') : []);
     const cafeUsed = [];
     baseCafe.forEach(m => { const c = ((m.cat || '') + '').trim(); if (c && cafeUsed.indexOf(c) < 0) cafeUsed.push(c); });
-    const cafeOrdered = this.cafeCatList().filter(c => cafeUsed.indexOf(c) >= 0);
-    const cafeSel = this.state.cafeCat;
+    const cafeCatsAll = this.cafeCatList();
+    const cafeOrdered = cafeCatsAll.filter(c => cafeUsed.indexOf(c) >= 0).concat(cafeUsed.filter(c => cafeCatsAll.indexOf(c) < 0)).filter(c => c !== CAFE_TEMP);
+    if (baseCafe.some(m => m.temporada)) cafeOrdered.unshift(CAFE_TEMP);
+    const cafeSel = (this.state.cafeCat !== 'todas' && cafeOrdered.indexOf(this.state.cafeCat) < 0) ? 'todas' : this.state.cafeCat;
     let cafeFiltered = baseCafe;
-    if (cafeSel !== 'todas') cafeFiltered = cafeFiltered.filter(m => ((m.cat || '') + '').trim() === cafeSel);
+    if (cafeSel === CAFE_TEMP) cafeFiltered = cafeFiltered.filter(m => m.temporada);
+    else if (cafeSel !== 'todas') cafeFiltered = cafeFiltered.filter(m => ((m.cat || '') + '').trim() === cafeSel);
     const cafeChips = [{ key: 'todas', label: 'Todo' }].concat(cafeOrdered.map(c => ({ key: c, label: c }))).map(c => ({
       label: c.label, onClick: () => this.setState({ cafeCat: c.key }), style: this.chipStyle(cafeSel === c.key)
     }));
